@@ -12,7 +12,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "tsc --noEmit --pretty",
-    "commit": "cz",
+    "commit": "git-cz",
     "prepare": "husky"
   },
   "devDependencies": {
