@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "\033[1;33mInit lint into files...\033[0m" &&
+
+npx --no-install lint-staged &&
+
+echo "\033[1;33mlint finished!\033[0m"
