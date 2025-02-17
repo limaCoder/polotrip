@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #03AED2;
+  --color-secondary: #68D2E8;
+  --color-yellow: #FEEFAD;
+  --color-accent: #FDDE55;
+  --color-background: #F7FCFD;
+  --color-text: #08171C;
+  /* TO-DO: add gradient color here */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  .font-heading {
+    font-family: var(--font-epilogue);
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 110%;
+    letter-spacing: -2%;
+
+    @media screen and (max-width: 375px) {
+      font-size: 3.4rem;
+    }
+  }
+
+  .font-title_one {
+    font-family: var(--font-epilogue);
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 120%;
+    letter-spacing: -2%;
+
+    @media screen and (max-width: 375px) {
+      font-size: 2.6rem;
+    }
+  }
+
+  .font-title_two {
+    font-family: var(--font-epilogue);
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 120%;
+    letter-spacing: -2%;
+
+    @media screen and (max-width: 375px) {
+      font-size: 1.7rem;
+    }
+  }
+
+  .font-title_three {
+    font-family: var(--font-epilogue);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 130%;
+    letter-spacing: -2%;
+  }
+
+  .font-body_one {
+    font-family: var(--font-epilogue);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 150%;
+  }
+
+  .font-body_two {
+    font-family: var(--font-epilogue);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+  }
+}
