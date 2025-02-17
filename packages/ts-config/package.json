@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo-ds-boilerplate/ts-config",
+  "name": "@polotrip/ts-config",
   "version": "1.0.0",
   "license": "MIT",
   "private": true
