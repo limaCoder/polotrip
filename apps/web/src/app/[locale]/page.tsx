@@ -1,3 +1,4 @@
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { getTranslations } from 'next-intl/server';
 
 export default async function Home() {
@@ -5,8 +6,11 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      <h1>{t('title')}</h1>
-      <p>{t('content')}</p>
+      <div className="container w-full items-center justify-center">
+        <h1>{t('title')}</h1>
+        <p>{t('content')}</p>
+        <LocaleSwitcher />
+      </div>
     </div>
   );
 }
