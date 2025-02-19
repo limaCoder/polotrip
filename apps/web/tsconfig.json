@@ -8,6 +8,8 @@
     "src/i18n/messages.d.ts"
   ],
   "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"]
     },

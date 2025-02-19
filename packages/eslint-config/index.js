@@ -61,6 +61,7 @@ module.exports = {
     ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",
-    "@typescript-eslint/no-empty-function": "warn"
+    "@typescript-eslint/no-empty-function": "warn",
+    "no-irregular-whitespace": "off",
   },
 };

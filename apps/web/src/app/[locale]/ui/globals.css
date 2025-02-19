@@ -1,22 +1,42 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-primary: #03AED2;
-  --color-secondary: #68D2E8;
-  --color-yellow: #FEEFAD;
-  --color-accent: #FDDE55;
-  --color-background: #F7FCFD;
-  --color-text: #08171C;
+  --color-primary: #03aed2;
+  --color-secondary: #68d2e8;
+  --color-yellow: #feefad;
+  --color-accent: #fdde55;
+  --color-background: #f7fcfd;
+  --color-text: #08171c;
+  --color-gradient-primary: #2980b9, #2c3e50;
+  --color-secondary-50: #afe7f2;
+  --color-secondary-10: #EFF9FC;
   /* TO-DO: add gradient color here */
 }
 
 @layer base {
+  .bg-gradient-primary {
+    background: linear-gradient(90deg, var(--color-gradient-primary));
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(90deg, var(--color-gradient-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+
+  .container {
+    margin: 0 auto;
+  }
+
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
   }
 
-  a, button {
+  a,
+  button {
     cursor: pointer;
   }
 
@@ -28,7 +48,8 @@
     letter-spacing: -2%;
 
     @media screen and (max-width: 375px) {
-      font-size: 3.4rem;
+      /* font-size: 3.4rem; */
+      font-size: 2.4rem;
     }
   }
 
@@ -62,6 +83,10 @@
     font-size: 24px;
     line-height: 130%;
     letter-spacing: -2%;
+
+    @media screen and (max-width: 375px) {
+      font-size: 1rem;
+    }
   }
 
   .font-body_one {
@@ -76,5 +101,42 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 150%;
+  }
+
+  body {
+    background: var(--color-background);
+  }
+}
+
+@theme inline {
+  --color-border: var(--border);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background;
   }
 }
