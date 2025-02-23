@@ -4,3 +4,4 @@ dist/
 storybook-static/
 .DS_Store
 coverage/
+.env
