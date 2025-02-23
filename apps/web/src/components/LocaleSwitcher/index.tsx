@@ -9,11 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-const options = [
-  { value: 'pt', label: 'Português', flag: '/flags/brazil.svg' },
-  { value: 'en', label: 'English', flag: '/flags/us.svg' },
-];
+import { options } from './options';
 
 export function LocaleSwitcher() {
   const locale = useLocale();

@@ -10,7 +10,9 @@ export async function Cta() {
         <p className="font-body_one text-white">
           Por apenas <strong>R$29,99</strong>, crie um álbum de viagem digital único e memorável.
         </p>
-        <Button text="Começar agora" href={''} className="bg-yellow text-black shadow-md" />
+        <Button href={''} className="bg-yellow text-black shadow-md">
+          <strong>Começar agora</strong>
+        </Button>
       </div>
     </section>
   );

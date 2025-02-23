@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import './ui/globals.css';
+import { fontEpilogueVariable } from '@/styles/fonts';
 
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
@@ -9,7 +10,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/i18n/routing';
 import { Locale } from '@/i18n/types';
 import { cn } from '@/lib/cn';
-import { fontEpilogueVariable } from './ui/fonts';
 import { RootLayoutProps } from './types';
 
 export const metadata: Metadata = {

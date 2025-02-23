@@ -11,8 +11,12 @@ export async function Hero() {
           <h1 className="font-heading text-gradient-primary">{t('title')}</h1>
           <p className="mt-6 font-title_three">{t('content')}</p>
           <div className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start">
-            <Button text="Como funciona?" href={''} className="bg-primary text-white shadow-md" />
-            <Button text="Comece agora" href={''} className="bg-yellow text-black shadow-md" />
+            <Button href={''} className="bg-primary text-white shadow-md">
+              <strong>Como funciona?</strong>
+            </Button>
+            <Button href={''} className="bg-yellow text-black shadow-md">
+              <strong>Comece agora</strong>
+            </Button>
           </div>
         </div>
         <div className="flex flex-col items-center w-full lg:w-1/2 lg:mt-0 mt-12">

@@ -23,12 +23,10 @@ export function Header() {
 
         <div className="hidden lg:flex gap-4 items-center">
           <p className="hidden lg:block">Pronto para criar seus álbuns?</p>
-          <Button
-            href="/login"
-            text="Acessar conta"
-            className="bg-gradient-primary text-white"
-            icon={<Album />}
-          />
+          <Button href="/login" className="bg-gradient-primary text-white">
+            <strong>Acessar conta</strong>
+            <Album />
+          </Button>
           <LocaleSwitcher />
         </div>
 
@@ -48,10 +46,11 @@ export function Header() {
           </a>
           <Button
             href="/login"
-            text="Acessar conta"
             className="bg-gradient-primary text-white w-full justify-center mt-3"
-            icon={<Album />}
-          />
+          >
+            <strong>Acessar conta</strong>
+            <Album />
+          </Button>
           <div className="flex w-full justify-center">
             <LocaleSwitcher />
           </div>

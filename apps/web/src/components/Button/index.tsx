@@ -1,14 +1,13 @@
 import { cn } from '@/lib/cn';
-import React, { ComponentProps } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 
 interface ButtonProps extends ComponentProps<'a'> {
-  text: string;
   href: string;
-  icon?: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-export function Button({ text, href, icon, className = '', ...rest }: ButtonProps) {
+export function Button({ href, className = '', children, ...rest }: ButtonProps) {
   return (
     <a
       {...rest}
@@ -18,8 +17,7 @@ export function Button({ text, href, icon, className = '', ...rest }: ButtonProp
         className,
       )}
     >
-      {text}
-      {icon && <span>{icon}</span>}
+      {children}
     </a>
   );
 }
