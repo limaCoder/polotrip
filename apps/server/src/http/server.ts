@@ -8,7 +8,9 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 import { env } from '@/env';
+
 import { getAlbumsRoute } from './routes/get-albums';
+import { createAlbumRoute } from './routes/create-album';
 
 const app = fastify();
 
@@ -32,6 +34,7 @@ app.register(fastifySwaggerUi, {
 });
 
 app.register(getAlbumsRoute);
+app.register(createAlbumRoute);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running!');
