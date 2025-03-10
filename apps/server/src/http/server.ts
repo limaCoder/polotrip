@@ -11,6 +11,8 @@ import { env } from '@/env';
 
 import { getAlbumsRoute } from './routes/get-albums';
 import { createAlbumRoute } from './routes/create-album';
+import { createCheckoutRoute } from './routes/create-checkout';
+import { uploadPhotosRoute } from './routes/upload-photos';
 
 const app = fastify();
 
@@ -35,6 +37,8 @@ app.register(fastifySwaggerUi, {
 
 app.register(getAlbumsRoute);
 app.register(createAlbumRoute);
+app.register(createCheckoutRoute);
+app.register(uploadPhotosRoute);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running!');
