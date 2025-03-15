@@ -4,7 +4,7 @@ import z from 'zod';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    'albums',
+    '/albums',
     {
       schema: {
         querystring: z.object({
