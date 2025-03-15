@@ -13,6 +13,7 @@ import { getAlbumsRoute } from './routes/get-albums';
 import { createAlbumRoute } from './routes/create-album';
 import { createCheckoutRoute } from './routes/create-checkout';
 import { uploadPhotosRoute } from './routes/upload-photos';
+import { updateAlbumRoute } from './routes/update-album';
 
 const app = fastify();
 
@@ -39,6 +40,7 @@ app.register(getAlbumsRoute);
 app.register(createAlbumRoute);
 app.register(createCheckoutRoute);
 app.register(uploadPhotosRoute);
+app.register(updateAlbumRoute);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running!');
