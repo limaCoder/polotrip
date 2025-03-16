@@ -7,6 +7,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx --env-file .env ./src/db/seed.ts",
     "start": "node ./dist/http/server.js",
     "build": "tsup src",
     "seed": "tsx --env-file .env ./src/db/seed.ts"
@@ -26,9 +27,11 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "10.1.0",
     "@fastify/jwt": "9.0.4",
     "@fastify/multipart": "^9.0.2",
+    "@fastify/rate-limit": "^10.2.2",
     "@fastify/swagger": "9.4.2",
     "@fastify/swagger-ui": "5.2.1",
     "@paralleldrive/cuid2": "2.2.2",
