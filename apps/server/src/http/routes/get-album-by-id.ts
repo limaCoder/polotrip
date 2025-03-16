@@ -1,15 +1,23 @@
 import { getAlbumById } from '@/app/functions/get-album-by-id';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { authenticate } from '../middlewares/authenticate';
+
+const paramsSchema = z.object({
+  id: z.string(),
+});
+
+type GetAlbumByIdParams = z.infer<typeof paramsSchema>;
 
 export const getAlbumByIdRoute: FastifyPluginAsyncZod = async app => {
-  app.get(
+  app.get<{
+    Params: GetAlbumByIdParams;
+  }>(
     '/album/:id',
     {
+      onRequest: [authenticate],
       schema: {
-        params: z.object({
-          id: z.string().uuid(),
-        }),
+        params: paramsSchema,
         response: {
           200: z.object({
             album: z.object({

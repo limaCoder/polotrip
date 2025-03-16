@@ -6,6 +6,14 @@ import { db } from '@/db';
 import { photos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
+import { authenticate } from '../middlewares/authenticate';
+
+const querySchema = z.object({
+  albumId: z.string(),
+  userId: z.string(),
+});
+
+type UploadPhotosQuery = z.infer<typeof querySchema>;
 
 export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
   app.register(fastifyMultipart, {
@@ -15,14 +23,14 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
     },
   });
 
-  app.post(
-    '/upload',
+  app.post<{
+    Querystring: UploadPhotosQuery;
+  }>(
+    'albums/photos/upload',
     {
+      onRequest: [authenticate],
       schema: {
-        querystring: z.object({
-          albumId: z.string().uuid(),
-          userId: z.string().uuid(),
-        }),
+        querystring: querySchema,
         response: {
           200: z.object({
             photos: z.array(

@@ -1,21 +1,29 @@
 import { createCheckoutSession } from '@/app/functions/create-checkout-session';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { authenticate } from '../middlewares/authenticate';
+
+const bodySchema = z.object({
+  userId: z.string(),
+  albumId: z.string(),
+  successUrl: z.string().url(),
+  cancelUrl: z.string().url(),
+  paymentMethod: z.enum(['credit_card', 'pix']),
+  isAdditionalPhotos: z.boolean().optional().default(false),
+  additionalPhotosCount: z.number().int().min(1).optional(),
+});
+
+type CreateCheckoutBody = z.infer<typeof bodySchema>;
 
 export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
-  app.post(
+  app.post<{
+    Body: CreateCheckoutBody;
+  }>(
     '/checkout',
     {
+      onRequest: [authenticate],
       schema: {
-        body: z.object({
-          userId: z.string().uuid(),
-          albumId: z.string().uuid(),
-          successUrl: z.string().url(),
-          cancelUrl: z.string().url(),
-          paymentMethod: z.enum(['credit_card', 'pix']),
-          isAdditionalPhotos: z.boolean().optional().default(false),
-          additionalPhotosCount: z.number().int().min(1).optional(),
-        }),
+        body: bodySchema,
         response: {
           200: z.object({
             checkoutUrl: z.string().url().nullable(),

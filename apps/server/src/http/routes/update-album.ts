@@ -1,34 +1,46 @@
 import { updateAlbum } from '@/app/functions/update-album';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { authenticate } from '../middlewares/authenticate';
+
+const paramsSchema = z.object({
+  id: z.string(),
+});
+
+const bodySchema = z.object({
+  userId: z.string(),
+  title: z.string().min(3).max(255).optional(),
+  description: z.string().max(1000).nullable().optional(),
+  coverImageUrl: z.string().url().nullable().optional(),
+  spotifyTrackId: z.string().nullable().optional(),
+  spotifyPlaylistId: z.string().nullable().optional(),
+  isPublished: z.boolean().optional(),
+  photoUpdates: z
+    .array(
+      z.object({
+        id: z.string(),
+        locationName: z.string().nullable().optional(),
+        description: z.string().nullable().optional(),
+        order: z.string().nullable().optional(),
+      }),
+    )
+    .optional(),
+});
+
+type UpdateAlbumParams = z.infer<typeof paramsSchema>;
+type UpdateAlbumBody = z.infer<typeof bodySchema>;
 
 export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
-  app.put(
+  app.put<{
+    Params: UpdateAlbumParams;
+    Body: UpdateAlbumBody;
+  }>(
     '/albums/:id',
     {
+      onRequest: [authenticate],
       schema: {
-        params: z.object({
-          id: z.string().uuid(),
-        }),
-        body: z.object({
-          userId: z.string().uuid(),
-          title: z.string().min(3).max(255).optional(),
-          description: z.string().max(1000).nullable().optional(),
-          coverImageUrl: z.string().url().nullable().optional(),
-          spotifyTrackId: z.string().nullable().optional(),
-          spotifyPlaylistId: z.string().nullable().optional(),
-          isPublished: z.boolean().optional(),
-          photoUpdates: z
-            .array(
-              z.object({
-                id: z.string().uuid(),
-                locationName: z.string().nullable().optional(),
-                description: z.string().nullable().optional(),
-                order: z.string().nullable().optional(),
-              }),
-            )
-            .optional(),
-        }),
+        params: paramsSchema,
+        body: bodySchema,
         response: {
           200: z.object({
             album: z.object({
