@@ -19,36 +19,28 @@ export async function setupRateLimit(app: FastifyInstance) {
     },
   });
 
-  // Specific configs to authentication routes
-  app.after(() => {
-    app.route({
-      method: 'POST',
-      url: '/auth/token',
-      config: {
-        rateLimit: {
-          max: 20,
-          timeWindow: '1 minute',
-          keyGenerator: function (request) {
-            return `${request.ip}-${request.cookies.refreshToken || 'no-token'}`;
-          },
+  // Add specific rate limits for sensitive routes
+  app.addHook('onRoute', routeOptions => {
+    if (routeOptions.method === 'POST' && routeOptions.url === '/auth/token') {
+      routeOptions.config = routeOptions.config || {};
+      routeOptions.config.rateLimit = {
+        max: 20,
+        timeWindow: '1 minute',
+        keyGenerator: function (request) {
+          return `${request.ip}-${request.cookies.refreshToken || 'no-token'}`;
         },
-      },
-      handler: async () => {},
-    });
+      };
+    }
 
-    app.route({
-      method: 'POST',
-      url: '/auth/sync-user',
-      config: {
-        rateLimit: {
-          max: 10,
-          timeWindow: '1 minute',
-          keyGenerator: function (request) {
-            return request.ip;
-          },
+    if (routeOptions.method === 'POST' && routeOptions.url === '/auth/sync-user') {
+      routeOptions.config = routeOptions.config || {};
+      routeOptions.config.rateLimit = {
+        max: 10,
+        timeWindow: '1 minute',
+        keyGenerator: function (request) {
+          return request.ip;
         },
-      },
-      handler: async () => {},
-    });
+      };
+    }
   });
 }

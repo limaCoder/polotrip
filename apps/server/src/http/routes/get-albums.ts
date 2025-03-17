@@ -9,9 +9,6 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
     {
       onRequest: [authenticate],
       schema: {
-        querystring: z.object({
-          userId: z.string(),
-        }),
         response: {
           200: z.object({
             albums: z.array(

@@ -25,10 +25,13 @@ export const syncUserRoute: FastifyPluginAsyncZod = async app => {
         body: bodySchema,
         response: {
           200: z.object({
-            id: z.string(),
-            email: z.string(),
-            name: z.string(),
-            avatarUrl: z.string().nullable(),
+            accessToken: z.string(),
+            user: z.object({
+              id: z.string(),
+              name: z.string(),
+              email: z.string(),
+              avatarUrl: z.string().nullable(),
+            }),
           }),
         },
       },
