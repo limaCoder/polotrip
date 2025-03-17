@@ -6,7 +6,7 @@ import { db } from '@/db';
 import { photos } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
-import { authenticate } from '../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate';
 
 const querySchema = z.object({
   albumId: z.string(),

@@ -1,7 +1,7 @@
 import { createAlbum } from '@/app/functions/create-album';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { authenticate } from '../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate';
 
 const bodySchema = z.object({
   userId: z.string(),

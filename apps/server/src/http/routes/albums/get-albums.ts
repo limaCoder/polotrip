@@ -1,7 +1,7 @@
 import { getAlbumsByUserId } from '@/app/functions/get-albums-by-user-id';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { authenticate } from '../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(

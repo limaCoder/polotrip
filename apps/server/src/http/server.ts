@@ -16,14 +16,15 @@ import { env } from '@/env';
 import { setupErrorHandler } from './errors';
 import { setupRateLimit } from './plugins/rate-limit';
 
-import { getAlbumsRoute } from './routes/get-albums';
-import { createAlbumRoute } from './routes/create-album';
-import { createCheckoutRoute } from './routes/create-checkout';
-import { uploadPhotosRoute } from './routes/upload-photos';
-import { updateAlbumRoute } from './routes/update-album';
-import { getAlbumByIdRoute } from './routes/get-album-by-id';
-import { syncUserRoute } from './routes/auth/sync-user';
-import { getToken } from './routes/auth/get-token';
+import {
+  getAlbumsRoute,
+  createAlbumRoute,
+  uploadPhotosRoute,
+  updateAlbumRoute,
+  getAlbumByIdRoute,
+} from './routes/albums';
+import { createCheckoutRoute } from './routes/checkout/create-checkout';
+import { syncUserRoute, getToken } from './routes/auth';
 
 const app = fastify({
   logger: true,
