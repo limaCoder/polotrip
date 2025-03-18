@@ -1,8 +1,7 @@
 import { db } from '@/db';
 import { albums, payments } from '@/db/schema';
-import { env } from '@/env';
 import { eq } from 'drizzle-orm';
-import Stripe from 'stripe';
+import stripe from '../lib/stripe';
 
 interface CreateCheckoutSessionRequest {
   userId: string;
@@ -36,10 +35,6 @@ async function createCheckoutSession({
   if (album.userId !== userId) {
     throw new Error('Album does not belong to the user');
   }
-
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-    apiVersion: '2025-02-24.acacia',
-  });
 
   let amount = 2999; // R$29,99 to new album
   let description = `Photos album: ${album.title}`;
