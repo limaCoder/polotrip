@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Album, X, Menu } from 'lucide-react';
-import { Button } from '@/components/Button';
+import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { cn } from '@/lib/cn';
 
@@ -36,10 +36,13 @@ export function HeaderMobile() {
         <a href="#perguntas-frequentes" className="text-black" onClick={toggleMenu}>
           Perguntas frequentes
         </a>
-        <Button href="/login" className="bg-gradient-primary text-white w-full justify-center mt-3">
+        <ButtonNavigation
+          href="/login"
+          className="bg-gradient-primary text-white w-full justify-center mt-3"
+        >
           <strong>Acessar conta</strong>
           <Album />
-        </Button>
+        </ButtonNavigation>
         <div className="flex w-full justify-center">
           <LocaleSwitcher />
         </div>
