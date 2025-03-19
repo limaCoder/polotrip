@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { getTranslations } from 'next-intl/server';
 
 export async function Hero() {
@@ -11,16 +11,16 @@ export async function Hero() {
           <h1 className="font-heading text-gradient-primary">{t('title')}</h1>
           <p className="mt-6 font-title_three">{t('content')}</p>
           <div className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start">
-            <Button href={''} className="bg-primary text-white shadow-md">
+            <ButtonNavigation href={''} className="bg-primary text-white shadow-md">
               <strong>Como funciona?</strong>
-            </Button>
-            <Button href={''} className="bg-yellow text-black shadow-md">
+            </ButtonNavigation>
+            <ButtonNavigation href={''} className="bg-yellow text-black shadow-md">
               <strong>Comece agora</strong>
-            </Button>
+            </ButtonNavigation>
           </div>
         </div>
         <div className="flex flex-col items-center w-full lg:w-1/2 lg:mt-0 mt-12">
-          <img src="/img/hero-photos.png" alt="" className="w-2/3 2xl:w-2/3" />
+          <img src="/pages/home/hero-photos.png" alt="" className="w-2/3 2xl:w-2/3" />
         </div>
       </div>
     </section>

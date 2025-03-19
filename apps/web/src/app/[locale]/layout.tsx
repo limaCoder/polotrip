@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import './ui/globals.css';
+import '@/styles/globals.css';
 import { fontEpilogueVariable } from '@/styles/fonts';
 
 import { getMessages } from 'next-intl/server';

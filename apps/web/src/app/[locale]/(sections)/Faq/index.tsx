@@ -17,7 +17,7 @@ export async function Faq() {
               help@polotrip.com
             </a>
           </p>
-          <img src="/img/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
+          <img src="/pages/home/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
         </div>
         <div className="flex flex-col w-full lg:w-3/5 justify-center">
           <Accordion type="single" collapsible>
