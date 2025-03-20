@@ -4,10 +4,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { MotionSection } from '@/lib/motion/motion-components';
 
 export async function Faq() {
   return (
-    <section className="py-12 bg-secondary-10 lg:bg-background">
+    <MotionSection
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      className="py-12 bg-secondary-10 lg:bg-background"
+    >
       <div className="container mx-auto lg:px-9 px-4 flex flex-col lg:flex-row gap-12">
         <div className="flex w-full lg:w-2/5 flex-col">
           <h2 className="font-title_two text-primary font-bold">Perguntas frequentes</h2>
@@ -17,7 +23,7 @@ export async function Faq() {
               help@polotrip.com
             </a>
           </p>
-          <img src="/pages/home/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
+          <img src="/pages/home/faq/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
         </div>
         <div className="flex flex-col w-full lg:w-3/5 justify-center">
           <Accordion type="single" collapsible>
@@ -56,6 +62,6 @@ export async function Faq() {
           </Accordion>
         </div>
       </div>
-    </section>
+    </MotionSection>
   );
 }

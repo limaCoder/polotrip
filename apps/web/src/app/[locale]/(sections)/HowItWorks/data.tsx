@@ -1,26 +1,26 @@
-import { Image, UploadCloud, Share2 } from 'lucide-react';
-
 const steps = [
   {
-    id: 1,
-    title: 'Crie seu album',
-    description:
-      'Defina o título, descrição e capa da viagem. Escolha como deseja pagar (cartão ou Pix) e pronto: seu álbum está reservado!',
-    icon: <Image className="w-10 h-10 text-primary" />,
+    category: '1. Crie sua conta',
+    title:
+      'Registre-se gratuitamente em poucos segundos e comece a criar seu primeiro álbum de viagem digital personalizado..',
+    src: '/pages/home/how-it-works/step-one.jpg',
   },
   {
-    id: 2,
-    title: 'Envie suas fotos',
-    description:
-      'Arraste e solte as imagens, organize-as por data e, se quiser, conecte sua conta do Spotify para escolher a trilha sonora perfeita.',
-    icon: <UploadCloud className="w-10 h-10 text-primary" />,
+    category: '2. Faça upload das fotos',
+    title: 'Adicione suas melhores fotos e vídeos de viagem ao seu álbum digital. ',
+    src: '/pages/home/how-it-works/step-two.jpg',
   },
   {
-    id: 3,
-    title: 'Compartilhe com o mundo',
-    description:
-      'Receba um link único do seu álbum. Ele exibirá mapa, timeline e galeria em um layout envolvente – tudo para que amigos e família possam reviver cada momento.',
-    icon: <Share2 className="w-10 h-10 text-primary" />,
+    category: '3. Personalize seu álbum',
+    title:
+      'Organize suas fotos, adicione locais no mapa interativo e escolha a trilha sonora perfeita do Spotify para embalar suas memórias.',
+    src: '/pages/home/how-it-works/step-three.jpg',
+  },
+  {
+    category: '4. Compartilhe com amigos',
+    title:
+      'Envie o link do seu álbum para amigos e familiares reviverem suas aventuras. Eles poderão navegar pelo mapa, ver suas fotos e ouvir a trilha sonora escolhida.',
+    src: '/pages/home/how-it-works/step-four.jpg',
   },
 ];
 

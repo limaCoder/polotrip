@@ -14,7 +14,7 @@ export function HeaderMobile() {
   };
 
   return (
-    <div className="lg:hidden py-4 container relative flex justify-between items-center px-4">
+    <div className="lg:hidden bg-background py-4 container relative flex justify-between items-center px-4">
       <img src="brand/logo.svg" alt="Logo" className="w-[150px] sm:w-full md:w-[180px]" />
 
       <button className="text-primary z-20" onClick={toggleMenu}>
@@ -23,8 +23,8 @@ export function HeaderMobile() {
 
       <div
         className={cn(
-          'fixed top-0 left-0 w-full h-[300px] bg-white bg-opacity-90 p-6 flex flex-col gap-4 items-start justify-center transition-transform duration-700 z-10 shadow-lg',
-          isMenuOpen ? 'translate-y-0' : '-translate-y-full',
+          'absolute top-0 left-0 w-full h-[300px] bg-background p-6 flex flex-col gap-4 items-start justify-center transition-transform duration-700 z-10 shadow-lg',
+          isMenuOpen ? 'translate-y-16' : '-translate-y-full',
         )}
       >
         <a href="#vantagens" className="text-black" onClick={toggleMenu}>

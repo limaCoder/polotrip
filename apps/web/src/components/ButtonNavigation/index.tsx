@@ -1,5 +1,9 @@
+'use client';
+
 import { cn } from '@/lib/cn';
 import { ButtonNavigationProps } from './types';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 export function ButtonNavigation({
   href,
@@ -7,16 +11,19 @@ export function ButtonNavigation({
   children,
   ...rest
 }: ButtonNavigationProps) {
+  const params = useParams();
+  const locale = params.locale;
+
   return (
-    <a
+    <Link
       {...rest}
-      href={href}
+      href={`/${locale}${href}`}
       className={cn(
-        `flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-4 text-center rounded-[10px] transition-all hover:brightness-110 font-bold`,
+        `flex items-center justify-center gap-2 px-4 py-4 text-center rounded-[10px] transition-all ease-in-out duration-300 hover:brightness-110 font-bold`,
         className,
       )}
     >
       {children}
-    </a>
+    </Link>
   );
 }

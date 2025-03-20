@@ -2,17 +2,27 @@ import { ButtonNavigation } from '@/components/ButtonNavigation';
 
 export async function Cta() {
   return (
-    <section className="py-12 bg-[url('/pages/home/cta-section.png')] bg-cover bg-center bg-no-repeat">
-      <div className="container mx-auto lg:px-9 px-4 flex flex-col items-center gap-5 lg:text-left text-center">
-        <h2 className="font-title_two font-bold text-white">
-          Pronto para criar seu primeiro álbum?
-        </h2>
-        <p className="font-body_one text-white">
-          Por apenas <strong>R$29,99</strong>, crie um álbum de viagem digital único e memorável.
-        </p>
-        <ButtonNavigation href={''} className="bg-yellow text-black shadow-md">
-          <strong>Começar agora</strong>
-        </ButtonNavigation>
+    <section className="relative overflow-hidden py-20">
+      <div className="absolute inset-0 w-full h-full z-0">
+        <video autoPlay muted loop playsInline className="w-full h-full object-cover">
+          <source src="/pages/home/cta/cta-section.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/70"></div>
+      </div>
+
+      <div className="container px-4 lg:px-9 relative z-10">
+        <div className="flex flex-col items-center text-center text-white">
+          <h2 className="font-title_one mb-6">Pronto para criar seu primeiro álbum?</h2>
+          <p className="font-title_three mb-8">
+            Por apenas <strong>R$29,99</strong>, crie um álbum de viagem digital único e memorável.
+          </p>
+          <ButtonNavigation
+            href="/login"
+            className="h-[60px] bg-primary text-white hover:bg-primary/90"
+          >
+            <strong>Comece agora</strong>
+          </ButtonNavigation>
+        </div>
       </div>
     </section>
   );

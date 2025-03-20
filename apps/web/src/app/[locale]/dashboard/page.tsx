@@ -2,8 +2,8 @@ import { Plus } from 'lucide-react';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/Button';
 import { AlbumCard } from '@/components/AlbumCard';
+import { ButtonNavigation } from '@/components/ButtonNavigation';
 
 import { albums } from '@/data/albums';
 
@@ -19,10 +19,13 @@ export default function DashboardPage() {
                 <h1 className="font-title_two">Meus Álbuns</h1>
                 <p className="font-title_three">Gerencie e compartilhe suas memórias de viagem</p>
               </div>
-              <Button className="bg-primary text-background py-4 px-8 flex items-center gap-2 shadow-lg hover:brightness-105">
+              <ButtonNavigation
+                href="/dashboard/create-album"
+                className="bg-primary text-background py-4 px-8 flex items-center gap-2 shadow-lg hover:brightness-105"
+              >
                 <Plus size={24} color="#F7FCFD" />
                 <span>Criar Novo Álbum</span>
-              </Button>
+              </ButtonNavigation>
             </div>
 
             <div className="flex justify-between flex-wrap gap-9">

@@ -1,4 +1,4 @@
-import { Camera } from 'lucide-react';
+import { Camera, Map, Music4, Share2 } from 'lucide-react';
 
 const benefits = [
   {
@@ -11,19 +11,19 @@ const benefits = [
     id: 2,
     title: 'Mapa Interativo',
     description: 'Visualize sua jornada em um mapa com todos os lugares que você visitou.',
-    icon: <Camera />,
+    icon: <Map />,
   },
   {
     id: 3,
     title: 'Trilha Sonora',
     description: 'Adicione músicas do Spotify para tornar a experiência ainda mais especial.',
-    icon: <Camera />,
+    icon: <Music4 />,
   },
   {
     id: 4,
     title: 'Compartilhamento Fácil',
     description: 'Compartilhe seus álbuns com amigos e familiares através de um link.',
-    icon: <Camera />,
+    icon: <Share2 />,
   },
 ];
 
