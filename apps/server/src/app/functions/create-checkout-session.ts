@@ -1,7 +1,7 @@
-import { db } from '@/db';
-import { albums, payments } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import stripe from '../lib/stripe';
+import { db } from '@polotrip/db';
+import { albums, payments } from '@polotrip/db/schema';
+import stripe from '@/app/lib/stripe';
 
 interface CreateCheckoutSessionRequest {
   userId: string;

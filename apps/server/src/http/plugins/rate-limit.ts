@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import fastifyRateLimit from '@fastify/rate-limit';
-import { TooManyRequestsError } from '../errors';
+import { TooManyRequestsError } from '@/http/errors';
 
 export async function setupRateLimit(app: FastifyInstance) {
   await app.register(fastifyRateLimit, {

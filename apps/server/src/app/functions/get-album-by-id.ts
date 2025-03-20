@@ -1,6 +1,6 @@
-import { db } from '@/db';
-import { albums, photos, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { db } from '@polotrip/db';
+import { albums, photos, users } from '@polotrip/db/schema';
 
 interface GetAlbumByIdRequest {
   albumId: string;

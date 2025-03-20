@@ -61,7 +61,7 @@ export function setupErrorHandler(app: FastifyInstance) {
       return reply.status(400).send(badRequestError.toResponse());
     }
 
-    // Erros do Fastify
+    // Fastify errors
     if ((error as FastifyError).statusCode) {
       const fastifyError = error as FastifyError;
       const statusCode = fastifyError.statusCode || 500;

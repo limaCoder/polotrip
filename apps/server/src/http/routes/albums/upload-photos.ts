@@ -1,12 +1,13 @@
-import { uploadPhotos } from '@/app/functions/upload-photos';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import fastifyMultipart from '@fastify/multipart';
-import { db } from '@/db';
-import { photos } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-import { sql } from 'drizzle-orm';
-import { authenticate } from '../../middlewares/authenticate';
+
+import { eq, sql } from 'drizzle-orm';
+import { db } from '@polotrip/db';
+import { photos } from '@polotrip/db/schema';
+
+import { uploadPhotos } from '@/app/functions/upload-photos';
+import { authenticate } from '@/http/middlewares/authenticate';
 
 const querySchema = z.object({
   albumId: z.string(),

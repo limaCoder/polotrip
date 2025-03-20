@@ -1,7 +1,7 @@
-import { getAlbumById } from '@/app/functions/get-album-by-id';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { authenticate } from '../../middlewares/authenticate';
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { getAlbumById } from '@/app/functions/get-album-by-id';
+import { authenticate } from '@/http/middlewares/authenticate';
 
 const paramsSchema = z.object({
   id: z.string(),

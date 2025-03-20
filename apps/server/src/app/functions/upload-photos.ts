@@ -1,11 +1,13 @@
-import { db } from '@/db';
-import { albums, photos } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { db } from '@polotrip/db';
+import { albums, photos } from '@polotrip/db/schema';
 import { env } from '@/env';
+
 import { MultipartFile } from '@fastify/multipart';
 import { createClient } from '@supabase/supabase-js';
-import { eq } from 'drizzle-orm';
-import { extractExifData } from '../utils/extractExifData';
 import { createId } from '@paralleldrive/cuid2';
+
+import { extractExifData } from '@/app/utils/extractExifData';
 
 interface UploadPhotosRequest {
   albumId: string;

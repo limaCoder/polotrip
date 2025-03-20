@@ -1,5 +1,5 @@
-import { db, client } from '.';
-import { albums, users, photos } from './schema';
+import { db, client } from '@polotrip/db';
+import { albums, users, photos } from '@polotrip/db/schema';
 import { env } from '@/env';
 
 import { fastify } from 'fastify';

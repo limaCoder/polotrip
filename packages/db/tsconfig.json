@@ -1,0 +1,5 @@
+{
+  "extends": "@polotrip/ts-config/base.json",
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist/**", "build/**"]
+}

@@ -1,5 +1,5 @@
-import { db } from '@/db';
-import { users } from '@/db/schema';
+import { db } from '@polotrip/db';
+import { users } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';

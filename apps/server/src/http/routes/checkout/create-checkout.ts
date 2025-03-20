@@ -1,7 +1,7 @@
-import { createCheckoutSession } from '@/app/functions/create-checkout-session';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { authenticate } from '../../middlewares/authenticate';
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { createCheckoutSession } from '@/app/functions/create-checkout-session';
+import { authenticate } from '@/http/middlewares/authenticate';
 
 const bodySchema = z.object({
   userId: z.string(),

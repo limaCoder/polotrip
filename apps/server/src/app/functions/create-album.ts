@@ -1,5 +1,5 @@
-import { db } from '@/db';
-import { albums } from '@/db/schema';
+import { db } from '@polotrip/db';
+import { albums } from '@polotrip/db/schema';
 import { createId } from '@paralleldrive/cuid2';
 
 interface CreateAlbumRequest {

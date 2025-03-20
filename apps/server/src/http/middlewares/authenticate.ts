@@ -1,5 +1,5 @@
 import { FastifyRequest } from 'fastify';
-import { UnauthorizedError } from '../errors';
+import { UnauthorizedError } from '@/http/errors';
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
