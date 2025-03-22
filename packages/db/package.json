@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "2.2.2",
     "@types/node": "~22.13.1",
     "drizzle-orm": "0.39.3",
     "drizzle-zod": "~0.7.0",
@@ -23,9 +24,9 @@
     "zod": "~3.24.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "~9.4.0",
     "@polotrip/eslint-config": "workspace:*",
     "@polotrip/ts-config": "workspace:*",
-    "@faker-js/faker": "~9.4.0",
     "drizzle-kit": "~0.30.4"
   }
 }

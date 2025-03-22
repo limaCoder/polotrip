@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
 
-import { users } from './users';
+import { users } from './auth-schema';
 import { photos } from './photos';
 
 const albums = pgTable('albums', {

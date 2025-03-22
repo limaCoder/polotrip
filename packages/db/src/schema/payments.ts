@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2';
 import { integer, pgTable, text, boolean, timestamp } from 'drizzle-orm/pg-core';
-import { users } from './users';
+import { users } from './auth-schema';
 import { albums } from './albums';
 import { relations } from 'drizzle-orm';
 
