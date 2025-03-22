@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@polotrip/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@polotrip/db": "workspace:*",
+    "better-auth": "~1.1.16",
+    "zod": "~3.24.1"
+  },
+  "devDependencies": {
+    "@polotrip/eslint-config": "workspace:*",
+    "@polotrip/ts-config": "workspace:*",
+    "@types/node": "~22.13.1",
+    "typescript": "~5.7.3"
+  }
+}
