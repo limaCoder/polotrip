@@ -17,7 +17,7 @@ export async function Cta() {
             Por apenas <strong>R$29,99</strong>, crie um álbum de viagem digital único e memorável.
           </p>
           <ButtonNavigation
-            href="/login"
+            href="/sign-in"
             className="h-[60px] bg-primary text-white hover:bg-primary/90"
           >
             <strong>Comece agora</strong>

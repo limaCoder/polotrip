@@ -16,7 +16,7 @@ export function HomeContent() {
   return (
     <>
       <p className="block">Pronto para criar seus álbuns?</p>
-      <ButtonNavigation href="/login" className="bg-gradient-primary text-white button-shadow">
+      <ButtonNavigation href="/sign-in" className="bg-gradient-primary text-white button-shadow">
         <strong>Acessar conta</strong>
         <Album />
       </ButtonNavigation>

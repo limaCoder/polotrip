@@ -39,7 +39,7 @@ export async function Hero() {
             <ButtonNavigation href="#how-it-works" className="bg-primary text-white button-shadow">
               <strong>Como funciona?</strong>
             </ButtonNavigation>
-            <ButtonNavigation href="/login" className="bg-yellow text-black button-shadow">
+            <ButtonNavigation href="/sign-in" className="bg-yellow text-black button-shadow">
               <strong>Comece agora</strong>
             </ButtonNavigation>
           </MotionDiv>

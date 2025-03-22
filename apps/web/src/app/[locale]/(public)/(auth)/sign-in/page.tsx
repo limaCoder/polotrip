@@ -3,10 +3,10 @@ import { LogIn } from 'lucide-react';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/Button';
 import LottieAnimation from '@/components/LottieAnimation';
 
 import womanTakingSunbathOnBeach from '@/assets/lottie/woman-taking-sunbath-on-beach.json';
+import { OAuthButton } from '@/components/OAuthButton';
 
 export default function LoginPage() {
   return (
@@ -28,15 +28,10 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col gap-4 w-full">
-              <Button className="border border-text-opacity-25 rounded-lg py-2 px-6 w-full font-normal justify-center items-center hover:bg-gray-50">
+              <OAuthButton provider="google">
                 <Image src="/icons/google.png" alt="Google" width={24} height={24} />
                 <span className="font-body_two">Sign in with Google</span>
-              </Button>
-
-              <Button className="border border-text-opacity-25 rounded-lg py-2 px-6 w-full font-normal justify-center items-center hover:bg-gray-50">
-                <Image src="/icons/apple.png" alt="Apple" width={24} height={24} />
-                <span className="font-body_two">Sign in with Apple</span>
-              </Button>
+              </OAuthButton>
             </div>
 
             <div className="w-full h-[320px] mt-4 rounded-lg overflow-hidden">

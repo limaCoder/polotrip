@@ -5,9 +5,11 @@ import { Footer } from '@/components/Footer';
 import { AlbumCard } from '@/components/AlbumCard';
 import { ButtonNavigation } from '@/components/ButtonNavigation';
 
-import { albums } from '@/data/albums';
+import { getAlbums } from '@/http/get-albums';
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const albums = await getAlbums();
+
   return (
     <main className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -29,15 +31,19 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex justify-between flex-wrap gap-9">
-              {albums?.map(album => (
-                <AlbumCard
-                  key={album?.id}
-                  title={album?.title}
-                  date={album?.date}
-                  photosCount={album?.photosCount}
-                  imageUrl={album?.imageUrl}
-                />
-              ))}
+              {albums?.length > 0 ? (
+                albums?.map(album => (
+                  <AlbumCard
+                    key={album?.id}
+                    title={album?.title}
+                    date={album?.createdAt.toLocaleDateString()}
+                    photosCount={album?.photoCount}
+                    imageUrl={album?.coverImageUrl ?? ''}
+                  />
+                ))
+              ) : (
+                <p className="text-center text-gray-500">Nenhum álbum encontrado</p>
+              )}
             </div>
           </div>
         </div>
