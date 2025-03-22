@@ -2,14 +2,13 @@ import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
 import { fastifySwagger } from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
-import fastifyJwt from '@fastify/jwt';
-import fastifyCookie from '@fastify/cookie';
 
 import {
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod';
+import fastifyCookie from '@fastify/cookie';
 
 import { env } from '@/env';
 
@@ -23,32 +22,34 @@ import {
   updateAlbumRoute,
   getAlbumByIdRoute,
 } from './routes/albums';
+
 import { createCheckoutRoute } from './routes/checkout/create-checkout';
-import { syncUserRoute, getToken } from './routes/auth';
+import { authRoute } from './routes/auth';
+
+import dbPlugin from './plugins/db';
+import authPlugin from './plugins/auth';
 
 const app = fastify({
   logger: true,
 });
 
+setupErrorHandler(app);
+
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
 
-setupErrorHandler(app);
-
 app.register(fastifyCors, {
-  origin: true,
+  origin: env.WEB_URL,
   credentials: true,
+  allowedHeaders: ['Authorization', 'cookie', 'content-type'],
 });
 
-app.register(fastifyJwt, {
-  secret: env.JWT_SECRET,
-  cookie: {
-    cookieName: 'refreshToken',
-    signed: false,
-  },
+app.register(fastifyCookie, {
+  prefix: 'polotrip',
 });
 
-app.register(fastifyCookie);
+app.register(dbPlugin);
+app.register(authPlugin);
 
 app.register(setupRateLimit);
 
@@ -66,8 +67,7 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 });
 
-app.register(syncUserRoute);
-app.register(getToken);
+app.register(authRoute);
 
 app.register(getAlbumsRoute);
 app.register(createAlbumRoute);

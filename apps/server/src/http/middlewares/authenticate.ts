@@ -1,26 +1,18 @@
-import { FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { UnauthorizedError } from '@/http/errors';
+import { fromNodeHeaders } from 'better-auth/node';
 
-declare module '@fastify/jwt' {
-  interface FastifyJWT {
-    payload: {
-      sub: string;
-      name?: string;
-      email?: string;
-      iat?: number;
-    };
-    user: {
-      sub: string;
-      name?: string;
-      email?: string;
-      iat?: number;
-    };
-  }
-}
-
-async function authenticate(request: FastifyRequest) {
+async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
-    await request.jwtVerify();
+    const session = await request.server.auth.api.getSession({
+      headers: fromNodeHeaders(request.headers),
+    });
+
+    if (!session) {
+      return reply.status(401).send({
+        error: 'Unauthorized',
+      });
+    }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
@@ -38,7 +30,7 @@ async function authenticate(request: FastifyRequest) {
       'Error in authentication',
     );
 
-    throw new UnauthorizedError('Invalid or expired token', 'INVALID_ACCESS_TOKEN', {
+    throw new UnauthorizedError('Invalid or expired session', 'INVALID_SESSION', {
       originalError: errorMessage,
     });
   }

@@ -35,7 +35,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
     Params: UpdateAlbumParams;
     Body: UpdateAlbumBody;
   }>(
-    '/albums/:id',
+    '/api/albums/:id',
     {
       onRequest: [authenticate],
       schema: {

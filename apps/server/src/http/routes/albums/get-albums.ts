@@ -2,10 +2,12 @@ import z from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { getAlbumsByUserId } from '@/app/functions/get-albums-by-user-id';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { fromNodeHeaders } from 'better-auth/node';
+import { UnauthorizedError } from '@/http/errors';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    '/albums',
+    '/api/albums',
     {
       onRequest: [authenticate],
       schema: {
@@ -32,10 +34,16 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
       },
     },
     async request => {
-      const userId = request.user.sub;
+      const session = await request.server.auth.api.getSession({
+        headers: fromNodeHeaders(request.headers),
+      });
+
+      if (!session) {
+        throw new UnauthorizedError();
+      }
 
       const { albums } = await getAlbumsByUserId({
-        userId,
+        userId: session.user.id,
       });
 
       return { albums };
