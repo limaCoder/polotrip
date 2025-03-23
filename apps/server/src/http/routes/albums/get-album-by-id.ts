@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+
+import DOMPurify from 'isomorphic-dompurify';
+
 import { getAlbumById } from '@/app/functions/get-album-by-id';
 import { authenticate } from '@/http/middlewares/authenticate';
 
@@ -97,8 +100,12 @@ export const getAlbumByIdRoute: FastifyPluginAsyncZod = async app => {
       try {
         const { id: albumId } = request.params;
 
+        const sanitizedInput = {
+          id: DOMPurify.sanitize(albumId),
+        };
+
         const result = await getAlbumById({
-          albumId,
+          albumId: sanitizedInput.id,
         });
 
         return result;

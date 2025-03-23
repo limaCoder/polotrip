@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+
+import DOMPurify from 'isomorphic-dompurify';
+
 import { updateAlbum } from '@/app/functions/update-album';
 import { authenticate } from '@/http/middlewares/authenticate';
 
@@ -95,16 +98,28 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
           photoUpdates,
         } = request.body;
 
+        const sanitizedInput = {
+          albumId: DOMPurify.sanitize(albumId),
+          userId: DOMPurify.sanitize(userId),
+          title: DOMPurify.sanitize(title ?? ''),
+          description: DOMPurify.sanitize(description ?? ''),
+          coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
+          spotifyTrackId: DOMPurify.sanitize(spotifyTrackId ?? ''),
+          spotifyPlaylistId: DOMPurify.sanitize(spotifyPlaylistId ?? ''),
+          isPublished: isPublished ?? false,
+          photoUpdates: photoUpdates ?? [],
+        };
+
         const result = await updateAlbum({
-          albumId,
-          userId,
-          title,
-          description,
-          coverImageUrl,
-          spotifyTrackId,
-          spotifyPlaylistId,
-          isPublished,
-          photoUpdates,
+          albumId: sanitizedInput?.albumId,
+          userId: sanitizedInput?.userId,
+          title: sanitizedInput?.title,
+          description: sanitizedInput?.description,
+          coverImageUrl: sanitizedInput?.coverImageUrl,
+          spotifyTrackId: sanitizedInput?.spotifyTrackId,
+          spotifyPlaylistId: sanitizedInput?.spotifyPlaylistId,
+          isPublished: sanitizedInput?.isPublished,
+          photoUpdates: sanitizedInput?.photoUpdates,
         });
 
         return result;

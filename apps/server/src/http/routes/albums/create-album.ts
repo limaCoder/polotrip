@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+
+import DOMPurify from 'isomorphic-dompurify';
+
 import { createAlbum } from '@/app/functions/create-album';
 import { authenticate } from '@/http/middlewares/authenticate';
 
@@ -44,11 +47,18 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
     async (request, reply) => {
       const { title, userId, coverImageUrl, description } = request.body;
 
+      const sanitizedInput = {
+        userId: DOMPurify.sanitize(userId),
+        title: DOMPurify.sanitize(title),
+        description: DOMPurify.sanitize(description ?? ''),
+        coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
+      };
+
       const { album } = await createAlbum({
-        userId,
-        title,
-        description,
-        coverImageUrl,
+        userId: sanitizedInput.userId,
+        title: sanitizedInput?.title,
+        description: sanitizedInput?.description,
+        coverImageUrl: sanitizedInput?.coverImageUrl,
       });
 
       return reply.status(201).send({ album });

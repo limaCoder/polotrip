@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+
+import DOMPurify from 'isomorphic-dompurify';
+
 import { createCheckoutSession } from '@/app/functions/create-checkout-session';
 import { authenticate } from '@/http/middlewares/authenticate';
 
@@ -61,15 +64,22 @@ export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
         additionalPhotosCount,
       } = request.body;
 
+      const sanitizedInput = {
+        userId: DOMPurify.sanitize(userId),
+        albumId: DOMPurify.sanitize(albumId),
+        successUrl: DOMPurify.sanitize(successUrl),
+        cancelUrl: DOMPurify.sanitize(cancelUrl),
+      };
+
       try {
         const { payment, checkoutUrl } = await createCheckoutSession({
-          userId,
-          albumId,
-          successUrl,
-          cancelUrl,
-          paymentMethod,
-          isAdditionalPhotos,
-          additionalPhotosCount,
+          userId: sanitizedInput.userId,
+          albumId: sanitizedInput.albumId,
+          successUrl: sanitizedInput.successUrl,
+          cancelUrl: sanitizedInput.cancelUrl,
+          paymentMethod: paymentMethod,
+          isAdditionalPhotos: isAdditionalPhotos ?? false,
+          additionalPhotosCount: additionalPhotosCount ?? 0,
         });
 
         return { payment, checkoutUrl };

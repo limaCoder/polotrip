@@ -6,6 +6,8 @@ import { eq, sql } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { photos } from '@polotrip/db/schema';
 
+import DOMPurify from 'isomorphic-dompurify';
+
 import { uploadPhotos } from '@/app/functions/upload-photos';
 import { authenticate } from '@/http/middlewares/authenticate';
 
@@ -87,9 +89,14 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
           });
         }
 
+        const sanitizedInput = {
+          albumId: DOMPurify.sanitize(albumId),
+          userId: DOMPurify.sanitize(userId),
+        };
+
         const { photos: uploadedPhotos } = await uploadPhotos({
-          albumId,
-          userId,
+          albumId: sanitizedInput?.albumId,
+          userId: sanitizedInput?.userId,
           files,
         });
 
