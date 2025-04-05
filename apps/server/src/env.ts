@@ -16,6 +16,9 @@ const envSchema = z.object({
 
   SUPABASE_KEY: z.string(),
   SUPABASE_URL: z.string().url(),
+
+  UNSPLASH_ACCESS_KEY: z.string(),
+  UNSPLASH_SECRET_KEY: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

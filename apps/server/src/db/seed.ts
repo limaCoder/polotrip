@@ -5,6 +5,7 @@ import { client, db } from '@polotrip/db';
 import { users, accounts, albums, photos, verifications } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
 import { auth } from '@polotrip/auth';
+import { getRandomUnsplashImage } from '@/app/utils/getRandomUnsplashImage';
 
 async function seed() {
   console.log('🌱 Starting database seed...');
@@ -45,6 +46,9 @@ async function seed() {
 
   for (let i = 0; i < 3; i++) {
     const albumTitle = faker.location.country();
+    const albumQuery = `travel,${albumTitle.toLowerCase()}`;
+
+    const coverImage = await getRandomUnsplashImage(albumQuery);
 
     const [album] = await db
       .insert(albums)
@@ -52,7 +56,7 @@ async function seed() {
         userId: userId,
         title: `Trip to ${albumTitle}`,
         description: faker.lorem.paragraph(),
-        coverImageUrl: `https://source.unsplash.com/random/800x600/?travel,${albumTitle.toLowerCase()}`,
+        coverImageUrl: coverImage?.full,
         isPublished: i === 0 ? true : i === 1,
         shareableLink: `album-${createId()}`,
       })
@@ -69,10 +73,12 @@ async function seed() {
       const longitude = faker.location.longitude();
       const randomDate = faker.date.recent({ days: 30 }).toISOString();
 
+      const photoImage = await getRandomUnsplashImage(`${albumTitle.toLowerCase()},travel`);
+
       await db.insert(photos).values({
         albumId: album.id,
-        imageUrl: `https://source.unsplash.com/random/800x600/?${albumTitle.toLowerCase()},travel`,
-        thumbnailUrl: `https://source.unsplash.com/random/400x300/?${albumTitle.toLowerCase()},travel`,
+        imageUrl: photoImage?.full,
+        thumbnailUrl: photoImage?.thumb,
         originalFileName: `photo-${j + 1}.jpg`,
         dateTaken: randomDate,
         latitude,
@@ -80,6 +86,8 @@ async function seed() {
         locationName: location,
         description: faker.lorem.sentence(),
       });
+
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     await db.update(albums).set({ photoCount: photosCount }).where(eq(albums.id, album.id));
