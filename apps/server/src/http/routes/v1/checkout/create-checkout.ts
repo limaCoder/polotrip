@@ -18,7 +18,7 @@ const bodySchema = z.object({
 
 type CreateCheckoutBody = z.infer<typeof bodySchema>;
 
-export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
+const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Body: CreateCheckoutBody;
   }>(
@@ -91,3 +91,5 @@ export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
     },
   );
 };
+
+export default createCheckoutRoute;

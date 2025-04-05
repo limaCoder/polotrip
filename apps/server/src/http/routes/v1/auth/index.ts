@@ -25,4 +25,4 @@ const authRoute: FastifyPluginAsyncZod = async app => {
   });
 };
 
-export { authRoute };
+export default authRoute;

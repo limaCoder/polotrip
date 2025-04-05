@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { sql } from 'drizzle-orm';
 
-export const healthRoute: FastifyPluginAsyncZod = async app => {
+const healthRoute: FastifyPluginAsyncZod = async app => {
   app.get(
     '/health',
     {
@@ -47,3 +47,5 @@ export const healthRoute: FastifyPluginAsyncZod = async app => {
     },
   );
 };
+
+export default healthRoute;
