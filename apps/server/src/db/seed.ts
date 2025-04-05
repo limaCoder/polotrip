@@ -1,10 +1,10 @@
 import { createId } from '@paralleldrive/cuid2';
-import dayjs from 'dayjs';
 import { faker } from '@faker-js/faker/locale/pt_BR';
 
 import { client, db } from '@polotrip/db';
-import { users, accounts, albums, photos } from '@polotrip/db/schema';
+import { users, accounts, albums, photos, verifications } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
+import { auth } from '@polotrip/auth';
 
 async function seed() {
   console.log('🌱 Starting database seed...');
@@ -12,31 +12,33 @@ async function seed() {
   console.log('🧹 Clearing existing data...');
   await db.delete(accounts);
   await db.delete(users);
+  await db.delete(verifications);
 
-  const userId = createId();
   const userEmail = 'teste@example.com';
   const userPassword = 'senha123';
 
-  console.log('👤 Creating test user...');
-  await db.insert(users).values({
-    id: userId,
-    name: 'Usuário Teste',
-    email: userEmail,
-    emailVerified: true,
-    createdAt: dayjs().toDate(),
-    updatedAt: dayjs().toDate(),
-  });
+  const createUser = async () => {
+    console.log('👤 Creating test user with better-auth...');
 
-  console.log('🔑 Creating user credentials...');
-  await db.insert(accounts).values({
-    id: createId(),
-    userId: userId,
-    providerId: 'credentials',
-    accountId: userEmail,
-    password: userPassword, // NOTE: In production, this should be a hash
-    createdAt: dayjs().toDate(),
-    updatedAt: dayjs().toDate(),
-  });
+    try {
+      const result = await auth.api.signUpEmail({
+        body: {
+          name: 'Usuário Teste',
+          email: userEmail,
+          password: userPassword,
+        },
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to create user: ${error}`);
+    }
+  };
+
+  const userData = await createUser();
+
+  const userId = userData?.user?.id;
+  console.log('✅ User created with ID:', userId);
 
   console.log('📸 Creating sample albums...');
   const albumsData = [];
