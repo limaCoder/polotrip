@@ -29,7 +29,7 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Querystring: UploadPhotosQuery;
   }>(
-    '/api/v1/albums/photos/upload',
+    '/albums/photos/upload',
     {
       onRequest: [authenticate],
       schema: {
@@ -102,11 +102,9 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
 
         return { photos: uploadedPhotos };
       } catch (error) {
-        console.error('Error when make photos upload:', error);
+        app.log.error('Error when making photos upload:', error);
 
-        return reply.status(400).send({
-          message: error instanceof Error ? error.message : 'Error when processing upload',
-        });
+        reply.status(500).send({ error: 'Failed to process the request.' });
       }
     },
   );

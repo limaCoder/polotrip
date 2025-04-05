@@ -21,7 +21,7 @@ async function getAlbumById({ albumId }: GetAlbumByIdRequest) {
         ? {
             id: userData.id,
             name: userData.name,
-            avatarUrl: userData.avatarUrl,
+            avatarUrl: userData.image,
           }
         : null;
 

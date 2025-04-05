@@ -38,7 +38,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
     Params: UpdateAlbumParams;
     Body: UpdateAlbumBody;
   }>(
-    '/api/v1/albums/:id',
+    '/albums/:id',
     {
       onRequest: [authenticate],
       schema: {
@@ -124,10 +124,9 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        console.error('Error updating album:', error);
-        return reply.status(400).send({
-          message: error instanceof Error ? error.message : 'Error updating album',
-        });
+        app.log.error('Error updating album:', error);
+
+        reply.status(500).send({ error: 'Failed to process the request.' });
       }
     },
   );

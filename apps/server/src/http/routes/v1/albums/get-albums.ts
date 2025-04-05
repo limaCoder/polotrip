@@ -7,7 +7,7 @@ import { UnauthorizedError } from '@/http/errors';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    '/api/v1/albums',
+    '/albums',
     {
       onRequest: [authenticate],
       schema: {
@@ -33,20 +33,26 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
         },
       },
     },
-    async request => {
-      const session = await request.server.auth.api.getSession({
-        headers: fromNodeHeaders(request.headers),
-      });
+    async (request, reply) => {
+      try {
+        const session = await request.server.auth.api.getSession({
+          headers: fromNodeHeaders(request.headers),
+        });
 
-      if (!session) {
-        throw new UnauthorizedError();
+        if (!session) {
+          throw new UnauthorizedError();
+        }
+
+        const { albums } = await getAlbumsByUserId({
+          userId: session.user.id,
+        });
+
+        return { albums };
+      } catch (error) {
+        app.log.error('Error when searching for albums:', error);
+
+        reply.status(500).send({ error: 'Failed to process the request.' });
       }
-
-      const { albums } = await getAlbumsByUserId({
-        userId: session.user.id,
-      });
-
-      return { albums };
     },
   );
 };

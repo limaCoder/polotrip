@@ -22,7 +22,7 @@ export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Body: CreateCheckoutBody;
   }>(
-    '/api/v1/checkout',
+    '/checkout',
     {
       onRequest: [authenticate],
       schema: {
@@ -84,11 +84,9 @@ export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
 
         return { payment, checkoutUrl };
       } catch (error) {
-        console.error('Error when creating checkout session:', error);
+        app.log.error('Error when creating checkout session:', error);
 
-        return reply.status(400).send({
-          message: error instanceof Error ? error.message : 'Error when processing payment',
-        });
+        reply.status(500).send({ error: 'Failed to process the request.' });
       }
     },
   );

@@ -19,7 +19,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Body: CreateAlbumBody;
   }>(
-    '/api/v1/albums',
+    '/albums',
     {
       onRequest: [authenticate],
       schema: {
@@ -45,23 +45,29 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
       },
     },
     async (request, reply) => {
-      const { title, userId, coverImageUrl, description } = request.body;
+      try {
+        const { title, userId, coverImageUrl, description } = request.body;
 
-      const sanitizedInput = {
-        userId: DOMPurify.sanitize(userId),
-        title: DOMPurify.sanitize(title),
-        description: DOMPurify.sanitize(description ?? ''),
-        coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
-      };
+        const sanitizedInput = {
+          userId: DOMPurify.sanitize(userId),
+          title: DOMPurify.sanitize(title),
+          description: DOMPurify.sanitize(description ?? ''),
+          coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
+        };
 
-      const { album } = await createAlbum({
-        userId: sanitizedInput.userId,
-        title: sanitizedInput?.title,
-        description: sanitizedInput?.description,
-        coverImageUrl: sanitizedInput?.coverImageUrl,
-      });
+        const { album } = await createAlbum({
+          userId: sanitizedInput.userId,
+          title: sanitizedInput?.title,
+          description: sanitizedInput?.description,
+          coverImageUrl: sanitizedInput?.coverImageUrl,
+        });
 
-      return reply.status(201).send({ album });
+        return reply.status(201).send({ album });
+      } catch (error) {
+        app.log.error('Error when creating album:', error);
+
+        reply.status(500).send({ error: 'Failed to process the request.' });
+      }
     },
   );
 };

@@ -16,7 +16,7 @@ export const getAlbumByIdRoute: FastifyPluginAsyncZod = async app => {
   app.get<{
     Params: GetAlbumByIdParams;
   }>(
-    '/api/v1/album/:id',
+    '/albums/:id',
     {
       onRequest: [authenticate],
       schema: {
@@ -110,9 +110,10 @@ export const getAlbumByIdRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        console.error('Erro ao buscar álbum:', error);
-        return reply.status(400).send({
-          message: error instanceof Error ? error.message : 'Erro ao buscar álbum',
+        app.log.error('Error when searching for album:', error);
+
+        reply.status(400).send({
+          message: error instanceof Error ? error.message : 'Error when searching for album',
         });
       }
     },
