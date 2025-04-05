@@ -16,7 +16,7 @@ export const getAlbumByIdRoute: FastifyPluginAsyncZod = async app => {
   app.get<{
     Params: GetAlbumByIdParams;
   }>(
-    '/api/album/:id',
+    '/api/v1/album/:id',
     {
       onRequest: [authenticate],
       schema: {

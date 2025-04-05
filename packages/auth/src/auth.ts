@@ -39,6 +39,7 @@ export const config: BetterAuthOptions = {
   advanced: {
     cookiePrefix: 'polotrip',
   },
+  basePath: '/api/v1/auth',
 };
 
 const auth = betterAuth(config);

@@ -7,7 +7,7 @@ import { UnauthorizedError } from '@/http/errors';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
-    '/api/albums',
+    '/api/v1/albums',
     {
       onRequest: [authenticate],
       schema: {

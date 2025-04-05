@@ -17,7 +17,7 @@ const authRoute: FastifyPluginAsyncZod = async app => {
 
   app.route({
     method: ['POST', 'GET'],
-    url: '/api/auth/*',
+    url: '/api/v1/auth/*',
     handler: async (req, reply) => {
       console.log('authHandler ', reply.raw);
       return await authHandler(req.raw, reply.raw);

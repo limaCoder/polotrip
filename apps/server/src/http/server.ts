@@ -21,10 +21,10 @@ import {
   uploadPhotosRoute,
   updateAlbumRoute,
   getAlbumByIdRoute,
-} from './routes/albums';
+} from './routes/v1/albums';
 
-import { createCheckoutRoute } from './routes/checkout/create-checkout';
-import { authRoute } from './routes/auth';
+import { createCheckoutRoute } from './routes/v1/checkout/create-checkout';
+import { authRoute } from './routes/v1/auth';
 
 import dbPlugin from './plugins/db';
 import authPlugin from './plugins/auth';

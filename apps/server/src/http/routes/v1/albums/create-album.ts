@@ -19,7 +19,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Body: CreateAlbumBody;
   }>(
-    '/api/albums',
+    '/api/v1/albums',
     {
       onRequest: [authenticate],
       schema: {

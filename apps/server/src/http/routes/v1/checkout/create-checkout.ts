@@ -22,7 +22,7 @@ export const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Body: CreateCheckoutBody;
   }>(
-    '/checkout',
+    '/api/v1/checkout',
     {
       onRequest: [authenticate],
       schema: {

@@ -29,7 +29,7 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
   app.post<{
     Querystring: UploadPhotosQuery;
   }>(
-    '/api/albums/photos/upload',
+    '/api/v1/albums/photos/upload',
     {
       onRequest: [authenticate],
       schema: {
