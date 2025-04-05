@@ -1,33 +1,14 @@
 import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
-import { fastifySwagger } from '@fastify/swagger';
-import { fastifySwaggerUi } from '@fastify/swagger-ui';
+import autoload from '@fastify/autoload';
+import { join } from 'path';
 
-import {
-  jsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyCookie from '@fastify/cookie';
 
 import { env } from '@/env';
 
 import { setupErrorHandler } from './errors';
-import { setupRateLimit } from './plugins/rate-limit';
-
-import {
-  getAlbumsRoute,
-  createAlbumRoute,
-  uploadPhotosRoute,
-  updateAlbumRoute,
-  getAlbumByIdRoute,
-} from './routes/v1/albums';
-
-import { createCheckoutRoute } from './routes/v1/checkout/create-checkout';
-import { authRoute } from './routes/v1/auth';
-
-import dbPlugin from './plugins/db';
-import authPlugin from './plugins/auth';
 
 const app = fastify({
   logger: true,
@@ -48,33 +29,19 @@ app.register(fastifyCookie, {
   prefix: 'polotrip',
 });
 
-app.register(dbPlugin);
-app.register(authPlugin);
+app.register(autoload, {
+  dir: join(__dirname, 'plugins'),
+  options: {},
+  dirNameRoutePrefix: false,
+});
 
-app.register(setupRateLimit);
-
-app.register(fastifySwagger, {
-  openapi: {
-    info: {
-      title: 'Polotrip',
-      version: '0.1',
-    },
+app.register(autoload, {
+  dir: join(__dirname, 'routes', 'v1'),
+  options: {
+    prefix: '/api/v1',
   },
-  transform: jsonSchemaTransform,
+  dirNameRoutePrefix: false,
 });
-
-app.register(fastifySwaggerUi, {
-  routePrefix: '/docs',
-});
-
-app.register(authRoute);
-
-app.register(getAlbumsRoute);
-app.register(createAlbumRoute);
-app.register(createCheckoutRoute);
-app.register(uploadPhotosRoute);
-app.register(updateAlbumRoute);
-app.register(getAlbumByIdRoute);
 
 app.get('/', (_, reply) => {
   reply.status(200).send('OK');

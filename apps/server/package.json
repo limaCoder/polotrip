@@ -23,6 +23,7 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
+    "@fastify/autoload": "^6.3.0",
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "10.1.0",
     "@fastify/jwt": "9.0.4",
