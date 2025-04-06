@@ -19,6 +19,8 @@ const envSchema = z.object({
 
   UNSPLASH_ACCESS_KEY: z.string(),
   UNSPLASH_SECRET_KEY: z.string(),
+
+  RESEND_API_KEY: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

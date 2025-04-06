@@ -18,6 +18,7 @@
     "@polotrip/ts-config": "workspace:*",
     "@types/node": "22.1.0",
     "drizzle-kit": "0.24.0",
+    "resend": "^4.2.0",
     "tsup": "8.2.4",
     "tsx": "4.17.0",
     "typescript": "5.5.4"
