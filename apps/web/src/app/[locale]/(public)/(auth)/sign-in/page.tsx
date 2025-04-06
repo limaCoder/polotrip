@@ -8,7 +8,15 @@ import LottieAnimation from '@/components/LottieAnimation';
 import womanTakingSunbathOnBeach from '@/assets/lottie/woman-taking-sunbath-on-beach.json';
 import { OAuthButton } from '@/components/OAuthButton';
 
-export default function LoginPage() {
+import { loginWithEmailPassword } from '@/actions/loginWithEmailPassword';
+import { LoginPageProps } from './types';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+export default async function LoginPage({ params }: LoginPageProps) {
+  const { locale } = await params;
+  const signInUserWithLocale = loginWithEmailPassword.bind(null, locale);
+
   return (
     <main className="min-h-screen bg-background flex flex-col">
       <Header />
@@ -28,6 +36,45 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col gap-4 w-full">
+              {isDevelopment && (
+                <form action={signInUserWithLocale} className="w-full space-y-4 mb-4">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="email" className="font-body_two">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Seu email"
+                      className="w-full p-3 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="password" className="font-body_two">
+                      Senha
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder="Sua senha"
+                      className="w-full p-3 border border-gray-300 rounded-lg"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-white font-body_two p-3 rounded-lg hover:bg-primary/90"
+                  >
+                    Entrar
+                  </button>
+                </form>
+              )}
+
               <OAuthButton provider="google">
                 <Image src="/icons/google.png" alt="Google" width={24} height={24} />
                 <span className="font-body_two">Sign in with Google</span>

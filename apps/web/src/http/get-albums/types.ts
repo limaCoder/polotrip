@@ -1,5 +1,7 @@
 import type { Album } from '@polotrip/db/models';
 
-type GetAlbumsResponse = Album[];
+type GetAlbumsResponse = {
+  albums: Album[];
+};
 
 export type { GetAlbumsResponse };

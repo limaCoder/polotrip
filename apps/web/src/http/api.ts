@@ -2,13 +2,9 @@ import { env } from '@/lib/env';
 import ky, { Options } from 'ky';
 import { headers } from 'next/headers';
 
-interface ApiResponse<T> {
-  response: T;
-}
-
 const apiInstance = ky
   .create({
-    prefixUrl: env.NEXT_PUBLIC_API_URL,
+    prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -31,16 +27,13 @@ const apiInstance = ky
   });
 
 export const api = {
-  get: <T>(url: string, options?: Options) => apiInstance.get(url, options).json<ApiResponse<T>>(),
+  get: <T>(url: string, options?: Options) => apiInstance.get(url, options).json<T>(),
 
-  post: <T>(url: string, options?: Options) =>
-    apiInstance.post(url, options).json<ApiResponse<T>>(),
+  post: <T>(url: string, options?: Options) => apiInstance.post(url, options).json<T>(),
 
-  put: <T>(url: string, options?: Options) => apiInstance.put(url, options).json<ApiResponse<T>>(),
+  put: <T>(url: string, options?: Options) => apiInstance.put(url, options).json<T>(),
 
-  patch: <T>(url: string, options?: Options) =>
-    apiInstance.patch(url, options).json<ApiResponse<T>>(),
+  patch: <T>(url: string, options?: Options) => apiInstance.patch(url, options).json<T>(),
 
-  delete: <T>(url: string, options?: Options) =>
-    apiInstance.delete(url, options).json<ApiResponse<T>>(),
+  delete: <T>(url: string, options?: Options) => apiInstance.delete(url, options).json<T>(),
 };

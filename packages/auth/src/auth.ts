@@ -1,5 +1,6 @@
 import { type BetterAuthOptions, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { nextCookies } from 'better-auth/next-js';
 
 import { db } from '@polotrip/db';
 import { schema } from '@polotrip/db/schema';
@@ -43,6 +44,7 @@ export const config: BetterAuthOptions = {
     cookiePrefix: 'polotrip',
   },
   basePath: '/api/v1/auth',
+  plugins: [nextCookies()],
 };
 
 const auth = betterAuth(config);

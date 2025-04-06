@@ -13,7 +13,9 @@ export function AlbumCard({ title, date, photosCount, imageUrl }: AlbumCardProps
         <div className="flex flex-col items-start p-3 pb-2 z-10 bg-gradient-to-t from-black/70 to-transparent">
           <h3 className="font-title_three text-background font-bold">{title}</h3>
           <div className="flex justify-between w-full">
-            <span className="font-body_two text-background">{date}</span>
+            <span className="font-body_two text-background capitalize">
+              {new Date(date)?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            </span>
             <span className="font-body_two text-accent">{photosCount} fotos</span>
           </div>
         </div>

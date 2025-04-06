@@ -8,7 +8,9 @@ import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { getAlbums } from '@/http/get-albums';
 
 export default async function DashboardPage() {
-  const albums = await getAlbums();
+  const albumsData = await getAlbums();
+
+  const albums = albumsData?.albums;
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -36,7 +38,7 @@ export default async function DashboardPage() {
                   <AlbumCard
                     key={album?.id}
                     title={album?.title}
-                    date={album?.createdAt.toLocaleDateString()}
+                    date={album?.createdAt}
                     photosCount={album?.photoCount}
                     imageUrl={album?.coverImageUrl ?? ''}
                   />

@@ -1,6 +1,6 @@
 interface AlbumCardProps {
   title: string;
-  date: string;
+  date: Date;
   photosCount: number;
   imageUrl: string;
 }

@@ -16,8 +16,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
 
 export function DashboardContent() {
-  const router = useRouter();
-
   const [userData, setUserData] = useState<{
     userAvatar: string | undefined;
     userName: string | undefined;
@@ -28,6 +26,7 @@ export function DashboardContent() {
     usernameInitials: undefined,
   });
 
+  const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
   const locale = params.locale;
@@ -37,8 +36,6 @@ export function DashboardContent() {
 
     const userAvatar = session?.data?.user?.image ?? undefined;
     const userName = session?.data?.user?.name ?? undefined;
-
-    console.log(userAvatar);
 
     const usernameInitials = userName
       ?.split(' ')
@@ -69,7 +66,7 @@ export function DashboardContent() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            {userData?.userAvatar && userData?.usernameInitials ? (
+            {userData?.userAvatar || userData?.usernameInitials ? (
               <>
                 <AvatarImage referrerPolicy="no-referrer" src={userData?.userAvatar} />
                 <AvatarFallback className="bg-primary font-bold text-white">
