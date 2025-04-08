@@ -11,7 +11,7 @@ import { env } from '@/env';
 import { setupErrorHandler } from './errors';
 
 const app = fastify({
-  logger: true,
+  logger: false,
 });
 
 setupErrorHandler(app);

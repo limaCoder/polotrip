@@ -2,6 +2,7 @@ import z from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { getAlbumsByUserId } from '@/app/functions/get-albums-by-user-id';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { sendEmailWelcome } from '@/http/middlewares/send-email-welcome';
 import { fromNodeHeaders } from 'better-auth/node';
 import { UnauthorizedError } from '@/http/errors';
 
@@ -9,7 +10,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
     '/albums',
     {
-      onRequest: [authenticate],
+      onRequest: [authenticate, sendEmailWelcome],
       schema: {
         response: {
           200: z.object({
