@@ -44,7 +44,7 @@ async function seed() {
   console.log('📸 Creating sample albums...');
   const albumsData = [];
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 6; i++) {
     const albumTitle = faker.location.country();
     const albumQuery = `travel,${albumTitle.toLowerCase()}`;
 

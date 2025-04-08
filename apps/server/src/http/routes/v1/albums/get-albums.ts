@@ -5,6 +5,8 @@ import { authenticate } from '@/http/middlewares/authenticate';
 import { sendEmailWelcome } from '@/http/middlewares/send-email-welcome';
 import { fromNodeHeaders } from 'better-auth/node';
 import { UnauthorizedError } from '@/http/errors';
+import { paginationQuerySchema, paginationResponseSchema } from '@/app/helpers/pagination/schema';
+import { PaginationQuery } from '@/app/helpers/pagination/types';
 
 const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
   app.get(
@@ -12,6 +14,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
     {
       onRequest: [authenticate, sendEmailWelcome],
       schema: {
+        querystring: paginationQuerySchema,
         response: {
           200: z.object({
             albums: z.array(
@@ -30,6 +33,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
                 updatedAt: z.date(),
               }),
             ),
+            pagination: paginationResponseSchema.optional(),
           }),
         },
       },
@@ -44,11 +48,14 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
           throw new UnauthorizedError();
         }
 
-        const { albums } = await getAlbumsByUserId({
+        const { page, limit } = request.query as PaginationQuery;
+
+        const result = await getAlbumsByUserId({
           userId: session.user.id,
+          pagination: { page, limit },
         });
 
-        return { albums };
+        return result;
       } catch (error) {
         app.log.error('Error when searching for albums:', error);
 
