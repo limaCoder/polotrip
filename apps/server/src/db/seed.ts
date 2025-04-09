@@ -44,7 +44,7 @@ async function seed() {
   console.log('📸 Creating sample albums...');
   const albumsData = [];
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 15; i++) {
     const albumTitle = faker.location.country();
     const albumQuery = `travel,${albumTitle.toLowerCase()}`;
 
@@ -65,7 +65,7 @@ async function seed() {
     albumsData.push(album);
     console.log(`✅ Album created: ${album.title}`);
 
-    const photosCount = faker.number.int({ min: 5, max: 15 });
+    const photosCount = faker.number.int({ min: 1, max: 1 });
 
     for (let j = 0; j < photosCount; j++) {
       const location = faker.location.city();

@@ -1,19 +1,25 @@
 import { env } from '@/lib/env';
 import ky, { Options } from 'ky';
-import { headers } from 'next/headers';
 
-const apiInstance = ky
-  .create({
-    prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  })
-  .extend({
-    hooks: {
-      beforeRequest: [
-        async request => {
+const isClient = typeof window !== 'undefined';
+
+const baseConfig = {
+  prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  credentials: 'include' as RequestCredentials,
+};
+
+const clientApi = ky.create(baseConfig);
+
+const serverApi = ky.create(baseConfig).extend({
+  hooks: {
+    beforeRequest: [
+      async request => {
+        try {
+          const { headers } = await import('next/headers');
+
           const header = await headers();
 
           const cookies = header.get('cookie');
@@ -21,10 +27,15 @@ const apiInstance = ky
           const sessionCookie = cookies?.split('; ').find(cookie => cookie.startsWith('polotrip'));
 
           request.headers.set('cookie', sessionCookie ?? '');
-        },
-      ],
-    },
-  });
+        } catch (error) {
+          console.error('Error setting cookies:', error);
+        }
+      },
+    ],
+  },
+});
+
+const apiInstance = isClient ? clientApi : serverApi;
 
 export const api = {
   get: <T>(url: string, options?: Options) => apiInstance.get(url, options).json<T>(),

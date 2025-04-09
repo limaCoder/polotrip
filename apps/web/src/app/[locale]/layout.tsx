@@ -30,9 +30,9 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   return (
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
-        <Providers>
-          <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>{children}</body>
-        </Providers>
+        <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>
+          <Providers>{children}</Providers>
+        </body>
       </NextIntlClientProvider>
     </html>
   );

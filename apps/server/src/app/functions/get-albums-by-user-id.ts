@@ -12,7 +12,7 @@ interface GetAlbumsByUserIdRequest {
 
 async function getAlbumsByUserId({
   userId,
-  pagination = { page: 1, limit: 10 },
+  pagination = { page: 1, limit: 9 },
 }: GetAlbumsByUserIdRequest) {
   if (pagination) {
     const baseQuery = sql`

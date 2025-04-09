@@ -1,9 +1,12 @@
 import { api } from '../api';
-import { GetAlbumsResponse } from './types';
+import { GetAlbumsRequest, GetAlbumsResponse } from './types';
 
-export async function getAlbums(): Promise<GetAlbumsResponse> {
+export async function getAlbums({ params, signal }: GetAlbumsRequest): Promise<GetAlbumsResponse> {
   try {
-    const data = await api.get<GetAlbumsResponse>('v1/albums');
+    const data = await api.get<GetAlbumsResponse>('v1/albums', {
+      searchParams: params,
+      signal,
+    });
 
     return data;
   } catch (error) {

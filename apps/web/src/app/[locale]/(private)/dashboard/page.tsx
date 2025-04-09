@@ -1,16 +1,24 @@
+import { Suspense } from 'react';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { AlbumCard } from '@/components/AlbumCard';
 import { ButtonNavigation } from '@/components/ButtonNavigation';
+import { AlbumsList } from '@/components/AlbumsList';
+import { SkeletonList } from '@/components/SkeletonList';
 
+import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
 
 export default async function DashboardPage() {
-  const albumsData = await getAlbums();
+  const queryClient = new QueryClient();
 
-  const albums = albumsData?.albums;
+  queryClient.prefetchInfiniteQuery({
+    queryKey: [NetworkKeys.ALBUMS],
+    queryFn: ({ signal }) => getAlbums({ params: { page: 1, limit: 10 }, signal }),
+    initialPageParam: 1,
+  });
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -33,19 +41,15 @@ export default async function DashboardPage() {
             </div>
 
             <div className="flex justify-between flex-wrap gap-9">
-              {albums?.length > 0 ? (
-                albums?.map(album => (
-                  <AlbumCard
-                    key={album?.id}
-                    title={album?.title}
-                    date={album?.createdAt}
-                    photosCount={album?.photoCount}
-                    imageUrl={album?.coverImageUrl ?? ''}
-                  />
-                ))
-              ) : (
-                <p className="text-center text-gray-500">Nenhum álbum encontrado</p>
-              )}
+              <HydrationBoundary state={dehydrate(queryClient)}>
+                <Suspense
+                  fallback={
+                    <SkeletonList count={3} className="w-[31%] h-[256px] rounded-2xl shadow-md" />
+                  }
+                >
+                  <AlbumsList />
+                </Suspense>
+              </HydrationBoundary>
             </div>
           </div>
         </div>
