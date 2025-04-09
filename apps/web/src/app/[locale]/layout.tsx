@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import Providers from '@/app/providers';
 import '@/styles/globals.css';
 import { fontEpilogueVariable } from '@/styles/fonts';
 
@@ -29,7 +30,9 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   return (
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
-        <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>{children}</body>
+        <Providers>
+          <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>{children}</body>
+        </Providers>
       </NextIntlClientProvider>
     </html>
   );
