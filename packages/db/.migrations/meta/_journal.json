@@ -15,6 +15,13 @@
       "when": 1743975921508,
       "tag": "0001_fair_tiger_shark",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744315341610,
+      "tag": "0002_loose_expediter",
+      "breakpoints": true
     }
   ]
 }

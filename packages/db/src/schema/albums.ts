@@ -18,6 +18,8 @@ const albums = pgTable('albums', {
   spotifyTrackId: text('spotify_track_id'),
   spotifyPlaylistId: text('spotify_playlist_id'),
   isPublished: boolean('is_published').notNull().default(false),
+  isPaid: boolean('is_paid').notNull().default(false),
+  currentStepAfterPayment: text('current_step_after_payment'),
   shareableLink: text('shareable_link').notNull().unique(),
   photoCount: integer('photo_count').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
