@@ -1,10 +1,72 @@
-import { Upload, CreditCard, QrCode } from 'lucide-react';
+'use client';
+
+import { useActionState, useEffect, useRef } from 'react';
+import { useParams } from 'next/navigation';
+import { Upload, CreditCard, Loader, AlertCircle } from 'lucide-react';
+
 import { Button } from '@/components/Button';
+import { createAlbumWithCheckout } from '@/actions/createAlbumWithCheckout';
+import getStripe from '@/lib/stripe/get-stripejs';
+import { Stripe } from '@stripe/stripe-js';
 
 export function AlbumForm() {
+  const { locale } = useParams();
+
+  const stripeClientRef = useRef<Stripe | null>(null);
+
+  const createAlbumWithCheckoutAction = createAlbumWithCheckout.bind(null, {
+    locale: locale as string,
+    stripePromise: stripeClientRef?.current,
+  });
+
+  const [state, formAction, isPending] = useActionState(createAlbumWithCheckoutAction, null);
+
+  const hasError = state?.status === 'error';
+  const hasInvalidData = state?.status === 'invalidData';
+
+  const hasSuccess = state?.status === 'success';
+  const sessionId = state?.sessionId;
+
+  useEffect(() => {
+    async function loadStripeClient() {
+      const stripe = await getStripe();
+
+      if (!stripe) throw new Error('Stripe failed to initialize.');
+
+      stripeClientRef.current = stripe;
+    }
+
+    loadStripeClient();
+  }, []);
+
+  useEffect(() => {
+    if (hasSuccess && sessionId) {
+      stripeClientRef?.current?.redirectToCheckout({ sessionId });
+    }
+  }, [hasSuccess, sessionId]);
+
   return (
-    <form className="bg-background p-8 rounded-lg shadow-md">
+    <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
       <h1 className="font-title_three mb-6 font-bold">Criar Novo Álbum</h1>
+
+      {hasError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 flex items-start gap-2">
+          <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-body_two font-bold">Erro ao criar álbum</p>
+            <p className="text-sm">{state?.error?.message}</p>
+            {state?.error?.errors?.title && (
+              <p className="text-sm mt-1">Título: {state?.error?.errors?.title?.join(', ')}</p>
+            )}
+            {state?.error?.errors?.description && (
+              <p className="text-sm">Descrição: {state?.error?.errors?.description?.join(', ')}</p>
+            )}
+            {state?.error?.errors?.coverImage && (
+              <p className="text-sm">Imagem: {state?.error?.errors?.coverImage?.join(', ')}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="space-y-4 mb-6">
         <div className="flex flex-col gap-1">
@@ -18,6 +80,9 @@ export function AlbumForm() {
             placeholder="Ex: Viagem para Paris"
             className="border border-text/25 rounded p-3 font-body_two text-sm"
           />
+          {hasInvalidData && state?.error?.errors?.title && (
+            <p className="text-sm text-red-500">Título é obrigatório</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
@@ -52,6 +117,9 @@ export function AlbumForm() {
             </p>
             <span className="text-primary text-xs mt-1">PNG, JPG até 10MB</span>
           </div>
+          {hasInvalidData && state?.error?.errors?.coverImage && (
+            <p className="text-sm text-red-500">{state.error.errors.coverImage.join(', ')}</p>
+          )}
         </div>
       </div>
 
@@ -63,22 +131,36 @@ export function AlbumForm() {
         <div className="w-full flex justify-between">
           <div>
             <h3 className="font-body_two font-bold">Criação do álbum</h3>
-            <p className="text-xs">Inclui até 300 fotos e todas as funcionalidades premium</p>
+            <p className="text-xs">Inclui até 100 fotos e todas as funcionalidades premium</p>
           </div>
-          <span className="font-body_two text-primary">R$ 29,99</span>
+          <span className="font-body_two text-primary">R$ 19,99</span>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded">
-          <CreditCard size={20} color="#F7FCFD" />
-          <span>Pagar com cartão</span>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded"
+        >
+          {isPending ? (
+            <>
+              <Loader size={20} className="animate-spin" color="#F7FCFD" />
+              <span>Processando...</span>
+            </>
+          ) : (
+            <>
+              <CreditCard size={20} color="#F7FCFD" />
+              <span>Pagar com cartão</span>
+            </>
+          )}
         </Button>
 
-        <Button className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded">
+        {/* TO-DO: Implement payment with Pix */}
+        {/* <Button className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded">
           <QrCode size={20} color="#F7FCFD" />
           <span>Pagar com Pix</span>
-        </Button>
+        </Button> */}
       </div>
     </form>
   );

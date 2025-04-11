@@ -3,6 +3,9 @@ import Image from 'next/image';
 import { AlbumCardProps } from './types';
 
 export function AlbumCard({ title, date, photosCount, imageUrl }: AlbumCardProps) {
+  const photosCountLabel = photosCount === 1 ? 'foto' : 'fotos';
+  const albumImage = imageUrl || '/pages/dashboard/album-card-fallback.png';
+
   return (
     <button
       type="button"
@@ -10,7 +13,7 @@ export function AlbumCard({ title, date, photosCount, imageUrl }: AlbumCardProps
     >
       <div className="w-full h-[192px] rounded-t-xl relative flex flex-col justify-end">
         <Image
-          src={imageUrl}
+          src={albumImage}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -23,7 +26,9 @@ export function AlbumCard({ title, date, photosCount, imageUrl }: AlbumCardProps
             <span className="font-body_two text-background capitalize">
               {new Date(date)?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </span>
-            <span className="font-body_two text-accent">{photosCount} fotos</span>
+            <span className="font-body_two text-accent">
+              {photosCount} {photosCountLabel}
+            </span>
           </div>
         </div>
       </div>

@@ -40,7 +40,7 @@ export default async function DashboardPage() {
               </ButtonNavigation>
             </div>
 
-            <div className="flex justify-between flex-wrap gap-9">
+            <div className="flex flex-wrap gap-9">
               <HydrationBoundary state={dehydrate(queryClient)}>
                 <Suspense
                   fallback={

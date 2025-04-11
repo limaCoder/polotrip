@@ -8,7 +8,7 @@ export async function loginWithEmailPassword(locale: string, formData: FormData)
   const password = formData.get('password') as string;
 
   if (!email || !password) {
-    console.error('Email e senha são obrigatórios');
+    console.error('Email and password are required');
     return;
   }
 
@@ -20,7 +20,7 @@ export async function loginWithEmailPassword(locale: string, formData: FormData)
       },
     });
   } catch (error) {
-    console.error('Erro ao fazer login:', error);
+    console.error('Error when logging in:', error);
   }
 
   redirect(`/${locale}/dashboard`);

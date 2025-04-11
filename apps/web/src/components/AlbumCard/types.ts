@@ -3,6 +3,7 @@ interface AlbumCardProps {
   date: Date;
   photosCount: number;
   imageUrl: string;
+  stepAfterPayment: string;
 }
 
 export type { AlbumCardProps };

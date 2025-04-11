@@ -21,6 +21,7 @@ export function AlbumsList() {
           date={album?.createdAt}
           photosCount={album?.photoCount}
           imageUrl={album?.coverImageUrl ?? ''}
+          stepAfterPayment={album?.currentStepAfterPayment ?? ''}
         />
       ))}
       <InfiniteScroll

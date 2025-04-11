@@ -60,11 +60,17 @@ export function UploadForm() {
       </>
 
       <div className="w-full flex justify-end gap-4">
-        <Button className="font-bold border border-text-opacity-25 rounded px-4 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+        <Button
+          type="button"
+          className="font-bold border border-text-opacity-25 rounded px-4 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Limpar tudo
         </Button>
 
-        <Button className="font-bold border border-text-opacity-25 bg-primary text-background rounded px-4 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed">
+        <Button
+          type="button"
+          className="font-bold border border-text-opacity-25 bg-primary text-background rounded px-4 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Continuar
         </Button>
       </div>

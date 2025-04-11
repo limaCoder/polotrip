@@ -18,6 +18,7 @@ export function OAuthButton({ provider, children, ...props }: OAuthButtonProps) 
 
   return (
     <Button
+      type="button"
       className="border border-text-opacity-25 rounded-lg py-2 px-6 w-full font-normal justify-center items-center hover:bg-gray-50"
       onClick={async () => {
         setIsLoading(true);
