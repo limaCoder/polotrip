@@ -14,7 +14,15 @@ async function createAlbum({ userId, title, description, coverImageUrl }: Create
 
   const [album] = await db
     .insert(albums)
-    .values({ userId, title, description, coverImageUrl, shareableLink, isPublished: false })
+    .values({
+      userId,
+      title,
+      description,
+      coverImageUrl,
+      shareableLink,
+      isPublished: false,
+      isPaid: false,
+    })
     .returning();
 
   return { album };

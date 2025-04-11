@@ -27,6 +27,8 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
                 spotifyTrackId: z.string().nullable(),
                 spotifyPlaylistId: z.string().nullable(),
                 isPublished: z.boolean(),
+                isPaid: z.boolean(),
+                currentStepAfterPayment: z.string().nullable(),
                 shareableLink: z.string(),
                 photoCount: z.number(),
                 createdAt: z.date(),

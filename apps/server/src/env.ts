@@ -12,8 +12,6 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
 
-  STRIPE_SECRET_KEY: z.string(),
-
   SUPABASE_KEY: z.string(),
   SUPABASE_URL: z.string().url(),
 
@@ -21,6 +19,9 @@ const envSchema = z.object({
   UNSPLASH_SECRET_KEY: z.string(),
 
   RESEND_API_KEY: z.string(),
+
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_PRICE_ID: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

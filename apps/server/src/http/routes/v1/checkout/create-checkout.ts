@@ -5,9 +5,10 @@ import DOMPurify from 'isomorphic-dompurify';
 
 import { createCheckoutSession } from '@/app/functions/create-checkout-session';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { fromNodeHeaders } from 'better-auth/node';
+import { UnauthorizedError } from '@/http/errors';
 
 const bodySchema = z.object({
-  userId: z.string(),
   albumId: z.string(),
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
@@ -29,7 +30,10 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
         body: bodySchema,
         response: {
           200: z.object({
-            checkoutUrl: z.string().url().nullable(),
+            checkoutSession: z.object({
+              id: z.string(),
+              url: z.string().url().nullable(),
+            }),
             payment: z.object({
               id: z.string(),
               userId: z.string(),
@@ -55,7 +59,6 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       const {
-        userId,
         albumId,
         successUrl,
         cancelUrl,
@@ -64,16 +67,25 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
         additionalPhotosCount,
       } = request.body;
 
+      const session = await request.server.auth.api.getSession({
+        headers: fromNodeHeaders(request.headers),
+      });
+
+      if (!session) {
+        throw new UnauthorizedError();
+      }
+
+      const userId = session.user.id;
+
       const sanitizedInput = {
-        userId: DOMPurify.sanitize(userId),
         albumId: DOMPurify.sanitize(albumId),
         successUrl: DOMPurify.sanitize(successUrl),
         cancelUrl: DOMPurify.sanitize(cancelUrl),
       };
 
       try {
-        const { payment, checkoutUrl } = await createCheckoutSession({
-          userId: sanitizedInput.userId,
+        const { payment, checkoutSession } = await createCheckoutSession({
+          userId,
           albumId: sanitizedInput.albumId,
           successUrl: sanitizedInput.successUrl,
           cancelUrl: sanitizedInput.cancelUrl,
@@ -82,7 +94,7 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
           additionalPhotosCount: additionalPhotosCount ?? 0,
         });
 
-        return { payment, checkoutUrl };
+        return { payment, checkoutSession };
       } catch (error) {
         app.log.error('Error when creating checkout session:', error);
 

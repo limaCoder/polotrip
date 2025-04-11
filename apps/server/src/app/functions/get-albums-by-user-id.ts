@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, and } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums } from '@polotrip/db/schema';
 
@@ -17,13 +17,13 @@ async function getAlbumsByUserId({
   if (pagination) {
     const baseQuery = sql`
       SELECT * FROM ${albums}
-      WHERE ${albums.userId} = ${userId}
+      WHERE ${albums.userId} = ${userId} AND ${albums.isPaid} = true
       ORDER BY ${albums.createdAt}
     `;
 
     const countQuery = sql`
       SELECT COUNT(*) FROM ${albums}
-      WHERE ${albums.userId} = ${userId}
+      WHERE ${albums.userId} = ${userId} AND ${albums.isPaid} = true
     `;
 
     const result = await paginate({
@@ -42,7 +42,7 @@ async function getAlbumsByUserId({
   const userAlbums = await db
     .select()
     .from(albums)
-    .where(eq(albums.userId, userId))
+    .where(and(eq(albums.userId, userId), eq(albums.isPaid, true)))
     .orderBy(albums.createdAt);
 
   return { albums: userAlbums };

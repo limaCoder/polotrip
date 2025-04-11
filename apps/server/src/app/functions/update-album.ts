@@ -17,6 +17,7 @@ interface UpdateAlbumRequest {
     description?: string | null;
     order?: string | null;
   }[];
+  currentStepAfterPayment?: string;
 }
 
 async function updateAlbum({
@@ -29,6 +30,7 @@ async function updateAlbum({
   spotifyPlaylistId,
   isPublished,
   photoUpdates,
+  currentStepAfterPayment,
 }: UpdateAlbumRequest) {
   const album = await db
     .select()
@@ -53,6 +55,7 @@ async function updateAlbum({
       ...(spotifyTrackId !== undefined && { spotifyTrackId }),
       ...(spotifyPlaylistId !== undefined && { spotifyPlaylistId }),
       ...(isPublished !== undefined && { isPublished }),
+      ...(currentStepAfterPayment !== undefined && { currentStepAfterPayment }),
       updatedAt: new Date(),
     })
     .where(eq(albums.id, albumId))

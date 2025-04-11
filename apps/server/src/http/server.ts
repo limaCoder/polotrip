@@ -22,7 +22,7 @@ app.setValidatorCompiler(validatorCompiler);
 app.register(fastifyCors, {
   origin: env.WEB_URL,
   credentials: true,
-  allowedHeaders: ['Authorization', 'cookie', 'content-type'],
+  allowedHeaders: ['Authorization', 'cookie', 'content-type', 'stripe-signature'],
 });
 
 app.register(fastifyCookie, {

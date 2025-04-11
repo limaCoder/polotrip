@@ -5,9 +5,10 @@ import DOMPurify from 'isomorphic-dompurify';
 
 import { createAlbum } from '@/app/functions/create-album';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { fromNodeHeaders } from 'better-auth/node';
+import { UnauthorizedError } from '@/http/errors';
 
 const bodySchema = z.object({
-  userId: z.string(),
   title: z.string().min(3).max(255),
   description: z.string().max(1000).nullable().optional(),
   coverImageUrl: z.string().url().nullable().optional(),
@@ -32,8 +33,8 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
               title: z.string(),
               description: z.string().nullable(),
               coverImageUrl: z.string().nullable(),
-              spotifyTrackId: z.string().nullable(),
-              spotifyPlaylistId: z.string().nullable(),
+              spotifyTrackId: z.string().nullable().optional(),
+              spotifyPlaylistId: z.string().nullable().optional(),
               isPublished: z.boolean(),
               shareableLink: z.string(),
               photoCount: z.number(),
@@ -46,17 +47,26 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { title, userId, coverImageUrl, description } = request.body;
+        const session = await request.server.auth.api.getSession({
+          headers: fromNodeHeaders(request.headers),
+        });
+
+        if (!session) {
+          throw new UnauthorizedError();
+        }
+
+        const userId = session.user.id;
+
+        const { title, coverImageUrl, description } = request.body;
 
         const sanitizedInput = {
-          userId: DOMPurify.sanitize(userId),
           title: DOMPurify.sanitize(title),
           description: DOMPurify.sanitize(description ?? ''),
           coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
         };
 
         const { album } = await createAlbum({
-          userId: sanitizedInput.userId,
+          userId,
           title: sanitizedInput?.title,
           description: sanitizedInput?.description,
           coverImageUrl: sanitizedInput?.coverImageUrl,

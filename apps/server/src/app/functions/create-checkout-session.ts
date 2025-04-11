@@ -36,7 +36,7 @@ async function createCheckoutSession({
     throw new Error('Album does not belong to the user');
   }
 
-  let amount = 2999; // R$29,99 to new album
+  let amount = 1999; // R$19,99 to new album
   let description = `Photos album: ${album.title}`;
 
   if (isAdditionalPhotos && additionalPhotosCount > 0) {
@@ -90,7 +90,7 @@ async function createCheckoutSession({
 
     return {
       payment,
-      checkoutUrl: session.url,
+      checkoutSession: session,
     };
   } else {
     throw new Error('Método de pagamento PIX não implementado ainda');

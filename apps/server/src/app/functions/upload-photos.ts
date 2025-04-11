@@ -67,6 +67,7 @@ async function uploadPhotos({ albumId, userId, files }: UploadPhotosRequest) {
     .set({
       photoCount: album.photoCount + uploadedPhotos.length,
       updatedAt: new Date(),
+      currentStepAfterPayment: 'organize',
     })
     .where(eq(albums.id, albumId));
 

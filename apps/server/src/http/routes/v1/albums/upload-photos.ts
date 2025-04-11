@@ -10,6 +10,8 @@ import DOMPurify from 'isomorphic-dompurify';
 
 import { uploadPhotos } from '@/app/functions/upload-photos';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { UnauthorizedError } from '@/http/errors';
+import { fromNodeHeaders } from 'better-auth/node';
 
 const querySchema = z.object({
   albumId: z.string(),
@@ -62,7 +64,17 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
-        const { albumId, userId } = request.query;
+        const session = await request.server.auth.api.getSession({
+          headers: fromNodeHeaders(request.headers),
+        });
+
+        if (!session) {
+          throw new UnauthorizedError();
+        }
+
+        const userId = session.user.id;
+
+        const { albumId } = request.query;
 
         const filesIterator = await request.files();
         const files = [];
@@ -91,12 +103,11 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
 
         const sanitizedInput = {
           albumId: DOMPurify.sanitize(albumId),
-          userId: DOMPurify.sanitize(userId),
         };
 
         const { photos: uploadedPhotos } = await uploadPhotos({
           albumId: sanitizedInput?.albumId,
-          userId: sanitizedInput?.userId,
+          userId,
           files,
         });
 

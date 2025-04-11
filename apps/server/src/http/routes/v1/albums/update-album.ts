@@ -5,6 +5,8 @@ import DOMPurify from 'isomorphic-dompurify';
 
 import { updateAlbum } from '@/app/functions/update-album';
 import { authenticate } from '@/http/middlewares/authenticate';
+import { fromNodeHeaders } from 'better-auth/node';
+import { UnauthorizedError } from '@/http/errors';
 
 const paramsSchema = z.object({
   id: z.string(),
@@ -28,13 +30,14 @@ const bodySchema = z.object({
       }),
     )
     .optional(),
+  currentStepAfterPayment: z.string().nullable().optional(),
 });
 
 type UpdateAlbumParams = z.infer<typeof paramsSchema>;
 type UpdateAlbumBody = z.infer<typeof bodySchema>;
 
 export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
-  app.put<{
+  app.patch<{
     Params: UpdateAlbumParams;
     Body: UpdateAlbumBody;
   }>(
@@ -55,6 +58,8 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
               spotifyTrackId: z.string().nullable(),
               spotifyPlaylistId: z.string().nullable(),
               isPublished: z.boolean(),
+              isPaid: z.boolean(),
+              currentStepAfterPayment: z.string(),
               shareableLink: z.string(),
               photoCount: z.number(),
               createdAt: z.date(),
@@ -86,9 +91,18 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
     },
     async (request, reply) => {
       try {
+        const session = await request.server.auth.api.getSession({
+          headers: fromNodeHeaders(request.headers),
+        });
+
+        if (!session) {
+          throw new UnauthorizedError();
+        }
+
+        const userId = session.user.id;
+
         const { id: albumId } = request.params;
         const {
-          userId,
           title,
           description,
           coverImageUrl,
@@ -96,11 +110,11 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
           spotifyPlaylistId,
           isPublished,
           photoUpdates,
+          currentStepAfterPayment,
         } = request.body;
 
         const sanitizedInput = {
           albumId: DOMPurify.sanitize(albumId),
-          userId: DOMPurify.sanitize(userId),
           title: DOMPurify.sanitize(title ?? ''),
           description: DOMPurify.sanitize(description ?? ''),
           coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
@@ -108,11 +122,12 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
           spotifyPlaylistId: DOMPurify.sanitize(spotifyPlaylistId ?? ''),
           isPublished: isPublished ?? false,
           photoUpdates: photoUpdates ?? [],
+          currentStepAfterPayment: DOMPurify.sanitize(currentStepAfterPayment ?? ''),
         };
 
         const result = await updateAlbum({
           albumId: sanitizedInput?.albumId,
-          userId: sanitizedInput?.userId,
+          userId,
           title: sanitizedInput?.title,
           description: sanitizedInput?.description,
           coverImageUrl: sanitizedInput?.coverImageUrl,
@@ -120,6 +135,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
           spotifyPlaylistId: sanitizedInput?.spotifyPlaylistId,
           isPublished: sanitizedInput?.isPublished,
           photoUpdates: sanitizedInput?.photoUpdates,
+          currentStepAfterPayment: sanitizedInput?.currentStepAfterPayment,
         });
 
         return result;
