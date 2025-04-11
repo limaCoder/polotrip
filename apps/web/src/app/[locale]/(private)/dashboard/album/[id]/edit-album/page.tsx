@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { BackButton } from '../(components)/BackButton';
+import { BackButton } from '../../../(components)/BackButton';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, MapPin, Music, Trash2 } from 'lucide-react';

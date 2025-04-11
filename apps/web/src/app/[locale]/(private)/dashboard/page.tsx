@@ -10,8 +10,9 @@ import { SkeletonList } from '@/components/SkeletonList';
 
 import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
+import { PageWithLocale } from '@/types/pageWithLocale';
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ params }: PageWithLocale) {
   const queryClient = new QueryClient();
 
   queryClient.prefetchInfiniteQuery({
@@ -19,6 +20,8 @@ export default async function DashboardPage() {
     queryFn: ({ signal }) => getAlbums({ params: { page: 1, limit: 10 }, signal }),
     initialPageParam: 1,
   });
+
+  const locale = params?.locale;
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -47,7 +50,7 @@ export default async function DashboardPage() {
                     <SkeletonList count={3} className="w-[31%] h-[256px] rounded-2xl shadow-md" />
                   }
                 >
-                  <AlbumsList />
+                  <AlbumsList locale={locale} />
                 </Suspense>
               </HydrationBoundary>
             </div>

@@ -4,8 +4,9 @@ import { AlbumCard } from '@/components/AlbumCard';
 import { InfiniteScroll } from '@/components/InfiniteScroll';
 import useGetInfiniteAlbums from '@/hooks/network/queries/useGetInfiniteAlbums';
 import { SkeletonList } from '@/components/SkeletonList';
+import { AlbumsListProps } from './types';
 
-export function AlbumsList() {
+export function AlbumsList({ locale }: AlbumsListProps) {
   const albums = useGetInfiniteAlbums();
 
   if (albums?.items?.length === 0) {
@@ -17,11 +18,13 @@ export function AlbumsList() {
       {albums?.items?.map(album => (
         <AlbumCard
           key={album?.id}
+          id={album?.id}
           title={album?.title}
           date={album?.createdAt}
           photosCount={album?.photoCount}
           imageUrl={album?.coverImageUrl ?? ''}
           stepAfterPayment={album?.currentStepAfterPayment ?? ''}
+          locale={locale}
         />
       ))}
       <InfiniteScroll

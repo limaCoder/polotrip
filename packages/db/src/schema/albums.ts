@@ -1,9 +1,15 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, integer, pgEnum } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
 
 import { users } from './auth-schema';
 import { photos } from './photos';
+
+const currentStepAfterPaymentEnum = pgEnum('current_step_after_payment', [
+  'upload',
+  'organize',
+  'published',
+]);
 
 const albums = pgTable('albums', {
   id: text('id')
@@ -19,7 +25,7 @@ const albums = pgTable('albums', {
   spotifyPlaylistId: text('spotify_playlist_id'),
   isPublished: boolean('is_published').notNull().default(false),
   isPaid: boolean('is_paid').notNull().default(false),
-  currentStepAfterPayment: text('current_step_after_payment'),
+  currentStepAfterPayment: currentStepAfterPaymentEnum('current_step_after_payment'),
   shareableLink: text('shareable_link').notNull().unique(),
   photoCount: integer('photo_count').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
