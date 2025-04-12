@@ -13,6 +13,8 @@ import { getAlbums } from '@/http/get-albums';
 import { PageWithLocale } from '@/types/pageWithLocale';
 
 export default async function DashboardPage({ params }: PageWithLocale) {
+  const { locale } = await params;
+
   const queryClient = new QueryClient();
 
   queryClient.prefetchInfiniteQuery({
@@ -20,8 +22,6 @@ export default async function DashboardPage({ params }: PageWithLocale) {
     queryFn: ({ signal }) => getAlbums({ params: { page: 1, limit: 10 }, signal }),
     initialPageParam: 1,
   });
-
-  const locale = params?.locale;
 
   return (
     <main className="min-h-screen bg-background flex flex-col">

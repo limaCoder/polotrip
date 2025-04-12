@@ -48,7 +48,7 @@ export async function createAlbumWithCheckout(
     });
 
     const origin = env.NEXT_PUBLIC_WEB_URL;
-    const successUrl = `${origin}/${extra?.locale}/dashboard/upload`;
+    const successUrl = `${origin}/${extra?.locale}/dashboard/album/${album?.id}/upload`;
     const cancelUrl = `${origin}/${extra?.locale}/create-album`;
 
     const { checkoutSession } = await createCheckout({

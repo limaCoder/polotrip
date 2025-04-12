@@ -10,7 +10,7 @@ export function HeaderDesktop() {
   const params = useParams();
   const locale = params.locale;
 
-  const isDashboard = pathname === `/${locale}/dashboard`;
+  const isDashboard = pathname.startsWith(`/${locale}/dashboard`);
 
   const logoHref = isDashboard ? `/${locale}/dashboard` : `/${locale}`;
 

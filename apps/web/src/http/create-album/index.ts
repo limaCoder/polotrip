@@ -9,6 +9,6 @@ export async function createAlbum({ body }: CreateAlbumRequest): Promise<CreateA
 
     return data;
   } catch (error) {
-    throw new Error(`Failed to get albums: ${error}`);
+    throw new Error(`Failed to create album: ${error}`);
   }
 }
