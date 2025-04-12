@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import { Link } from '@/i18n/routing';
 import { AlbumCardProps } from './types';
 import {
   AlbumStatusColorEnum,
@@ -16,12 +16,11 @@ export function AlbumCard({
   photosCount,
   imageUrl,
   stepAfterPayment,
-  locale,
 }: AlbumCardProps) {
   const photosCountLabel = photosCount === 1 ? 'foto' : 'fotos';
   const albumImage = imageUrl || '/pages/dashboard/album-card-fallback.png';
 
-  const albumLink = generateAlbumLink(id, stepAfterPayment, locale);
+  const albumLink = generateAlbumLink(id, stepAfterPayment);
   const albumStatusLabel =
     AlbumStatusLabelEnum[stepAfterPayment as keyof typeof AlbumStatusLabelEnum];
   const albumStatusColor =

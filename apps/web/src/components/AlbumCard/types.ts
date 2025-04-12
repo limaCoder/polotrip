@@ -5,7 +5,6 @@ interface AlbumCardProps {
   photosCount: number;
   imageUrl: string;
   stepAfterPayment: string;
-  locale: string;
 }
 
 export type { AlbumCardProps };

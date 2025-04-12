@@ -14,7 +14,7 @@ export function OAuthButton({ provider, children, ...props }: OAuthButtonProps) 
   const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams();
-  const locale = params.locale;
+  const locale = params?.locale as string;
 
   return (
     <Button

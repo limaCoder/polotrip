@@ -1,16 +1,10 @@
-'use client';
-
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { ArrowLeft } from 'lucide-react';
-import { useParams } from 'next/navigation';
 
 export function BackButton() {
-  const params = useParams();
-  const locale = params?.locale;
-
   return (
     <Link
-      href={`/${locale}/dashboard`}
+      href="/dashboard"
       className="flex items-center gap-2 font-body_one hover:text-primary transition-colors"
     >
       <ArrowLeft size={24} />

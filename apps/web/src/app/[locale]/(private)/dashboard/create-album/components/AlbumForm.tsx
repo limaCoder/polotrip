@@ -21,11 +21,16 @@ export function AlbumForm() {
 
   const [state, formAction, isPending] = useActionState(createAlbumWithCheckoutAction, null);
 
-  const hasError = state?.status === 'error';
-  const hasInvalidData = state?.status === 'invalidData';
-
-  const hasSuccess = state?.status === 'success';
-  const sessionId = state?.sessionId;
+  const formState = {
+    hasError: state?.status === 'error',
+    hasInvalidData: state?.status === 'invalidData',
+    hasSuccess: state?.status === 'success',
+    errorMessage: state?.error?.message,
+    sessionId: state?.sessionId,
+    titleError: state?.error?.errors?.title,
+    descriptionError: state?.error?.errors?.description,
+    coverImageError: state?.error?.errors?.coverImage,
+  };
 
   useEffect(() => {
     async function loadStripeClient() {
@@ -40,29 +45,29 @@ export function AlbumForm() {
   }, []);
 
   useEffect(() => {
-    if (hasSuccess && sessionId) {
-      stripeClientRef?.current?.redirectToCheckout({ sessionId });
+    if (formState?.hasSuccess && formState?.sessionId) {
+      stripeClientRef?.current?.redirectToCheckout({ sessionId: formState?.sessionId });
     }
-  }, [hasSuccess, sessionId]);
+  }, [formState?.hasSuccess, formState?.sessionId]);
 
   return (
     <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
       <h1 className="font-title_three mb-6 font-bold">Criar Novo Álbum</h1>
 
-      {hasError && (
+      {formState?.hasError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 flex items-start gap-2">
           <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-body_two font-bold">Erro ao criar álbum</p>
-            <p className="text-sm">{state?.error?.message}</p>
-            {state?.error?.errors?.title && (
-              <p className="text-sm mt-1">Título: {state?.error?.errors?.title?.join(', ')}</p>
+            <p className="text-sm">{formState?.errorMessage}</p>
+            {formState?.titleError && (
+              <p className="text-sm mt-1">Título: {formState?.titleError?.join(', ')}</p>
             )}
-            {state?.error?.errors?.description && (
-              <p className="text-sm">Descrição: {state?.error?.errors?.description?.join(', ')}</p>
+            {formState?.descriptionError && (
+              <p className="text-sm">Descrição: {formState?.descriptionError?.join(', ')}</p>
             )}
-            {state?.error?.errors?.coverImage && (
-              <p className="text-sm">Imagem: {state?.error?.errors?.coverImage?.join(', ')}</p>
+            {formState?.coverImageError && (
+              <p className="text-sm">Imagem: {formState?.coverImageError?.join(', ')}</p>
             )}
           </div>
         </div>
@@ -80,7 +85,7 @@ export function AlbumForm() {
             placeholder="Ex: Viagem para Paris"
             className="border border-text/25 rounded p-3 font-body_two text-sm"
           />
-          {hasInvalidData && state?.error?.errors?.title && (
+          {formState?.hasInvalidData && formState?.titleError && (
             <p className="text-sm text-red-500">Título é obrigatório</p>
           )}
         </div>
@@ -117,8 +122,8 @@ export function AlbumForm() {
             </p>
             <span className="text-primary text-xs mt-1">PNG, JPG até 10MB</span>
           </div>
-          {hasInvalidData && state?.error?.errors?.coverImage && (
-            <p className="text-sm text-red-500">{state.error.errors.coverImage.join(', ')}</p>
+          {formState?.hasInvalidData && formState?.coverImageError && (
+            <p className="text-sm text-red-500">{formState?.coverImageError?.join(', ')}</p>
           )}
         </div>
       </div>

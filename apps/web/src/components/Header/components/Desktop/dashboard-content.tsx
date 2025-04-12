@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -11,16 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { signOut, getSession } from '@/lib/auth/client';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useRouter } from 'next/navigation';
+import { signOut, getSession } from '@/lib/auth/client';
+import { usePathname, useRouter } from '@/i18n/routing';
+import { UserDataState } from '../../types';
 
 export function DashboardContent() {
-  const [userData, setUserData] = useState<{
-    userAvatar: string | undefined;
-    userName: string | undefined;
-    usernameInitials: string | undefined;
-  }>({
+  const [userData, setUserData] = useState<UserDataState>({
     userAvatar: undefined,
     userName: undefined,
     usernameInitials: undefined,
@@ -28,8 +24,6 @@ export function DashboardContent() {
 
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
-  const locale = params.locale;
 
   const getUserData = useCallback(async () => {
     const session = await getSession();
@@ -48,10 +42,10 @@ export function DashboardContent() {
   async function handleLogout() {
     await signOut({});
 
-    router.push(`/${locale}/sign-in`);
+    router.push('/sign-in');
   }
 
-  const isDashboard = pathname === `/${locale}/dashboard`;
+  const isDashboard = pathname === `/dashboard`;
 
   useEffect(() => {
     if (!isDashboard) return;

@@ -1,7 +1,9 @@
 'use client';
 
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
 import { LottieAnimationProps } from './types';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 export default function LottieAnimation({ animationData }: LottieAnimationProps) {
   if (!animationData) {

@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@polotrip/db';
 import { albums, payments } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
+import { QueryClient } from '@tanstack/react-query';
+import { NetworkKeys } from '@/hooks/network/keys';
 
 const secret = env.STRIPE_WEBHOOK_SECRET;
 
@@ -18,6 +20,8 @@ export async function POST(req: Request) {
     }
 
     const event = stripe.webhooks.constructEvent(body, signature, secret);
+
+    const queryClient = new QueryClient();
 
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -41,6 +45,10 @@ export async function POST(req: Request) {
               .set({ isPaid: true, currentStepAfterPayment: 'upload' })
               .where(eq(albums.id, albumId))
               .returning();
+
+            queryClient.invalidateQueries({
+              queryKey: [NetworkKeys.ALBUMS],
+            });
 
             /* if (session.customer_details?.email) {
               await sendEmail({

@@ -230,7 +230,7 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
       clearAll();
 
       if (options?.redirectPath) {
-        router.push(options.redirectPath);
+        router.push(options?.redirectPath);
       } else if (options?.onSuccess) {
         options?.onSuccess();
       }

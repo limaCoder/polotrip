@@ -1,15 +1,13 @@
 'use client';
 
-import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { Album } from 'lucide-react';
-import { useParams, usePathname } from 'next/navigation';
+import { ButtonNavigation } from '@/components/ButtonNavigation';
+import { usePathname } from '@/i18n/routing';
 
 export function HomeContent() {
   const pathname = usePathname();
-  const params = useParams();
-  const locale = params.locale;
 
-  const isHome = pathname === `/${locale}`;
+  const isHome = pathname === `/`;
 
   if (!isHome) return null;
 

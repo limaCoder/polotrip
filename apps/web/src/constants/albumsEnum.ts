@@ -22,11 +22,11 @@ const AlbumStatusTextColorEnum = {
   [StepAfterPaymentEnum.PUBLISHED]: 'text-background',
 } as const;
 
-const generateAlbumLink = (id: string, stepAfterPayment: string, locale = 'pt') => {
+const generateAlbumLink = (id: string, stepAfterPayment: string) => {
   const AlbumLinkEnum = {
-    [StepAfterPaymentEnum.UPLOAD]: `/${locale}/dashboard/album/${id}/upload`,
-    [StepAfterPaymentEnum.ORGANIZE]: `/${locale}/dashboard/album/${id}/edit-album`,
-    [StepAfterPaymentEnum.PUBLISHED]: `/${locale}/album/${id}`,
+    [StepAfterPaymentEnum.UPLOAD]: `/dashboard/album/${id}/upload`,
+    [StepAfterPaymentEnum.ORGANIZE]: `/dashboard/album/${id}/edit-album`,
+    [StepAfterPaymentEnum.PUBLISHED]: `/album/${id}`,
   } as const;
 
   return AlbumLinkEnum[stepAfterPayment as keyof typeof AlbumLinkEnum];

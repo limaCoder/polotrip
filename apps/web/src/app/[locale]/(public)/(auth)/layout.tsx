@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/routing';
 
 import { getCurrentUser } from '@/lib/auth/server';
 
@@ -19,7 +19,7 @@ export default async function AuthLayout({ children, params }: AuthLayoutProps) 
   const user = await getCurrentUser();
 
   if (user) {
-    redirect(`/${locale}/dashboard`);
+    redirect({ href: '/dashboard', locale });
   }
 
   return <>{children}</>;

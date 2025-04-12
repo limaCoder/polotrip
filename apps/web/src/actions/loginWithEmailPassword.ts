@@ -1,5 +1,5 @@
 import { auth } from '@polotrip/auth';
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/routing';
 
 export async function loginWithEmailPassword(locale: string, formData: FormData) {
   'use server';
@@ -23,5 +23,5 @@ export async function loginWithEmailPassword(locale: string, formData: FormData)
     console.error('Error when logging in:', error);
   }
 
-  redirect(`/${locale}/dashboard`);
+  redirect({ href: '/dashboard', locale });
 }
