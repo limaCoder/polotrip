@@ -20,6 +20,8 @@ interface UpdateAlbumRequest {
   currentStepAfterPayment?: string;
 }
 
+type AlbumStep = 'upload' | 'organize' | 'published';
+
 async function updateAlbum({
   albumId,
   userId,
@@ -55,7 +57,9 @@ async function updateAlbum({
       ...(spotifyTrackId !== undefined && { spotifyTrackId }),
       ...(spotifyPlaylistId !== undefined && { spotifyPlaylistId }),
       ...(isPublished !== undefined && { isPublished }),
-      ...(currentStepAfterPayment !== undefined && { currentStepAfterPayment }),
+      ...(currentStepAfterPayment !== undefined && {
+        currentStepAfterPayment: currentStepAfterPayment as AlbumStep,
+      }),
       updatedAt: new Date(),
     })
     .where(eq(albums.id, albumId))

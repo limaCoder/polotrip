@@ -1,41 +1,36 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import fastifyMultipart from '@fastify/multipart';
-
-import { eq, sql } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { photos } from '@polotrip/db/schema';
 
 import DOMPurify from 'isomorphic-dompurify';
-
-import { uploadPhotos } from '@/app/functions/upload-photos';
+import { fromNodeHeaders } from 'better-auth/node';
 import { authenticate } from '@/http/middlewares/authenticate';
 import { UnauthorizedError } from '@/http/errors';
-import { fromNodeHeaders } from 'better-auth/node';
+import { saveUploadedPhotos } from '@/app/functions/save-uploaded-photos';
 
-const querySchema = z.object({
+const bodySchema = z.object({
   albumId: z.string(),
-  userId: z.string(),
+  photos: z.array(
+    z.object({
+      filePath: z.string(),
+      originalFileName: z.string(),
+      dateTaken: z.string().nullable(),
+      latitude: z.number().nullable(),
+      longitude: z.number().nullable(),
+    }),
+  ),
 });
 
-type UploadPhotosQuery = z.infer<typeof querySchema>;
+type SaveUploadedPhotosBody = z.infer<typeof bodySchema>;
 
 export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
-  app.register(fastifyMultipart, {
-    limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB
-      files: 100,
-    },
-  });
-
   app.post<{
-    Querystring: UploadPhotosQuery;
+    Body: SaveUploadedPhotosBody;
   }>(
-    '/albums/photos/upload',
+    '/albums/photos/save',
     {
       onRequest: [authenticate],
       schema: {
-        querystring: querySchema,
+        body: bodySchema,
         response: {
           200: z.object({
             photos: z.array(
@@ -73,48 +68,34 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
         }
 
         const userId = session.user.id;
+        const { albumId, photos: uploadedPhotosData } = request.body;
 
-        const { albumId } = request.query;
+        const sanitizedAlbumId = DOMPurify.sanitize(albumId);
 
-        const filesIterator = await request.files();
-        const files = [];
-
-        for await (const file of filesIterator) {
-          files.push(file);
-        }
-
-        if (files.length === 0) {
-          return reply.status(400).send({
-            message: 'No photo sent',
+        try {
+          const { photos: savedPhotos } = await saveUploadedPhotos({
+            albumId: sanitizedAlbumId,
+            userId,
+            photos: uploadedPhotosData,
           });
+
+          return { photos: savedPhotos };
+        } catch (error) {
+          if (error instanceof Error) {
+            if (error.message === 'Album not found') {
+              return reply.status(404).send({ message: error.message });
+            }
+            if (error.message === 'Album does not belong to user') {
+              return reply.status(403).send({ message: error.message });
+            }
+            if (error.message === 'Limite de 100 fotos por álbum excedido') {
+              return reply.status(400).send({ message: error.message });
+            }
+          }
+          throw error;
         }
-
-        const currentPhotos = await db
-          .select({ count: sql`count(*)` })
-          .from(photos)
-          .where(eq(photos.albumId, albumId))
-          .then(rows => Number(rows[0]?.count || 0));
-
-        if (currentPhotos + files.length > 300) {
-          return reply.status(400).send({
-            message: 'Limit of 300 photos per album exceeded',
-          });
-        }
-
-        const sanitizedInput = {
-          albumId: DOMPurify.sanitize(albumId),
-        };
-
-        const { photos: uploadedPhotos } = await uploadPhotos({
-          albumId: sanitizedInput?.albumId,
-          userId,
-          files,
-        });
-
-        return { photos: uploadedPhotos };
       } catch (error) {
-        app.log.error('Error when making photos upload:', error);
-
+        app.log.error('Error saving uploaded photos:', error);
         reply.status(500).send({ error: 'Failed to process the request.' });
       }
     },
