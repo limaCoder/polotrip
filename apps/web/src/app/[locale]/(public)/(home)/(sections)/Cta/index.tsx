@@ -14,7 +14,7 @@ export async function Cta() {
         <div className="flex flex-col items-center text-center text-white">
           <h2 className="font-title_one mb-6">Pronto para criar seu primeiro álbum?</h2>
           <p className="font-title_three mb-8">
-            Por apenas <strong>R$29,99</strong>, crie um álbum de viagem digital único e memorável.
+            Por apenas <strong>R$19,99</strong>, crie um álbum de viagem digital único e memorável.
           </p>
           <ButtonNavigation
             href="/sign-in"

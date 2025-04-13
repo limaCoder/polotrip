@@ -1,35 +1,26 @@
-import { benefits } from './data';
 import { MotionSection } from '@/lib/motion/motion-components';
+import { BenefitsCarousel } from './carousel';
 
-export async function Benefits() {
+export function Benefits() {
   return (
     <MotionSection
       initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
-      className="py-10 bg-secondary-10 lg:bg-background"
+      className="py-16 bg-secondary-10 lg:bg-background"
     >
       <div className="container mx-auto px-4 lg:px-9">
         <h2 className="font-title_two text-primary text-center font-bold mb-12">
           Por que escolher o Polotrip?
         </h2>
 
-        <div className="flex flex-col justify-center items-center lg:flex-row gap-8 px-4 md:px-9">
-          {benefits.map(benefit => (
-            <div
-              key={benefit.id}
-              className="w-[265px] min-h-[250px] flex flex-col items-center lg:items-start"
-            >
-              <div className="text-primary bg-secondary-50 w-12 h-12 justify-center flex items-center rounded-full">
-                {benefit.icon}
-              </div>
-              <h3 className="font-title_three mt-5 font-semibold text-center lg:text-start">
-                {benefit.title}
-              </h3>
-              <p className="font-body_one mt-6 text-center lg:text-start">{benefit.description}</p>
-            </div>
-          ))}
-        </div>
+        <BenefitsCarousel />
+
+        <p className="mt-12 text-center text-sm max-w-2xl mx-auto text-gray-600">
+          Diferente de soluções convencionais de armazenamento, o Polotrip foi projetado
+          exclusivamente para criar e compartilhar memórias de viagens da maneira que você sempre
+          quis.
+        </p>
       </div>
     </MotionSection>
   );

@@ -2,7 +2,7 @@ const steps = [
   {
     category: '1. Crie sua conta',
     title:
-      'Registre-se gratuitamente em poucos segundos e comece a criar seu primeiro álbum de viagem digital personalizado..',
+      'Registre-se em poucos segundos e comece a criar seu primeiro álbum de viagem digital personalizado..',
     src: '/pages/home/how-it-works/step-one.jpg',
   },
   {
