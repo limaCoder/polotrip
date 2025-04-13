@@ -30,6 +30,9 @@ interface UploadFormState {
   isUploading: boolean;
   progress: number;
   error: string | null;
+  showMetadataDialog: boolean;
+  keepMetadata: boolean | null;
+  willMetadataBeRemoved: boolean | null;
 }
 
 export type { PhotoFile, PhotoPreview, UseUploadFormOptions, Params, UploadFormState };

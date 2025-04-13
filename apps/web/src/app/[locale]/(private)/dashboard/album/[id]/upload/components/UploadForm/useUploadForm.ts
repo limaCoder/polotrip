@@ -22,6 +22,9 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     isUploading: false,
     progress: 0,
     error: null,
+    showMetadataDialog: false,
+    keepMetadata: null,
+    willMetadataBeRemoved: null,
   });
 
   const updateUploadFormState = useCallback((newState: Partial<UploadFormState>) => {
@@ -34,14 +37,6 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
       files: filesUpdater(prev.files),
     }));
   }, []);
-
-  useEffect(() => {
-    return () => {
-      uploadFormState?.files?.forEach(file => {
-        revokePreviewUrl(file?.preview);
-      });
-    };
-  }, [uploadFormState?.files]);
 
   const handleFiles = useCallback(
     async (newFiles: FileList | null) => {
@@ -126,7 +121,20 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     updateUploadFormState({ files: [] });
   }, [uploadFormState?.files, updateUploadFormState]);
 
-  const upload = useCallback(async () => {
+  const checkForMetadata = useCallback(() => {
+    const { files } = uploadFormState;
+
+    const hasMetadataFiles = files.some(file => {
+      const metadata = file?.metadata;
+      return (
+        metadata?.dateTaken !== null || metadata?.latitude !== null || metadata?.longitude !== null
+      );
+    });
+
+    return hasMetadataFiles;
+  }, [uploadFormState]);
+
+  const startUpload = useCallback(async () => {
     const { files, isUploading } = uploadFormState;
 
     if (!files || files?.length === 0 || isUploading) return;
@@ -140,6 +148,14 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
       });
       return;
     }
+
+    console.log(
+      'Iniciando upload com arquivos:',
+      validFiles.map(f => ({
+        name: f?.file?.name,
+        hasMetadata: !!(f?.metadata?.dateTaken || f?.metadata?.latitude || f?.metadata?.longitude),
+      })),
+    );
 
     updateUploadFormState({
       isUploading: true,
@@ -283,11 +299,72 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     }
   }, [albumId, uploadFormState, clearAll, router, options, updateUploadFormState]);
 
+  const handleUploadClick = useCallback(() => {
+    const { files, isUploading, keepMetadata } = uploadFormState;
+
+    if (!files || files?.length === 0 || isUploading) return;
+
+    if (keepMetadata === null && checkForMetadata()) {
+      updateUploadFormState({ showMetadataDialog: true });
+      return;
+    }
+
+    startUpload();
+  }, [uploadFormState, checkForMetadata, updateUploadFormState, startUpload]);
+
+  const handleKeepMetadata = useCallback(() => {
+    updateUploadFormState({
+      showMetadataDialog: false,
+      keepMetadata: true,
+    });
+
+    startUpload();
+  }, [startUpload, updateUploadFormState]);
+
+  const handleRemoveMetadata = useCallback(() => {
+    const filesWithoutMetadata = uploadFormState?.files?.map(file => ({
+      ...file,
+      metadata: {
+        dateTaken: null,
+        latitude: null,
+        longitude: null,
+      },
+    }));
+
+    updateUploadFormState({
+      showMetadataDialog: false,
+      keepMetadata: false,
+      files: filesWithoutMetadata,
+      willMetadataBeRemoved: true,
+    });
+  }, [updateUploadFormState, uploadFormState?.files]);
+
+  const handleCloseMetadataDialog = useCallback(() => {
+    updateUploadFormState({ showMetadataDialog: false });
+  }, [updateUploadFormState]);
+
+  useEffect(() => {
+    return () => {
+      uploadFormState?.files?.forEach(file => {
+        revokePreviewUrl(file?.preview);
+      });
+    };
+  }, [uploadFormState?.files]);
+
+  useEffect(() => {
+    if (uploadFormState?.willMetadataBeRemoved) {
+      startUpload();
+    }
+  }, [uploadFormState?.willMetadataBeRemoved, startUpload, updateUploadFormState]);
+
   return {
     uploadFormState,
     handleFiles,
     removeFile,
     clearAll,
-    upload,
+    handleUploadClick,
+    handleKeepMetadata,
+    handleRemoveMetadata,
+    handleCloseMetadataDialog,
   };
 }

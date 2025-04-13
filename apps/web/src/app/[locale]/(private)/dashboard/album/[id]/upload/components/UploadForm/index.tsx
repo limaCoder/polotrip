@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { Upload, X, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/Button';
+import { MetadataDialog } from '../MetadataDialog';
 import { cn } from '@/lib/cn';
 
 import { formatFileSize } from '@/helpers/uploadHelpers';
@@ -17,7 +18,16 @@ export function UploadForm() {
   const { id: albumId, locale } = useParams<Params>();
 
   const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
-  const { uploadFormState, handleFiles, removeFile, clearAll, upload } = useUploadForm(albumId, {
+  const {
+    uploadFormState,
+    handleFiles,
+    removeFile,
+    clearAll,
+    handleUploadClick,
+    handleKeepMetadata,
+    handleRemoveMetadata,
+    handleCloseMetadataDialog,
+  } = useUploadForm(albumId, {
     redirectPath,
   });
 
@@ -137,12 +147,19 @@ export function UploadForm() {
         <Button
           type="button"
           className="font-bold border border-text-opacity-25 bg-primary text-background rounded px-4 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={upload}
+          onClick={handleUploadClick}
           disabled={uploadButtonDisabled}
         >
           {uploadFormState?.isUploading ? 'Enviando...' : 'Continuar'}
         </Button>
       </div>
+
+      <MetadataDialog
+        isOpen={uploadFormState?.showMetadataDialog}
+        onClose={handleCloseMetadataDialog}
+        onKeepMetadata={handleKeepMetadata}
+        onRemoveMetadata={handleRemoveMetadata}
+      />
     </div>
   );
 }
