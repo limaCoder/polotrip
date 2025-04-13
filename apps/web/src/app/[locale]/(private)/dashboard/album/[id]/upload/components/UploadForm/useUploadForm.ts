@@ -12,114 +12,140 @@ import {
   generateUniqueId,
   revokePreviewUrl,
 } from '@/helpers/uploadHelpers';
-import { PhotoFile, UseUploadFormOptions } from './types';
+import { PhotoFile, UseUploadFormOptions, UploadFormState } from './types';
 
 export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
   const router = useRouter();
 
-  const [files, setFiles] = useState<PhotoFile[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const [uploadFormState, setUploadFormState] = useState<UploadFormState>({
+    files: [],
+    isUploading: false,
+    progress: 0,
+    error: null,
+  });
+
+  const updateUploadFormState = useCallback((newState: Partial<UploadFormState>) => {
+    setUploadFormState(prev => ({ ...prev, ...newState }));
+  }, []);
+
+  const updateFiles = useCallback((filesUpdater: (prevFiles: PhotoFile[]) => PhotoFile[]) => {
+    setUploadFormState(prev => ({
+      ...prev,
+      files: filesUpdater(prev.files),
+    }));
+  }, []);
 
   useEffect(() => {
     return () => {
-      files.forEach(file => {
-        revokePreviewUrl(file.preview);
+      uploadFormState?.files?.forEach(file => {
+        revokePreviewUrl(file?.preview);
       });
     };
-  }, [files]);
+  }, [uploadFormState?.files]);
 
-  const handleFiles = useCallback(async (newFiles: FileList | null) => {
-    if (!newFiles?.length) return;
+  const handleFiles = useCallback(
+    async (newFiles: FileList | null) => {
+      if (!newFiles?.length) return;
 
-    const imageFiles = Array.from(newFiles)
-      .filter(file => file?.type?.startsWith('image/'))
-      .slice(0, 100);
+      const imageFiles = Array.from(newFiles)
+        .filter(file => file?.type?.startsWith('image/'))
+        .slice(0, 100);
 
-    const newPhotos: PhotoFile[] = imageFiles?.map(file => ({
-      id: generateUniqueId(),
-      file,
-      preview: createPreviewUrl(file),
-      size: file?.size,
-      loading: true,
-      error: undefined,
-      metadata: undefined,
-    }));
+      const newPhotos: PhotoFile[] = imageFiles?.map(file => ({
+        id: generateUniqueId(),
+        file,
+        preview: createPreviewUrl(file),
+        size: file?.size,
+        loading: true,
+        error: undefined,
+        metadata: undefined,
+      }));
 
-    setFiles(prev => [...prev, ...newPhotos]);
-    setError(null);
+      updateUploadFormState({
+        files: [...uploadFormState.files, ...newPhotos],
+        error: null,
+      });
 
-    for (const photo of newPhotos) {
-      try {
-        const compressedFile = await compressImage(photo?.file);
+      for (const photo of newPhotos) {
+        try {
+          const compressedFile = await compressImage(photo?.file);
 
-        const metadata = await extractExifData(photo?.file);
+          const metadata = await extractExifData(photo?.file);
 
-        setFiles(prev =>
-          prev.map(p =>
-            p?.id === photo?.id
-              ? {
-                  ...p,
-                  file: compressedFile,
-                  size: compressedFile?.size,
-                  loading: false,
-                  metadata,
-                }
-              : p,
-          ),
-        );
-      } catch (error) {
-        console.error('Error processing image:', error);
-        toast.error('Erro ao processar imagem', {
-          description: 'Por favor, tente novamente.',
-          duration: 5000,
-          richColors: true,
-        });
+          updateFiles(prev =>
+            prev.map(p =>
+              p?.id === photo?.id
+                ? {
+                    ...p,
+                    file: compressedFile,
+                    size: compressedFile?.size,
+                    loading: false,
+                    metadata,
+                  }
+                : p,
+            ),
+          );
+        } catch (error) {
+          console.error('Error processing image:', error);
+          toast.error('Erro ao processar imagem', {
+            description: 'Por favor, tente novamente.',
+            duration: 5000,
+            richColors: true,
+          });
 
-        setFiles(prev =>
-          prev.map(p =>
-            p?.id === photo?.id ? { ...p, loading: false, error: 'Erro ao processar imagem' } : p,
-          ),
-        );
+          updateFiles(prev =>
+            prev.map(p =>
+              p?.id === photo?.id ? { ...p, loading: false, error: 'Erro ao processar imagem' } : p,
+            ),
+          );
+        }
       }
-    }
-  }, []);
+    },
+    [uploadFormState?.files, updateFiles, updateUploadFormState],
+  );
 
-  const removeFile = useCallback((fileId: string) => {
-    setFiles(prev => {
-      const fileToRemove = prev.find(f => f.id === fileId);
-      if (fileToRemove) {
-        revokePreviewUrl(fileToRemove.preview);
-      }
+  const removeFile = useCallback(
+    (fileId: string) => {
+      updateFiles(prev => {
+        const fileToRemove = prev.find(f => f.id === fileId);
+        if (fileToRemove) {
+          revokePreviewUrl(fileToRemove.preview);
+        }
 
-      return prev.filter(f => f.id !== fileId);
-    });
-  }, []);
+        return prev.filter(f => f.id !== fileId);
+      });
+    },
+    [updateFiles],
+  );
 
   const clearAll = useCallback(() => {
-    files.forEach(file => {
-      revokePreviewUrl(file.preview);
+    uploadFormState?.files?.forEach(file => {
+      revokePreviewUrl(file?.preview);
     });
 
-    setFiles([]);
-  }, [files]);
+    updateUploadFormState({ files: [] });
+  }, [uploadFormState?.files, updateUploadFormState]);
 
   const upload = useCallback(async () => {
+    const { files, isUploading } = uploadFormState;
+
     if (!files || files?.length === 0 || isUploading) return;
 
     const validFiles = files?.filter(file => !file?.error && !file?.loading);
 
     if (!validFiles?.length) {
-      setError(
-        'Não há arquivos válidos para upload. Remova os arquivos com erro e tente novamente.',
-      );
+      updateUploadFormState({
+        error:
+          'Não há arquivos válidos para upload. Remova os arquivos com erro e tente novamente.',
+      });
       return;
     }
 
-    setIsUploading(true);
-    setProgress(0);
-    setError(null);
+    updateUploadFormState({
+      isUploading: true,
+      progress: 0,
+      error: null,
+    });
 
     try {
       const fileNames = validFiles?.map(file => file?.file?.name || '');
@@ -194,7 +220,9 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
             }
 
             completedUploads++;
-            setProgress(Math.round((completedUploads / totalFiles) * 100));
+            updateUploadFormState({
+              progress: Math.round((completedUploads / totalFiles) * 100),
+            });
 
             return true;
           } catch (error) {
@@ -235,8 +263,11 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         options?.onSuccess();
       }
 
-      setIsUploading(false);
-      setProgress(100);
+      updateUploadFormState({
+        isUploading: false,
+        progress: 100,
+      });
+
       toast.success('Upload realizado com sucesso!', {
         description: 'As imagens foram enviadas com sucesso.',
         duration: 5000,
@@ -245,16 +276,15 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     } catch (error) {
       console.error('Error during upload:', error);
 
-      setError('Falha ao fazer upload das imagens. Por favor, tente novamente.');
-      setIsUploading(false);
+      updateUploadFormState({
+        error: 'Falha ao fazer upload das imagens. Por favor, tente novamente.',
+        isUploading: false,
+      });
     }
-  }, [albumId, files, clearAll, router, options, isUploading]);
+  }, [albumId, uploadFormState, clearAll, router, options, updateUploadFormState]);
 
   return {
-    files,
-    isUploading,
-    progress,
-    error,
+    uploadFormState,
     handleFiles,
     removeFile,
     clearAll,

@@ -25,4 +25,11 @@ interface UseUploadFormOptions {
   redirectPath?: string;
 }
 
-export type { PhotoFile, PhotoPreview, UseUploadFormOptions, Params };
+interface UploadFormState {
+  files: PhotoFile[];
+  isUploading: boolean;
+  progress: number;
+  error: string | null;
+}
+
+export type { PhotoFile, PhotoPreview, UseUploadFormOptions, Params, UploadFormState };
