@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AlbumForm } from './components/AlbumForm';
-import { BackButton } from '../(components)/BackButton';
+import { BackButton } from '../(components)/back-button';
 
 export default function CreateAlbumPage() {
   return (

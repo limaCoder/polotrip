@@ -10,6 +10,7 @@ import { SkeletonList } from '@/components/SkeletonList';
 
 import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
+import { OnboardingModalWrapper } from './(components)/onboarding-modal-wrapper';
 
 export default async function DashboardPage() {
   const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ export default async function DashboardPage() {
         </div>
       </section>
       <Footer />
+      <OnboardingModalWrapper />
     </main>
   );
 }
