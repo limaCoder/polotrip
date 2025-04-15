@@ -8,11 +8,15 @@ import { authenticate } from '@/http/middlewares/authenticate';
 import { fromNodeHeaders } from 'better-auth/node';
 import { UnauthorizedError } from '@/http/errors';
 
+type Currency = 'brl' | 'usd';
+
 const bodySchema = z.object({
   albumId: z.string(),
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
   paymentMethod: z.enum(['credit_card', 'pix']),
+  amount: z.number().int().min(1),
+  currency: z.enum(['brl', 'usd']),
   isAdditionalPhotos: z.boolean().optional().default(false),
   additionalPhotosCount: z.number().int().min(1).optional(),
 });
@@ -65,6 +69,8 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
         paymentMethod,
         isAdditionalPhotos,
         additionalPhotosCount,
+        amount,
+        currency,
       } = request.body;
 
       const session = await request.server.auth.api.getSession({
@@ -81,6 +87,8 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
         albumId: DOMPurify.sanitize(albumId),
         successUrl: DOMPurify.sanitize(successUrl),
         cancelUrl: DOMPurify.sanitize(cancelUrl),
+        amount: DOMPurify.sanitize(amount.toString()),
+        currency: DOMPurify.sanitize(currency),
       };
 
       try {
@@ -90,6 +98,8 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
           successUrl: sanitizedInput.successUrl,
           cancelUrl: sanitizedInput.cancelUrl,
           paymentMethod: paymentMethod,
+          amount: Number(sanitizedInput.amount),
+          currency: sanitizedInput.currency as Currency,
           isAdditionalPhotos: isAdditionalPhotos ?? false,
           additionalPhotosCount: additionalPhotosCount ?? 0,
         });

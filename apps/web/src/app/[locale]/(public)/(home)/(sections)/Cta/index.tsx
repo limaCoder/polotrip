@@ -1,6 +1,11 @@
 import { ButtonNavigation } from '@/components/ButtonNavigation';
+import { formatCurrency } from '@/utils/formatCurrency';
+import { getAlbumPrice } from '@/utils/getAlbumPrice';
+import { CtaProps } from './types';
 
-export async function Cta() {
+export async function Cta({ locale }: CtaProps) {
+  const albumPrice = getAlbumPrice(locale);
+
   return (
     <section className="relative overflow-hidden py-20">
       <div className="absolute inset-0 w-full h-full z-0">
@@ -14,7 +19,8 @@ export async function Cta() {
         <div className="flex flex-col items-center text-center text-white">
           <h2 className="font-title_one mb-6">Pronto para criar seu primeiro álbum?</h2>
           <p className="font-title_three mb-8">
-            Por apenas <strong>R$19,99</strong>, crie um álbum de viagem digital único e memorável.
+            Por apenas <strong>{formatCurrency(locale, albumPrice)}</strong>, crie um álbum de
+            viagem digital único e memorável.
           </p>
           <ButtonNavigation
             href="/sign-in"

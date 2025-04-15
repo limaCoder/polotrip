@@ -6,8 +6,11 @@ import { HowItWorks } from './(sections)/HowItWorks';
 import { Benefits } from './(sections)/Benefits';
 import { Faq } from './(sections)/Faq';
 import { Cta } from './(sections)/Cta';
+import { PageWithLocale } from '@/types/pageWithLocale';
 
-export default async function Home() {
+export default async function Home({ params }: PageWithLocale) {
+  const { locale } = await params;
+
   return (
     <main className="min-h-dvh">
       <Header />
@@ -15,7 +18,7 @@ export default async function Home() {
       <Benefits />
       <HowItWorks />
       <Faq />
-      <Cta />
+      <Cta locale={locale} />
       <Footer />
     </main>
   );

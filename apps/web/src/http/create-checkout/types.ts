@@ -7,6 +7,8 @@ type CreateCheckoutRequest = {
     successUrl: string;
     cancelUrl: string;
     paymentMethod: 'credit_card' | 'pix';
+    amount: number;
+    currency: string;
     isAdditionalPhotos: boolean;
     additionalPhotosCount?: number | undefined;
   };

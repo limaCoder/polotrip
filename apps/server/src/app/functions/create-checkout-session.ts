@@ -9,6 +9,8 @@ interface CreateCheckoutSessionRequest {
   successUrl: string;
   cancelUrl: string;
   paymentMethod: 'credit_card' | 'pix';
+  amount: number;
+  currency: 'brl' | 'usd';
   isAdditionalPhotos?: boolean;
   additionalPhotosCount?: number;
 }
@@ -19,6 +21,8 @@ async function createCheckoutSession({
   successUrl,
   cancelUrl,
   paymentMethod,
+  amount,
+  currency,
   isAdditionalPhotos = false,
   additionalPhotosCount = 0,
 }: CreateCheckoutSessionRequest) {
@@ -36,11 +40,10 @@ async function createCheckoutSession({
     throw new Error('Album does not belong to the user');
   }
 
-  let amount = 1999; // R$19,99 to new album
   let description = `Photos album: ${album.title}`;
 
   if (isAdditionalPhotos && additionalPhotosCount > 0) {
-    // R$9,99 for each 100 additional photos
+    // R$9,99 or USD 9,99 for each 100 additional photos
     amount = 999 * Math.ceil(additionalPhotosCount / 100);
     description = `${additionalPhotosCount} additional photos to the album: ${album.title}`;
   }
@@ -51,7 +54,7 @@ async function createCheckoutSession({
       line_items: [
         {
           price_data: {
-            currency: 'brl',
+            currency: currency,
             product_data: {
               name: description,
             },
@@ -77,7 +80,7 @@ async function createCheckoutSession({
         userId,
         albumId,
         amount,
-        currency: 'BRL',
+        currency,
         status: 'pending',
         paymentMethod: 'credit_card',
         paymentGateway: 'stripe',

@@ -9,6 +9,8 @@ import { createAlbumWithCheckout } from '@/actions/createAlbumWithCheckout';
 import getStripe from '@/lib/stripe/get-stripejs';
 import { Stripe } from '@stripe/stripe-js';
 import { cn } from '@/lib/cn';
+import { getAlbumPrice } from '@/utils/getAlbumPrice';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export function AlbumForm() {
   const { locale } = useParams();
@@ -32,6 +34,8 @@ export function AlbumForm() {
     descriptionError: state?.error?.errors?.description,
     coverImageError: state?.error?.errors?.coverImage,
   };
+
+  const albumPrice = getAlbumPrice(locale as string);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -170,7 +174,9 @@ export function AlbumForm() {
             <h3 className="font-body_two font-bold">Criação do álbum</h3>
             <p className="text-xs">Inclui até 100 fotos e todas as funcionalidades premium</p>
           </div>
-          <span className="font-body_two text-primary">R$ 19,99</span>
+          <span className="font-body_two text-primary">
+            {formatCurrency(locale as string, albumPrice)}
+          </span>
         </div>
       </div>
 
