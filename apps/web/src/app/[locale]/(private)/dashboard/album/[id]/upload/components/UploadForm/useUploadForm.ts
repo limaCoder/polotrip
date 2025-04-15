@@ -42,11 +42,30 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     async (newFiles: FileList | null) => {
       if (!newFiles?.length) return;
 
-      const imageFiles = Array.from(newFiles)
-        .filter(file => file?.type?.startsWith('image/'))
-        .slice(0, 100);
+      const imageFiles = Array.from(newFiles).filter(file => file?.type?.startsWith('image/'));
 
-      const newPhotos: PhotoFile[] = imageFiles?.map(file => ({
+      const remainingSlots = 100 - uploadFormState.files.length;
+
+      if (remainingSlots <= 0) {
+        toast.error('Limite excedido', {
+          description: 'Você já atingiu o limite de 100 fotos por álbum.',
+          duration: 5000,
+          richColors: true,
+        });
+        return;
+      }
+
+      const filesToAdd = imageFiles.slice(0, remainingSlots);
+
+      if (imageFiles.length > remainingSlots) {
+        toast.warning('Algumas imagens foram ignoradas', {
+          description: `Apenas ${remainingSlots} ${remainingSlots === 1 ? 'foto foi adicionada' : 'fotos foram adicionadas'} para respeitar o limite de 100 fotos por álbum.`,
+          duration: 5000,
+          richColors: true,
+        });
+      }
+
+      const newPhotos: PhotoFile[] = filesToAdd?.map(file => ({
         id: generateUniqueId(),
         file,
         preview: createPreviewUrl(file),
