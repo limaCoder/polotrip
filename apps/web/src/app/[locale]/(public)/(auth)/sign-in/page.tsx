@@ -11,7 +11,7 @@ import { OAuthButton } from '@/components/OAuthButton';
 import { loginWithEmailPassword } from '@/actions/loginWithEmailPassword';
 import { LoginPageProps } from './types';
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isLoginWithEmailPasswordEnabled = false;
 
 export default async function LoginPage({ params }: LoginPageProps) {
   const { locale } = await params;
@@ -36,7 +36,7 @@ export default async function LoginPage({ params }: LoginPageProps) {
             </div>
 
             <div className="flex flex-col gap-4 w-full">
-              {isDevelopment && (
+              {isLoginWithEmailPasswordEnabled && (
                 <form action={signInUserWithLocale} className="w-full space-y-4 mb-4">
                   <div className="flex flex-col gap-2">
                     <label htmlFor="email" className="font-body_two">
