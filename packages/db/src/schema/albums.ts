@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp, boolean, integer, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, integer, pgEnum, date } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
 
 import { users } from './auth-schema';
@@ -19,6 +19,7 @@ const albums = pgTable('albums', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
+  date: date('date').notNull(),
   description: text('description'),
   coverImageUrl: text('cover_image_url'),
   spotifyTrackId: text('spotify_track_id'),

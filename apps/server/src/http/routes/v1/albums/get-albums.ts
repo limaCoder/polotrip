@@ -22,6 +22,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
                 id: z.string(),
                 userId: z.string(),
                 title: z.string(),
+                date: z.string(),
                 description: z.string().nullable(),
                 coverImageUrl: z.string().nullable(),
                 spotifyTrackId: z.string().nullable(),

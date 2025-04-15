@@ -17,11 +17,15 @@ export async function createAlbumWithCheckout(
 ) {
   try {
     const title = formData.get('title') as string;
+    const dateString = formData.get('date') as string;
     const description = formData.get('description') as string;
     const coverImageFile = formData.get('cover') as File;
 
+    const dateWithDay = `${dateString}-01`;
+
     const validationResult = albumFormSchema.safeParse({
       title,
+      date: dateWithDay,
       description,
       coverImage: coverImageFile?.size > 0 ? coverImageFile : null,
     });
@@ -44,6 +48,7 @@ export async function createAlbumWithCheckout(
     const { album } = await createAlbum({
       body: {
         title,
+        date: dateWithDay,
         description: description || null,
         coverImageUrl,
       },

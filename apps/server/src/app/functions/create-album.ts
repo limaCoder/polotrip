@@ -5,11 +5,18 @@ import { createId } from '@paralleldrive/cuid2';
 interface CreateAlbumRequest {
   userId: string;
   title: string;
+  date: string;
   description?: string | null;
   coverImageUrl?: string | null;
 }
 
-async function createAlbum({ userId, title, description, coverImageUrl }: CreateAlbumRequest) {
+async function createAlbum({
+  userId,
+  title,
+  date,
+  description,
+  coverImageUrl,
+}: CreateAlbumRequest) {
   const shareableLink = `album=${createId()}`;
 
   const [album] = await db
@@ -17,6 +24,7 @@ async function createAlbum({ userId, title, description, coverImageUrl }: Create
     .values({
       userId,
       title,
+      date,
       description,
       coverImageUrl,
       shareableLink,

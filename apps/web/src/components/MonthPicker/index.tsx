@@ -1,0 +1,121 @@
+'use client';
+
+import * as React from 'react';
+import { format, addYears, subYears, setMonth } from 'date-fns';
+import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { cn } from '@/lib/cn';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
+import { MonthPickerProps } from './types';
+
+export function MonthPicker({
+  value,
+  onChange,
+  disabled,
+  className,
+  placeholder = 'Selecione um mês',
+  name,
+}: MonthPickerProps) {
+  const [date, setDate] = React.useState<Date>(value || new Date());
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (value) {
+      setDate(value);
+    }
+  }, [value]);
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const handleMonthSelect = (monthIndex: number) => {
+    const newDate = setMonth(date, monthIndex);
+    setDate(newDate);
+    onChange?.(newDate);
+    setOpen(false);
+  };
+
+  const handlePreviousYear = () => {
+    const newDate = subYears(date, 1);
+    setDate(newDate);
+  };
+
+  const handleNextYear = () => {
+    const newDate = addYears(date, 1);
+    setDate(newDate);
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className={cn(
+            'w-full justify-start text-left font-normal hover:bg-secondary-10',
+            !date && 'text-text/55',
+            className,
+          )}
+          disabled={disabled}
+        >
+          <CalendarIcon color="#08171C40" className="mr-2 h-4 w-4" />
+          {date ? format(date, 'MMMM yyyy') : placeholder}
+          {name && <input type="hidden" name={name} value={date ? format(date, 'yyyy-MM') : ''} />}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0 bg-secondary" align="start">
+        <div className="p-2 flex items-center justify-between">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-7 w-7 hover:bg-primary transition-colors duration-300"
+            onClick={handlePreviousYear}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="sr-only">Previous year</span>
+          </Button>
+          <div className="font-medium">{format(date, 'yyyy')}</div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-7 w-7 hover:bg-primary transition-colors duration-300"
+            onClick={handleNextYear}
+          >
+            <ChevronRight className="h-4 w-4" />
+            <span className="sr-only">Next year</span>
+          </Button>
+        </div>
+        <div className="grid grid-cols-3 gap-2 p-2">
+          {months.map((month, index) => {
+            const isCurrentMonth =
+              date && date.getMonth() === index && date.getFullYear() === date.getFullYear();
+
+            return (
+              <Button
+                key={month}
+                variant={isCurrentMonth ? 'default' : 'outline'}
+                className="h-9 hover:bg-primary transition-colors duration-300"
+                onClick={() => handleMonthSelect(index)}
+              >
+                {month?.substring(0, 3)}
+              </Button>
+            );
+          })}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

@@ -5,6 +5,12 @@ export const albumFormSchema = z.object({
     .string()
     .min(3, { message: 'O título deve ter pelo menos 3 caracteres' })
     .max(255, { message: 'O título deve ter no máximo 255 caracteres' }),
+  date: z
+    .string()
+    .min(1, { message: 'A data é obrigatória' })
+    .regex(/^\d{4}-\d{2}(-\d{2})?$/, {
+      message: 'Formato de data inválido. Use YYYY-MM ou YYYY-MM-DD',
+    }),
   description: z
     .string()
     .max(1000, { message: 'A descrição deve ter no máximo 1000 caracteres' })

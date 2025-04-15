@@ -21,6 +21,7 @@ export function AlbumCard({
   const albumImage = imageUrl || '/pages/dashboard/album-card-fallback.png';
 
   const albumLink = generateAlbumLink(id, stepAfterPayment);
+
   const albumStatusLabel =
     AlbumStatusLabelEnum[stepAfterPayment as keyof typeof AlbumStatusLabelEnum];
   const albumStatusColor =

@@ -1,7 +1,7 @@
 interface AlbumCardProps {
   id: string;
   title: string;
-  date: Date;
+  date: string;
   photosCount: number;
   imageUrl: string;
   stepAfterPayment: string;

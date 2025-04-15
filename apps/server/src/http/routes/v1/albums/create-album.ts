@@ -10,6 +10,7 @@ import { UnauthorizedError } from '@/http/errors';
 
 const bodySchema = z.object({
   title: z.string().min(3).max(255),
+  date: z.string(),
   description: z.string().max(1000).nullable().optional(),
   coverImageUrl: z.string().url().nullable().optional(),
 });
@@ -31,6 +32,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
               id: z.string(),
               userId: z.string(),
               title: z.string(),
+              date: z.string(),
               description: z.string().nullable(),
               coverImageUrl: z.string().nullable(),
               spotifyTrackId: z.string().nullable().optional(),
@@ -57,7 +59,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         const userId = session.user.id;
 
-        const { title, coverImageUrl, description } = request.body;
+        const { title, coverImageUrl, description, date } = request.body;
 
         const sanitizedInput = {
           title: DOMPurify.sanitize(title),
@@ -68,6 +70,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
         const { album } = await createAlbum({
           userId,
           title: sanitizedInput?.title,
+          date,
           description: sanitizedInput?.description,
           coverImageUrl: sanitizedInput?.coverImageUrl,
         });

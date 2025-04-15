@@ -11,6 +11,7 @@ import { Stripe } from '@stripe/stripe-js';
 import { cn } from '@/lib/cn';
 import { getAlbumPrice } from '@/utils/getAlbumPrice';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { MonthPicker } from '@/components/MonthPicker';
 
 export function AlbumForm() {
   const { locale } = useParams();
@@ -31,6 +32,7 @@ export function AlbumForm() {
     errorMessage: state?.error?.message,
     sessionId: state?.sessionId,
     titleError: state?.error?.errors?.title,
+    dateError: state?.error?.errors?.date,
     descriptionError: state?.error?.errors?.description,
     coverImageError: state?.error?.errors?.coverImage,
   };
@@ -79,6 +81,9 @@ export function AlbumForm() {
             {formState?.titleError && (
               <p className="text-sm mt-1">Título: {formState?.titleError?.join(', ')}</p>
             )}
+            {formState?.dateError && (
+              <p className="text-sm mt-1">Data: {formState?.dateError?.join(', ')}</p>
+            )}
             {formState?.descriptionError && (
               <p className="text-sm">Descrição: {formState?.descriptionError?.join(', ')}</p>
             )}
@@ -103,6 +108,20 @@ export function AlbumForm() {
           />
           {formState?.hasInvalidData && formState?.titleError && (
             <p className="text-sm text-red-500">Título é obrigatório</p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="date" className="font-body_two">
+            Data da viagem
+          </label>
+          <MonthPicker
+            className="border border-text/25 rounded p-3 font-body_two text-sm"
+            name="date"
+            placeholder="Selecione o mês e o ano da viagem"
+          />
+          {formState?.hasInvalidData && formState?.dateError && (
+            <p className="text-sm text-red-500">Data é obrigatório</p>
           )}
         </div>
 

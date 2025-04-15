@@ -29,6 +29,13 @@
       "when": 1744338343760,
       "tag": "0003_blue_calypso",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744694457396,
+      "tag": "0004_chief_paibok",
+      "breakpoints": true
     }
   ]
 }

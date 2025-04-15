@@ -19,7 +19,7 @@ export function AlbumsList() {
           key={album?.id}
           id={album?.id}
           title={album?.title}
-          date={album?.createdAt}
+          date={album?.date}
           photosCount={album?.photoCount}
           imageUrl={album?.coverImageUrl ?? ''}
           stepAfterPayment={album?.currentStepAfterPayment ?? ''}
