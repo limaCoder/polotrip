@@ -1,10 +1,16 @@
 import { env } from '@/lib/env';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { SizeLimit } from 'next';
 
 const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb' as SizeLimit,
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -12,6 +18,15 @@ const nextConfig = {
       },
       {
         hostname: '*.googleusercontent.com',
+      },
+      {
+        hostname: '*.stripe.com',
+      },
+      {
+        hostname: '*.stripe.network',
+      },
+      {
+        hostname: '*.supabase.co',
       },
     ],
   },

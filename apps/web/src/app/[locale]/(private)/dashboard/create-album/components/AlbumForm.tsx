@@ -1,17 +1,18 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Upload, CreditCard, Loader, AlertCircle } from 'lucide-react';
+import { Upload, CreditCard, Loader, AlertCircle, Check } from 'lucide-react';
 
 import { Button } from '@/components/Button';
 import { createAlbumWithCheckout } from '@/actions/createAlbumWithCheckout';
 import getStripe from '@/lib/stripe/get-stripejs';
 import { Stripe } from '@stripe/stripe-js';
+import { cn } from '@/lib/cn';
 
 export function AlbumForm() {
   const { locale } = useParams();
-
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const stripeClientRef = useRef<Stripe | null>(null);
 
   const createAlbumWithCheckoutAction = createAlbumWithCheckout.bind(null, {
@@ -32,6 +33,11 @@ export function AlbumForm() {
     coverImageError: state?.error?.errors?.coverImage,
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSelectedImage(file);
+  };
+
   useEffect(() => {
     async function loadStripeClient() {
       const stripe = await getStripe();
@@ -49,6 +55,12 @@ export function AlbumForm() {
       stripeClientRef?.current?.redirectToCheckout({ sessionId: formState?.sessionId });
     }
   }, [formState?.hasSuccess, formState?.sessionId]);
+
+  useEffect(() => {
+    return () => {
+      setSelectedImage(null);
+    };
+  }, []);
 
   return (
     <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
@@ -106,21 +118,41 @@ export function AlbumForm() {
           <label htmlFor="cover" className="font-body_two">
             Capa do álbum
           </label>
-          <div className="border border-dashed border-text/25 rounded p-3 h-[116px] flex flex-col items-center justify-center text-center relative">
+          <div
+            className={cn(
+              'border border-dashed rounded p-3 h-[116px] flex flex-col items-center justify-center text-center relative',
+              selectedImage ? 'border-primary' : 'border-text/25',
+            )}
+          >
             <input
               type="file"
               id="cover"
               name="cover"
               accept="image/png, image/jpeg, image/jpg"
               className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              onChange={handleImageChange}
             />
-            <Upload size={24} className="text-text/25 mb-2" />
-            <p className="font-body_two text-sm">
-              <span className="text-primary font-bold">Faça upload de uma foto</span>
-              <br />
-              ou arraste e solte
-            </p>
-            <span className="text-primary text-xs mt-1">PNG, JPG até 10MB</span>
+            {selectedImage ? (
+              <>
+                <Check size={24} className="text-primary mb-2" />
+                <p className="font-body_two text-sm">
+                  <span className="text-primary font-bold">Imagem selecionada!</span>
+                  <br />
+                  Se deseja alterar, arraste e solte novamente
+                </p>
+                <span className="text-primary text-xs mt-1">{selectedImage?.name}</span>
+              </>
+            ) : (
+              <>
+                <Upload size={24} className="text-text/25 mb-2" />
+                <p className="font-body_two text-sm">
+                  <span className="text-primary font-bold">Faça upload de uma foto</span>
+                  <br />
+                  ou arraste e solte
+                </p>
+                <span className="text-primary text-xs mt-1">PNG, JPG até 5MB</span>
+              </>
+            )}
           </div>
           {formState?.hasInvalidData && formState?.coverImageError && (
             <p className="text-sm text-red-500">{formState?.coverImageError?.join(', ')}</p>

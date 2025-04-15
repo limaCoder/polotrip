@@ -12,8 +12,8 @@ export const albumFormSchema = z.object({
     .nullable(),
   coverImage: z
     .instanceof(File)
-    .refine(file => file.size <= 10 * 1024 * 1024, {
-      message: 'A imagem deve ter no máximo 10MB',
+    .refine(file => file.size <= 5 * 1024 * 1024, {
+      message: 'A imagem deve ter no máximo 5MB',
     })
     .refine(file => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type), {
       message: 'O arquivo deve ser uma imagem PNG ou JPG',
