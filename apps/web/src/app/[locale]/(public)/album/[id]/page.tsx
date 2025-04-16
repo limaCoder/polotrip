@@ -1,6 +1,7 @@
+import { FullscreenIcon, Share2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { FullscreenIcon, Share2 } from 'lucide-react';
+import { PhotoTimeline } from '@/components/PhotoTimeline';
 
 export default function AlbumViewPage() {
   return (
@@ -53,7 +54,9 @@ export default function AlbumViewPage() {
         </div>
       </div>
 
-      <div className="flex-grow bg-secondary/5"></div>
+      <main className="bg-background">
+        <PhotoTimeline />
+      </main>
 
       <Footer />
     </main>
