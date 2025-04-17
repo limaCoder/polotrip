@@ -168,14 +168,6 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
       return;
     }
 
-    console.log(
-      'Iniciando upload com arquivos:',
-      validFiles.map(f => ({
-        name: f?.file?.name,
-        hasMetadata: !!(f?.metadata?.dateTaken || f?.metadata?.latitude || f?.metadata?.longitude),
-      })),
-    );
-
     updateUploadFormState({
       isUploading: true,
       progress: 0,

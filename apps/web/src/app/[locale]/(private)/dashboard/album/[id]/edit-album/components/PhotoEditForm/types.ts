@@ -1,0 +1,22 @@
+import { Photo } from '@polotrip/db/models';
+import { z } from 'zod';
+
+const formSchema = z.object({
+  dateTaken: z.date().optional().nullable(),
+  locationName: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+});
+
+type PhotoEditFormData = z.infer<typeof formSchema>;
+
+interface PhotoEditFormProps {
+  photo?: Photo | null;
+  isMultipleSelection?: boolean;
+  selectedCount?: number;
+  onSave: (data: PhotoEditFormData) => void;
+  onCancel?: () => void;
+  isDisabled?: boolean;
+}
+
+export { formSchema };
+export type { PhotoEditFormProps, PhotoEditFormData };

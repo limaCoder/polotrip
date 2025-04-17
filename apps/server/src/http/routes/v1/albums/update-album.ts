@@ -7,13 +7,13 @@ import { updateAlbum } from '@/app/functions/update-album';
 import { authenticate } from '@/http/middlewares/authenticate';
 import { fromNodeHeaders } from 'better-auth/node';
 import { UnauthorizedError } from '@/http/errors';
+import { sanitizeNonNullable, sanitizeNullable } from '@/app/utils/sanitize';
 
 const paramsSchema = z.object({
   id: z.string(),
 });
 
 const bodySchema = z.object({
-  userId: z.string(),
   title: z.string().min(3).max(255).optional(),
   description: z.string().max(1000).nullable().optional(),
   coverImageUrl: z.string().url().nullable().optional(),
@@ -24,6 +24,7 @@ const bodySchema = z.object({
     .array(
       z.object({
         id: z.string(),
+        dateTaken: z.string().nullable().optional(),
         locationName: z.string().nullable().optional(),
         description: z.string().nullable().optional(),
         order: z.string().nullable().optional(),
@@ -115,27 +116,29 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         const sanitizedInput = {
           albumId: DOMPurify.sanitize(albumId),
-          title: DOMPurify.sanitize(title ?? ''),
-          description: DOMPurify.sanitize(description ?? ''),
-          coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
-          spotifyTrackId: DOMPurify.sanitize(spotifyTrackId ?? ''),
-          spotifyPlaylistId: DOMPurify.sanitize(spotifyPlaylistId ?? ''),
-          isPublished: isPublished ?? false,
+          title: sanitizeNonNullable(title),
+          description: sanitizeNullable(description),
+          coverImageUrl: sanitizeNullable(coverImageUrl),
+          spotifyTrackId: sanitizeNullable(spotifyTrackId),
+          spotifyPlaylistId: sanitizeNullable(spotifyPlaylistId),
+          isPublished,
           photoUpdates: photoUpdates ?? [],
-          currentStepAfterPayment: DOMPurify.sanitize(currentStepAfterPayment ?? ''),
+          currentStepAfterPayment: sanitizeNonNullable(
+            currentStepAfterPayment as string | undefined,
+          ),
         };
 
         const result = await updateAlbum({
-          albumId: sanitizedInput?.albumId,
+          albumId: sanitizedInput.albumId,
           userId,
-          title: sanitizedInput?.title,
-          description: sanitizedInput?.description,
-          coverImageUrl: sanitizedInput?.coverImageUrl,
-          spotifyTrackId: sanitizedInput?.spotifyTrackId,
-          spotifyPlaylistId: sanitizedInput?.spotifyPlaylistId,
-          isPublished: sanitizedInput?.isPublished,
-          photoUpdates: sanitizedInput?.photoUpdates,
-          currentStepAfterPayment: sanitizedInput?.currentStepAfterPayment,
+          title: sanitizedInput.title,
+          description: sanitizedInput.description,
+          coverImageUrl: sanitizedInput.coverImageUrl,
+          spotifyTrackId: sanitizedInput.spotifyTrackId,
+          spotifyPlaylistId: sanitizedInput.spotifyPlaylistId,
+          isPublished: sanitizedInput.isPublished,
+          photoUpdates: sanitizedInput.photoUpdates,
+          currentStepAfterPayment: sanitizedInput.currentStepAfterPayment,
         });
 
         return result;

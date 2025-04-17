@@ -6,7 +6,7 @@ import { db } from '@polotrip/db';
 import { albums, payments } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
 import { QueryClient } from '@tanstack/react-query';
-import { NetworkKeys } from '@/hooks/network/keys';
+import { albumKeys } from '@/hooks/network/keys/albumKeys';
 
 const secret = env.STRIPE_WEBHOOK_SECRET;
 
@@ -29,9 +29,6 @@ export async function POST(req: Request) {
 
         if (session.payment_status === 'paid') {
           const albumId = session.metadata?.albumId;
-          const userId = session.metadata?.userId;
-
-          console.log(`Payment by card completed for album: ${albumId}, user: ${userId}`);
 
           if (albumId) {
             await db
@@ -47,7 +44,7 @@ export async function POST(req: Request) {
               .returning();
 
             queryClient.invalidateQueries({
-              queryKey: [NetworkKeys.ALBUMS],
+              queryKey: [albumKeys.all],
             });
 
             /* if (session.customer_details?.email) {

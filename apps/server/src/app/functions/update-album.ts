@@ -1,6 +1,12 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums, photos } from '@polotrip/db/schema';
+import {
+  groupPhotoUpdates,
+  PhotoUpdate,
+  updateMultiplePhotos,
+  updateSinglePhoto,
+} from '../helpers/update-album';
 
 interface UpdateAlbumRequest {
   albumId: string;
@@ -11,16 +17,22 @@ interface UpdateAlbumRequest {
   spotifyTrackId?: string | null;
   spotifyPlaylistId?: string | null;
   isPublished?: boolean;
-  photoUpdates?: {
-    id: string;
-    locationName?: string | null;
-    description?: string | null;
-    order?: string | null;
-  }[];
+  photoUpdates?: PhotoUpdate[];
   currentStepAfterPayment?: string;
 }
 
 type AlbumStep = 'upload' | 'organize' | 'published';
+
+interface AlbumUpdateData {
+  title?: string;
+  description?: string | null;
+  coverImageUrl?: string | null;
+  spotifyTrackId?: string | null;
+  spotifyPlaylistId?: string | null;
+  isPublished?: boolean;
+  currentStepAfterPayment?: AlbumStep;
+  updatedAt: Date;
+}
 
 async function updateAlbum({
   albumId,
@@ -48,44 +60,66 @@ async function updateAlbum({
     throw new Error('Album does not belong to the user');
   }
 
-  const [updatedAlbum] = await db
-    .update(albums)
-    .set({
-      ...(title && { title }),
-      ...(description !== undefined && { description }),
-      ...(coverImageUrl !== undefined && { coverImageUrl }),
-      ...(spotifyTrackId !== undefined && { spotifyTrackId }),
-      ...(spotifyPlaylistId !== undefined && { spotifyPlaylistId }),
-      ...(isPublished !== undefined && { isPublished }),
-      ...(currentStepAfterPayment !== undefined && {
-        currentStepAfterPayment: currentStepAfterPayment as AlbumStep,
-      }),
+  return await db.transaction(async tx => {
+    const albumUpdateData: AlbumUpdateData = {
       updatedAt: new Date(),
-    })
-    .where(eq(albums.id, albumId))
-    .returning();
+    };
 
-  if (photoUpdates && photoUpdates.length > 0) {
-    for (const photoUpdate of photoUpdates) {
-      await db
-        .update(photos)
-        .set({
-          ...(photoUpdate.locationName !== undefined && { locationName: photoUpdate.locationName }),
-          ...(photoUpdate.description !== undefined && { description: photoUpdate.description }),
-          ...(photoUpdate.order !== undefined && { order: photoUpdate.order }),
-          updatedAt: new Date(),
-        })
-        .where(eq(photos.id, photoUpdate.id));
+    const optionalFields = {
+      title,
+      description,
+      coverImageUrl,
+      spotifyTrackId,
+      spotifyPlaylistId,
+      isPublished,
+    };
+
+    const fieldsToUpdate = Object.entries(optionalFields).reduce(
+      (acc, [key, value]) => {
+        const typedKey = key as keyof typeof optionalFields;
+        if (typedKey === 'title' ? value : value !== undefined) {
+          acc[typedKey] = value;
+        }
+        return acc;
+      },
+      {} as Record<string, string | boolean | null | undefined>,
+    );
+
+    Object.assign(albumUpdateData, fieldsToUpdate);
+
+    if (
+      currentStepAfterPayment &&
+      ['upload', 'organize', 'published'].includes(currentStepAfterPayment)
+    ) {
+      albumUpdateData.currentStepAfterPayment = currentStepAfterPayment as AlbumStep;
     }
-  }
 
-  const albumPhotos = await db
-    .select()
-    .from(photos)
-    .where(eq(photos.albumId, albumId))
-    .orderBy(photos.order || photos.dateTaken || photos.createdAt);
+    const [updatedAlbum] = await tx
+      .update(albums)
+      .set(albumUpdateData)
+      .where(eq(albums.id, albumId))
+      .returning();
 
-  return { album: updatedAlbum, photos: albumPhotos };
+    if (photoUpdates?.length) {
+      const updateGroups = groupPhotoUpdates(photoUpdates);
+
+      for (const group of updateGroups) {
+        if (group.length === 1) {
+          await updateSinglePhoto(tx, group[0]);
+        } else {
+          await updateMultiplePhotos(tx, group);
+        }
+      }
+    }
+
+    const albumPhotos = await tx
+      .select()
+      .from(photos)
+      .where(eq(photos.albumId, albumId))
+      .orderBy(photos.order || photos.dateTaken || photos.createdAt);
+
+    return { album: updatedAlbum, photos: albumPhotos };
+  });
 }
 
 export { updateAlbum };
