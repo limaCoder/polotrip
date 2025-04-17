@@ -90,41 +90,45 @@ export function PhotoTimeline() {
 
       <AnimatePresence>
         {selectedPhoto && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
-            onClick={() => setSelectedPhoto(null)}
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative max-w-4xl max-h-[90vh] w-full h-full"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="relative w-full h-full">
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 bg-black/80"
+              onClick={() => setSelectedPhoto(null)}
+            />
+
+            <div className="relative z-50 w-full h-full max-w-7xl max-h-[90vh] flex items-center justify-center p-4">
+              <motion.div
+                layoutId={`photo-${selectedPhoto.id}`}
+                className="relative w-full h-full max-w-5xl flex items-center justify-center"
+                onClick={e => e.stopPropagation()}
+              >
                 <Image
                   src={selectedPhoto.src || '/placeholder.svg'}
                   alt={selectedPhoto.alt}
                   fill
                   sizes="100vw"
-                  className="object-contain rounded-lg"
+                  className="object-contain"
                   priority
                 />
-              </div>
-              <button
-                onClick={() => setSelectedPhoto(null)}
-                className="absolute top-0 -right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
-                aria-label="Fechar"
-              >
-                <X size={24} />
-              </button>
-            </motion.div>
-          </motion.div>
+
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ delay: 0.2 }}
+                  onClick={() => setSelectedPhoto(null)}
+                  className="absolute top-0 -right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
+                  aria-label="Fechar"
+                >
+                  <X size={24} />
+                </motion.button>
+              </motion.div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </div>

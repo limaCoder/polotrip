@@ -64,14 +64,16 @@ export function MasonryGallery({
                   paddingBottom: `${(photo.height / photo.width) * 100}%`,
                 }}
               >
-                <Image
-                  src={photo.src || '/placeholder.svg'}
-                  alt={photo.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
+                <motion.div layoutId={`photo-${photo.id}`} className="absolute inset-0">
+                  <Image
+                    src={photo.src || '/placeholder.svg'}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </motion.div>
               </div>
             </motion.div>
           ))}
