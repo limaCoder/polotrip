@@ -9,6 +9,8 @@ export function PhotoGalleryItem({
   isModified,
   togglePhotoSelection,
 }: PhotoGalleryItemProps) {
+  const isLocationsMetadataAvailable = photo?.latitude && photo?.longitude;
+
   return (
     <div
       key={photo?.id}
@@ -39,7 +41,13 @@ export function PhotoGalleryItem({
         </div>
       )}
 
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center" />
+      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        {isLocationsMetadataAvailable ? (
+          <div className="text-white text-sm text-center">Dados de localidade presentes</div>
+        ) : (
+          <div className="text-white text-sm text-center">Dados de localidade ausentes</div>
+        )}
+      </div>
     </div>
   );
 }

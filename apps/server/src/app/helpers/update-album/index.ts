@@ -11,6 +11,8 @@ interface DbTransaction {
 interface PhotoUpdate {
   id: string;
   locationName?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   description?: string | null;
   order?: string | null;
   dateTaken?: string | null;
@@ -26,6 +28,8 @@ function groupPhotoUpdates(photoUpdates: PhotoUpdate[]): PhotoUpdate[][] {
     const updateKey = [
       update.dateTaken !== undefined ? 'dateTaken' : '',
       update.locationName !== undefined ? 'locationName' : '',
+      update.latitude !== undefined ? 'latitude' : '',
+      update.longitude !== undefined ? 'longitude' : '',
       update.description !== undefined ? 'description' : '',
       update.order !== undefined ? 'order' : '',
     ].join('_');
@@ -52,6 +56,8 @@ async function updateSinglePhoto(tx: DbTransaction, photoUpdate: PhotoUpdate): P
   };
 
   if (photoUpdate.locationName !== undefined) updateData.locationName = photoUpdate.locationName;
+  if (photoUpdate.latitude !== undefined) updateData.latitude = photoUpdate.latitude;
+  if (photoUpdate.longitude !== undefined) updateData.longitude = photoUpdate.longitude;
   if (photoUpdate.description !== undefined) updateData.description = photoUpdate.description;
   if (photoUpdate.dateTaken !== undefined) updateData.dateTaken = photoUpdate.dateTaken;
   if (photoUpdate.order !== undefined) updateData.order = photoUpdate.order;
@@ -70,6 +76,8 @@ async function updateMultiplePhotos(tx: DbTransaction, photoUpdates: PhotoUpdate
 
   const fieldsToUpdate = {
     locationName: sampleUpdate.locationName !== undefined,
+    latitude: sampleUpdate.latitude !== undefined,
+    longitude: sampleUpdate.longitude !== undefined,
     description: sampleUpdate.description !== undefined,
     dateTaken: sampleUpdate.dateTaken !== undefined,
     order: sampleUpdate.order !== undefined,
@@ -86,6 +94,28 @@ async function updateMultiplePhotos(tx: DbTransaction, photoUpdates: PhotoUpdate
           sql` `,
         )}
         ELSE "location_name" 
+      END`;
+  }
+
+  if (fieldsToUpdate.latitude) {
+    batchUpdateSQL = sql`${batchUpdateSQL}, "latitude" = 
+      CASE "id" 
+        ${sql.join(
+          photoUpdates.map(update => sql`WHEN ${update.id} THEN ${update.latitude}`),
+          sql` `,
+        )}
+        ELSE "latitude" 
+      END`;
+  }
+
+  if (fieldsToUpdate.longitude) {
+    batchUpdateSQL = sql`${batchUpdateSQL}, "longitude" = 
+      CASE "id" 
+        ${sql.join(
+          photoUpdates.map(update => sql`WHEN ${update.id} THEN ${update.longitude}`),
+          sql` `,
+        )}
+        ELSE "longitude" 
       END`;
   }
 

@@ -26,6 +26,8 @@ const bodySchema = z.object({
         id: z.string(),
         dateTaken: z.string().nullable().optional(),
         locationName: z.string().nullable().optional(),
+        latitude: z.number().nullable().optional(),
+        longitude: z.number().nullable().optional(),
         description: z.string().nullable().optional(),
         order: z.string().nullable().optional(),
       }),

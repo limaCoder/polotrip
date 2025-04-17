@@ -12,6 +12,8 @@ interface PhotoBatchUpdate {
     dateTaken?: string | null;
     locationName?: string | null;
     description?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
   };
 }
 

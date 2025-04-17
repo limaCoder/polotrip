@@ -1,12 +1,11 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { MapPin, Check, CalendarIcon } from 'lucide-react';
+import { Check, CalendarIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -21,6 +20,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { apiStringToDate } from '@/utils/dates';
 import { type PhotoEditFormProps, type PhotoEditFormData, formSchema } from './types';
+import { LocationAutocomplete } from '../LocationAutocomplete';
 
 export function PhotoEditForm({
   photo,
@@ -39,6 +39,8 @@ export function PhotoEditForm({
       dateTaken: apiStringToDate(photo?.dateTaken),
       locationName: photo?.locationName || '',
       description: photo?.description || '',
+      latitude: photo?.latitude || null,
+      longitude: photo?.longitude || null,
     },
   });
 
@@ -109,19 +111,18 @@ export function PhotoEditForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="font-body_two">Localização</FormLabel>
-                <div className="border border-text/25 mt-1 rounded px-3 flex items-center gap-2">
-                  <MapPin size={20} className="text-text/50" />
-                  <FormControl>
-                    <Input
-                      type="text"
-                      disabled={isDisabled}
-                      className="font-body_two text-text/75 bg-transparent w-full outline-none border-0 p-0 focus-visible:ring-0 shadow-none"
-                      placeholder="Digite o nome da localização"
-                      {...field}
-                      value={field.value || ''}
-                    />
-                  </FormControl>
-                </div>
+                <FormControl>
+                  <LocationAutocomplete
+                    value={field.value || ''}
+                    onChange={(value, latitude, longitude) => {
+                      field.onChange(value);
+                      form.setValue('latitude', latitude);
+                      form.setValue('longitude', longitude);
+                    }}
+                    disabled={isDisabled}
+                    placeholder="Digite o nome da localização"
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

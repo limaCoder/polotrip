@@ -5,6 +5,8 @@ const formSchema = z.object({
   dateTaken: z.date().optional().nullable(),
   locationName: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  latitude: z.number().optional().nullable(),
+  longitude: z.number().optional().nullable(),
 });
 
 type PhotoEditFormData = z.infer<typeof formSchema>;

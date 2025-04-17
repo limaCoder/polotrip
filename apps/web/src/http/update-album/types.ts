@@ -6,6 +6,8 @@ export type PhotoUpdate = {
   locationName?: string | null;
   description?: string | null;
   order?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 };
 
 export type UpdateAlbumRequest = {

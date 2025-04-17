@@ -176,6 +176,8 @@ export function useEditAlbum() {
       dateTaken: dateToAPIString(data.dateTaken),
       locationName: data.locationName || null,
       description: data.description || null,
+      latitude: data.latitude || null,
+      longitude: data.longitude || null,
     });
   };
 
@@ -188,6 +190,8 @@ export function useEditAlbum() {
         dateTaken: dateToAPIString(data.dateTaken),
         locationName: data.locationName || null,
         description: data.description || null,
+        latitude: data.latitude || null,
+        longitude: data.longitude || null,
       },
     });
   };
