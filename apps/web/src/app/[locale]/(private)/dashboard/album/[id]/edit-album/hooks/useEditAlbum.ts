@@ -12,6 +12,7 @@ import { useGetPhotosByDate } from '@/hooks/network/queries/useGetPhotosByDate';
 import { useUpdatePhoto } from '@/hooks/network/mutations/useUpdatePhoto';
 import { useUpdatePhotoBatch } from '@/hooks/network/mutations/useUpdatePhotoBatch';
 import { usePublishAlbum } from '@/hooks/network/mutations/usePublishAlbum';
+import { useDeletePhotos } from '@/hooks/network/mutations/useDeletePhotos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -27,6 +28,7 @@ export function useEditAlbum() {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const initializedRef = useRef(false);
 
@@ -130,6 +132,14 @@ export function useEditAlbum() {
     },
   });
 
+  const deletePhotosMutation = useDeletePhotos({
+    albumId: params.id,
+    onSuccess: () => {
+      deselectAllPhotos();
+      setIsDeleteDialogOpen(false);
+    },
+  });
+
   const handleDateSelect = async (date: string | null) => {
     setSelectedDateLocal(date);
 
@@ -182,6 +192,14 @@ export function useEditAlbum() {
     });
   };
 
+  const handleDeletePhotos = () => {
+    if (selectedPhotos.length === 0) return;
+
+    deletePhotosMutation.mutate({
+      photoIds: selectedPhotos,
+    });
+  };
+
   const handleCancelEdit = () => {
     setSelectedPhoto(null);
     deselectAllPhotos();
@@ -199,6 +217,14 @@ export function useEditAlbum() {
     setIsFinishDialogOpen(false);
   };
 
+  const openDeleteDialog = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+  };
+
   const isLoading = albumDatesQuery.isLoading || photosQuery.isLoading;
   const isPhotosLoading = photosQuery.isLoading;
 
@@ -213,6 +239,8 @@ export function useEditAlbum() {
     isLoading,
     isPhotosLoading,
     isFinishDialogOpen,
+    isDeleteDialogOpen,
+    isDeletingPhotos: deletePhotosMutation.isPending,
 
     error,
     photoPagination: photosQuery.data?.pagination || null,
@@ -222,6 +250,7 @@ export function useEditAlbum() {
     handlePhotoClick,
     handleSavePhotoEdit,
     handleSaveBatchEdit,
+    handleDeletePhotos,
     handleFinish,
     handleCancelEdit,
     handlePageChange,
@@ -230,5 +259,7 @@ export function useEditAlbum() {
     deselectAllPhotos,
     openFinishDialog,
     closeFinishDialog,
+    openDeleteDialog,
+    closeDeleteDialog,
   };
 }

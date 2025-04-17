@@ -7,6 +7,7 @@ import { getAlbumByIdRoute } from './get-album-by-id';
 import { getUploadUrlsRoute } from './get-upload-urls';
 import { getPhotosByDateRoute } from './get-photos-by-date';
 import { getAlbumDatesRoute } from './get-album-dates';
+import { deletePhotosRoute } from './delete-photos';
 
 const albumsController: FastifyPluginAsyncZod = async app => {
   app.register(getAlbumsRoute);
@@ -17,6 +18,7 @@ const albumsController: FastifyPluginAsyncZod = async app => {
   app.register(getAlbumByIdRoute);
   app.register(getPhotosByDateRoute);
   app.register(getAlbumDatesRoute);
+  app.register(deletePhotosRoute);
 };
 
 export default albumsController;

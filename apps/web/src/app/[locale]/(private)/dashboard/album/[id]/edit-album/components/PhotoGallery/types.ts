@@ -12,6 +12,7 @@ interface PhotoGalleryProps {
   togglePhotoSelection: (photoId: string) => void;
   deselectAllPhotos: () => void;
   onPageChange: (page: number) => void;
+  onDeletePhotos: () => void;
 }
 
 export type { PhotoGalleryProps };

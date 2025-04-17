@@ -2,7 +2,7 @@ import { SkeletonList } from '@/components/SkeletonList';
 import { type PhotoGalleryProps } from './types';
 import { PhotoGalleryPagination } from '../PhotoGalleryPagination';
 import { PhotoGalleryItem } from '../PhotoGalleryItem';
-import { Trash2 } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
 
 export function PhotoGallery({
   filteredPhotos,
@@ -15,6 +15,7 @@ export function PhotoGallery({
   togglePhotoSelection,
   deselectAllPhotos,
   onPageChange,
+  onDeletePhotos,
 }: PhotoGalleryProps) {
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
@@ -36,13 +37,22 @@ export function PhotoGallery({
         </p>
 
         {selectedPhotos.length > 0 && (
-          <button
-            className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
-            onClick={deselectAllPhotos}
-          >
-            <Trash2 size={18} />
-            <span className="font-body_two">Limpar Seleção</span>
-          </button>
+          <div className="flex gap-4">
+            <button
+              className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
+              onClick={deselectAllPhotos}
+            >
+              <X size={18} />
+              <span className="font-body_two">Limpar Seleção</span>
+            </button>
+            <button
+              className="flex items-center gap-2 text-red-500 cursor-pointer hover:text-red-600"
+              onClick={onDeletePhotos}
+            >
+              <Trash2 size={18} />
+              <span className="font-body_two">Excluir Selecionadas</span>
+            </button>
+          </div>
         )}
       </div>
 

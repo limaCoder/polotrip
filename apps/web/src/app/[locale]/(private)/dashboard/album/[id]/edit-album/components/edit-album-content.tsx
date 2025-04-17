@@ -8,6 +8,7 @@ import { PhotoMap } from './PhotoMap';
 import { PhotoEditForm } from './PhotoEditForm';
 import { PhotoGallery } from './PhotoGallery';
 import { FinishEditDialog } from './FinishEditDialog';
+import { DeletePhotosDialog } from './DeletePhotosDialog';
 import { useEditAlbum } from '../hooks/useEditAlbum';
 
 export function EditAlbumContent() {
@@ -23,6 +24,8 @@ export function EditAlbumContent() {
     photoPagination,
     currentPage,
     isFinishDialogOpen,
+    isDeleteDialogOpen,
+    isDeletingPhotos,
 
     handleDateSelect,
     handlePhotoClick,
@@ -31,11 +34,14 @@ export function EditAlbumContent() {
     handleFinish,
     handleCancelEdit,
     handlePageChange,
+    handleDeletePhotos,
     getModifiedStatus,
     togglePhotoSelection,
     deselectAllPhotos,
     openFinishDialog,
     closeFinishDialog,
+    openDeleteDialog,
+    closeDeleteDialog,
   } = useEditAlbum();
 
   if (isLoading) {
@@ -100,6 +106,7 @@ export function EditAlbumContent() {
           togglePhotoSelection={togglePhotoSelection}
           deselectAllPhotos={deselectAllPhotos}
           onPageChange={handlePageChange}
+          onDeletePhotos={openDeleteDialog}
         />
 
         <div className="flex justify-end">
@@ -127,6 +134,14 @@ export function EditAlbumContent() {
         isOpen={isFinishDialogOpen}
         onClose={closeFinishDialog}
         onConfirm={handleFinish}
+      />
+
+      <DeletePhotosDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={closeDeleteDialog}
+        onConfirm={handleDeletePhotos}
+        photoCount={selectedPhotos.length}
+        isDeleting={isDeletingPhotos}
       />
     </div>
   );
