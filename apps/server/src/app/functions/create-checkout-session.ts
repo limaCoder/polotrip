@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums, payments } from '@polotrip/db/schema';
 import stripe from '@/app/lib/stripe';
+import { getAlbumStripePrice } from '@/app/utils/getAlbumPrice';
 
 interface CreateCheckoutSessionRequest {
   userId: string;
@@ -9,7 +10,6 @@ interface CreateCheckoutSessionRequest {
   successUrl: string;
   cancelUrl: string;
   paymentMethod: 'credit_card' | 'pix';
-  amount: number;
   currency: 'brl' | 'usd';
   isAdditionalPhotos?: boolean;
   additionalPhotosCount?: number;
@@ -21,7 +21,6 @@ async function createCheckoutSession({
   successUrl,
   cancelUrl,
   paymentMethod,
-  amount,
   currency,
   isAdditionalPhotos = false,
   additionalPhotosCount = 0,
@@ -41,6 +40,8 @@ async function createCheckoutSession({
   }
 
   let description = `Photos album: ${album.title}`;
+
+  let amount = getAlbumStripePrice(currency);
 
   if (isAdditionalPhotos && additionalPhotosCount > 0) {
     // R$9,99 or USD 9,99 for each 100 additional photos
