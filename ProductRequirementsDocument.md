@@ -191,7 +191,7 @@ O backend segue uma **Arquitetura em Camadas com Separação de Responsabilidade
 
 - **Camada de Negócio (src/app/functions/)**:
   - Contém a lógica de negócio isolada da interface HTTP
-  - Responsável pelo acesso ao banco de dados via Drizzle ORM
+  - Responsável pelo acesso ao banco de dados via Drizzle ORM (Desgin Pattern Repository)
   - Implementa regras e validações de domínio
   - Retorna dados estruturados e erros tipados
   - Pode ser reutilizada por diferentes endpoints ou serviços
