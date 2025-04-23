@@ -52,7 +52,7 @@ async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) 
       )
       .returning();
 
-    const [updatedAlbum] = await tx
+    await tx
       .update(albums)
       .set({
         photoCount: album.photoCount - deletedPhotos.length,
@@ -82,8 +82,9 @@ async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) 
     }
 
     return {
+      success: true,
       deletedCount: deletedPhotos.length,
-      album: updatedAlbum,
+      message: `${deletedPhotos.length} photos deleted successfully`,
     };
   });
 }

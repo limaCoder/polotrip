@@ -30,23 +30,9 @@ export const deletePhotosRoute: FastifyPluginAsyncZod = async app => {
         body: bodySchema,
         response: {
           200: z.object({
+            success: z.boolean(),
             deletedCount: z.number(),
-            album: z.object({
-              id: z.string(),
-              userId: z.string(),
-              title: z.string(),
-              description: z.string().nullable(),
-              coverImageUrl: z.string().nullable(),
-              spotifyTrackId: z.string().nullable(),
-              spotifyPlaylistId: z.string().nullable(),
-              isPublished: z.boolean(),
-              isPaid: z.boolean(),
-              currentStepAfterPayment: z.string(),
-              shareableLink: z.string(),
-              photoCount: z.number(),
-              createdAt: z.date(),
-              updatedAt: z.date(),
-            }),
+            message: z.string(),
           }),
           400: z.object({
             message: z.string(),

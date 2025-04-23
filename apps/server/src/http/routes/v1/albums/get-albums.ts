@@ -20,7 +20,6 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
             albums: z.array(
               z.object({
                 id: z.string(),
-                userId: z.string(),
                 title: z.string(),
                 date: z.string(),
                 description: z.string().nullable(),

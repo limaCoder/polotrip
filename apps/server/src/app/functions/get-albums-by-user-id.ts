@@ -1,6 +1,7 @@
 import { eq, sql, and } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums } from '@polotrip/db/schema';
+import { Album } from '@polotrip/db/models';
 
 import { PaginationQuery } from '@/app/helpers/pagination/types';
 import { paginate } from '@/app/helpers/pagination';
@@ -33,8 +34,16 @@ async function getAlbumsByUserId({
       db,
     });
 
+    const sanitizedData = result?.data?.map(album => {
+      const albumData = album as Album;
+
+      const { userId, ...rest } = albumData;
+
+      return rest;
+    });
+
     return {
-      albums: result?.data,
+      albums: sanitizedData,
       pagination: result?.pagination,
     };
   }

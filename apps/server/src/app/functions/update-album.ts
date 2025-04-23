@@ -112,13 +112,19 @@ async function updateAlbum({
       }
     }
 
-    const albumPhotos = await tx
+    await tx
       .select()
       .from(photos)
       .where(eq(photos.albumId, albumId))
       .orderBy(photos.order || photos.dateTaken || photos.createdAt);
 
-    return { album: updatedAlbum, photos: albumPhotos };
+    const { userId: removedUserId, ...album } = updatedAlbum;
+
+    return {
+      success: true,
+      album,
+      message: 'Album updated successfully',
+    };
   });
 }
 

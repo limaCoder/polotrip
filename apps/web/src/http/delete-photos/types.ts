@@ -10,6 +10,7 @@ export type DeletePhotosRequest = {
 };
 
 export type DeletePhotosResponse = {
+  success: boolean;
   deletedCount: number;
-  album: Album;
+  message: string;
 };

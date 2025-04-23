@@ -52,9 +52,9 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
         body: bodySchema,
         response: {
           200: z.object({
+            success: z.boolean(),
             album: z.object({
               id: z.string(),
-              userId: z.string(),
               title: z.string(),
               description: z.string().nullable(),
               coverImageUrl: z.string().nullable(),
@@ -68,23 +68,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
               createdAt: z.date(),
               updatedAt: z.date(),
             }),
-            photos: z.array(
-              z.object({
-                id: z.string(),
-                albumId: z.string(),
-                imageUrl: z.string(),
-                thumbnailUrl: z.string().nullable(),
-                originalFileName: z.string().nullable(),
-                dateTaken: z.string().nullable(),
-                latitude: z.number().nullable(),
-                longitude: z.number().nullable(),
-                locationName: z.string().nullable(),
-                description: z.string().nullable(),
-                order: z.string().nullable(),
-                createdAt: z.date(),
-                updatedAt: z.date(),
-              }),
-            ),
+            message: z.string(),
           }),
           400: z.object({
             message: z.string(),

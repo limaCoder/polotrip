@@ -7,6 +7,7 @@ import { deletePhotos } from '@/http/delete-photos';
 import { albumKeys } from '../keys/albumKeys';
 import { useCallback } from 'react';
 import { Photo } from '@polotrip/db/models';
+import { Pagination } from '@/types/pagination';
 
 interface UseDeletePhotosProps {
   albumId: string;
@@ -17,13 +18,6 @@ interface DeletePhotosVariables {
   photoIds: string[];
 }
 
-interface PaginationData {
-  currentPage: number;
-  totalItems: number;
-  totalPages: number;
-  perPage: number;
-}
-
 export const useDeletePhotos = ({ albumId, onSuccess }: UseDeletePhotosProps) => {
   const queryClient = useQueryClient();
 
@@ -32,7 +26,7 @@ export const useDeletePhotos = ({ albumId, onSuccess }: UseDeletePhotosProps) =>
 
   const removePhotosFromCache = useCallback(
     (photoIds: string[]) => {
-      queryClient.setQueryData<{ photos: Photo[]; pagination: PaginationData }>(
+      queryClient.setQueryData<{ photos: Photo[]; pagination: Pagination }>(
         getPhotosByDateQueryKey,
         oldData => {
           if (!oldData) return oldData;

@@ -19,7 +19,7 @@ async function createAlbum({
 }: CreateAlbumRequest) {
   const shareableLink = `album=${createId()}`;
 
-  const [album] = await db
+  const [originalAlbum] = await db
     .insert(albums)
     .values({
       userId,
@@ -32,6 +32,8 @@ async function createAlbum({
       isPaid: false,
     })
     .returning();
+
+  const { userId: removedUserId, ...album } = originalAlbum;
 
   return { album };
 }

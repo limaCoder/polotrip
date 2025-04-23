@@ -81,7 +81,11 @@ async function saveUploadedPhotos({
     })
     .where(eq(albums.id, albumId));
 
-  return { photos: savedPhotos };
+  return {
+    success: true,
+    photosCount: savedPhotos?.length,
+    message: 'Photos saved successfully',
+  };
 }
 
 export { saveUploadedPhotos };

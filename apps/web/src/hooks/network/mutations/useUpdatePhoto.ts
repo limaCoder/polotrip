@@ -7,6 +7,7 @@ import { updateAlbum } from '@/http/update-album';
 import { Photo } from '@polotrip/db/models';
 import { albumKeys } from '../keys/albumKeys';
 import { DateCount } from '@/http/get-photos-by-date/types';
+import { Pagination } from '@/types/pagination';
 
 interface PhotoUpdate {
   id: string;
@@ -19,14 +20,7 @@ interface PhotoUpdate {
 
 interface PhotosResponse {
   photos: Photo[];
-  pagination?: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
+  pagination?: Pagination;
 }
 
 interface UseUpdatePhotoProps {

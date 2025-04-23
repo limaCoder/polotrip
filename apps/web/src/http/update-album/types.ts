@@ -1,4 +1,4 @@
-import { Album, Photo } from '@polotrip/db/models';
+import { Album } from '@polotrip/db/models';
 
 export type PhotoUpdate = {
   id: string;
@@ -25,6 +25,7 @@ export type UpdateAlbumRequest = {
 };
 
 export type UpdateAlbumResponse = {
+  success: boolean;
   album: Album;
-  photos: Photo[];
+  message: string;
 };
