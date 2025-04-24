@@ -4,6 +4,7 @@ import { env } from '@/env';
 import { eq } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums } from '@polotrip/db/schema';
+import { StorageProviderFactory } from '../factories/storage-provider.factory';
 
 interface GetUploadUrlsRequest {
   albumId: string;
@@ -31,7 +32,7 @@ async function getUploadUrls({ albumId, userId, fileNames, fileTypes }: GetUploa
     throw new Error('Album does not belong to user');
   }
 
-  const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
+  const storageProvider = StorageProviderFactory.getProvider();
 
   const urls = [];
 
@@ -41,13 +42,7 @@ async function getUploadUrls({ albumId, userId, fileNames, fileTypes }: GetUploa
     const uniqueFilename = `${createId()}.${fileExtension}`;
     const filePath = `${userId}/${albumId}/${uniqueFilename}`;
 
-    const { data, error } = await supabase.storage
-      .from('polotrip-albums-content')
-      .createSignedUploadUrl(filePath);
-
-    if (error) {
-      throw error;
-    }
+    const data = await storageProvider.createSignedUploadUrl('polotrip-albums-content', filePath);
 
     urls.push({
       signedUrl: data.signedUrl,

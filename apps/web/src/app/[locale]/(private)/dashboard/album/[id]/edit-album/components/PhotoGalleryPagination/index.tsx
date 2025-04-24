@@ -21,6 +21,7 @@ export function PhotoGalleryPagination({
           {pagination.hasPrevPage && (
             <PaginationItem className="hover:bg-primary/10 transition-colors">
               <PaginationPrevious
+                className="hover:bg-primary/10 transition-colors"
                 href="#"
                 onClick={e => {
                   e.preventDefault();
@@ -68,6 +69,7 @@ export function PhotoGalleryPagination({
           {pagination.hasNextPage && (
             <PaginationItem className="hover:bg-primary/10 transition-colors">
               <PaginationNext
+                className="hover:bg-primary/10 transition-colors"
                 href="#"
                 onClick={e => {
                   e.preventDefault();

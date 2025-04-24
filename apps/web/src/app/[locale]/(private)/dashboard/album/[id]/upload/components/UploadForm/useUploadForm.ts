@@ -175,93 +175,93 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     });
 
     try {
-      const fileNames = validFiles?.map(file => file?.file?.name || '');
-      const fileTypes = validFiles?.map(file => file?.file?.type || 'image/jpeg');
-
-      const validFileNames = fileNames?.filter(
-        name => name && typeof name === 'string' && name.trim() !== '',
-      );
-
-      const validFileTypes = fileTypes?.filter(
-        (type, index) =>
-          fileNames[index] &&
-          typeof fileNames[index] === 'string' &&
-          fileNames[index]?.trim() !== '' &&
-          type &&
-          typeof type === 'string',
-      );
-
-      if (!validFileNames?.length) {
-        throw new Error('No valid files to upload');
-      }
-
-      if (validFileNames?.length !== validFileTypes?.length) {
-        throw new Error('File names and types quantity do not match');
-      }
-
-      const { urls } = await getSignedUrls({
-        params: {
-          albumId,
-          count: validFileNames?.length,
-        },
-        body: {
-          fileNames: validFileNames,
-          fileTypes: validFileTypes,
-        },
-      });
-
-      const limit = pLimit(options?.maxConcurrentUploads || 5);
+      const BATCH_SIZE = 5;
       let completedUploads = 0;
       const totalFiles = validFiles?.length;
-
       const photoMetadata: PhotoMetadata[] = [];
-      const uploadTasks = [];
 
-      for (let i = 0; i < validFiles?.length; i++) {
-        const file = validFiles[i];
-        if (!file || !file?.file) continue;
+      for (let batchStart = 0; batchStart < validFiles?.length; batchStart += BATCH_SIZE) {
+        const batchEnd = Math.min(batchStart + BATCH_SIZE, validFiles.length);
+        const batchFiles = validFiles.slice(batchStart, batchEnd);
 
-        const urlData = urls[i];
-        if (!urlData) continue;
+        const fileNames = batchFiles?.map(file => file?.file?.name || '');
+        const fileTypes = batchFiles?.map(file => file?.file?.type || 'image/jpeg');
 
-        photoMetadata.push({
-          filePath: urlData.filePath,
-          originalFileName: file?.file?.name || `photo-${i}.jpg`,
-          dateTaken: file?.metadata?.dateTaken || null,
-          latitude: file?.metadata?.latitude !== undefined ? file?.metadata?.latitude : null,
-          longitude: file?.metadata?.longitude !== undefined ? file?.metadata?.longitude : null,
+        const validFileNames = fileNames?.filter(
+          name => name && typeof name === 'string' && name.trim() !== '',
+        );
+
+        const validFileTypes = fileTypes?.filter(
+          (type, index) =>
+            fileNames[index] &&
+            typeof fileNames[index] === 'string' &&
+            fileNames[index]?.trim() !== '' &&
+            type &&
+            typeof type === 'string',
+        );
+
+        if (!validFileNames?.length) continue;
+
+        const { urls } = await getSignedUrls({
+          params: {
+            albumId,
+            count: validFileNames?.length,
+          },
+          body: {
+            fileNames: validFileNames,
+            fileTypes: validFileTypes,
+          },
         });
 
-        const uploadTask = limit(async () => {
-          try {
-            const uploadResponse = await fetch(urlData?.signedUrl, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': file?.file?.type || 'image/jpeg',
-              },
-              body: file?.file,
-            });
+        const limit = pLimit(options?.maxConcurrentUploads || 5);
+        const uploadTasks = [];
 
-            if (!uploadResponse.ok) {
-              throw new Error(`Failed to upload ${file?.file?.name || 'file'}`);
+        for (let i = 0; i < validFiles?.length; i++) {
+          const file = validFiles[i];
+          if (!file || !file?.file) continue;
+
+          const urlData = urls[i];
+          if (!urlData) continue;
+
+          photoMetadata.push({
+            filePath: urlData.filePath,
+            originalFileName: file?.file?.name || `photo-${i}.jpg`,
+            dateTaken: file?.metadata?.dateTaken || null,
+            latitude: file?.metadata?.latitude !== undefined ? file?.metadata?.latitude : null,
+            longitude: file?.metadata?.longitude !== undefined ? file?.metadata?.longitude : null,
+          });
+
+          const uploadTask = limit(async () => {
+            try {
+              const uploadResponse = await fetch(urlData?.signedUrl, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': file?.file?.type || 'image/jpeg',
+                },
+                body: file?.file,
+              });
+
+              if (!uploadResponse.ok) {
+                throw new Error(`Failed to upload ${file?.file?.name || 'file'}`);
+              }
+
+              completedUploads++;
+              updateUploadFormState({
+                progress: Math.round((completedUploads / totalFiles) * 100),
+              });
+
+              return true;
+            } catch (error) {
+              console.error(`Error uploading ${file?.file?.name || 'file'}:`, error);
+              throw error;
             }
+          });
 
-            completedUploads++;
-            updateUploadFormState({
-              progress: Math.round((completedUploads / totalFiles) * 100),
-            });
+          uploadTasks.push(uploadTask);
+        }
 
-            return true;
-          } catch (error) {
-            console.error(`Error uploading ${file?.file?.name || 'file'}:`, error);
-            throw error;
-          }
-        });
-
-        uploadTasks.push(uploadTask);
+        await Promise.all(uploadTasks);
       }
-
-      await Promise.all(uploadTasks);
 
       const validPhotos = photoMetadata?.filter(
         photo =>
