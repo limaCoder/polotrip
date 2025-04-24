@@ -37,10 +37,10 @@ export async function Hero() {
             className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start"
           >
             <ButtonNavigation href="#how-it-works" className="bg-primary text-white button-shadow">
-              <strong>Como funciona?</strong>
+              <span className="font-bold">Como funciona?</span>
             </ButtonNavigation>
             <ButtonNavigation href="/sign-in" className="bg-yellow text-black button-shadow">
-              <strong>Comece agora</strong>
+              <span className="font-bold">Comece agora</span>
             </ButtonNavigation>
           </MotionDiv>
         </div>

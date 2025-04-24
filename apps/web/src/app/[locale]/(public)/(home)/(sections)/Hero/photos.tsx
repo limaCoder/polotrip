@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function HeroPhotos() {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full mt-10 relative">
+    <div className="hidden flex-col justify-center items-center w-full h-full mt-10 relative">
       <MotionDiv
         initial={{ opacity: 0, y: 20, rotate: -2 }}
         animate={{
@@ -26,18 +26,19 @@ export function HeroPhotos() {
         <Image
           src="/pages/home/hero/hero-photo-1.jpg"
           alt="Polaroid de viagem"
-          width={392.49}
+          width={325}
           height={295.67}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
+          className="2xl:w-[400px]"
         />
       </MotionDiv>
 
       <MotionDiv
-        initial={{ opacity: 0, rotate: 15 }}
+        initial={{ opacity: 0, rotate: 4 }}
         animate={{
           opacity: 1,
-          rotate: 12,
+          rotate: 5,
         }}
         transition={{
           duration: 0.2,
@@ -49,23 +50,24 @@ export function HeroPhotos() {
             ease: 'easeInOut',
           },
         }}
-        className="absolute z-20 top-60 xl:right-20 xl:bottom-70"
+        className="absolute z-20 top-60 xl:top-44 2xl:top-56 xl:right-20"
       >
         <Image
           src="/pages/home/hero/hero-photo-2.jpg"
           alt="Polaroid de viagem"
-          width={432.91}
-          height={325.12}
+          width={280}
+          height={200}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
+          className="2xl:w-[430px]"
         />
       </MotionDiv>
 
       <MotionDiv
-        initial={{ opacity: 0, rotate: 0 }}
+        initial={{ opacity: 0, rotate: 3 }}
         animate={{
           opacity: 1,
-          rotate: -2,
+          rotate: -4,
         }}
         transition={{
           duration: 0.2,
@@ -77,15 +79,16 @@ export function HeroPhotos() {
             ease: 'easeInOut',
           },
         }}
-        className="absolute z-30 bottom-0 xl:right-0 xl:bottom-0"
+        className="absolute z-30 bottom-0 xl:right-0 xl:bottom-[10px] 2xl:bottom-[-20px]"
       >
         <Image
           src="/pages/home/hero/hero-photo-3.jpg"
           alt="Polaroid de viagem"
-          width={402.63}
+          width={325}
           height={303.32}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
+          className="2xl:w-[400px]"
         />
       </MotionDiv>
     </div>
