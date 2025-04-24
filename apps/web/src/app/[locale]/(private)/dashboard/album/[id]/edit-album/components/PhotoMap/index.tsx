@@ -85,7 +85,7 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
   return (
     <div
       ref={mapRef}
-      className="w-full h-full rounded-md overflow-hidden"
+      className="w-full h-full rounded-md overflow-hidden relative z-1"
       style={{ minHeight: '300px' }}
     />
   );
