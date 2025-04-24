@@ -1,5 +1,5 @@
 import { MotionSection } from '@/lib/motion/motion-components';
-import { BenefitsCarousel } from './carousel';
+import { BenefitsGrid } from './grid';
 
 export function Benefits() {
   return (
@@ -14,9 +14,9 @@ export function Benefits() {
           Por que escolher o Polotrip?
         </h2>
 
-        <BenefitsCarousel />
+        <BenefitsGrid />
 
-        <p className="md:mt-12 text-center text-sm max-w-2xl mx-auto text-gray-600 mt-4">
+        <p className="md:mt-12 text-center text-sm max-w-2xl mx-auto text-gray-600 mt-8">
           Diferente de soluções convencionais de armazenamento, o Polotrip foi projetado
           exclusivamente para criar e compartilhar memórias de viagens da maneira que você sempre
           quis.
