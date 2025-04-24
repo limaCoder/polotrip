@@ -216,8 +216,8 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         const limit = pLimit(options?.maxConcurrentUploads || 5);
         const uploadTasks = [];
 
-        for (let i = 0; i < validFiles?.length; i++) {
-          const file = validFiles[i];
+        for (let i = 0; i < batchFiles?.length; i++) {
+          const file = batchFiles[i];
           if (!file || !file?.file) continue;
 
           const urlData = urls[i];

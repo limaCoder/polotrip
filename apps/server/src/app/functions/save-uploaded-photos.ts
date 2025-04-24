@@ -1,8 +1,7 @@
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums, photos } from '@polotrip/db/schema';
-import { env } from '@/env';
-import { createClient } from '@supabase/supabase-js';
+import { StorageProviderFactory } from '@/app/factories/storage-provider.factory';
 
 type PhotoData = {
   filePath: string;
@@ -47,17 +46,17 @@ async function saveUploadedPhotos({
     throw new Error('Limit of 100 photos per album exceeded');
   }
 
-  const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
+  const storageProvider = StorageProviderFactory.getProvider();
+
+  const LONG_EXPIRY = 604800; // ~ 7 days in seconds
 
   const photosToInsert = await Promise.all(
     uploadedPhotosData?.map(async photo => {
-      const { data, error } = await supabase.storage
-        .from('polotrip-albums-content')
-        .createSignedUrl(photo?.filePath, 315360000); // ~10 years in seconds
-
-      if (error || !data) {
-        throw new Error(`Error generating signed URL: ${error?.message || 'data is null'}`);
-      }
+      const data = await storageProvider.createSignedDownloadUrl(
+        'polotrip-albums-content',
+        photo?.filePath,
+        LONG_EXPIRY,
+      );
 
       return {
         albumId,

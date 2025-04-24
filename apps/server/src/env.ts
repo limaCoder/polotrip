@@ -22,6 +22,13 @@ const envSchema = z.object({
 
   STRIPE_SECRET_KEY: z.string(),
   STRIPE_PRICE_ID: z.string(),
+
+  R2_ACCOUNT_ID: z.string(),
+  R2_TOKEN: z.string(),
+  R2_ACCESS_KEY_ID: z.string(),
+  R2_SECRET_ACCESS_KEY: z.string(),
+  R2_JURISDICTION_DEFAULT_ENDPOINT: z.string().url(),
+  R2_JURISDICTION_EU_ENDPOINT: z.string().url(),
 });
 
 export const env = envSchema.parse(process.env);

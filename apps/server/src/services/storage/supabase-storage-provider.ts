@@ -23,6 +23,19 @@ class SupabaseStorageProvider implements StorageProvider {
       path: data.path,
     };
   }
+
+  async createSignedDownloadUrl(bucket: string, path: string, expiresIn: number) {
+    const { data, error } = await this.client.storage.from(bucket).createSignedUrl(path, expiresIn);
+
+    if (error) {
+      throw new Error(`Failed to create download URL: ${error.message}`);
+    }
+
+    return {
+      signedUrl: data.signedUrl,
+      path,
+    };
+  }
 }
 
 export { SupabaseStorageProvider };
