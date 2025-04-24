@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
-import { Photo } from '@polotrip/db/models';
 import { type PhotoEditFormData } from '../components/PhotoEditForm/types';
 import { dateToAPIString } from '@/utils/dates';
 
@@ -25,7 +24,6 @@ export function useEditAlbum() {
   const params = useParams<Params>();
   const router = useRouter();
 
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -55,8 +53,6 @@ export function useEditAlbum() {
         return [...prev, photoId];
       }
     });
-
-    setSelectedPhoto(null);
   };
 
   useEffect(() => {
@@ -148,7 +144,6 @@ export function useEditAlbum() {
     await setDateParam(date);
 
     deselectAllPhotos();
-    setSelectedPhoto(null);
   };
 
   const handlePageChange = async (page: number) => {
@@ -156,10 +151,9 @@ export function useEditAlbum() {
   };
 
   const handlePhotoClick = (photoId: string) => {
-    const photo = photosQuery.data?.photos.find(p => p.id === photoId);
-    if (photo) {
-      setSelectedPhoto(photo);
-      deselectAllPhotos();
+    const photos = photosQuery.data?.photos.filter(p => p.id === photoId);
+    if (photos) {
+      setSelectedPhotos(photos?.map(p => p?.id));
     }
   };
 
@@ -169,10 +163,10 @@ export function useEditAlbum() {
   };
 
   const handleSavePhotoEdit = (data: PhotoEditFormData) => {
-    if (!selectedPhoto) return;
+    if (selectedPhotos.length === 0 || selectedPhotos.length > 1) return;
 
     updatePhotoMutation.mutate({
-      id: selectedPhoto.id,
+      id: selectedPhotos[0],
       dateTaken: dateToAPIString(data.dateTaken),
       locationName: data.locationName || null,
       description: data.description || null,
@@ -184,16 +178,30 @@ export function useEditAlbum() {
   const handleSaveBatchEdit = (data: PhotoEditFormData) => {
     if (selectedPhotos.length === 0) return;
 
-    updatePhotoBatchMutation.mutate({
-      ids: selectedPhotos,
-      data: {
-        dateTaken: dateToAPIString(data.dateTaken),
-        locationName: data.locationName || null,
-        description: data.description || null,
-        latitude: data.latitude || null,
-        longitude: data.longitude || null,
+    const fieldsToCheck = {
+      dateTaken: data.dateTaken ? dateToAPIString(data.dateTaken) : undefined,
+      locationName: data.locationName ?? undefined,
+      description: data.description ?? undefined,
+      latitude: data.latitude ?? undefined,
+      longitude: data.longitude ?? undefined,
+    };
+
+    const updateData = Object.entries(fieldsToCheck).reduce(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = value === '' ? null : value;
+        }
+        return acc;
       },
-    });
+      {} as Record<string, string | number | null>,
+    );
+
+    if (Object.keys(updateData).length > 0) {
+      updatePhotoBatchMutation.mutate({
+        ids: selectedPhotos,
+        data: updateData,
+      });
+    }
   };
 
   const handleDeletePhotos = () => {
@@ -205,7 +213,6 @@ export function useEditAlbum() {
   };
 
   const handleCancelEdit = () => {
-    setSelectedPhoto(null);
     deselectAllPhotos();
   };
 
@@ -237,7 +244,6 @@ export function useEditAlbum() {
   return {
     albumDates: albumDatesQuery.data?.dates || [],
     selectedDate: selectedDateLocal,
-    selectedPhoto,
     filteredPhotos: photosQuery.data?.photos || [],
     selectedPhotos,
     isLoading,

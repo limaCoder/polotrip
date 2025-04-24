@@ -15,7 +15,6 @@ export function EditAlbumContent() {
   const {
     albumDates,
     selectedDate,
-    selectedPhoto,
     filteredPhotos,
     selectedPhotos,
     isLoading,
@@ -87,12 +86,10 @@ export function EditAlbumContent() {
 
       <div className="flex flex-col gap-9">
         <PhotoEditForm
-          photo={selectedPhoto}
-          isMultipleSelection={selectedPhotos.length > 0}
-          selectedCount={selectedPhotos.length}
-          onSave={selectedPhotos.length > 0 ? handleSaveBatchEdit : handleSavePhotoEdit}
+          selectedPhotos={filteredPhotos?.filter(photo => selectedPhotos?.includes(photo?.id))}
+          onSave={selectedPhotos?.length > 1 ? handleSaveBatchEdit : handleSavePhotoEdit}
           onCancel={handleCancelEdit}
-          isDisabled={selectedPhotos.length === 0 && !selectedPhoto}
+          isDisabled={selectedPhotos?.length === 0}
         />
 
         <PhotoGallery

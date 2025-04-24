@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { Check, CalendarIcon } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,46 +21,123 @@ import { Calendar } from '@/components/ui/calendar';
 import { apiStringToDate } from '@/utils/dates';
 import { type PhotoEditFormProps, type PhotoEditFormData, formSchema } from './types';
 import { LocationAutocomplete } from '../LocationAutocomplete';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 export function PhotoEditForm({
-  photo,
-  isMultipleSelection = false,
-  selectedCount = 0,
+  selectedPhotos,
   onSave,
   onCancel,
   isDisabled = false,
 }: PhotoEditFormProps) {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [preserveFields, setPreserveFields] = useState({
+    location: true,
+    description: true,
+  });
+
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const isMultipleSelection = selectedPhotos?.length > 1;
 
   const form = useForm<PhotoEditFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      dateTaken: apiStringToDate(photo?.dateTaken),
-      locationName: photo?.locationName || '',
-      description: photo?.description || '',
-      latitude: photo?.latitude || null,
-      longitude: photo?.longitude || null,
+      dateTaken: null,
+      locationName: '',
+      description: '',
+      latitude: null,
+      longitude: null,
     },
   });
 
   function onSubmit(data: PhotoEditFormData) {
-    onSave(data);
+    const showSuccess = () => {
+      setShowSuccess(true);
 
-    setShowSuccess(true);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
 
-    if (successTimeoutRef.current) {
-      clearTimeout(successTimeoutRef.current);
+      successTimeoutRef.current = setTimeout(() => {
+        setShowSuccess(false);
+      }, 2000);
+    };
+
+    if (isMultipleSelection) {
+      let formData = { ...data };
+
+      if (preserveFields?.location) {
+        const { locationName, latitude, longitude, ...rest } = formData;
+        formData = rest as PhotoEditFormData;
+      }
+
+      if (preserveFields?.description) {
+        const { description, ...rest } = formData;
+        formData = rest as PhotoEditFormData;
+      }
+
+      onSave(formData);
+      showSuccess();
+      return;
     }
 
-    successTimeoutRef.current = setTimeout(() => {
-      setShowSuccess(false);
-    }, 2000);
+    onSave(data);
+    showSuccess();
   }
 
   const selectionText = isMultipleSelection
-    ? `Editar ${selectedCount} ${selectedCount === 1 ? 'foto selecionada' : 'fotos selecionadas'}`
-    : 'Editar foto';
+    ? `Editar ${selectedPhotos.length} fotos selecionadas`
+    : selectedPhotos.length === 1
+      ? 'Editar foto'
+      : 'Selecione uma foto para editar';
+
+  useEffect(() => {
+    if (selectedPhotos.length === 0) {
+      form.reset({
+        dateTaken: null,
+        locationName: '',
+        description: '',
+        latitude: null,
+        longitude: null,
+      });
+
+      return;
+    }
+
+    if (selectedPhotos.length === 1) {
+      const photo = selectedPhotos[0];
+      form.reset({
+        dateTaken: apiStringToDate(photo.dateTaken),
+        locationName: photo.locationName || '',
+        description: photo.description || '',
+        latitude: photo.latitude,
+        longitude: photo.longitude,
+      });
+
+      return;
+    }
+
+    const firstPhoto = selectedPhotos[0];
+    form.reset(
+      {
+        dateTaken: apiStringToDate(firstPhoto.dateTaken),
+        locationName: '',
+        description: '',
+        latitude: null,
+        longitude: null,
+      },
+      {
+        keepDirty: false,
+        keepTouched: false,
+      },
+    );
+
+    setPreserveFields({
+      location: true,
+      description: true,
+    });
+  }, [selectedPhotos, form]);
 
   return (
     <div className={cn('bg-background p-8 rounded-lg shadow-md', isDisabled && 'opacity-40')}>
@@ -105,6 +182,26 @@ export function PhotoEditForm({
             )}
           />
 
+          {isMultipleSelection && (
+            <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
+              <div className="flex flex-col">
+                <Label className="font-body_two text-text/90">Preservar localização original</Label>
+                <p className="text-sm text-text/60 mt-1">
+                  {preserveFields?.location
+                    ? 'A localização original das fotos será mantida'
+                    : 'A localização será substituída em todas as fotos'}
+                </p>
+              </div>
+              <Switch
+                checked={preserveFields?.location}
+                onCheckedChange={() =>
+                  setPreserveFields({ ...preserveFields, location: !preserveFields?.location })
+                }
+                aria-label="Preservar localização original"
+              />
+            </div>
+          )}
+
           <FormField
             control={form.control}
             name="locationName"
@@ -114,19 +211,53 @@ export function PhotoEditForm({
                 <FormControl>
                   <LocationAutocomplete
                     value={field.value || ''}
+                    latitude={form.getValues('latitude')}
+                    longitude={form.getValues('longitude')}
                     onChange={(value, latitude, longitude) => {
                       field.onChange(value);
                       form.setValue('latitude', latitude);
                       form.setValue('longitude', longitude);
                     }}
-                    disabled={isDisabled}
-                    placeholder="Digite o nome da localização"
+                    disabled={isDisabled || (isMultipleSelection && preserveFields?.location)}
+                    placeholder={
+                      isMultipleSelection && preserveFields?.location
+                        ? 'Localização original será preservada'
+                        : 'Digite o nome da localização'
+                    }
                   />
                 </FormControl>
+                {isMultipleSelection && preserveFields?.location && (
+                  <p className="text-sm text-text/60 mt-1">
+                    Desabilite o toggle acima para editar a localização
+                  </p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {isMultipleSelection && (
+            <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
+              <div className="flex flex-col">
+                <Label className="font-body_two text-text/90">Preservar descrição original</Label>
+                <p className="text-sm text-text/60 mt-1">
+                  {preserveFields?.description
+                    ? 'A descrição original das fotos será mantida'
+                    : 'A descrição será substituída em todas as fotos'}
+                </p>
+              </div>
+              <Switch
+                checked={preserveFields?.description}
+                onCheckedChange={() =>
+                  setPreserveFields({
+                    ...preserveFields,
+                    description: !preserveFields?.description,
+                  })
+                }
+                aria-label="Preservar descrição original"
+              />
+            </div>
+          )}
 
           <FormField
             control={form.control}
@@ -136,13 +267,22 @@ export function PhotoEditForm({
                 <FormLabel className="font-body_two">Descrição</FormLabel>
                 <FormControl>
                   <Textarea
-                    disabled={isDisabled}
+                    disabled={isDisabled || (isMultipleSelection && preserveFields?.description)}
                     className="border border-text/25 rounded mt-1 p-3 font-body_two text-text/75 bg-transparent w-full outline-none h-24 resize-none"
-                    placeholder="Descreva este momento..."
+                    placeholder={
+                      isMultipleSelection && preserveFields?.description
+                        ? 'Descrição original será preservada'
+                        : 'Descreva este momento...'
+                    }
                     {...field}
                     value={field.value || ''}
                   />
                 </FormControl>
+                {isMultipleSelection && preserveFields?.description && (
+                  <p className="text-sm text-text/60 mt-1">
+                    Desabilite o toggle acima para editar a descrição
+                  </p>
+                )}
                 <FormMessage />
               </FormItem>
             )}

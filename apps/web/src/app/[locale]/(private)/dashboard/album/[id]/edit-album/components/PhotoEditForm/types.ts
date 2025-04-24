@@ -12,9 +12,7 @@ const formSchema = z.object({
 type PhotoEditFormData = z.infer<typeof formSchema>;
 
 interface PhotoEditFormProps {
-  photo?: Photo | null;
-  isMultipleSelection?: boolean;
-  selectedCount?: number;
+  selectedPhotos: Photo[];
   onSave: (data: PhotoEditFormData) => void;
   onCancel?: () => void;
   isDisabled?: boolean;

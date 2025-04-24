@@ -23,6 +23,7 @@
     "@radix-ui/react-popover": "^1.1.7",
     "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.2.0",
+    "@radix-ui/react-switch": "^1.2.2",
     "@stripe/stripe-js": "^7.0.0",
     "@supabase/supabase-js": "^2.49.1",
     "@t3-oss/env-nextjs": "^0.12.0",

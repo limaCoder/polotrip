@@ -1,33 +1,22 @@
 'use client';
 
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback } from 'react';
 import { MapPin, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/cn';
-
-interface LocationResult {
-  geometry: {
-    coordinates: [number, number]; // [longitude, latitude]
-  };
-  properties: {
-    name: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  };
-}
-
-interface LocationAutocompleteProps {
-  value: string;
-  onChange: (value: string, latitude?: number | null, longitude?: number | null) => void;
-  disabled?: boolean;
-  placeholder?: string;
-  className?: string;
-}
+import { LocationAutocompleteProps, LocationResult } from './types';
 
 export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocompleteProps>(
   (
-    { value, onChange, disabled = false, placeholder = 'Digite o nome da localização', className },
+    {
+      value,
+      onChange,
+      disabled = false,
+      placeholder = 'Digite o nome da localização',
+      className,
+      latitude,
+      longitude,
+    },
     ref,
   ) => {
     const [inputValue, setInputValue] = useState(value || '');
@@ -35,32 +24,100 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
     const [isLoading, setIsLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [preventDropdown, setPreventDropdown] = useState(false);
+    const [isUserTyping, setIsUserTyping] = useState(false);
+
     const inputRef = useRef<HTMLInputElement>(null);
     const resultsRef = useRef<HTMLDivElement>(null);
 
-    const fetchLocations = async (query: string) => {
-      if (!query || query.length < 3) return;
+    const formatAddress = (location: LocationResult) => {
+      const { name, city, state, country } = location.properties;
+      const parts = [name, city, state, country].filter(Boolean);
+      return parts.join(', ');
+    };
 
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en`,
-        );
+    const fetchLocations = useCallback(
+      async (query: string) => {
+        if (!query || query.length < 3) return;
 
-        if (!response.ok) {
-          throw new Error('Falha ao buscar localizações');
+        setIsLoading(true);
+        try {
+          const response = await fetch(
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en`,
+          );
+
+          if (!response.ok) {
+            throw new Error('Falha ao buscar localizações');
+          }
+
+          const data = await response.json();
+          setResults(data.features || []);
+
+          if (isUserTyping && !preventDropdown) {
+            setShowResults(true);
+          }
+        } catch (error) {
+          console.error('Erro ao buscar localizações:', error);
+        } finally {
+          setIsLoading(false);
         }
+      },
+      [preventDropdown, isUserTyping],
+    );
 
-        const data = await response.json();
-        setResults(data.features || []);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setIsUserTyping(true);
+      setInputValue(e.target.value);
 
-        if (!preventDropdown) {
-          setShowResults(true);
+      if (e.target.value === '') {
+        onChange('', null, null);
+      }
+
+      if (preventDropdown) {
+        setPreventDropdown(false);
+      }
+    };
+
+    const handleInputFocus = () => {
+      setIsUserTyping(true);
+
+      if (inputValue.length >= 3 && isUserTyping && !preventDropdown && results.length > 0) {
+        setShowResults(true);
+      }
+    };
+
+    const handleInputBlur = () => {
+      setTimeout(() => {
+        if (!showResults) {
+          setIsUserTyping(false);
         }
-      } catch (error) {
-        console.error('Erro ao buscar localizações:', error);
-      } finally {
-        setIsLoading(false);
+      }, 200);
+    };
+
+    const handleLocationSelect = (location: LocationResult) => {
+      const displayName = formatAddress(location);
+      setInputValue(displayName);
+
+      const longitude = location.geometry.coordinates[0];
+      const latitude = location.geometry.coordinates[1];
+
+      setIsUserTyping(false);
+
+      onChange(displayName, latitude, longitude);
+      setShowResults(false);
+
+      setPreventDropdown(true);
+      setTimeout(() => {
+        setPreventDropdown(false);
+      }, 300);
+    };
+
+    const handleClearInput = () => {
+      setInputValue('');
+      onChange('', null, null);
+      setIsUserTyping(false);
+
+      if (inputRef.current) {
+        inputRef.current.focus();
       }
     };
 
@@ -77,18 +134,25 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }
 
       document.addEventListener('mousedown', handleClickOutside);
+
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }, []);
 
     useEffect(() => {
-      setInputValue(value || '');
-    }, [value]);
+      if (value !== inputValue && !isUserTyping) {
+        setInputValue(value || '');
+      }
+    }, [value, inputValue, isUserTyping]);
 
     useEffect(() => {
       if (!inputValue || inputValue.length < 3) {
         setResults([]);
+        return;
+      }
+
+      if (!isUserTyping) {
         return;
       }
 
@@ -97,54 +161,48 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }, 300);
 
       return () => clearTimeout(timer);
-    }, [inputValue]);
+    }, [inputValue, fetchLocations, isUserTyping]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(e.target.value);
-      if (e.target.value === '') {
-        onChange('', null, null);
+    useEffect(() => {
+      if (latitude && longitude && !inputValue && !disabled) {
+        const fetchReverseGeocoding = async () => {
+          setIsLoading(true);
+          try {
+            const response = await fetch(
+              `https://photon.komoot.io/reverse?lon=${longitude}&lat=${latitude}`,
+            );
+
+            if (!response.ok) {
+              throw new Error('Failed to fetch location');
+            }
+
+            const data = await response.json();
+
+            if (data.features && data.features.length > 0) {
+              const location = data.features[0];
+              const displayName = formatAddress(location);
+
+              setInputValue(displayName);
+              setIsUserTyping(false);
+              onChange(displayName, latitude, longitude);
+            }
+          } catch (error) {
+            console.error('Error fetching reverse geocoding:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+
+        fetchReverseGeocoding();
       }
+    }, [latitude, longitude, inputValue, disabled, onChange]);
 
-      if (preventDropdown) {
-        setPreventDropdown(false);
+    useEffect(() => {
+      if (disabled) {
+        setIsUserTyping(false);
+        setShowResults(false);
       }
-    };
-
-    const handleInputFocus = () => {
-      if (inputValue.length >= 3 && !preventDropdown && results.length > 0) {
-        setShowResults(true);
-      }
-    };
-
-    const formatAddress = (location: LocationResult) => {
-      const { name, city, state, country } = location.properties;
-      const parts = [name, city, state, country].filter(Boolean);
-      return parts.join(', ');
-    };
-
-    const handleLocationSelect = (location: LocationResult) => {
-      const displayName = formatAddress(location);
-      setInputValue(displayName);
-
-      const longitude = location.geometry.coordinates[0];
-      const latitude = location.geometry.coordinates[1];
-
-      onChange(displayName, latitude, longitude);
-      setShowResults(false);
-
-      setPreventDropdown(true);
-      setTimeout(() => {
-        setPreventDropdown(false);
-      }, 300);
-    };
-
-    const handleClearInput = () => {
-      setInputValue('');
-      onChange('', null, null);
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
+    }, [disabled]);
 
     return (
       <div className="relative">
@@ -162,6 +220,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
             value={inputValue}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
           />
           {isLoading ? (
             <Loader2 size={16} className="animate-spin text-text/50 shrink-0" />
