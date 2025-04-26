@@ -1,9 +1,22 @@
-import { FullscreenIcon, Share2 } from 'lucide-react';
+import { FullscreenIcon, MapPin, Share2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { PhotoTimeline } from '@/components/PhotoTimeline';
+import { getPublicAlbum } from '@/http/get-public-album';
+import { AlbumViewPageProps } from './types';
+import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
+import { Suspense } from 'react';
+import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
 
-export default function AlbumViewPage() {
+export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
+  const albumData = await getPublicAlbum({ albumId: params.id });
+  const locationsDataPromise = getPublicAlbumLocations({ albumId: params.id });
+
+  const hasLocations = await locationsDataPromise.then(
+    data => data.locations.length > 0,
+    () => false,
+  );
+
   return (
     <main className="min-h-screen bg-background flex flex-col">
       <div className="relative w-full h-[510px] flex flex-col justify-between">
@@ -55,6 +68,27 @@ export default function AlbumViewPage() {
       </div>
 
       <main className="bg-background">
+        {hasLocations && (
+          <section className="w-full max-w-7xl mx-auto px-4 py-8">
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin className="text-primary" size={24} />
+              <h2 className="font-title_two text-2xl">
+                ✨ Esses foram os momentos incríveis de Victória
+              </h2>
+            </div>
+            <div className="w-full h-[400px] rounded-lg overflow-hidden">
+              <Suspense
+                fallback={
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    Carregando mapa...
+                  </div>
+                }
+              >
+                <PublicPhotoMap locationsPromise={locationsDataPromise} />
+              </Suspense>
+            </div>
+          </section>
+        )}
         <PhotoTimeline />
       </main>
 
