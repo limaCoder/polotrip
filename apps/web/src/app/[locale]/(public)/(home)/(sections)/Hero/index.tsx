@@ -12,10 +12,10 @@ export async function Hero() {
       initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
-      className="h-[170dvh] md:h-[120dvh] lg:h-[115dvh] xl:h-[100dvh] 2xl:h-[85dvh] py-10 pt-30 lg:pt-0"
+      className="py-10 pt-30 lg:pt-0"
     >
-      <div className="flex flex-col xl:flex-row container justify-center items-center w-full h-full px-4 lg:px-9">
-        <div className="lg:h-full flex flex-col lg:justify-center text-center lg:text-left">
+      <div className="flex flex-col xl:flex-row container justify-between items-center w-full h-full px-4 lg:px-9">
+        <div className="lg:h-full flex flex-col lg:justify-center text-center lg:text-left max-w-2xl">
           <TextGenerateEffect
             className="lg:w-[582px]"
             tag="h1"

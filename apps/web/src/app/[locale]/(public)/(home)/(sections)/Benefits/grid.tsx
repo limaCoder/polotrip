@@ -17,7 +17,7 @@ export function BenefitsGrid() {
             {benefit.icon}
           </div>
           <h3 className="mt-4 font-semibold text-lg">{benefit.title}</h3>
-          <p className="text-gray-600 mt-2 text-sm">{benefit.description}</p>
+          <p className="text-gray-600 mt-2">{benefit.description}</p>
         </MotionDiv>
       ))}
     </div>

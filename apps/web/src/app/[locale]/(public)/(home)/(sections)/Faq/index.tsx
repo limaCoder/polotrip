@@ -5,8 +5,9 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { MotionSection } from '@/lib/motion/motion-components';
+import { questions } from './data';
 
-export async function Faq() {
+export function Faq() {
   return (
     <MotionSection
       initial={{ opacity: 0, y: 35 }}
@@ -25,40 +26,15 @@ export async function Faq() {
           </p>
           <img src="/pages/home/faq/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
         </div>
+
         <div className="flex flex-col w-full lg:w-3/5 justify-center">
           <Accordion type="single" collapsible>
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionTrigger>
-              <AccordionContent>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionTrigger>
-              <AccordionContent>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionTrigger>
-              <AccordionContent>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-4">
-              <AccordionTrigger>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionTrigger>
-              <AccordionContent>
-                Lorem Ipsumis simply dummy text of the printing and typesetting industry.
-              </AccordionContent>
-            </AccordionItem>
+            {questions.map((q, i) => (
+              <AccordionItem key={i} value={`item-${i + 1}`}>
+                <AccordionTrigger>{q.question}</AccordionTrigger>
+                <AccordionContent>{q.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       </div>
