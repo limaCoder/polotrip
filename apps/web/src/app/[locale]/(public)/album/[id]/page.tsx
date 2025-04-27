@@ -1,5 +1,5 @@
-import { FullscreenIcon, MapPin, Share2 } from 'lucide-react';
-import { Header } from '@/components/Header';
+import { HeaderAlbum } from '../(components)/HeaderAlbum';
+import { MapPin } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { PhotoTimeline } from '@/components/PhotoTimeline';
 import { getPublicAlbum } from '@/http/get-public-album';
@@ -35,7 +35,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
-      <div className="relative w-full h-[510px] flex flex-col justify-between">
+      <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/50 via-transparent to-transparent z-10" />
           <img
@@ -45,30 +45,14 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
           />
         </div>
 
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 lg:px-9 py-4 flex justify-between items-center">
-          <div>
-            <Header />
-          </div>
+        <HeaderAlbum />
 
-          <div className="flex items-center gap-6">
-            <button className="flex items-center gap-2 text-background hover:text-primary transition-colors">
-              <FullscreenIcon size={20} className="text-primary" />
-              <span className="font-body_one">Tela cheia</span>
-            </button>
-
-            <button className="flex items-center gap-2 text-background hover:text-primary transition-colors">
-              <Share2 size={20} className="text-primary" />
-              <span className="font-body_one">Compartilhar</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="relative z-20 w-full flex flex-col items-start pl-12 pb-10">
-          <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-background text-center">
+        <div className="relative z-20 w-full flex flex-col items-start p-4 sm:p-8 md:pl-12 md:pb-10">
+          <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-background">
             Viagem para Paris
           </h1>
 
-          <p className="font-title_three text-xl md:text-2xl text-background text-center mb-6">
+          <p className="font-title_three text-xl md:text-2xl text-background mb-6">
             Uma jornada inesquecível pela Cidade Luz
           </p>
 

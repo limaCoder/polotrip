@@ -3,13 +3,13 @@
 @theme {
   --color-primary: #03aed2;
   --color-secondary: #68d2e8;
-  --color-secondary-10: #EFF9FC;
+  --color-secondary-10: #eff9fc;
   --color-secondary-50: #afe7f2;
   --color-yellow: #feefad;
   --color-accent: #fdde55;
   --color-background: #f7fcfd;
   --color-text: #08171c;
-  --color-text-opacity-25: #08171C40;
+  --color-text-opacity-25: #08171c40;
   --color-gradient-primary: #2980b9, #2c3e50;
 
   --background-image-home-cta: url('/pages/home/cta-section.png');
@@ -57,8 +57,12 @@
     line-height: 110%;
     letter-spacing: -2%;
 
-    @media screen and (max-width: 375px) {
-      font-size: 2.4rem;
+    @media screen and (max-width: 768px) {
+      font-size: 3rem;
+    }
+
+    @media screen and (max-width: 425px) {
+      font-size: 2.75rem;
     }
   }
 
@@ -69,8 +73,12 @@
     line-height: 120%;
     letter-spacing: -2%;
 
-    @media screen and (max-width: 375px) {
-      font-size: 2.6rem;
+    @media screen and (max-width: 768px) {
+      font-size: 2.75rem;
+    }
+
+    @media screen and (max-width: 425px) {
+      font-size: 2.5rem;
     }
   }
 
@@ -81,8 +89,12 @@
     line-height: 120%;
     letter-spacing: -2%;
 
-    @media screen and (max-width: 375px) {
-      font-size: 1.7rem;
+    @media screen and (max-width: 768px) {
+      font-size: 2rem;
+    }
+
+    @media screen and (max-width: 425px) {
+      font-size: 1.75rem;
     }
   }
 
@@ -93,7 +105,11 @@
     line-height: 130%;
     letter-spacing: -2%;
 
-    @media screen and (max-width: 375px) {
+    @media screen and (max-width: 768px) {
+      font-size: 1.25rem;
+    }
+
+    @media screen and (max-width: 425px) {
       font-size: 1rem;
     }
   }
@@ -113,7 +129,21 @@
   }
 
   .button-shadow {
-    box-shadow: 0px 1px 2px rgba(20, 14, 62, 0.25), inset 0px 1px 1px 1px rgba(255, 255, 255, 0.25), inset 0px -1px 1px 1px rgba(52, 35, 170, 0.25);
+    box-shadow:
+      0px 1px 2px rgba(20, 14, 62, 0.25),
+      inset 0px 1px 1px 1px rgba(255, 255, 255, 0.25),
+      inset 0px -1px 1px 1px rgba(52, 35, 170, 0.25);
+  }
+
+  .swiper-pagination-bullet {
+    @apply !bg-secondary-50 w-2.5 h-2.5 !opacity-100 transition-all duration-300;
+  }
+
+  .swiper-pagination-bullet-active {
+    @apply !bg-primary w-4 h-2.5;
+  }
+
+  .swiper-pagination {
   }
 
   .leaflet-popup-content-wrapper .leaflet-popup-content {

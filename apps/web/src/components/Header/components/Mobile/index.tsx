@@ -15,7 +15,7 @@ export function HeaderMobile() {
 
   return (
     <div className="lg:hidden bg-background py-4 container relative flex justify-between items-center px-4">
-      <img src="/brand/logo.svg" alt="Logo" className="w-[150px] sm:w-full md:w-[180px]" />
+      <img src="/brand/logo.svg" alt="Logo" className="w-[150px] md:w-[180px]" />
 
       <button className="text-primary z-20" onClick={toggleMenu}>
         {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -40,7 +40,7 @@ export function HeaderMobile() {
           href="/login"
           className="bg-gradient-primary text-white w-full justify-center mt-3"
         >
-          <strong>Acessar conta</strong>
+          <span className="font-semibold">Acessar conta</span>
           <Album />
         </ButtonNavigation>
         <div className="flex w-full justify-center">

@@ -1,91 +1,28 @@
-import { MotionDiv } from '@/lib/motion/motion-components';
+'use client';
+
 import Image from 'next/image';
+import { MotionDiv } from '@/lib/motion/motion-components';
 
 export function HeroPhotos() {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full mt-10 relative">
+    <div className="flex justify-center lg:justify-end items-center w-full h-full mt-12 lg:mt-8 relative">
       <MotionDiv
-        initial={{ opacity: 0, y: 20, rotate: -2 }}
-        animate={{
-          opacity: 1,
-          y: 0,
-          rotate: 2,
-        }}
+        initial={{ y: 0 }}
+        animate={{ y: [0, -10, 0] }}
         transition={{
-          duration: 0.2,
-          delay: 0.1,
-          rotate: {
-            duration: 6,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          },
+          duration: 3,
+          repeat: Infinity,
+          ease: 'easeInOut',
         }}
-        className="absolute z-10 top-0 xl:top-0 xl:right-0"
       >
         <Image
-          src="/pages/home/hero/hero-photo-1.jpg"
+          src="/pages/home/hero/hero-photos.png"
           alt="Polaroid de viagem"
-          width={392.49}
-          height={295.67}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          width={480}
+          height={700}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw, (max-width: 1300px) 10vw, 33vw"
           priority
-        />
-      </MotionDiv>
-
-      <MotionDiv
-        initial={{ opacity: 0, rotate: 15 }}
-        animate={{
-          opacity: 1,
-          rotate: 12,
-        }}
-        transition={{
-          duration: 0.2,
-          delay: 0.3,
-          rotate: {
-            duration: 7,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          },
-        }}
-        className="absolute z-20 top-60 xl:right-20 xl:bottom-70"
-      >
-        <Image
-          src="/pages/home/hero/hero-photo-2.jpg"
-          alt="Polaroid de viagem"
-          width={432.91}
-          height={325.12}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority
-        />
-      </MotionDiv>
-
-      <MotionDiv
-        initial={{ opacity: 0, rotate: 0 }}
-        animate={{
-          opacity: 1,
-          rotate: -2,
-        }}
-        transition={{
-          duration: 0.2,
-          delay: 0.5,
-          rotate: {
-            duration: 8,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-          },
-        }}
-        className="absolute z-30 bottom-0 xl:right-0 xl:bottom-0"
-      >
-        <Image
-          src="/pages/home/hero/hero-photo-3.jpg"
-          alt="Polaroid de viagem"
-          width={402.63}
-          height={303.32}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority
+          className="object-contain max-h-[600px]"
         />
       </MotionDiv>
     </div>
