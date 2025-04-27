@@ -1,7 +1,7 @@
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums, photos } from '@polotrip/db/schema';
-import { env } from '@/env';
+import { StorageProviderFactory } from '@/app/factories/storage-provider.factory';
 
 type PhotoData = {
   filePath: string;
@@ -46,15 +46,28 @@ async function saveUploadedPhotos({
     throw new Error('Limit of 100 photos per album exceeded');
   }
 
-  const supabaseBaseUrl = `${env.SUPABASE_URL}/storage/v1/object/public/photos`;
-  const photosToInsert = uploadedPhotosData?.map(photo => ({
-    albumId,
-    imageUrl: `${supabaseBaseUrl}/${photo?.filePath}`,
-    originalFileName: photo?.originalFileName,
-    dateTaken: photo?.dateTaken,
-    latitude: photo?.latitude,
-    longitude: photo?.longitude,
-  }));
+  const storageProvider = StorageProviderFactory.getProvider();
+
+  const LONG_EXPIRY = 604800; // ~ 7 days in seconds
+
+  const photosToInsert = await Promise.all(
+    uploadedPhotosData?.map(async photo => {
+      const data = await storageProvider.createSignedDownloadUrl(
+        'polotrip-albums-content',
+        photo?.filePath,
+        LONG_EXPIRY,
+      );
+
+      return {
+        albumId,
+        imageUrl: data.signedUrl,
+        originalFileName: photo?.originalFileName,
+        dateTaken: photo?.dateTaken,
+        latitude: photo?.latitude,
+        longitude: photo?.longitude,
+      };
+    }),
+  );
 
   const savedPhotos = await db.insert(photos).values(photosToInsert).returning();
 
@@ -67,7 +80,11 @@ async function saveUploadedPhotos({
     })
     .where(eq(albums.id, albumId));
 
-  return { photos: savedPhotos };
+  return {
+    success: true,
+    photosCount: savedPhotos?.length,
+    message: 'Photos saved successfully',
+  };
 }
 
 export { saveUploadedPhotos };

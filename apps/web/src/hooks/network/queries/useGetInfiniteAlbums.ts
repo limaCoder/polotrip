@@ -2,9 +2,9 @@
 
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
-import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
 import { GetAlbumsResponse } from '@/http/get-albums/types';
+import { albumKeys } from '@/hooks/network/keys/albumKeys';
 
 const useGetInfiniteAlbums = () => {
   const {
@@ -17,7 +17,7 @@ const useGetInfiniteAlbums = () => {
     isError,
     error,
   } = useSuspenseInfiniteQuery<GetAlbumsResponse, Error>({
-    queryKey: [NetworkKeys.ALBUMS],
+    queryKey: [albumKeys.all],
     initialPageParam: 1,
     queryFn: async ({ pageParam, signal }) => {
       return getAlbums({

@@ -33,23 +33,9 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
         body: bodySchema,
         response: {
           200: z.object({
-            photos: z.array(
-              z.object({
-                id: z.string(),
-                albumId: z.string(),
-                imageUrl: z.string(),
-                thumbnailUrl: z.string().nullable(),
-                originalFileName: z.string().nullable(),
-                dateTaken: z.string().nullable(),
-                latitude: z.number().nullable(),
-                longitude: z.number().nullable(),
-                locationName: z.string().nullable(),
-                description: z.string().nullable(),
-                order: z.string().nullable(),
-                createdAt: z.date(),
-                updatedAt: z.date(),
-              }),
-            ),
+            success: z.boolean(),
+            photosCount: z.number(),
+            message: z.string(),
           }),
           400: z.object({
             message: z.string(),
@@ -73,13 +59,13 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
         const sanitizedAlbumId = DOMPurify.sanitize(albumId);
 
         try {
-          const { photos: savedPhotos } = await saveUploadedPhotos({
+          const result = await saveUploadedPhotos({
             albumId: sanitizedAlbumId,
             userId,
             photos: uploadedPhotosData,
           });
 
-          return { photos: savedPhotos };
+          return result;
         } catch (error) {
           if (error instanceof Error) {
             if (error.message === 'Album not found') {

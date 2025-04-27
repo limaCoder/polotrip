@@ -7,7 +7,6 @@ import { albumFormSchema } from './schema/album-schema';
 import { uploadImage } from './utils/upload-image';
 import { env } from '@/lib/env';
 import { createCheckout } from '@/http/create-checkout';
-import { getAlbumStripePrice } from '@/utils/getAlbumPrice';
 import { getCurrency } from '@/utils/getCurrency';
 
 export async function createAlbumWithCheckout(
@@ -21,7 +20,7 @@ export async function createAlbumWithCheckout(
     const description = formData.get('description') as string;
     const coverImageFile = formData.get('cover') as File;
 
-    const dateWithDay = `${dateString}-01`;
+    const dateWithDay = `${dateString}-15`;
 
     const validationResult = albumFormSchema.safeParse({
       title,
@@ -58,7 +57,6 @@ export async function createAlbumWithCheckout(
     const successUrl = `${origin}/${extra?.locale}/dashboard/album/${album?.id}/upload`;
     const cancelUrl = `${origin}/${extra?.locale}/create-album`;
 
-    const albumPrice = getAlbumStripePrice(extra?.locale as string);
     const currency = getCurrency(extra?.locale as string);
 
     const { checkoutSession } = await createCheckout({
@@ -67,7 +65,6 @@ export async function createAlbumWithCheckout(
         successUrl,
         cancelUrl,
         paymentMethod: 'credit_card',
-        amount: albumPrice,
         currency,
         isAdditionalPhotos: false,
       },

@@ -145,6 +145,15 @@
 
   .swiper-pagination {
   }
+
+  .leaflet-popup-content-wrapper .leaflet-popup-content {
+    width: 13rem;
+    height: 15rem;
+  }
+
+  .leaflet-popup-content:has(p) {
+    margin: 15px 24px 80px 20px!important;
+  }
 }
 
 @theme inline {

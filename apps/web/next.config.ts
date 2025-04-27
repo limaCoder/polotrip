@@ -28,6 +28,9 @@ const nextConfig = {
       {
         hostname: '*.supabase.co',
       },
+      {
+        hostname: '*.r2.cloudflarestorage.com',
+      },
     ],
   },
   async rewrites() {

@@ -51,5 +51,7 @@ export type Photo = {
 };
 
 export type SaveUploadedPhotosResponse = {
-  photos: Photo[];
+  success: boolean;
+  photosCount: number;
+  message: string;
 };

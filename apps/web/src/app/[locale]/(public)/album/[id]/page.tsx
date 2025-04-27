@@ -1,8 +1,38 @@
+import { HeaderAlbum } from '../(components)/HeaderAlbum';
+import { MapPin } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { PhotoTimeline } from '@/components/PhotoTimeline';
-import { HeaderAlbum } from '../(components)/HeaderAlbum';
+import { getPublicAlbum } from '@/http/get-public-album';
+import { AlbumViewPageProps } from './types';
+import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
+import { Suspense } from 'react';
+import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 
-export default function AlbumViewPage() {
+export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
+  const { id: albumId } = await params;
+  const albumData = await getPublicAlbum({ albumId });
+  const locationsDataPromise = getPublicAlbumLocations({ albumId });
+
+  const hasLocations = await locationsDataPromise.then(
+    data => data.locations.length > 0,
+    () => false,
+  );
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: albumKeys.publicPhotosList(albumId),
+    queryFn: () =>
+      getPublicAlbumPhotos({
+        albumId,
+        limit: 20,
+      }),
+    initialPageParam: null,
+  });
+
   return (
     <main className="min-h-screen bg-background flex flex-col">
       <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
@@ -38,7 +68,38 @@ export default function AlbumViewPage() {
       </div>
 
       <main className="bg-background">
-        <PhotoTimeline />
+        {hasLocations && (
+          <section className="container py-8">
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin className="text-primary" size={24} />
+              <h2 className="font-title_two text-2xl text-primary">
+                ✨ Esses foram os momentos incríveis de Victória!
+              </h2>
+            </div>
+            <div className="w-full h-[400px] rounded-lg overflow-hidden">
+              <Suspense
+                fallback={
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    Carregando mapa...
+                  </div>
+                }
+              >
+                <PublicPhotoMap locationsPromise={locationsDataPromise} />
+              </Suspense>
+            </div>
+          </section>
+        )}
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Suspense
+            fallback={
+              <div className="w-full py-20 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            }
+          >
+            <PhotoTimeline albumId={albumId} />
+          </Suspense>
+        </HydrationBoundary>
       </main>
 
       <Footer />

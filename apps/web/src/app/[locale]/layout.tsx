@@ -13,6 +13,7 @@ import { Locale } from '@/i18n/types';
 import { cn } from '@/lib/cn';
 import { RootLayoutProps } from './types';
 import { Toaster } from '@/components/ui/sooner';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -32,7 +33,9 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
         <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </Providers>
           <Toaster />
         </body>
       </NextIntlClientProvider>
