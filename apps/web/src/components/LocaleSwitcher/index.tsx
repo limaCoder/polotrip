@@ -10,8 +10,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { options } from './options';
+import { cn } from '@/lib/cn';
 
-export function LocaleSwitcher() {
+interface LocaleSwitcherProps {
+  whiteTrigger?: boolean;
+  hideChevron?: boolean;
+}
+
+export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: LocaleSwitcherProps) {
   const locale = useLocale();
   const router = useRouter();
 
@@ -20,15 +26,24 @@ export function LocaleSwitcher() {
   };
 
   return (
-    <div className="relative items-center flex">
+    <div className="relative flex items-center">
       <Select defaultValue={locale} onValueChange={handleChange}>
-        <SelectTrigger>
+        <SelectTrigger
+          className={cn(
+            'px-2',
+            whiteTrigger ? 'text-white' : '',
+            hideChevron ? '[&>svg]:hidden' : '',
+          )}
+        >
           <SelectValue />
         </SelectTrigger>
+
         <SelectContent position="item-aligned" avoidCollisions={false}>
           {options.map(option => (
-            <SelectItem key={option.value} value={option.value} className="flex items-center gap-2">
-              <img src={option.flag} alt={option.label} className="w-5 h-5 rounded-full" />
+            <SelectItem key={option.value} value={option.value}>
+              <div className="flex items-center gap-2">
+                <img src={option.flag} alt={option.label} className="w-5 h-5 rounded-full" />
+              </div>
             </SelectItem>
           ))}
         </SelectContent>
