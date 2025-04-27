@@ -1,6 +1,5 @@
 type GetPublicAlbumPhotosRequest = {
   albumId: string;
-  date: string;
   cursor?: string;
   limit?: number;
   signal?: AbortSignal;
@@ -9,21 +8,23 @@ type GetPublicAlbumPhotosRequest = {
 type Photo = {
   id: string;
   imageUrl: string;
-  thumbnailUrl: string | null;
   dateTaken: string | null;
   description: string | null;
-  latitude: number | null;
-  longitude: number | null;
   locationName: string | null;
   order: string | null;
 };
 
-type GetPublicAlbumPhotosResponse = {
+type TimelineEvent = {
+  date: string;
   photos: Photo[];
+};
+
+type GetPublicAlbumPhotosResponse = {
+  timelineEvents: TimelineEvent[];
   pagination: {
     hasMore: boolean;
     nextCursor: string | null;
   };
 };
 
-export type { GetPublicAlbumPhotosRequest, GetPublicAlbumPhotosResponse, Photo };
+export type { GetPublicAlbumPhotosRequest, GetPublicAlbumPhotosResponse, Photo, TimelineEvent };

@@ -11,20 +11,28 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
           id: z.string(),
         }),
         querystring: z.object({
-          date: z.string(),
           cursor: z.string().optional(),
-          limit: z.number().min(1).max(100).default(20).optional(),
+          limit: z
+            .union([z.string().regex(/^\d+$/).transform(Number), z.number()])
+            .pipe(z.number().min(1).max(100))
+            .default(20)
+            .optional(),
         }),
         response: {
           200: z.object({
-            photos: z.array(
+            timelineEvents: z.array(
               z.object({
-                id: z.string(),
-                imageUrl: z.string(),
-                dateTaken: z.string().nullable(),
-                description: z.string().nullable(),
-                locationName: z.string().nullable(),
-                order: z.string().nullable(),
+                date: z.string(),
+                photos: z.array(
+                  z.object({
+                    id: z.string(),
+                    imageUrl: z.string(),
+                    dateTaken: z.string().nullable(),
+                    description: z.string().nullable(),
+                    locationName: z.string().nullable(),
+                    order: z.string().nullable(),
+                  }),
+                ),
               }),
             ),
             pagination: z.object({
@@ -38,15 +46,13 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
     async (request, reply) => {
       try {
         const { id } = request.params as { id: string };
-        const { date, cursor, limit } = request.query as {
-          date: string;
+        const { cursor, limit } = request.query as {
           cursor?: string;
           limit?: number;
         };
 
         const result = await getPublicAlbumPhotos({
           albumId: id,
-          date,
           cursor,
           limit,
         });

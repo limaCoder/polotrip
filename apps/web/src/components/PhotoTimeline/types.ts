@@ -11,4 +11,8 @@ interface TimelineEvent {
   photos: Photo[];
 }
 
-export type { Photo, TimelineEvent };
+interface PhotoTimelineProps {
+  albumId: string;
+}
+
+export type { Photo, TimelineEvent, PhotoTimelineProps };

@@ -3,15 +3,12 @@ import { GetPublicAlbumPhotosRequest, GetPublicAlbumPhotosResponse } from './typ
 
 export async function getPublicAlbumPhotos({
   albumId,
-  date,
   cursor,
   limit,
   signal,
 }: GetPublicAlbumPhotosRequest): Promise<GetPublicAlbumPhotosResponse> {
   try {
-    const searchParams: Record<string, string | number> = {
-      date,
-    };
+    const searchParams: Record<string, string | number> = {};
 
     if (cursor) {
       searchParams.cursor = cursor;
@@ -28,6 +25,6 @@ export async function getPublicAlbumPhotos({
 
     return data;
   } catch (error) {
-    throw new Error(`Failed to get public album photos: ${error}`);
+    throw new Error(`Failed to get album photos: ${error}`);
   }
 }
