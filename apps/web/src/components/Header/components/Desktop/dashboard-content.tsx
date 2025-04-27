@@ -72,8 +72,10 @@ export function DashboardContent() {
             )}
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuContent className="bg-background">
+          <DropdownMenuLabel className="cursor-pointer hover:bg-primary/10 transition-colors duration-200">
+            My Account
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer hover:bg-primary/10 transition-colors duration-200"

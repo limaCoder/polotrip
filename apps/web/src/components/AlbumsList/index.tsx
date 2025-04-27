@@ -31,7 +31,7 @@ export function AlbumsList() {
         isFetching={albums?.isFetching}
         loadingComponent={
           <div className="flex justify-between flex-wrap gap-9">
-            <SkeletonList count={3} className="w-[31%] h-[256px] rounded-2xl shadow-md" />
+            <SkeletonList count={3} className="h-[256px] rounded-2xl shadow-md" />
           </div>
         }
         rootMargin="100px"

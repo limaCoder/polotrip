@@ -69,9 +69,9 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
 
       <main className="bg-background">
         {hasLocations && (
-          <section className="container py-8">
+          <section className="container px-4 py-8">
             <div className="flex items-center gap-2 mb-4">
-              <MapPin className="text-primary" size={24} />
+              <MapPin className="text-primary hidden md:block" size={24} />
               <h2 className="font-title_two text-2xl text-primary">
                 ✨ Esses foram os momentos incríveis de Victória!
               </h2>

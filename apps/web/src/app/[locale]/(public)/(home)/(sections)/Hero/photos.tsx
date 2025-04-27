@@ -20,9 +20,9 @@ export function HeroPhotos() {
           alt="Polaroid de viagem"
           width={480}
           height={700}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw, (max-width: 1300px) 10vw, 33vw"
+          sizes="(max-width: 768px) 80vw"
           priority
-          className="object-contain max-h-[600px]"
+          className="object-contain max-h-[600px] lg:max-h-[500px] xl:max-h-[600px]"
         />
       </MotionDiv>
     </div>

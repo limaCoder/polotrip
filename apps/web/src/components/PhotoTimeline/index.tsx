@@ -66,7 +66,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
           </div>
         ) : (
           <div ref={timelineRef} className="relative">
-            <div className="absolute left-4 md:left-8 top-0 bottom-0 w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]">
+            <div className="absolute left-8 md:left-12 top-0 bottom-0 w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]">
               <motion.div
                 style={{
                   height: heightTransform,
@@ -78,7 +78,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
 
             {timelineEvents.map((event, index) => (
               <div key={index} className="mb-16 md:mb-24">
-                <div className="flex items-center mb-6 md:mb-8">
+                <div className="flex items-center mb-6 md:mb-8 pl-4">
                   <div className="relative flex items-center justify-center">
                     <div className="absolute left-4 md:left-8 h-8 w-8 rounded-full bg-white border-2 border-secondary flex items-center justify-center z-10 transform -translate-x-1/2">
                       <div className="h-3 w-3 rounded-full bg-secondary" />
@@ -89,7 +89,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                   </h2>
                 </div>
 
-                <div className="pl-12 md:pl-20">
+                <div className="px-12 md:pl-20">
                   <MasonryGallery photos={event.photos} onPhotoClick={setSelectedPhoto} />
                 </div>
               </div>

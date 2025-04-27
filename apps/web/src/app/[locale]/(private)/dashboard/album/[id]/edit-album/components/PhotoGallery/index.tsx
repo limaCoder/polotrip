@@ -27,7 +27,7 @@ export function PhotoGallery({
         </p>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-startmd:items-center mb-6 flex-col md:flex-row gap-4">
         <p className="font-body_two">
           <span className="text-primary font-bold">
             {pagination?.total || filteredPhotos.length}
@@ -37,7 +37,7 @@ export function PhotoGallery({
         </p>
 
         {selectedPhotos.length > 0 && (
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-col md:flex-row mb-4">
             <button
               className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
               onClick={deselectAllPhotos}

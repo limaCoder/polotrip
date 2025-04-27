@@ -33,9 +33,9 @@ export function HeaderAlbumMobile() {
           <button className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
             <FullscreenIcon className="h-6 w-6 text-primary" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
             <LocaleSwitcher hideChevron />
-          </button>
+          </div>
         </div>
       </div>
     </div>

@@ -90,7 +90,7 @@ export function UploadForm() {
             {uploadFormState?.files?.map(photo => (
               <div
                 key={photo?.id}
-                className="relative rounded overflow-hidden w-full h-[160px] group"
+                className="relative rounded overflow-hidden w-full h-[300px] md:h-[160px] group"
               >
                 <Image
                   src={photo?.preview}

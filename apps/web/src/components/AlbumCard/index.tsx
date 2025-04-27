@@ -32,7 +32,7 @@ export function AlbumCard({
   return (
     <Link
       href={albumLink}
-      className="w-[31%] h-[256px] rounded-2xl shadow-md overflow-hidden hover:brightness-130 transition-all duration-300"
+      className="h-[256px] rounded-2xl shadow-md overflow-hidden hover:brightness-130 transition-all duration-300"
     >
       <div className="w-full h-[192px] rounded-t-xl relative flex flex-col justify-end">
         <Image
