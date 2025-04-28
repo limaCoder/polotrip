@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Menu, Share2, FullscreenIcon } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function HeaderAlbumMobile() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,13 +12,14 @@ export function HeaderAlbumMobile() {
   return (
     <div className="flex md:hidden w-full justify-between items-center">
       <Link href="/" className="cursor-pointer">
-        <img src="/brand/logo-white.svg" alt="Logo" className="w-[120px]" />
+        <Image src="/brand/logo-white.svg" alt="Logo" width={120} height={120} />
       </Link>
 
       <div className="relative">
         <button
           onClick={() => setIsOpen(prev => !prev)}
           className="p-3 rounded-full bg-white/75 hover:bg-gray-300 transition"
+          aria-label="Abrir menu"
         >
           <Menu className="h-6 w-6 text-primary" />
         </button>
@@ -27,10 +29,16 @@ export function HeaderAlbumMobile() {
             isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'
           }`}
         >
-          <button className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
+          <button
+            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
+            aria-label="Compartilhar"
+          >
             <Share2 className="h-6 w-6 text-primary relative -left-0.5" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
+          <button
+            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
+            aria-label="Tela cheia"
+          >
             <FullscreenIcon className="h-6 w-6 text-primary" />
           </button>
           <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">

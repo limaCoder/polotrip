@@ -12,14 +12,16 @@ export default async function Home({ params }: PageWithLocale) {
   const { locale } = await params;
 
   return (
-    <main className="min-h-dvh">
+    <>
       <Header />
-      <Hero />
-      <Benefits />
-      <HowItWorks />
-      <Faq />
-      <Cta locale={locale} />
+      <main className="min-h-dvh">
+        <Hero />
+        <Benefits />
+        <HowItWorks />
+        <Faq />
+        <Cta locale={locale} />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Allow all bots to access public albums
+Allow: /*/album/*
+
+# Private directories that should not be indexed
+Disallow: /*/dashboard/
+Disallow: /*/settings/
+Disallow: /*/admin/
+Disallow: /api/
+Disallow: /*/auth/
+
+# Allow Googlebot access to static resources
+User-agent: Googlebot
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+
+# Sitemap
+Sitemap: https://polotrip.com/sitemap.xml

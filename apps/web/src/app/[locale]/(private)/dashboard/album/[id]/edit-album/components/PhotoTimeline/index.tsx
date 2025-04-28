@@ -28,6 +28,7 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
               selectedDate === dateCount?.date ? 'bg-primary' : 'hover:bg-secondary/10',
             )}
             onClick={() => onSelectDate(dateCount?.date)}
+            aria-label={`Selecionar data ${formatDateToDisplay(dateCount?.date)}`}
           >
             <p
               className={cn(

@@ -70,11 +70,12 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
               variant="outline"
               onClick={handlePrevious}
               disabled={isFirstStep}
+              aria-label="Voltar"
             >
               Voltar
             </Button>
 
-            <Button className="text-white" onClick={handleNext}>
+            <Button className="text-white" onClick={handleNext} aria-label="Próximo">
               {isLastStep ? 'Começar' : 'Próximo'}
             </Button>
           </div>

@@ -5,9 +5,17 @@ import { Album, X, Menu } from 'lucide-react';
 import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { cn } from '@/lib/cn';
+import Image from 'next/image';
+import { usePathname } from '@/i18n/routing';
+import { DashboardContent } from '../../dashboard-content';
 
 export function HeaderMobile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const pathname = usePathname();
+
+  const isHomePage = pathname === '/';
+  const isDashboardPage = pathname === '/dashboard';
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -15,11 +23,27 @@ export function HeaderMobile() {
 
   return (
     <div className="lg:hidden bg-background py-4 container relative flex justify-between items-center px-4">
-      <img src="/brand/logo.svg" alt="Logo" className="w-[150px] md:w-[180px]" />
+      <Image
+        src="/brand/logo.svg"
+        alt="Logo"
+        width={180}
+        height={40}
+        className="w-[150px] md:w-[180px]"
+        sizes="(max-width: 768px) 150px, 180px"
+        priority
+      />
 
-      <button className="text-primary z-20" onClick={toggleMenu}>
-        {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-      </button>
+      <div className="flex items-center gap-2">
+        {!isHomePage && <LocaleSwitcher />}
+
+        {isDashboardPage && <DashboardContent />}
+      </div>
+
+      {isHomePage && (
+        <button className="text-primary z-20" onClick={toggleMenu} aria-label="Abrir menu">
+          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      )}
 
       <div
         className={cn(
@@ -27,22 +51,35 @@ export function HeaderMobile() {
           isMenuOpen ? 'translate-y-16' : '-translate-y-full',
         )}
       >
-        <a href="#vantagens" className="text-black" onClick={toggleMenu}>
-          Vantagens
-        </a>
-        <a href="#como-funciona" className="text-black" onClick={toggleMenu}>
-          Como funciona
-        </a>
-        <a href="#perguntas-frequentes" className="text-black" onClick={toggleMenu}>
-          Perguntas frequentes
-        </a>
-        <ButtonNavigation
-          href="/login"
-          className="bg-gradient-primary text-white w-full justify-center mt-3"
-        >
-          <span className="font-semibold">Acessar conta</span>
-          <Album />
-        </ButtonNavigation>
+        <>
+          <a href="#vantagens" className="text-black" onClick={toggleMenu} aria-label="Vantagens">
+            Vantagens
+          </a>
+          <a
+            href="#como-funciona"
+            className="text-black"
+            onClick={toggleMenu}
+            aria-label="Como funciona"
+          >
+            Como funciona
+          </a>
+          <a
+            href="#perguntas-frequentes"
+            className="text-black"
+            onClick={toggleMenu}
+            aria-label="Perguntas frequentes"
+          >
+            Perguntas frequentes
+          </a>
+          <ButtonNavigation
+            href="/sign-in"
+            className="bg-gradient-primary text-white w-full justify-center mt-3"
+            aria-label="Acessar conta"
+          >
+            <span className="font-semibold">Acessar conta</span>
+            <Album />
+          </ButtonNavigation>
+        </>
         <div className="flex w-full justify-center">
           <LocaleSwitcher />
         </div>

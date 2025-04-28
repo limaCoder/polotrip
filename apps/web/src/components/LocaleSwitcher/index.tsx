@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { options } from './options';
 import { cn } from '@/lib/cn';
+import Image from 'next/image';
 
 interface LocaleSwitcherProps {
   whiteTrigger?: boolean;
@@ -34,6 +35,7 @@ export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: Lo
             whiteTrigger ? 'text-white' : '',
             hideChevron ? '[&>svg]:hidden' : '',
           )}
+          aria-label="Selecione o idioma"
         >
           <SelectValue />
         </SelectTrigger>
@@ -42,7 +44,7 @@ export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: Lo
           {options.map(option => (
             <SelectItem key={option.value} value={option.value}>
               <div className="flex items-center gap-2">
-                <img src={option.flag} alt={option.label} className="w-5 h-5 rounded-full" />
+                <Image src={option.flag} alt={option.label} width={20} height={20} />
               </div>
             </SelectItem>
           ))}

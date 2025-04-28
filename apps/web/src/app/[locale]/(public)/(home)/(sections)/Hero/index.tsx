@@ -36,10 +36,18 @@ export async function Hero() {
             transition={{ duration: 0.7 }}
             className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start"
           >
-            <ButtonNavigation href="#how-it-works" className="bg-primary text-white button-shadow">
+            <ButtonNavigation
+              href="#how-it-works"
+              className="bg-primary text-white button-shadow"
+              aria-label="Como funciona?"
+            >
               <span className="font-bold">Como funciona?</span>
             </ButtonNavigation>
-            <ButtonNavigation href="/sign-in" className="bg-yellow text-black button-shadow">
+            <ButtonNavigation
+              href="/sign-in"
+              className="bg-yellow text-black button-shadow"
+              aria-label="Comece agora"
+            >
               <span className="font-bold">Comece agora</span>
             </ButtonNavigation>
           </MotionDiv>

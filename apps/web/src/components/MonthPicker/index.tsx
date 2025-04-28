@@ -70,6 +70,7 @@ export function MonthPicker({
             className,
           )}
           disabled={disabled}
+          aria-label="Selecionar mês"
         >
           <CalendarIcon color="#08171C40" className="mr-2 h-4 w-4" />
           {date ? format(date, 'MMMM yyyy') : placeholder}
@@ -83,6 +84,7 @@ export function MonthPicker({
             size="icon"
             className="h-7 w-7 hover:bg-primary transition-colors duration-300"
             onClick={handlePreviousYear}
+            aria-label="Ano anterior"
           >
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">Previous year</span>
@@ -93,6 +95,7 @@ export function MonthPicker({
             size="icon"
             className="h-7 w-7 hover:bg-primary transition-colors duration-300"
             onClick={handleNextYear}
+            aria-label="Ano posterior"
           >
             <ChevronRight className="h-4 w-4" />
             <span className="sr-only">Next year</span>
@@ -109,6 +112,7 @@ export function MonthPicker({
                 variant={isCurrentMonth ? 'default' : 'outline'}
                 className="h-9 hover:bg-primary transition-colors duration-300"
                 onClick={() => handleMonthSelect(index)}
+                aria-label={`Selecionar mês ${month?.substring(0, 3)}`}
               >
                 {month?.substring(0, 3)}
               </Button>

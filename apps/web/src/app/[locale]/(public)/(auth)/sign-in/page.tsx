@@ -75,7 +75,7 @@ export default async function LoginPage({ params }: LoginPageProps) {
                   </form>
                 )}
 
-                <OAuthButton provider="google">
+                <OAuthButton provider="google" aria-label="Entrar com Google">
                   <Image src="/icons/google.png" alt="Google" width={24} height={24} />
                   <span className="font-body_two">Sign in with Google</span>
                 </OAuthButton>

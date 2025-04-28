@@ -161,6 +161,7 @@ export function PhotoEditForm({
                           'text-left font-normal justify-start border-neutral-400 hover:bg-secondary-10',
                           !field.value && 'text-muted-foreground',
                         )}
+                        aria-label="Selecionar data"
                       >
                         <CalendarIcon className="h-4 w-4 opacity-50" />
                         {field.value ? format(field.value, 'PPP') : <span>Selecione a data</span>}
@@ -295,6 +296,7 @@ export function PhotoEditForm({
                 onClick={onCancel}
                 disabled={isDisabled}
                 className="bg-secondary-50 text-text rounded px-4 py-2 hover:bg-secondary-100 font-body_two"
+                aria-label="Cancelar edição"
               >
                 Cancelar
               </Button>
@@ -309,6 +311,7 @@ export function PhotoEditForm({
                   ? 'bg-green-500 text-white'
                   : 'bg-primary text-background hover:bg-primary/90',
               )}
+              aria-label="Salvar edição"
             >
               {showSuccess ? (
                 <>

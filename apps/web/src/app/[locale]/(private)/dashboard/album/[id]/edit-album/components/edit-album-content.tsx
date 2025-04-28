@@ -10,6 +10,7 @@ import { PhotoGallery } from './PhotoGallery';
 import { FinishEditDialog } from './FinishEditDialog';
 import { DeletePhotosDialog } from './DeletePhotosDialog';
 import { useEditAlbum } from '../hooks/useEditAlbum';
+import { Button } from '@/components/ui/button';
 
 export function EditAlbumContent() {
   const {
@@ -107,13 +108,14 @@ export function EditAlbumContent() {
         />
 
         <div className="flex justify-end">
-          <button
+          <Button
             onClick={openFinishDialog}
             disabled={isLoading}
             className={cn(
               'bg-primary text-background rounded px-8 py-3 hover:bg-primary/90 font-body_two flex items-center gap-2',
               isLoading && 'opacity-50 cursor-not-allowed',
             )}
+            aria-label="Finalizar edição do álbum"
           >
             {isLoading ? (
               <>
@@ -123,7 +125,7 @@ export function EditAlbumContent() {
             ) : (
               <span>Finalizar</span>
             )}
-          </button>
+          </Button>
         </div>
       </div>
 

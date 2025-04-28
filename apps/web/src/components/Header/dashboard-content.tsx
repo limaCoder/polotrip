@@ -13,7 +13,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { signOut, getSession } from '@/lib/auth/client';
 import { usePathname, useRouter } from '@/i18n/routing';
-import { UserDataState } from '../../types';
+import { UserDataState } from './types';
 
 export function DashboardContent() {
   const [userData, setUserData] = useState<UserDataState>({
@@ -24,6 +24,7 @@ export function DashboardContent() {
 
   const router = useRouter();
   const pathname = usePathname();
+  const isDashboard = pathname === `/dashboard`;
 
   const getUserData = useCallback(async () => {
     const session = await getSession();
@@ -45,8 +46,6 @@ export function DashboardContent() {
     router.push('/sign-in');
   }
 
-  const isDashboard = pathname === `/dashboard`;
-
   useEffect(() => {
     if (!isDashboard) return;
 
@@ -58,7 +57,7 @@ export function DashboardContent() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger aria-label="Abrir menu de usuário">
           <Avatar>
             {userData?.userAvatar || userData?.usernameInitials ? (
               <>

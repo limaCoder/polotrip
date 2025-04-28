@@ -12,6 +12,13 @@ import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
 import { OnboardingModalWrapper } from './(components)/onboarding-modal-wrapper';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard | Polotrip',
+  description: 'Gerencie seus álbuns e compartilhe suas memórias de viagem na Polotrip',
+};
+
 export default async function DashboardPage() {
   const queryClient = new QueryClient();
 
@@ -37,6 +44,7 @@ export default async function DashboardPage() {
                 <ButtonNavigation
                   href="/dashboard/create-album"
                   className="bg-primary text-background py-4 px-8 flex items-center gap-2 shadow-lg hover:brightness-105"
+                  aria-label="Criar novo álbum"
                 >
                   <Plus size={24} color="#F7FCFD" />
                   <span>Criar novo álbum</span>
@@ -57,9 +65,9 @@ export default async function DashboardPage() {
             </div>
           </div>
         </section>
-        <Footer />
         <OnboardingModalWrapper />
       </main>
+      <Footer />
     </>
   );
 }

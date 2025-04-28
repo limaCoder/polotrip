@@ -27,6 +27,7 @@ export async function Cta({ locale }: CtaProps) {
           <ButtonNavigation
             href="/sign-in"
             className="h-[60px] bg-primary text-white hover:bg-primary/90"
+            aria-label="Comece agora"
           >
             <span className="font-bold">Comece agora</span>
           </ButtonNavigation>

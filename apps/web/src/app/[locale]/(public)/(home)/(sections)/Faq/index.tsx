@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import { MotionSection } from '@/lib/motion/motion-components';
 import { questions } from './data';
-
+import Image from 'next/image';
 export function Faq() {
   return (
     <MotionSection
@@ -24,7 +24,15 @@ export function Faq() {
               help@polotrip.com
             </a>
           </p>
-          <img src="/pages/home/faq/question.svg" alt="" className="h-[250px] lg:h-[330px] mt-6" />
+          <div className="flex justify-center">
+            <Image
+              src="/pages/home/faq/question.svg"
+              alt="Ilustração de uma mulher segurando um balao de pontos de interrogação"
+              className="h-[250px] lg:h-[330px] mt-6"
+              width={232}
+              height={327}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col w-full lg:w-3/5 justify-center">

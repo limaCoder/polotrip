@@ -113,6 +113,7 @@ export function UploadForm() {
                   type="button"
                   onClick={() => removeFile(photo?.id)}
                   disabled={uploadFormState?.isUploading}
+                  aria-label="Remover foto"
                 >
                   <X size={16} />
                 </button>
@@ -140,6 +141,7 @@ export function UploadForm() {
           className="font-bold border border-text-opacity-25 rounded px-4 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={clearAll}
           disabled={clearAllButtonDisabled}
+          aria-label="Limpar tudo"
         >
           Limpar tudo
         </Button>
@@ -149,6 +151,7 @@ export function UploadForm() {
           className="font-bold border border-text-opacity-25 bg-primary text-background rounded px-4 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleUploadClick}
           disabled={uploadButtonDisabled}
+          aria-label="Continuar"
         >
           {uploadFormState?.isUploading ? 'Enviando...' : 'Continuar'}
         </Button>

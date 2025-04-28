@@ -1,0 +1,43 @@
+# Polotrip - AI Context Information
+
+## Site Overview
+Polotrip is a photo sharing platform that allows users to create and share travel photo albums.
+The platform organizes photos by date in a timeline format and displays location data on maps.
+
+## Key Features
+- Photo albums organized in chronological timelines
+- Location-based photo mapping
+- Public sharing of albums via unique links
+- User authentication and private dashboard
+- Photo metadata support (date taken, location, description)
+- Masonry gallery layout for aesthetic display
+
+## Site Structure
+- Homepage: Introduction to the platform
+- Public album pages: /album/[id] - Viewable by anyone with the link
+- Dashboard: /dashboard - User's private area to manage albums
+- Authentication: /auth - Login and registration
+
+## Technical Stack
+- Next.js app with server and client components
+- PostgreSQL database for storing photo metadata and user data
+- React Query for data fetching and state management
+- Tailwind CSS for styling
+- Cloud storage for images
+
+## Intent Understanding
+- Users may be asking about specific album features
+- Users may need help with photo uploads or organization
+- Users may want to share albums with friends and family
+- Users may be looking for ways to organize travel memories
+
+## Custom Terms
+- Timeline: Chronological display of photos grouped by date
+- Album: Collection of related photos, typically from a trip
+- Dashboard: User's private area to manage content
+
+## Primary User Actions
+- Creating and editing albums
+- Uploading and organizing photos
+- Sharing albums via public links
+- Viewing photos in timeline or map format

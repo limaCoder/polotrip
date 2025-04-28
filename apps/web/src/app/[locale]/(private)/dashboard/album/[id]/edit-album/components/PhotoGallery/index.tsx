@@ -41,6 +41,7 @@ export function PhotoGallery({
             <button
               className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
               onClick={deselectAllPhotos}
+              aria-label="Limpar seleção"
             >
               <X size={18} />
               <span className="font-body_two">Limpar Seleção</span>
@@ -48,6 +49,7 @@ export function PhotoGallery({
             <button
               className="flex items-center gap-2 text-red-500 cursor-pointer hover:text-red-600"
               onClick={onDeletePhotos}
+              aria-label="Excluir selecionadas"
             >
               <Trash2 size={18} />
               <span className="font-body_two">Excluir Selecionadas</span>

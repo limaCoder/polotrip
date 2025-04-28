@@ -204,6 +204,7 @@ export function AlbumForm() {
           type="submit"
           disabled={isPending}
           className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded"
+          aria-label="Pagar com cartão"
         >
           {isPending ? (
             <>

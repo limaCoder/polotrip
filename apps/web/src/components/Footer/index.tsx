@@ -1,9 +1,11 @@
+import Image from 'next/image';
+
 export function Footer() {
   return (
     <footer className="py-8">
       <div className="container mx-auto lg:px-9 px-4 flex flex-col lg:flex-row gap-4 justify-between text-center lg:text-left">
         <div className="flex flex-col justify-center items-center lg:items-start">
-          <img src="/brand/logo.svg" alt="" className="w-[150px]" />
+          <Image src="/brand/logo.svg" alt="Polotrip" width={150} height={150} />
           <p className="font-body_two mt-1">Copyright &copy; 2025 - Todos os direitos reservados</p>
           <p className="font-body_two mt-1">
             Made by
