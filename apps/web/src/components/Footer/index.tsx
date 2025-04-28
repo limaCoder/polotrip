@@ -1,3 +1,4 @@
+import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 
 export function Footer() {
@@ -22,12 +23,12 @@ export function Footer() {
         </div>
         <div className="flex flex-col">
           <p className="font-body_one font-bold">LEGAL</p>
-          <a href="" className="font-body_one text-primary mt-2">
+          <Link href="/terms-of-use" className="font-body_one text-primary mt-2">
             Termos de uso
-          </a>
-          <a href="" className="font-body_one text-primary mt-1">
+          </Link>
+          <Link href="/privacy-policy" className="font-body_one text-primary mt-1">
             Termos de privacidade
-          </a>
+          </Link>
           <a href="" className="font-body_one text-primary mt-1">
             CNPJ: 57.996.361/0001-57
           </a>
