@@ -11,6 +11,9 @@ type GetPublicAlbumResponse = {
     coverImageUrl: string | null;
     date: string;
   };
+  user: {
+    name: string;
+  };
 };
 
 export type { GetPublicAlbumRequest, GetPublicAlbumResponse };

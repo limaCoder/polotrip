@@ -9,6 +9,8 @@ type PhotoData = {
   dateTaken: string | null;
   latitude: number | null;
   longitude: number | null;
+  width: number | null;
+  height: number | null;
 };
 
 interface SaveUploadedPhotosRequest {
@@ -65,6 +67,8 @@ async function saveUploadedPhotos({
         dateTaken: photo?.dateTaken,
         latitude: photo?.latitude,
         longitude: photo?.longitude,
+        width: photo?.width,
+        height: photo?.height,
       };
     }),
   );

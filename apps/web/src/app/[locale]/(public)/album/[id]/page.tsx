@@ -18,7 +18,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id: albumId } = params;
+  const { id: albumId } = await params;
   const albumData = await getPublicAlbum({ albumId }).catch(() => null);
 
   if (!albumData) {
@@ -107,7 +107,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="text-primary hidden md:block" size={24} />
                 <h2 className="font-title_two text-2xl text-primary">
-                  ✨ Esses foram os momentos incríveis de Victória!
+                  ✨ Esses foram os momentos incríveis de {albumData?.user?.name.split(' ')[0]}
                 </h2>
               </div>
               <div className="w-full h-[400px] rounded-lg overflow-hidden">

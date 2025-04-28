@@ -145,6 +145,7 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
 
     const hasMetadataFiles = files.some(file => {
       const metadata = file?.metadata;
+
       return (
         metadata?.dateTaken !== null || metadata?.latitude !== null || metadata?.longitude !== null
       );
@@ -229,6 +230,8 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
             dateTaken: file?.metadata?.dateTaken || null,
             latitude: file?.metadata?.latitude !== undefined ? file?.metadata?.latitude : null,
             longitude: file?.metadata?.longitude !== undefined ? file?.metadata?.longitude : null,
+            width: file?.metadata?.width !== undefined ? file?.metadata?.width : null,
+            height: file?.metadata?.height !== undefined ? file?.metadata?.height : null,
           });
 
           const uploadTask = limit(async () => {
@@ -339,6 +342,8 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         dateTaken: null,
         latitude: null,
         longitude: null,
+        width: null,
+        height: null,
       },
     }));
 

@@ -31,6 +31,8 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
                     description: z.string().nullable(),
                     locationName: z.string().nullable(),
                     order: z.string().nullable(),
+                    width: z.number().nullable(),
+                    height: z.number().nullable(),
                   }),
                 ),
               }),

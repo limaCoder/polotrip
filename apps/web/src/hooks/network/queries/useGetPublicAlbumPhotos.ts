@@ -5,6 +5,8 @@ import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { Photo as TimelinePhoto, TimelineEvent } from '@/components/PhotoTimeline/types';
 
+const MASONRY_COLUMN_WIDTH = 300;
+
 const useGetPublicAlbumPhotos = (albumId: string) => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } = useSuspenseInfiniteQuery({
     queryKey: albumKeys.publicPhotosList(albumId),
@@ -33,13 +35,22 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
         year: 'numeric',
       });
 
-      const transformedPhotos: TimelinePhoto[] = event.photos.map(photo => ({
-        id: photo.id,
-        src: photo.imageUrl,
-        alt: photo.description || 'Foto do álbum',
-        width: 300,
-        height: Math.floor(Math.random() * 150) + 300,
-      }));
+      const transformedPhotos: TimelinePhoto[] = event.photos.map(photo => {
+        const displayWidth = MASONRY_COLUMN_WIDTH;
+        let displayHeight = 400;
+
+        if (photo.width && photo.height) {
+          displayHeight = Math.round((photo.height / photo.width) * displayWidth);
+        }
+
+        return {
+          id: photo.id,
+          src: photo.imageUrl,
+          alt: photo.description || 'Foto do álbum',
+          width: displayWidth,
+          height: displayHeight,
+        };
+      });
 
       if (eventsByDate.has(formattedDate)) {
         eventsByDate.get(formattedDate)!.push(...transformedPhotos);

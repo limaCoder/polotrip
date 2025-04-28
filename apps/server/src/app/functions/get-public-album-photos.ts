@@ -66,6 +66,8 @@ async function getPublicAlbumPhotos({ albumId, cursor, limit = 20 }: GetPublicAl
           dateTaken: photos.dateTaken,
           description: photos.description,
           locationName: photos.locationName,
+          width: photos.width,
+          height: photos.height,
           order: photos.order,
         })
         .from(photos)

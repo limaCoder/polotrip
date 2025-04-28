@@ -44,6 +44,8 @@ export const getPhotosByDateRoute: FastifyPluginAsyncZod = async app => {
                 dateTaken: z.string().nullable(),
                 latitude: z.number().nullable(),
                 longitude: z.number().nullable(),
+                width: z.number().nullable(),
+                height: z.number().nullable(),
                 locationName: z.string().nullable(),
                 description: z.string().nullable(),
                 order: z.string().nullable(),

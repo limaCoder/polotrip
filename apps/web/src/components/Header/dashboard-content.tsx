@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { signOut, getSession } from '@/lib/auth/client';
 import { usePathname, useRouter } from '@/i18n/routing';
 import { UserDataState } from './types';
+import { ChevronDownIcon } from 'lucide-react';
 
 export function DashboardContent() {
   const [userData, setUserData] = useState<UserDataState>({
@@ -57,7 +58,7 @@ export function DashboardContent() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger aria-label="Abrir menu de usuário">
+        <DropdownMenuTrigger className="flex items-center gap-2" aria-label="Abrir menu de usuário">
           <Avatar>
             {userData?.userAvatar || userData?.usernameInitials ? (
               <>
@@ -70,6 +71,7 @@ export function DashboardContent() {
               <Skeleton className="h-12 w-12 rounded-full" />
             )}
           </Avatar>
+          <ChevronDownIcon className="w-4 h-4 text-primary" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-background">
           <DropdownMenuLabel className="cursor-pointer hover:bg-primary/10 transition-colors duration-200">

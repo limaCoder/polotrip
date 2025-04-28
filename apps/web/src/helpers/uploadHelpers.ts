@@ -8,12 +8,16 @@ export async function extractExifData(file: File): Promise<{
   dateTaken: string | null;
   latitude: number | null;
   longitude: number | null;
+  width: number | null;
+  height: number | null;
 }> {
   if (!file || !file.type.startsWith('image/')) {
     return {
       dateTaken: null,
       latitude: null,
       longitude: null,
+      width: null,
+      height: null,
     };
   }
 
@@ -28,6 +32,8 @@ export async function extractExifData(file: File): Promise<{
         dateTaken: null,
         latitude: null,
         longitude: null,
+        width: null,
+        height: null,
       };
     }
 
@@ -43,10 +49,28 @@ export async function extractExifData(file: File): Promise<{
     const latitude = typeof exif.latitude === 'number' ? exif.latitude : null;
     const longitude = typeof exif.longitude === 'number' ? exif.longitude : null;
 
+    let width = null;
+    let height = null;
+
+    if (exif?.ExifImageWidth && exif?.ExifImageHeight) {
+      width = exif.ExifImageWidth;
+      height = exif.ExifImageHeight;
+    } else {
+      try {
+        const imageBitmap = await createImageBitmap(file);
+        width = imageBitmap.width;
+        height = imageBitmap.height;
+      } catch (e) {
+        console.error('Error getting image dimensions:', e);
+      }
+    }
+
     return {
       dateTaken,
       latitude,
       longitude,
+      width,
+      height,
     };
   } catch (error) {
     console.error('Error extracting EXIF metadata:', error);
@@ -54,6 +78,8 @@ export async function extractExifData(file: File): Promise<{
       dateTaken: null,
       latitude: null,
       longitude: null,
+      width: null,
+      height: null,
     };
   }
 }

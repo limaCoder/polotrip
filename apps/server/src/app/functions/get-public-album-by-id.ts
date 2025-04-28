@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@polotrip/db';
-import { albums } from '@polotrip/db/schema';
+import { albums, users } from '@polotrip/db/schema';
+import { Album } from '@polotrip/db/models';
 
 interface GetPublicAlbumByIdRequest {
   id: string;
@@ -16,6 +17,7 @@ async function getPublicAlbumById({ id }: GetPublicAlbumByIdRequest) {
         coverImageUrl: albums.coverImageUrl,
         date: albums.date,
         isPublished: albums.isPublished,
+        userId: albums.userId,
       })
       .from(albums)
       .where(eq(albums.id, id))
@@ -29,7 +31,21 @@ async function getPublicAlbumById({ id }: GetPublicAlbumByIdRequest) {
       throw new Error('Album is not published');
     }
 
-    return { album };
+    const user = await db
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.id, album.userId))
+      .then(rows => rows[0]);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const sanitizedData = album as Album;
+
+    const { userId, ...rest } = sanitizedData;
+
+    return { album: rest, user };
   } catch (error) {
     console.error('Error fetching public album by id:', error);
     throw error;

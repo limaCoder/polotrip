@@ -22,6 +22,8 @@ const photos = pgTable(
     locationName: text('location_name'),
     description: text('description'),
     order: text('order'),
+    width: doublePrecision('width'),
+    height: doublePrecision('height'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },

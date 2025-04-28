@@ -12,6 +12,8 @@ type Photo = {
   description: string | null;
   locationName: string | null;
   order: string | null;
+  width: number | null;
+  height: number | null;
 };
 
 type TimelineEvent = {

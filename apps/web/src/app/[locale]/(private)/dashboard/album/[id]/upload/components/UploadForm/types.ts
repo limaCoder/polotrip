@@ -9,6 +9,8 @@ type PhotoFile = {
     dateTaken: string | null;
     latitude: number | null;
     longitude: number | null;
+    width: number | null;
+    height: number | null;
   };
 };
 

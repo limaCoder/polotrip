@@ -16,6 +16,8 @@ const bodySchema = z.object({
       dateTaken: z.string().nullable(),
       latitude: z.number().nullable(),
       longitude: z.number().nullable(),
+      width: z.number().nullable(),
+      height: z.number().nullable(),
     }),
   ),
 });
