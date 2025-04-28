@@ -3,6 +3,8 @@ import { Tv, Share2 } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Image from 'next/image';
 
+const IS_INTERNATIONALIZATION_ENABLED = false;
+
 export function HeaderAlbumDesktop() {
   return (
     <div className="hidden md:flex w-full justify-between items-center">
@@ -27,7 +29,7 @@ export function HeaderAlbumDesktop() {
           <span className="font-body_one w-max">Compartilhar</span>
         </button>
 
-        <LocaleSwitcher whiteTrigger />
+        {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher whiteTrigger />}
       </div>
     </div>
   );

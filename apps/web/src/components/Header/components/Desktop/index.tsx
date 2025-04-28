@@ -5,6 +5,9 @@ import { HomeContent } from './home-content';
 import { DashboardContent } from '../../dashboard-content';
 import { Link, usePathname } from '@/i18n/routing';
 import Image from 'next/image';
+
+const IS_INTERNATIONALIZATION_ENABLED = false;
+
 export function HeaderDesktop() {
   const pathname = usePathname();
 
@@ -28,7 +31,7 @@ export function HeaderDesktop() {
       <div className="flex gap-4 items-center">
         <HomeContent />
         <DashboardContent />
-        <LocaleSwitcher />
+        {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
       </div>
     </div>
   );

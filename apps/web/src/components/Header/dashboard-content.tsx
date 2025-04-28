@@ -73,7 +73,7 @@ export function DashboardContent() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-background">
           <DropdownMenuLabel className="cursor-pointer hover:bg-primary/10 transition-colors duration-200">
-            My Account
+            Minha conta
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem

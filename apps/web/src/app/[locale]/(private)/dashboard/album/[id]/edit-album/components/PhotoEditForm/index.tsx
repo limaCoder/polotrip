@@ -23,6 +23,7 @@ import { type PhotoEditFormProps, type PhotoEditFormData, formSchema } from './t
 import { LocationAutocomplete } from '../LocationAutocomplete';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { ptBR } from 'date-fns/locale';
 
 export function PhotoEditForm({
   selectedPhotos,
@@ -164,7 +165,11 @@ export function PhotoEditForm({
                         aria-label="Selecionar data"
                       >
                         <CalendarIcon className="h-4 w-4 opacity-50" />
-                        {field.value ? format(field.value, 'PPP') : <span>Selecione a data</span>}
+                        {field.value ? (
+                          format(field.value, 'PPP', { locale: ptBR })
+                        ) : (
+                          <span>Selecione a data</span>
+                        )}
                       </Button>
                     </FormControl>
                   </PopoverTrigger>

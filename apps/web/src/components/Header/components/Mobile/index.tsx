@@ -9,6 +9,8 @@ import Image from 'next/image';
 import { usePathname } from '@/i18n/routing';
 import { DashboardContent } from '../../dashboard-content';
 
+const IS_INTERNATIONALIZATION_ENABLED = false;
+
 export function HeaderMobile() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -34,7 +36,7 @@ export function HeaderMobile() {
       />
 
       <div className="flex items-center gap-2">
-        {!isHomePage && <LocaleSwitcher />}
+        {!isHomePage && IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
 
         {isDashboardPage && <DashboardContent />}
       </div>

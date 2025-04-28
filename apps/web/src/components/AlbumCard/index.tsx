@@ -55,8 +55,14 @@ export function AlbumCard({
         <div className="flex flex-col items-start p-3 pb-2 z-10 bg-gradient-to-t from-black/70 to-transparent">
           <h3 className="font-title_three text-background font-bold">{title}</h3>
           <div className="flex justify-between w-full">
-            <span className="font-body_two text-background capitalize">
-              {new Date(date)?.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            <span className="font-body_two text-background">
+              {(() => {
+                const dateString = new Date(date).toLocaleDateString('pt-BR', {
+                  month: 'long',
+                  year: 'numeric',
+                });
+                return dateString.charAt(0).toUpperCase() + dateString.slice(1);
+              })()}
             </span>
             <span className="font-body_two text-accent">
               {photosCount} {photosCountLabel}

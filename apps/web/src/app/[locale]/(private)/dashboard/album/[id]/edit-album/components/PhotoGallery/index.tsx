@@ -17,6 +17,22 @@ export function PhotoGallery({
   onPageChange,
   onDeletePhotos,
 }: PhotoGalleryProps) {
+  const formattedSelectedDate = selectedDate
+    ? new Date(selectedDate)
+        .toLocaleDateString('pt-BR', {
+          month: 'long',
+          year: 'numeric',
+        })
+        .charAt(0)
+        .toUpperCase() +
+      new Date(selectedDate)
+        .toLocaleDateString('pt-BR', {
+          month: 'long',
+          year: 'numeric',
+        })
+        .slice(1)
+    : 'Sem data definida';
+
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
       <div className="mb-3">
@@ -31,9 +47,9 @@ export function PhotoGallery({
         <p className="font-body_two">
           <span className="text-primary font-bold">
             {pagination?.total || filteredPhotos.length}
-            {(pagination?.total || filteredPhotos.length) === 1 ? ' foto' : ' fotos'}
+            {(pagination?.total || filteredPhotos.length) === 1 ? ' foto ' : ' fotos '}
           </span>
-          {selectedDate ? ` em ${selectedDate}` : ' sem data definida'}
+          em {formattedSelectedDate}
         </p>
 
         {selectedPhotos.length > 0 && (

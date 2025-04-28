@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { MonthPickerProps } from './types';
+import { ptBR } from 'date-fns/locale';
 
 export function MonthPicker({
   value,
@@ -28,18 +29,18 @@ export function MonthPicker({
   }, [value]);
 
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
   ];
 
   const handleMonthSelect = (monthIndex: number) => {
@@ -65,7 +66,7 @@ export function MonthPicker({
         <Button
           variant="outline"
           className={cn(
-            'w-full justify-start text-left font-normal hover:bg-secondary-10',
+            'w-full justify-start text-left font-normal hover:bg-secondary-10 capitalize',
             !date && 'text-text/55',
             className,
           )}
@@ -73,8 +74,14 @@ export function MonthPicker({
           aria-label="Selecionar mês"
         >
           <CalendarIcon color="#08171C40" className="mr-2 h-4 w-4" />
-          {date ? format(date, 'MMMM yyyy') : placeholder}
-          {name && <input type="hidden" name={name} value={date ? format(date, 'yyyy-MM') : ''} />}
+          {date ? format(date, 'MMMM yyyy', { locale: ptBR }) : placeholder}
+          {name && (
+            <input
+              type="hidden"
+              name={name}
+              value={date ? format(date, 'yyyy-MM', { locale: ptBR }) : ''}
+            />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 bg-secondary" align="start">
@@ -87,9 +94,9 @@ export function MonthPicker({
             aria-label="Ano anterior"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">Previous year</span>
+            <span className="sr-only">Ano anterior</span>
           </Button>
-          <div className="font-medium">{format(date, 'yyyy')}</div>
+          <div className="font-medium">{format(date, 'yyyy', { locale: ptBR })}</div>
           <Button
             variant="outline"
             size="icon"
@@ -98,7 +105,7 @@ export function MonthPicker({
             aria-label="Ano posterior"
           >
             <ChevronRight className="h-4 w-4" />
-            <span className="sr-only">Next year</span>
+            <span className="sr-only">Ano posterior</span>
           </Button>
         </div>
         <div className="grid grid-cols-3 gap-2 p-2">

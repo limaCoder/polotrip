@@ -6,6 +6,8 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Link from 'next/link';
 import Image from 'next/image';
 
+const IS_INTERNATIONALIZATION_ENABLED = false;
+
 export function HeaderAlbumMobile() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,9 +43,11 @@ export function HeaderAlbumMobile() {
           >
             <Tv className="h-6 w-6 text-primary" />
           </button>
-          <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
-            <LocaleSwitcher hideChevron />
-          </div>
+          {IS_INTERNATIONALIZATION_ENABLED && (
+            <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
+              <LocaleSwitcher hideChevron />
+            </div>
+          )}
         </div>
       </div>
     </div>
