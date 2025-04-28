@@ -8,6 +8,7 @@ import { MasonryGallery } from './masonry-gallery';
 import { Photo, PhotoTimelineProps } from './types';
 import useGetPublicAlbumPhotos from '@/hooks/network/queries/useGetPublicAlbumPhotos';
 import { InfiniteScroll } from '@/components/InfiniteScroll';
+import { ScrollArea } from '../ui/scroll-area';
 
 export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
   const { timelineEvents, fetchNextPage, hasNextPage, isFetching } =
@@ -76,7 +77,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
               />
             </div>
 
-            {timelineEvents.map((event, index) => (
+            {timelineEvents?.map((event, index) => (
               <div key={index} className="mb-16 md:mb-24">
                 <div className="flex items-center mb-6 md:mb-8 pl-4">
                   <div className="relative flex items-center justify-center">
@@ -85,12 +86,12 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                     </div>
                   </div>
                   <h2 className="text-xl md:text-2xl font-bold ml-10 md:ml-14 text-secondary">
-                    {event.date}
+                    {event?.date}
                   </h2>
                 </div>
 
                 <div className="px-12 md:pl-20">
-                  <MasonryGallery photos={event.photos} onPhotoClick={setSelectedPhoto} />
+                  <MasonryGallery photos={event?.photos} onPhotoClick={setSelectedPhoto} />
                 </div>
               </div>
             ))}
@@ -121,33 +122,42 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
               onClick={() => setSelectedPhoto(null)}
             />
 
-            <div className="relative z-50 w-full h-full max-w-7xl max-h-[90vh] flex items-center justify-center p-4">
+            <div className="relative z-50 w-full h-full max-w-7xl max-h-[90vh] flex flex-col items-center justify-center p-4">
               <motion.div
-                layoutId={`photo-${selectedPhoto.id}`}
-                className="relative w-full h-full max-w-5xl flex items-center justify-center"
+                layoutId={`photo-${selectedPhoto?.id}`}
+                className="relative w-full max-w-5xl h-[65vh] flex items-center justify-center"
                 onClick={e => e.stopPropagation()}
               >
                 <Image
-                  src={selectedPhoto.src || '/placeholder.svg'}
-                  alt={selectedPhoto.alt}
+                  src={selectedPhoto?.src}
+                  alt={selectedPhoto?.alt}
                   fill
                   sizes="100vw"
-                  className="object-contain"
+                  className="object-contain rounded-sm"
                   priority
                 />
-
                 <motion.button
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ delay: 0.2 }}
                   onClick={() => setSelectedPhoto(null)}
-                  className="absolute top-0 -right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
+                  className="absolute top-0 right-0 xl:-right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
                   aria-label="Fechar"
                 >
                   <X size={24} />
                 </motion.button>
               </motion.div>
+              {selectedPhoto?.description && (
+                <div className="w-full max-w-3xl mt-4">
+                  <ScrollArea
+                    type="always"
+                    className="h-24 rounded-md border bg-background/80 p-3 text-text"
+                  >
+                    <p className="whitespace-pre-line">{selectedPhoto?.description}</p>
+                  </ScrollArea>
+                </div>
+              )}
             </div>
           </div>
         )}

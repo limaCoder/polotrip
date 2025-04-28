@@ -4,6 +4,7 @@ interface Photo {
   alt: string;
   width: number;
   height: number;
+  description: string;
 }
 
 interface TimelineEvent {

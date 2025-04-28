@@ -28,27 +28,28 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
   const eventsByDate = new Map<string, TimelinePhoto[]>();
 
   data?.pages.forEach(page => {
-    page.timelineEvents.forEach(event => {
+    page?.timelineEvents.forEach(event => {
       const formattedDate = new Date(event.date).toLocaleDateString('pt-BR', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
       });
 
-      const transformedPhotos: TimelinePhoto[] = event.photos.map(photo => {
+      const transformedPhotos: TimelinePhoto[] = event?.photos?.map(photo => {
         const displayWidth = MASONRY_COLUMN_WIDTH;
         let displayHeight = 400;
 
-        if (photo.width && photo.height) {
-          displayHeight = Math.round((photo.height / photo.width) * displayWidth);
+        if (photo?.width && photo?.height) {
+          displayHeight = Math.round((photo?.height / photo?.width) * displayWidth);
         }
 
         return {
-          id: photo.id,
-          src: photo.imageUrl,
-          alt: photo.description || 'Foto do álbum',
+          id: photo?.id,
+          src: photo?.imageUrl,
+          alt: photo?.description || 'Foto do álbum',
           width: displayWidth,
           height: displayHeight,
+          description: photo?.description || '',
         };
       });
 

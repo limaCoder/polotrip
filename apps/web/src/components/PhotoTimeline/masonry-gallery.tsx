@@ -25,13 +25,13 @@ export function MasonryGallery({
 
       const newColumns: Photo[][] = Array.from({ length: numColumns }, () => []);
 
-      photos.forEach(photo => {
-        const columnHeights = newColumns.map(col =>
-          col.reduce((sum, photo) => sum + photo.height, 0),
+      photos?.forEach(photo => {
+        const columnHeights = newColumns?.map(col =>
+          col.reduce((sum, photo) => sum + photo?.height, 0),
         );
-        const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+        const shortestColumnIndex = columnHeights?.indexOf(Math.min(...columnHeights));
 
-        newColumns[shortestColumnIndex].push(photo);
+        newColumns[shortestColumnIndex]?.push(photo);
       });
 
       setColumns(newColumns);
@@ -45,29 +45,32 @@ export function MasonryGallery({
 
   return (
     <div className="flex gap-4 w-full">
-      {columns.map((column, columnIndex) => (
+      {columns?.map((column, columnIndex) => (
         <div key={columnIndex} className="flex flex-col gap-4 flex-1">
-          {column.map(photo => (
+          {column?.map(photo => (
             <motion.div
-              key={photo.id}
+              key={photo?.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.5 }}
               className="relative overflow-hidden rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
-              onClick={() => onPhotoClick(photo)}
+              onClick={() => {
+                console.log('photo', photo);
+                onPhotoClick(photo);
+              }}
             >
               <div
                 style={{
                   position: 'relative',
                   width: '100%',
-                  paddingBottom: `${(photo.height / photo.width) * 100}%`,
+                  paddingBottom: `${(photo?.height / photo?.width) * 100}%`,
                 }}
               >
-                <motion.div layoutId={`photo-${photo.id}`} className="absolute inset-0">
+                <motion.div layoutId={`photo-${photo?.id}`} className="absolute inset-0">
                   <Image
-                    src={photo.src || '/placeholder.svg'}
-                    alt={photo.alt}
+                    src={photo?.src}
+                    alt={photo?.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover hover:scale-105 transition-transform duration-300"
