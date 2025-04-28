@@ -18,8 +18,9 @@ export function HeaderMobile() {
 
   const isHomePage = pathname === '/';
   const isDashboardPage = pathname === '/dashboard';
+  const isDashboardDirectory = pathname.startsWith('/dashboard');
 
-  const logoHref = isDashboardPage ? `/dashboard` : `/`;
+  const logoHref = isDashboardDirectory ? `/dashboard` : `/`;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
