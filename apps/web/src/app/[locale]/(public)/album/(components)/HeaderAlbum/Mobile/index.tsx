@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, Share2, FullscreenIcon } from 'lucide-react';
+import { Menu, Share2, Tv } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -37,9 +37,9 @@ export function HeaderAlbumMobile() {
           </button>
           <button
             className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
-            aria-label="Tela cheia"
+            aria-label="Modo TV"
           >
-            <FullscreenIcon className="h-6 w-6 text-primary" />
+            <Tv className="h-6 w-6 text-primary" />
           </button>
           <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
             <LocaleSwitcher hideChevron />

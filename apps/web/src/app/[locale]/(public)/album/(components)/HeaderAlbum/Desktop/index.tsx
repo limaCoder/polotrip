@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FullscreenIcon, Share2 } from 'lucide-react';
+import { Tv, Share2 } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Image from 'next/image';
 
@@ -13,10 +13,10 @@ export function HeaderAlbumDesktop() {
       <div className="flex items-center gap-6">
         <button
           className="flex items-center gap-2 text-background hover:text-primary transition-colors"
-          aria-label="Tela cheia"
+          aria-label="Modo TV"
         >
-          <FullscreenIcon size={20} className="text-primary" />
-          <span className="font-body_one w-max">Tela cheia</span>
+          <Tv size={20} className="text-primary" />
+          <span className="font-body_one w-max">Modo TV</span>
         </button>
 
         <button
