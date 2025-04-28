@@ -5,11 +5,43 @@ import { Menu, Share2, Tv } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Link from 'next/link';
 import Image from 'next/image';
+import { toast } from 'sonner';
+import { ScreenOrientationWithLock } from './types';
 
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
 export function HeaderAlbumMobile() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleTvMode = async () => {
+    if (document.documentElement.requestFullscreen) {
+      await document.documentElement.requestFullscreen();
+    }
+
+    if ('orientation' in screen) {
+      try {
+        await (screen.orientation as ScreenOrientationWithLock).lock?.('landscape');
+      } catch {
+        toast.info(
+          'Para melhor experiência, gire seu aparelho para o modo paisagem (horizontal).',
+          {
+            duration: 4000,
+            richColors: true,
+          },
+        );
+      }
+    }
+
+    const scrollStep = 10;
+    const delay = 10;
+    function smoothAutoScroll() {
+      if (window.scrollY + window.innerHeight < document.body.scrollHeight) {
+        window.scrollBy(0, scrollStep);
+        setTimeout(smoothAutoScroll, delay);
+      }
+    }
+    smoothAutoScroll();
+  };
 
   return (
     <div className="flex md:hidden w-full justify-between items-center">
@@ -40,6 +72,7 @@ export function HeaderAlbumMobile() {
           <button
             className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
             aria-label="Modo TV"
+            onClick={handleTvMode}
           >
             <Tv className="h-6 w-6 text-primary" />
           </button>
