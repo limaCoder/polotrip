@@ -57,7 +57,7 @@ export default async function DashboardPage() {
                     fallback={
                       <SkeletonList
                         count={3}
-                        className="w-[100%] lg:w-[31%] h-[256px] rounded-2xl shadow-md"
+                        className="w-[100%] h-[256px] rounded-2xl shadow-md"
                       />
                     }
                   >

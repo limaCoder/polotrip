@@ -14,6 +14,7 @@ export function Faq() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       className="py-12 bg-secondary-10 lg:bg-background"
+      id="faq"
     >
       <div className="container mx-auto lg:px-9 px-4 flex flex-col lg:flex-row gap-12">
         <div className="flex w-full lg:w-2/5 flex-col">

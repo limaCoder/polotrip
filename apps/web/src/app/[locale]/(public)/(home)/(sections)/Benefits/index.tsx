@@ -8,6 +8,7 @@ export function Benefits() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       className="py-8 lg:py-16 bg-secondary-10 lg:bg-background"
+      id="benefits"
     >
       <div className="container mx-auto px-4 lg:px-9">
         <h2 className="font-title_two text-primary text-center font-bold mb-4 md:mb-12">

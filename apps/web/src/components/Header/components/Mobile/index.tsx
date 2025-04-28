@@ -6,7 +6,7 @@ import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { cn } from '@/lib/cn';
 import Image from 'next/image';
-import { usePathname } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { DashboardContent } from '../../dashboard-content';
 
 const IS_INTERNATIONALIZATION_ENABLED = false;
@@ -19,21 +19,25 @@ export function HeaderMobile() {
   const isHomePage = pathname === '/';
   const isDashboardPage = pathname === '/dashboard';
 
+  const logoHref = isDashboardPage ? `/dashboard` : `/`;
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <div className="lg:hidden bg-background py-4 container relative flex justify-between items-center px-4">
-      <Image
-        src="/brand/logo.svg"
-        alt="Logo"
-        width={180}
-        height={40}
-        className="w-[150px] md:w-[180px]"
-        sizes="(max-width: 768px) 150px, 180px"
-        priority
-      />
+      <Link href={logoHref}>
+        <Image
+          src="/brand/logo.svg"
+          alt="Logo"
+          width={180}
+          height={40}
+          className="w-[150px] md:w-[180px]"
+          sizes="(max-width: 768px) 150px, 180px"
+          priority
+        />
+      </Link>
 
       <div className="flex items-center gap-2">
         {!isHomePage && IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
@@ -49,16 +53,16 @@ export function HeaderMobile() {
 
       <div
         className={cn(
-          'absolute top-0 left-0 w-full h-[300px] bg-background p-6 flex flex-col gap-4 items-start justify-center transition-transform duration-700 z-10 shadow-lg',
+          'absolute top-0 left-0 w-full bg-background p-6 flex flex-col gap-4 items-start justify-center transition-transform duration-700 z-10 shadow-lg',
           isMenuOpen ? 'translate-y-16' : '-translate-y-full',
         )}
       >
         <>
-          <a href="#vantagens" className="text-black" onClick={toggleMenu} aria-label="Vantagens">
+          <a href="#benefits" className="text-black" onClick={toggleMenu} aria-label="Vantagens">
             Vantagens
           </a>
           <a
-            href="#como-funciona"
+            href="#how-it-works"
             className="text-black"
             onClick={toggleMenu}
             aria-label="Como funciona"
@@ -66,7 +70,7 @@ export function HeaderMobile() {
             Como funciona
           </a>
           <a
-            href="#perguntas-frequentes"
+            href="#faq"
             className="text-black"
             onClick={toggleMenu}
             aria-label="Perguntas frequentes"
@@ -82,9 +86,12 @@ export function HeaderMobile() {
             <Album />
           </ButtonNavigation>
         </>
-        <div className="flex w-full justify-center">
-          <LocaleSwitcher />
-        </div>
+
+        {IS_INTERNATIONALIZATION_ENABLED && (
+          <div className="flex w-full justify-center">
+            <LocaleSwitcher />
+          </div>
+        )}
       </div>
     </div>
   );

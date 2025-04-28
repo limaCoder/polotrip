@@ -8,6 +8,7 @@ export async function getPublicAlbum({
   try {
     const data = await api.get<GetPublicAlbumResponse>(`v1/public/albums/${albumId}`, {
       signal,
+      cache: 'force-cache',
     });
 
     return data;

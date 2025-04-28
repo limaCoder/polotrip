@@ -46,10 +46,10 @@ export function InfiniteScroll({
   return (
     <>
       {isFetching ? (
-        <div className="h-full w-full">
+        <>
           {loadingComponent}
           {hasLoadingMessage && <div>{loadingMessage}</div>}
-        </div>
+        </>
       ) : null}
       <div ref={infiniteScrollRef} />
     </>

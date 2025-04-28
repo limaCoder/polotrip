@@ -30,9 +30,7 @@ export function AlbumsList() {
         hasNextPage={albums?.hasNextPage}
         isFetching={albums?.isFetching}
         loadingComponent={
-          <div className="flex justify-between flex-wrap gap-9">
-            <SkeletonList count={3} className="h-[256px] rounded-2xl shadow-md" />
-          </div>
+          <SkeletonList count={3} className="w-[100%] h-[256px] rounded-2xl shadow-md" />
         }
         rootMargin="100px"
       />
