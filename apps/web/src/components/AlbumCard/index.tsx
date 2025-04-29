@@ -8,6 +8,8 @@ import {
   generateAlbumLink,
 } from '@/constants/albumsEnum';
 import { cn } from '@/lib/cn';
+import { EllipsisVertical } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 export function AlbumCard({
   id,
@@ -29,50 +31,73 @@ export function AlbumCard({
   const albumStatusTextColor =
     AlbumStatusTextColorEnum[stepAfterPayment as keyof typeof AlbumStatusTextColorEnum];
 
+  const isAlbumPublished = stepAfterPayment === 'published';
+
   return (
-    <Link
-      href={albumLink}
-      className="h-[256px] rounded-2xl shadow-md overflow-hidden hover:brightness-130 transition-all duration-300"
-    >
-      <div className="w-full h-[192px] rounded-t-xl relative flex flex-col justify-end">
-        <Image
-          src={albumImage}
-          alt={title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover brightness-60"
-          priority
-        />
-        <span
-          className={cn(
-            'absolute top-2 right-2 font-bold px-2 py-1 rounded-full text-sm',
-            albumStatusTextColor,
-            albumStatusColor,
-          )}
-        >
-          {albumStatusLabel}
-        </span>
-        <div className="flex flex-col items-start p-3 pb-2 z-10 bg-gradient-to-t from-black/70 to-transparent">
-          <h3 className="font-title_three text-background font-bold">{title}</h3>
-          <div className="flex justify-between w-full">
-            <span className="font-body_two text-background">
-              {(() => {
-                const dateString = new Date(date).toLocaleDateString('pt-BR', {
-                  month: 'long',
-                  year: 'numeric',
-                });
-                return dateString.charAt(0).toUpperCase() + dateString.slice(1);
-              })()}
-            </span>
-            <span className="font-body_two text-accent">
-              {photosCount} {photosCountLabel}
-            </span>
+    <div className="relative rounded-2xl shadow-md overflow-hidden">
+      <Link
+        href={albumLink}
+        className="h-[256px] rounded-2xl hover:brightness-130 transition-all duration-300"
+      >
+        <div className="w-full h-[192px] rounded-t-xl relative flex flex-col justify-end">
+          <Image
+            src={albumImage}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover brightness-60"
+            priority
+          />
+          <span
+            className={cn(
+              'absolute top-2 right-2 font-bold px-2 py-1 rounded-full text-sm',
+              albumStatusTextColor,
+              albumStatusColor,
+            )}
+          >
+            {albumStatusLabel}
+          </span>
+          <div className="flex flex-col items-start p-3 pb-2 z-10 bg-gradient-to-t from-black/70 to-transparent">
+            <h3 className="font-title_three text-background font-bold">{title}</h3>
+            <div className="flex justify-between w-full">
+              <span className="font-body_two text-background">
+                {(() => {
+                  const dateString = new Date(date).toLocaleDateString('pt-BR', {
+                    month: 'long',
+                    year: 'numeric',
+                  });
+                  return dateString.charAt(0).toUpperCase() + dateString.slice(1);
+                })()}
+              </span>
+              <span className="font-body_two text-accent">
+                {photosCount} {photosCountLabel}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="h-16 flex items-center justify-start pl-3 border-t border-black/10 shadow-xl">
-        <p className="font-body_one text-primary hover:underline">Visualizar</p>
-      </div>
-    </Link>
+        <div className="h-16 flex items-center justify-between px-3 border-t border-black/10 shadow-xl">
+          <p className="font-body_one text-primary hover:underline">Visualizar</p>
+        </div>
+      </Link>
+      {isAlbumPublished && (
+        <div className="absolute bottom-4 right-3 z-10">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="p-2 rounded-full hover:bg-black/10 transition-all duration-300">
+                <EllipsisVertical size={16} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="bg-background">
+              <Link
+                className="text-primary w-full flex flex-grow hover:brightness-130 transition-all duration-300"
+                href={`/dashboard/album/${id}/edit-album`}
+              >
+                Editar
+              </Link>
+            </PopoverContent>
+          </Popover>
+        </div>
+      )}
+    </div>
   );
 }

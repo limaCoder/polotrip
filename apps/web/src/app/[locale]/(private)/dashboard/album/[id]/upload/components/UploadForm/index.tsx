@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { Upload, X, Loader2 } from 'lucide-react';
@@ -14,13 +13,13 @@ import { useUploadForm } from '@/app/[locale]/(private)/dashboard/album/[id]/upl
 import { Params } from './types';
 
 export function UploadForm() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { id: albumId, locale } = useParams<Params>();
 
   const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
 
   const {
     uploadFormState,
+    fileInputRef,
     handleFiles,
     removeFile,
     clearAll,

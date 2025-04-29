@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import pLimit from 'p-limit';
 import { toast } from 'sonner';
@@ -14,10 +14,14 @@ import {
   createPreviewUrlAsync,
 } from '@/helpers/uploadHelpers';
 import { PhotoFile, UseUploadFormOptions, UploadFormState } from './types';
+import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import { QueryClient } from '@tanstack/react-query';
 
 export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
   const router = useRouter();
+  const queryClient = useMemo(() => new QueryClient(), []);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadFormState, setUploadFormState] = useState<UploadFormState>({
     files: [],
     isUploading: false,
@@ -152,6 +156,10 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     });
 
     updateUploadFormState({ files: [] });
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }, [uploadFormState?.files, updateUploadFormState]);
 
   const checkForMetadata = useCallback(() => {
@@ -317,6 +325,10 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         duration: 5000,
         richColors: true,
       });
+
+      queryClient.invalidateQueries({
+        queryKey: [albumKeys.all],
+      });
     } catch (error) {
       console.error('Error during upload:', error);
 
@@ -325,7 +337,7 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         isUploading: false,
       });
     }
-  }, [albumId, uploadFormState, clearAll, router, options, updateUploadFormState]);
+  }, [albumId, uploadFormState, clearAll, router, options, updateUploadFormState, queryClient]);
 
   const handleUploadClick = useCallback(() => {
     const { files, isUploading, keepMetadata } = uploadFormState;
@@ -389,6 +401,7 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
 
   return {
     uploadFormState,
+    fileInputRef,
     handleFiles,
     removeFile,
     clearAll,

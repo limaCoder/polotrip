@@ -121,6 +121,8 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }
     };
 
+    const inputValueMessage = isLoading ? 'Buscando localizações...' : inputValue;
+
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         if (
@@ -217,7 +219,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
               className,
             )}
             placeholder={placeholder}
-            value={inputValue}
+            value={inputValueMessage}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
