@@ -122,6 +122,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
             </div>
           </section>
         )}
+
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense
             fallback={

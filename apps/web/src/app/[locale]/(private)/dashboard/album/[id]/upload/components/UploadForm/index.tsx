@@ -18,6 +18,7 @@ export function UploadForm() {
   const { id: albumId, locale } = useParams<Params>();
 
   const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
+
   const {
     uploadFormState,
     handleFiles,

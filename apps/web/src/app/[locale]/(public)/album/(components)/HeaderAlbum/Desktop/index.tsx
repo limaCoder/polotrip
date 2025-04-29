@@ -4,28 +4,12 @@ import Link from 'next/link';
 import { Tv, Share2 } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Image from 'next/image';
-import { useCallback } from 'react';
+import { useDesktopAlbumInTvMode } from '@/hooks/use-desktop-album-in-tv-mode';
 
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
 export function HeaderAlbumDesktop() {
-  const handleTvMode = useCallback(async () => {
-    if (document.documentElement.requestFullscreen) {
-      await document.documentElement.requestFullscreen();
-    }
-
-    const scrollStep = 10;
-    const delay = 10;
-
-    function smoothAutoScroll() {
-      if (window.scrollY + window.innerHeight < document.body.scrollHeight) {
-        window.scrollBy(0, scrollStep);
-        setTimeout(smoothAutoScroll, delay);
-      }
-    }
-
-    smoothAutoScroll();
-  }, []);
+  const { handleTvMode } = useDesktopAlbumInTvMode();
 
   return (
     <div className="hidden md:flex w-full justify-between items-center">

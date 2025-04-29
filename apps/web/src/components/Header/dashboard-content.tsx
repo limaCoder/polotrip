@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -11,49 +10,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
-import { signOut, getSession } from '@/lib/auth/client';
-import { usePathname, useRouter } from '@/i18n/routing';
-import { UserDataState } from './types';
 import { ChevronDownIcon } from 'lucide-react';
+import { useHeaderDashboardContent } from './useHeaderDashboardContent';
 
 export function DashboardContent() {
-  const [userData, setUserData] = useState<UserDataState>({
-    userAvatar: undefined,
-    userName: undefined,
-    usernameInitials: undefined,
-  });
+  const headerContent = useHeaderDashboardContent();
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const isDashboard = pathname === `/dashboard`;
+  if (!headerContent) return null;
 
-  const getUserData = useCallback(async () => {
-    const session = await getSession();
-
-    const userAvatar = session?.data?.user?.image ?? undefined;
-    const userName = session?.data?.user?.name ?? undefined;
-
-    const usernameInitials = userName
-      ?.split(' ')
-      .map(name => name[0])
-      .join('');
-
-    setUserData({ userAvatar, userName, usernameInitials });
-  }, []);
-
-  async function handleLogout() {
-    await signOut({});
-
-    router.push('/sign-in');
-  }
-
-  useEffect(() => {
-    if (!isDashboard) return;
-
-    getUserData();
-  }, [getUserData, isDashboard]);
-
-  if (!isDashboard) return null;
+  const { userData, handleLogout } = headerContent;
 
   return (
     <>

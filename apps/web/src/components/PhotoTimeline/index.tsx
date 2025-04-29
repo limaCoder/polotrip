@@ -1,62 +1,27 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { useScroll, useTransform, AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
 import { MasonryGallery } from './masonry-gallery';
-import { Photo, PhotoTimelineProps } from './types';
-import useGetPublicAlbumPhotos from '@/hooks/network/queries/useGetPublicAlbumPhotos';
+import { PhotoTimelineProps } from './types';
 import { InfiniteScroll } from '@/components/InfiniteScroll';
 import { ScrollArea } from '../ui/scroll-area';
+import { usePhotoTimeline } from './use-photo-timeline';
 
 export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
-  const { timelineEvents, fetchNextPage, hasNextPage, isFetching } =
-    useGetPublicAlbumPhotos(albumId);
-
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    const updateHeight = () => {
-      if (timelineRef.current) {
-        const rect = timelineRef.current.getBoundingClientRect();
-        setHeight(rect.height);
-      }
-    };
-
-    updateHeight();
-
-    window.addEventListener('resize', updateHeight);
-
-    const timeoutId = setTimeout(updateHeight, 500);
-
-    return () => {
-      window.removeEventListener('resize', updateHeight);
-      clearTimeout(timeoutId);
-    };
-  }, [timelineRef, timelineEvents.length]);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 10%', 'end 90%'],
-  });
-
-  const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
-  const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedPhoto(null);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  const {
+    timelineEvents,
+    selectedPhoto,
+    setSelectedPhoto,
+    heightTransform,
+    opacityTransform,
+    containerRef,
+    timelineRef,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+  } = usePhotoTimeline({ albumId });
 
   return (
     <div className="relative w-full bg-secondary-10" ref={containerRef}>

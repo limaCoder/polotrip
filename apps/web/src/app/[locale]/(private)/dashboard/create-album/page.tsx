@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { AlbumForm } from './components/AlbumForm';
+import { AlbumForm } from './components/album-form';
 import { BackButton } from '../(components)/back-button';
 import { Metadata } from 'next';
 

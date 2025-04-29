@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useInfiniteScroll } from './use-infinite-scroll';
 import { InfiniteScrollProps } from './types';
 
 export function InfiniteScroll({
@@ -14,34 +14,14 @@ export function InfiniteScroll({
   loadingMessage,
   hasLoadingMessage = false,
 }: InfiniteScrollProps) {
-  const infiniteScrollRef = useRef<HTMLDivElement>(null);
-
-  const observerCallback = useCallback(
-    ([entry]: IntersectionObserverEntry[]) => {
-      const isIntersecting = entry?.isIntersecting;
-
-      if (isIntersecting && hasNextPage && !isFetching) {
-        fetchNextPage();
-      }
-    },
-    [fetchNextPage, hasNextPage, isFetching],
-  );
-
-  useEffect(() => {
-    const intersectionObserver = new IntersectionObserver(observerCallback, {
-      root,
-      rootMargin,
-      threshold: threshold || 0,
-    });
-
-    if (infiniteScrollRef?.current) {
-      intersectionObserver.observe(infiniteScrollRef?.current);
-    }
-
-    return () => {
-      intersectionObserver.disconnect();
-    };
-  }, [infiniteScrollRef, root, rootMargin, threshold, observerCallback]);
+  const infiniteScrollRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    root,
+    rootMargin,
+    threshold,
+  });
 
   return (
     <>
