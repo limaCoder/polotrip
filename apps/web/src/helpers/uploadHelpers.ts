@@ -1,5 +1,6 @@
 import exifr from 'exifr';
 import imageCompression from 'browser-image-compression';
+import { heicTo, isHeic } from 'heic-to';
 
 /**
  * Extract EXIF metadata from an image
@@ -96,6 +97,24 @@ export async function compressImage(
   },
 ): Promise<File> {
   try {
+    const heicFile = await isHeic(file);
+
+    if (heicFile) {
+      const heicQuality = options?.quality ?? 0.6;
+      const heicFileConverted = await heicTo({
+        blob: file,
+        type: 'image/jpeg',
+        quality: heicQuality,
+      });
+
+      const newFileName = file.name.replace(/\.(heic|HEIC)$/, '.jpg');
+
+      file = new File([heicFileConverted], newFileName, {
+        type: 'image/jpeg',
+        lastModified: file.lastModified,
+      });
+    }
+
     const compressionOptions = {
       maxSizeMB: options?.maxSizeMB ?? 1,
       maxWidthOrHeight: options?.maxWidthOrHeight ?? 1920,
@@ -111,7 +130,6 @@ export async function compressImage(
     const lastModified = file.lastModified;
 
     const compressedImage = await imageCompression(file, compressionOptions);
-
     const fixedCompressedFile = new File([compressedImage], fileName, {
       type: compressedImage.type,
       lastModified: lastModified,
@@ -156,11 +174,56 @@ export function generateUniqueId(): string {
 }
 
 /**
+ * Verify if the file is in HEIC format
+ */
+export function isHeicFile(file?: File): boolean {
+  if (!file) return false;
+
+  return (
+    file.type === 'image/heic' ||
+    file.type === 'image/heif' ||
+    file.name.toLowerCase().endsWith('.heic')
+  );
+}
+
+/**
+ * Create a preview URL for a file, converting HEIC if necessary
+ */
+export async function createPreviewUrlAsync(file?: File): Promise<string> {
+  if (!file) {
+    return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24px" fill="%23555">Sem Preview</text></svg>';
+  }
+
+  try {
+    const heicFile = await isHeic(file);
+
+    if (heicFile) {
+      const heicFileConverted = await heicTo({
+        blob: file,
+        type: 'image/jpeg',
+        quality: 0.5,
+      });
+
+      return URL.createObjectURL(heicFileConverted);
+    }
+
+    return URL.createObjectURL(file);
+  } catch (error) {
+    console.error('Error creating preview:', error);
+    return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24px" fill="%23555">Erro</text></svg>';
+  }
+}
+
+/**
  * Create a preview URL for a file
  */
 export function createPreviewUrl(file?: File): string {
   if (!file) {
     return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24px" fill="%23555">Sem Preview</text></svg>';
+  }
+
+  if (isHeicFile(file)) {
+    return '/pages/upload/album-card-fallback.png';
   }
 
   try {

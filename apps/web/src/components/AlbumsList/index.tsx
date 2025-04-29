@@ -9,7 +9,7 @@ export function AlbumsList() {
   const albums = useGetInfiniteAlbums();
 
   if (albums?.items?.length === 0) {
-    return <p className="text-center text-gray-500">Nenhum álbum encontrado</p>;
+    return <p className="w-full text-center md:text-left text-gray-500">Nenhum álbum encontrado</p>;
   }
 
   return (

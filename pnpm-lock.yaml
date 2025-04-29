@@ -235,6 +235,9 @@ importers:
       exifr:
         specifier: ^7.1.3
         version: 7.1.3
+      heic-to:
+        specifier: ^1.1.12
+        version: 1.1.12
       ky:
         specifier: ^1.7.5
         version: 1.7.5
@@ -4701,6 +4704,9 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  heic-to@1.1.12:
+    resolution: {integrity: sha512-qkvjvvgbb0DtyBJts9RIy7Rka8ZnhJIPVG4uneNLiLD0OOJogzCjsLF4howhuu0JJ0Y8w77bfJ1X3j+ebZgtMA==}
 
   homedir-polyfill@1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
@@ -11643,6 +11649,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  heic-to@1.1.12: {}
 
   homedir-polyfill@1.0.3:
     dependencies:

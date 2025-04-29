@@ -72,10 +72,10 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
 
   return (
     <>
-      <main className="min-h-screen bg-background flex flex-col">
+      <main className="min-h-screen bg-secondary-10 flex flex-col">
         <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-black/50 via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 bg-text/70 via-transparent to-transparent z-10" />
             <Image
               src={albumData?.album.coverImageUrl ?? '/pages/album/album-card-fallback.png'}
               alt="Capa do álbum"
@@ -89,52 +89,50 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
           <HeaderAlbum />
 
           <div className="relative z-20 w-full flex flex-col items-start p-4 sm:p-8 md:pl-12 md:pb-10">
-            <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-background">
+            <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-secondary">
               {albumData?.album.title}
             </h1>
 
             {albumData?.album.description && (
-              <p className="font-title_three text-xl md:text-2xl text-background mb-6">
+              <p className="font-title_three text-lg md:text-2xl text-background font-bold pt-2">
                 {albumData?.album.description}
               </p>
             )}
           </div>
         </div>
 
-        <main className="bg-background">
-          {hasLocations && (
-            <section className="container px-4 py-8">
-              <div className="flex items-center gap-2 mb-4">
-                <MapPin className="text-primary hidden md:block" size={24} />
-                <h2 className="font-title_two text-2xl text-primary">
-                  ✨ Esses foram os momentos incríveis de {albumData?.user?.name.split(' ')[0]}
-                </h2>
+        {hasLocations && (
+          <section className="container px-4 py-8">
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin className="text-primary hidden md:block" size={24} />
+              <h2 className="font-title_two text-2xl text-primary">
+                ✨ Esses foram os momentos incríveis de {albumData?.user?.name.split(' ')[0]}
+              </h2>
+            </div>
+            <div className="w-full h-[400px] rounded-lg overflow-hidden">
+              <Suspense
+                fallback={
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    Carregando mapa...
+                  </div>
+                }
+              >
+                <PublicPhotoMap locationsPromise={locationsDataPromise} />
+              </Suspense>
+            </div>
+          </section>
+        )}
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <Suspense
+            fallback={
+              <div className="w-full py-20 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
-              <div className="w-full h-[400px] rounded-lg overflow-hidden">
-                <Suspense
-                  fallback={
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
-                      Carregando mapa...
-                    </div>
-                  }
-                >
-                  <PublicPhotoMap locationsPromise={locationsDataPromise} />
-                </Suspense>
-              </div>
-            </section>
-          )}
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <Suspense
-              fallback={
-                <div className="w-full py-20 flex items-center justify-center">
-                  <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              }
-            >
-              <PhotoTimeline albumId={albumId} />
-            </Suspense>
-          </HydrationBoundary>
-        </main>
+            }
+          >
+            <PhotoTimeline albumId={albumId} />
+          </Suspense>
+        </HydrationBoundary>
       </main>
       <Footer />
     </>

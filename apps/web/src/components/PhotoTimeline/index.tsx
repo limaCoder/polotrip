@@ -59,7 +59,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
   }, []);
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative w-full bg-secondary-10" ref={containerRef}>
       <div className="container py-10">
         {timelineEvents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">

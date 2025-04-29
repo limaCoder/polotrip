@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { use } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { type PublicPhotoMapProps } from './types';
@@ -18,9 +18,9 @@ export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
 
-  const handleMarkerClick = (photoId: string) => {
-    console.log('Clicou na foto:', photoId);
-  };
+  const handleMarkerClick = useCallback((photoId: string) => {
+    console.log('Clicked photo:', photoId);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !L) return;

@@ -11,6 +11,7 @@ import {
   createPreviewUrl,
   generateUniqueId,
   revokePreviewUrl,
+  createPreviewUrlAsync,
 } from '@/helpers/uploadHelpers';
 import { PhotoFile, UseUploadFormOptions, UploadFormState } from './types';
 
@@ -82,6 +83,19 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
 
       for (const photo of newPhotos) {
         try {
+          const preview = await createPreviewUrlAsync(photo.file);
+
+          updateFiles(prev =>
+            prev.map(p =>
+              p?.id === photo?.id
+                ? {
+                    ...p,
+                    preview,
+                  }
+                : p,
+            ),
+          );
+
           const compressedFile = await compressImage(photo?.file);
 
           const metadata = await extractExifData(photo?.file);

@@ -61,7 +61,7 @@ export function UploadForm() {
         <input
           type="file"
           ref={fileInputRef}
-          accept="image/png, image/jpeg, image/jpg"
+          accept="image/png, image/jpeg, image/jpg, image/heic, image/heif, image/heic-sequence"
           className="absolute inset-0 opacity-0 cursor-pointer z-10"
           multiple
           onChange={e => handleFiles(e.target.files)}
@@ -73,7 +73,7 @@ export function UploadForm() {
           <br />
           ou arraste e solte
         </p>
-        <span className="text-primary text-xs mt-1">Aceita imagens JPG e PNG</span>
+        <span className="text-primary text-xs mt-1">Aceita imagens JPG, PNG e HEIC</span>
       </div>
 
       {uploadFormState?.files?.length > 0 && (

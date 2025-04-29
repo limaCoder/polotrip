@@ -4,6 +4,8 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { Photo as TimelinePhoto, TimelineEvent } from '@/components/PhotoTimeline/types';
+import { format, parse } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const MASONRY_COLUMN_WIDTH = 300;
 
@@ -29,11 +31,8 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
 
   data?.pages.forEach(page => {
     page?.timelineEvents.forEach(event => {
-      const formattedDate = new Date(event.date).toLocaleDateString('pt-BR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
+      const parsedDate = parse(event.date, 'yyyy-MM-dd', new Date());
+      const formattedDate = format(parsedDate, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
 
       const transformedPhotos: TimelinePhoto[] = event?.photos?.map(photo => {
         const displayWidth = MASONRY_COLUMN_WIDTH;

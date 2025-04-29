@@ -56,7 +56,6 @@ export function MasonryGallery({
               transition={{ duration: 0.5 }}
               className="relative overflow-hidden rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
               onClick={() => {
-                console.log('photo', photo);
                 onPhotoClick(photo);
               }}
             >
