@@ -32,7 +32,7 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
           >
             <p
               className={cn(
-                'font-body_two font-bold',
+                'font-body_two font-bold text-left',
                 selectedDate === dateCount?.date ? 'text-background' : '',
               )}
             >

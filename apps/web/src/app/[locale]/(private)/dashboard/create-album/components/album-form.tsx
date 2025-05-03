@@ -121,6 +121,19 @@ export function AlbumForm() {
               </>
             )}
           </div>
+          <div className="mt-2 p-3 bg-secondary/5 rounded-lg">
+            <p className="text-sm font-body_two mb-2">✨ Recomendações para uma capa incrível:</p>
+            <div className="flex items-center gap-3">
+              <div className="w-[120px] h-[68px] bg-secondary/20 rounded flex items-center justify-center border border-dashed border-primary/30">
+                <span className="text-[10px] text-primary/70">1600 x 900 px</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-text/70">• Use uma imagem no formato horizontal</p>
+                <p className="text-sm text-text/70">• Resolução recomendada: 1600 x 900 pixels</p>
+                <p className="text-sm text-text/70">• Evite textos na imagem</p>
+              </div>
+            </div>
+          </div>
           {formState?.hasInvalidData && formState?.coverImageError && (
             <p className="text-sm text-red-500">{formState?.coverImageError?.join(', ')}</p>
           )}

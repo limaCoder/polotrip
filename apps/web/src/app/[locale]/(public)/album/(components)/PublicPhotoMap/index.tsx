@@ -5,10 +5,53 @@ import { use } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { type PublicPhotoMapProps } from './types';
 import type * as LeafletTypes from 'leaflet';
+import { groupBy } from 'lodash';
+import type { Location } from '@/http/get-public-album-locations/types';
 
 let L: typeof LeafletTypes;
 if (typeof window !== 'undefined') {
   L = require('leaflet');
+}
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    .leaflet-popup-content-wrapper {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+      overflow: hidden !important;
+      width: 280px !important;
+    }
+    .leaflet-popup-tip-container {
+      margin-top: -1px !important;
+    }
+    .photos-scroll-container {
+      max-height: 400px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+    .photos-scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .photos-scroll-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .photos-scroll-container::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+    .photos-grid {
+      display: grid;
+      gap: 16px;
+      padding: 12px;
+      padding-bottom: 100px;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
@@ -62,40 +105,74 @@ export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
       return;
     }
 
+    const groupedLocations = groupBy(
+      locationsWithCoordinates,
+      (location: Location) => `${location.latitude},${location.longitude}`,
+    );
+
     const markers: L.Marker[] = [];
     const bounds = L.latLngBounds([]);
 
-    locationsWithCoordinates?.forEach(location => {
-      if (location?.latitude !== null && location?.longitude !== null) {
-        const popupContent = document.createElement('div');
-        popupContent.className = 'custom-popup w-full h-full';
+    Object.entries(groupedLocations).forEach(([coords, groupLocations]) => {
+      const [lat, lng] = coords.split(',').map(Number);
+
+      const popupContent = document.createElement('div');
+      popupContent.className = 'w-[280px] overflow-hidden';
+
+      const scrollContainer = document.createElement('div');
+      scrollContainer.className = 'photos-scroll-container';
+
+      const imagesContainer = document.createElement('div');
+      imagesContainer.className = 'photos-grid';
+
+      (groupLocations as Location[]).forEach((location, index) => {
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'relative flex flex-col bg-white';
 
         const img = document.createElement('img');
         img.src = location.imageUrl;
         img.alt = location.locationName || 'Local';
-        img.className = 'w-full h-full object-cover rounded-md mb-2';
-        popupContent.appendChild(img);
+        img.className = 'w-full aspect-[4/3] object-cover rounded-lg shadow-sm';
+        imageWrapper.appendChild(img);
 
         if (location.locationName) {
           const locationName = document.createElement('p');
           locationName.textContent = location.locationName;
-          locationName.className = 'font-medium text-sm';
-          popupContent.appendChild(locationName);
+          locationName.className = 'font-medium text-sm mt-2 text-text/90';
+          imageWrapper.appendChild(locationName);
         }
 
-        const popup = L.popup().setContent(popupContent);
+        imagesContainer.appendChild(imageWrapper);
+      });
 
-        const marker = L.marker([location?.latitude, location?.longitude])
-          .addTo(mapInstanceRef.current!)
-          .bindPopup(popup);
+      scrollContainer.appendChild(imagesContainer);
+      popupContent.appendChild(scrollContainer);
 
-        marker.on('click', () => {
-          handleMarkerClick(location?.id);
-        });
+      const popup = L.popup({
+        maxWidth: 280,
+        maxHeight: undefined,
+        autoPan: true,
+        closeButton: true,
+        className: 'custom-popup',
+        autoPanPadding: [50, 50],
+      }).setContent(popupContent);
 
-        markers.push(marker);
-        bounds.extend([location?.latitude, location?.longitude]);
-      }
+      const markerIcon =
+        (groupLocations as Location[]).length > 1
+          ? L.divIcon({
+              html: `<div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">${(groupLocations as Location[]).length}</div>`,
+              className: 'custom-div-icon',
+              iconSize: [24, 24],
+              iconAnchor: [12, 12],
+            })
+          : DefaultIcon;
+
+      const marker = L.marker([lat, lng], { icon: markerIcon })
+        .addTo(mapInstanceRef.current!)
+        .bindPopup(popup);
+
+      markers.push(marker);
+      bounds.extend([lat, lng]);
     });
 
     markersRef.current = markers;

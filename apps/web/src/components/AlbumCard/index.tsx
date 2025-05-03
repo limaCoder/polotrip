@@ -90,7 +90,7 @@ export function AlbumCard({
             <PopoverContent className="bg-background">
               <Link
                 className="text-primary w-full flex flex-grow hover:brightness-130 transition-all duration-300"
-                href={`/dashboard/album/${id}/edit-album`}
+                href={`/dashboard/album/${id}/edit-album?is-published=true`}
               >
                 Editar
               </Link>

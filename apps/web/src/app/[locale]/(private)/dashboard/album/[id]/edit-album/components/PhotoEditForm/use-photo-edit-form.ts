@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { PhotoEditFormData } from './types';
+import { PhotoEditFormData, UsePhotoEditFormProps } from './types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formSchema } from './types';
-import { Photo } from '@polotrip/db/models';
 import { apiStringToDate } from '@/utils/dates';
 
 export function usePhotoEditForm({
   selectedPhotos,
   onSave,
-}: {
-  selectedPhotos: Photo[];
-  onSave: (data: PhotoEditFormData) => void;
-}) {
+  deselectAllPhotos,
+}: UsePhotoEditFormProps) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [preserveFields, setPreserveFields] = useState({
     location: true,
@@ -45,6 +42,8 @@ export function usePhotoEditForm({
       successTimeoutRef.current = setTimeout(() => {
         setShowSuccess(false);
       }, 2000);
+
+      deselectAllPhotos();
     };
 
     if (isMultipleSelection) {

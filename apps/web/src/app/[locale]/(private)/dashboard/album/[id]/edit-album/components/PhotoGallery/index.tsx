@@ -38,8 +38,7 @@ export function PhotoGallery({
       <div className="mb-3">
         <h2 className="font-title_three font-bold mb-1">Momentos da viagem</h2>
         <p className="font-body_two text-text/75">
-          Para realizar a edição das informações de data e localidade, selecione os conteúdos
-          abaixo.
+          Para realizar a edição das informações de data e localidade, selecione as fotos abaixo.
         </p>
       </div>
 

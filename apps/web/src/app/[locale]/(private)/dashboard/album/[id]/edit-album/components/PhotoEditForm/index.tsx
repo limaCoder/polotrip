@@ -30,6 +30,8 @@ export function PhotoEditForm({
   onSave,
   onCancel,
   isDisabled = false,
+  deselectAllPhotos,
+  isPublished,
 }: PhotoEditFormProps) {
   const {
     form,
@@ -39,7 +41,10 @@ export function PhotoEditForm({
     preserveFields,
     setPreserveFields,
     isMultipleSelection,
-  } = usePhotoEditForm({ selectedPhotos, onSave });
+  } = usePhotoEditForm({ selectedPhotos, onSave, deselectAllPhotos });
+
+  const isDescriptionPreserveSwitchEnabled =
+    isMultipleSelection && preserveFields?.description && isPublished;
 
   return (
     <div className={cn('bg-background p-8 rounded-lg shadow-md', isDisabled && 'opacity-40')}>
@@ -79,7 +84,7 @@ export function PhotoEditForm({
                       mode="single"
                       selected={field.value || undefined}
                       onSelect={field.onChange}
-                      disabled={isDisabled}
+                      disabled={date => date > new Date() || isDisabled}
                       initialFocus
                     />
                   </PopoverContent>
@@ -143,7 +148,7 @@ export function PhotoEditForm({
             )}
           />
 
-          {isMultipleSelection && (
+          {isMultipleSelection && isPublished && (
             <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
                 <Label className="font-body_two text-text/90">Preservar descrição original</Label>
@@ -174,10 +179,10 @@ export function PhotoEditForm({
                 <FormLabel className="font-body_two">Descrição</FormLabel>
                 <FormControl>
                   <Textarea
-                    disabled={isDisabled || (isMultipleSelection && preserveFields?.description)}
+                    disabled={isDisabled || isDescriptionPreserveSwitchEnabled}
                     className="border border-text/25 rounded mt-1 p-3 font-body_two text-text/75 bg-transparent w-full outline-none h-24 resize-none"
                     placeholder={
-                      isMultipleSelection && preserveFields?.description
+                      isDescriptionPreserveSwitchEnabled
                         ? 'Descrição original será preservada'
                         : 'Descreva este momento...'
                     }
@@ -185,7 +190,7 @@ export function PhotoEditForm({
                     value={field.value || ''}
                   />
                 </FormControl>
-                {isMultipleSelection && preserveFields?.description && (
+                {isDescriptionPreserveSwitchEnabled && (
                   <p className="text-sm text-text/60 mt-1">
                     Desabilite o toggle acima para editar a descrição
                   </p>

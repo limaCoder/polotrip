@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
-import { format, addYears, subYears, setMonth } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
+import { format, addYears, subYears, setMonth, isAfter, startOfMonth } from 'date-fns';
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '@/lib/cn';
@@ -19,10 +19,11 @@ export function MonthPicker({
   placeholder = 'Selecione um mês',
   name,
 }: MonthPickerProps) {
-  const [date, setDate] = React.useState<Date>(value || new Date());
-  const [open, setOpen] = React.useState(false);
+  const [date, setDate] = useState<Date>(value || new Date());
+  const [open, setOpen] = useState(false);
+  const currentDate = useMemo(() => new Date(), []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value) {
       setDate(value);
     }
@@ -45,6 +46,11 @@ export function MonthPicker({
 
   const handleMonthSelect = (monthIndex: number) => {
     const newDate = setMonth(date, monthIndex);
+
+    if (isAfter(startOfMonth(newDate), startOfMonth(currentDate))) {
+      return;
+    }
+
     setDate(newDate);
     onChange?.(newDate);
     setOpen(false);
@@ -57,6 +63,9 @@ export function MonthPicker({
 
   const handleNextYear = () => {
     const newDate = addYears(date, 1);
+    if (isAfter(startOfMonth(newDate), startOfMonth(currentDate))) {
+      return;
+    }
     setDate(newDate);
   };
 
@@ -102,6 +111,7 @@ export function MonthPicker({
             size="icon"
             className="h-7 w-7 hover:bg-primary transition-colors duration-300"
             onClick={handleNextYear}
+            disabled={date.getFullYear() >= currentDate.getFullYear()}
             aria-label="Ano posterior"
           >
             <ChevronRight className="h-4 w-4" />
@@ -113,12 +123,19 @@ export function MonthPicker({
             const isCurrentMonth =
               date && date.getMonth() === index && date.getFullYear() === date.getFullYear();
 
+            const monthDate = setMonth(date, index);
+            const isFutureMonth = isAfter(startOfMonth(monthDate), startOfMonth(currentDate));
+
             return (
               <Button
                 key={month}
                 variant={isCurrentMonth ? 'default' : 'outline'}
-                className="h-9 hover:bg-primary transition-colors duration-300"
+                className={cn(
+                  'h-9 transition-colors duration-300',
+                  isFutureMonth ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary',
+                )}
                 onClick={() => handleMonthSelect(index)}
+                disabled={isFutureMonth}
                 aria-label={`Selecionar mês ${month?.substring(0, 3)}`}
               >
                 {month?.substring(0, 3)}

@@ -21,7 +21,8 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
   ) => {
     const [inputValue, setInputValue] = useState(value || '');
     const [results, setResults] = useState<LocationResult[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingReverseGeocode, setIsLoadingReverseGeocode] = useState(false);
+    const [isLoadingSearch, setIsLoadingSearch] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [preventDropdown, setPreventDropdown] = useState(false);
     const [isUserTyping, setIsUserTyping] = useState(false);
@@ -39,7 +40,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       async (query: string) => {
         if (!query || query.length < 3) return;
 
-        setIsLoading(true);
+        setIsLoadingSearch(true);
         try {
           const response = await fetch(
             `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en`,
@@ -58,7 +59,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
         } catch (error) {
           console.error('Erro ao buscar localizações:', error);
         } finally {
-          setIsLoading(false);
+          setIsLoadingSearch(false);
         }
       },
       [preventDropdown, isUserTyping],
@@ -121,7 +122,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }
     };
 
-    const inputValueMessage = isLoading ? 'Buscando localizações...' : inputValue;
+    const inputValueMessage = isLoadingReverseGeocode ? 'Buscando localizações...' : inputValue;
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -168,7 +169,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
     useEffect(() => {
       if (latitude && longitude && !inputValue && !disabled) {
         const fetchReverseGeocoding = async () => {
-          setIsLoading(true);
+          setIsLoadingReverseGeocode(true);
           try {
             const response = await fetch(
               `https://photon.komoot.io/reverse?lon=${longitude}&lat=${latitude}`,
@@ -191,7 +192,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
           } catch (error) {
             console.error('Error fetching reverse geocoding:', error);
           } finally {
-            setIsLoading(false);
+            setIsLoadingReverseGeocode(false);
           }
         };
 
@@ -224,7 +225,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
           />
-          {isLoading ? (
+          {isLoadingSearch || isLoadingReverseGeocode ? (
             <Loader2 size={16} className="animate-spin text-text/50 shrink-0" />
           ) : inputValue ? (
             <X

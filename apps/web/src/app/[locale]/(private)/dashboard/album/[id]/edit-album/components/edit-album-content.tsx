@@ -3,14 +3,15 @@
 import { MapPin } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
+import { Button } from '@/components/ui/button';
 import { PhotoTimeline } from './PhotoTimeline';
 import { PhotoMap } from './PhotoMap';
 import { PhotoEditForm } from './PhotoEditForm';
 import { PhotoGallery } from './PhotoGallery';
 import { FinishEditDialog } from './FinishEditDialog';
 import { DeletePhotosDialog } from './DeletePhotosDialog';
+
 import { useEditAlbum } from '../hooks/useEditAlbum';
-import { Button } from '@/components/ui/button';
 
 export function EditAlbumContent() {
   const {
@@ -26,6 +27,7 @@ export function EditAlbumContent() {
     isFinishDialogOpen,
     isDeleteDialogOpen,
     isDeletingPhotos,
+    isPublished,
 
     handleDateSelect,
     handlePhotoClick,
@@ -91,6 +93,8 @@ export function EditAlbumContent() {
           onSave={selectedPhotos?.length > 1 ? handleSaveBatchEdit : handleSavePhotoEdit}
           onCancel={handleCancelEdit}
           isDisabled={selectedPhotos?.length === 0}
+          deselectAllPhotos={deselectAllPhotos}
+          isPublished={isPublished}
         />
 
         <PhotoGallery

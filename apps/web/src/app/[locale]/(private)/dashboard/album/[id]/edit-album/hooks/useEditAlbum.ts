@@ -34,6 +34,7 @@ export function useEditAlbum() {
 
   const [dateParam, setDateParam] = useQueryState('date');
   const [pageParam, setPageParam] = useQueryState('page', { defaultValue: '1' });
+  const [isPublishedParam] = useQueryState('is-published');
 
   const currentPage = Number(pageParam) || 1;
 
@@ -251,6 +252,7 @@ export function useEditAlbum() {
     isFinishDialogOpen,
     isDeleteDialogOpen,
     isDeletingPhotos: deletePhotosMutation.isPending,
+    isPublished: isPublishedParam === 'true',
 
     error,
     photoPagination: photosQuery.data?.pagination || null,
