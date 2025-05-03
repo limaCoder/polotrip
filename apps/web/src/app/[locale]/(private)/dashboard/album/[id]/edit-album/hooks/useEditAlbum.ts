@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useQueryState } from 'nuqs';
-import { type PhotoEditFormData } from '../components/PhotoEditForm/types';
+import { formSchema, type PhotoEditFormData } from '../components/PhotoEditForm/types';
 import { dateToAPIString } from '@/utils/dates';
 
 import { useGetAlbumDates } from '@/hooks/network/queries/useGetAlbumDates';
@@ -13,48 +16,405 @@ import { useUpdatePhotoBatch } from '@/hooks/network/mutations/useUpdatePhotoBat
 import { usePublishAlbum } from '@/hooks/network/mutations/usePublishAlbum';
 import { useDeletePhotos } from '@/hooks/network/mutations/useDeletePhotos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { useQueryClient } from '@tanstack/react-query';
-
-interface Params extends Record<string, string> {
-  id: string;
-  locale: string;
-}
+import {
+  PendingActionTypeEnum,
+  UnsavedChangesActionEnum,
+  unsavedChangesReducer,
+} from '../reducers/unsavedChangesReducer';
+import { Params } from './types';
 
 export function useEditAlbum() {
-  const params = useParams<Params>();
+  const { id, locale } = useParams<Params>();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
+  const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);
+
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const initializedRef = useRef(false);
+  const [unsavedChangesState, dispatch] = useReducer(unsavedChangesReducer, {
+    isDialogOpen: false,
+    pendingAction: null,
+  });
 
-  const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);
+  const initializedRef = useRef(false);
+  const deselectPhotosRef = useRef<(skipCheck?: boolean) => void>(() => {});
 
   const [dateParam, setDateParam] = useQueryState('date');
   const [pageParam, setPageParam] = useQueryState('page', { defaultValue: '1' });
-  const [isPublishedParam] = useQueryState('is-published');
+
+  const form = useForm<PhotoEditFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      dateTaken: null,
+      locationName: '',
+      description: '',
+      latitude: null,
+      longitude: null,
+    },
+  });
 
   const currentPage = Number(pageParam) || 1;
 
   const albumDatesQuery = useGetAlbumDates({
-    albumId: params.id,
+    albumId: id,
   });
 
-  const deselectAllPhotos = () => {
-    setSelectedPhotos([]);
-  };
+  const photosQuery = useGetPhotosByDate({
+    albumId: id,
+    date: selectedDateLocal || undefined,
+    noDate: selectedDateLocal === null,
+    page: currentPage,
+    enabled: !!id && (selectedDateLocal !== undefined || initializedRef.current),
+  });
 
-  const togglePhotoSelection = (photoId: string) => {
-    setSelectedPhotos(prev => {
-      if (prev.includes(photoId)) {
-        return prev.filter(id => id !== photoId);
-      } else {
-        return [...prev, photoId];
+  const updatePhotoMutation = useUpdatePhoto({
+    albumId: id,
+  });
+
+  const updatePhotoBatchMutation = useUpdatePhotoBatch({
+    albumId: id,
+  });
+
+  const publishAlbumMutation = usePublishAlbum({
+    albumId: id,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [albumKeys.all],
+      });
+      router.push(`/${locale}/album/${id}`);
+    },
+  });
+
+  const deletePhotosMutation = useDeletePhotos({
+    albumId: id,
+    onSuccess: () => {
+      deselectPhotosRef.current(true);
+      setIsDeleteDialogOpen(false);
+    },
+  });
+
+  const hasUnsavedChanges = useCallback(() => {
+    if (
+      updatePhotoMutation.isPending ||
+      updatePhotoBatchMutation.isPending ||
+      deletePhotosMutation.isPending ||
+      publishAlbumMutation.isPending
+    ) {
+      return false;
+    }
+
+    if (selectedPhotos.length === 0) {
+      return false;
+    }
+
+    const { isDirty, dirtyFields } = form.formState;
+
+    if (!isDirty) {
+      return false;
+    }
+
+    const dirtyFieldsKeys = Object.keys(dirtyFields);
+
+    if (dirtyFieldsKeys.length === 1 && dirtyFieldsKeys[0] === 'locationName') {
+      return false;
+    }
+
+    return true;
+  }, [
+    form.formState,
+    selectedPhotos.length,
+    updatePhotoMutation.isPending,
+    updatePhotoBatchMutation.isPending,
+    deletePhotosMutation.isPending,
+    publishAlbumMutation.isPending,
+  ]);
+
+  const deselectAllPhotos = useCallback(
+    (skipUnsavedCheck = false) => {
+      if (selectedPhotos.length === 0) {
+        return;
       }
+
+      if (!skipUnsavedCheck && hasUnsavedChanges()) {
+        dispatch({
+          type: UnsavedChangesActionEnum.SHOW_DIALOG,
+          action: { type: PendingActionTypeEnum.DESELECT_ALL },
+        });
+        return;
+      }
+
+      setSelectedPhotos([]);
+    },
+    [hasUnsavedChanges, selectedPhotos.length, dispatch],
+  );
+
+  const updateDateSelection = useCallback(
+    async (date: string | null) => {
+      setSelectedDateLocal(date);
+      await setPageParam('1');
+      await setDateParam(date);
+      setSelectedPhotos([]);
+    },
+    [setDateParam, setPageParam],
+  );
+
+  const handlePhotoClick = useCallback(
+    (photoId: string) => {
+      if (selectedPhotos.length === 1 && selectedPhotos[0] === photoId) {
+        return;
+      }
+
+      if (hasUnsavedChanges()) {
+        dispatch({
+          type: UnsavedChangesActionEnum.SHOW_DIALOG,
+          action: { type: PendingActionTypeEnum.SELECT_PHOTO, photoId },
+        });
+        return;
+      }
+
+      const photos = photosQuery.data?.photos.filter(p => p.id === photoId);
+      if (!photos || photos.length === 0) {
+        return;
+      }
+
+      setSelectedPhotos(photos.map(p => p.id));
+    },
+    [hasUnsavedChanges, photosQuery.data?.photos, selectedPhotos],
+  );
+
+  const togglePhotoSelection = useCallback(
+    (photoId: string) => {
+      if (selectedPhotos.includes(photoId)) {
+        setSelectedPhotos(prev => prev.filter(id => id !== photoId));
+        return;
+      }
+
+      if (hasUnsavedChanges()) {
+        dispatch({
+          type: UnsavedChangesActionEnum.SHOW_DIALOG,
+          action: { type: PendingActionTypeEnum.TOGGLE_PHOTO, photoId },
+        });
+        return;
+      }
+
+      setSelectedPhotos(prev => [...prev, photoId]);
+    },
+    [hasUnsavedChanges, selectedPhotos],
+  );
+
+  const handleDateSelect = useCallback(
+    async (date: string | null) => {
+      if (date === selectedDateLocal) {
+        return;
+      }
+
+      if (hasUnsavedChanges()) {
+        dispatch({
+          type: UnsavedChangesActionEnum.SHOW_DIALOG,
+          action: { type: PendingActionTypeEnum.SELECT_DATE, date },
+        });
+        return;
+      }
+
+      await updateDateSelection(date);
+    },
+    [hasUnsavedChanges, selectedDateLocal, updateDateSelection],
+  );
+
+  const closeUnsavedChangesDialog = useCallback(() => {
+    dispatch({ type: UnsavedChangesActionEnum.CLOSE_DIALOG });
+  }, []);
+
+  const handleUnsavedChanges = useCallback(async () => {
+    const action = unsavedChangesState.pendingAction;
+
+    form.reset(form.getValues(), {
+      keepDirty: false,
+      keepTouched: false,
     });
-  };
+
+    dispatch({ type: UnsavedChangesActionEnum.CONFIRM_ACTION });
+
+    if (!action) {
+      return;
+    }
+
+    switch (action.type) {
+      case PendingActionTypeEnum.SELECT_PHOTO: {
+        if (!action.photoId) return;
+
+        const photos = photosQuery.data?.photos.filter(p => p.id === action.photoId);
+        if (!photos || photos.length === 0) return;
+
+        setSelectedPhotos(photos.map(p => p.id));
+        return;
+      }
+      case PendingActionTypeEnum.TOGGLE_PHOTO: {
+        if (!action.photoId) return;
+
+        setSelectedPhotos(prev => [...prev, action.photoId!]);
+        return;
+      }
+      case PendingActionTypeEnum.SELECT_DATE: {
+        if (action.date === undefined) return;
+
+        await updateDateSelection(action.date);
+        return;
+      }
+      case PendingActionTypeEnum.DESELECT_ALL: {
+        setSelectedPhotos([]);
+        return;
+      }
+    }
+  }, [
+    form,
+    unsavedChangesState.pendingAction,
+    photosQuery.data?.photos,
+    updateDateSelection,
+    dispatch,
+  ]);
+
+  const handlePageChange = useCallback(
+    async (page: number) => {
+      await setPageParam(page.toString());
+    },
+    [setPageParam],
+  );
+
+  const getModifiedStatus = useCallback(
+    (photoId: string) => {
+      // As this is a real time update, we can use the mutation status to show changes in progress
+      return updatePhotoMutation.isPending && updatePhotoMutation.variables?.id === photoId;
+    },
+    [updatePhotoMutation.isPending, updatePhotoMutation.variables?.id],
+  );
+
+  const handleSavePhotoEdit = useCallback(
+    (data: PhotoEditFormData) => {
+      if (selectedPhotos.length === 0 || selectedPhotos.length > 1) {
+        return;
+      }
+
+      if (unsavedChangesState.isDialogOpen) {
+        dispatch({ type: UnsavedChangesActionEnum.CLOSE_DIALOG });
+      }
+
+      form.reset(data, {
+        keepDirty: false,
+        keepTouched: false,
+      });
+
+      updatePhotoMutation.mutate({
+        id: selectedPhotos[0],
+        dateTaken: dateToAPIString(data.dateTaken),
+        locationName: data.locationName || null,
+        description: data.description || null,
+        latitude: data.latitude || null,
+        longitude: data.longitude || null,
+      });
+    },
+    [form, selectedPhotos, updatePhotoMutation, unsavedChangesState.isDialogOpen, dispatch],
+  );
+
+  const handleSaveBatchEdit = useCallback(
+    (data: PhotoEditFormData) => {
+      if (selectedPhotos.length === 0) {
+        return;
+      }
+
+      if (unsavedChangesState.isDialogOpen) {
+        dispatch({ type: UnsavedChangesActionEnum.CLOSE_DIALOG });
+      }
+
+      form.reset(data, {
+        keepDirty: false,
+        keepTouched: false,
+      });
+
+      const fieldsToCheck = {
+        dateTaken: data.dateTaken ? dateToAPIString(data.dateTaken) : undefined,
+        locationName: data.locationName ?? undefined,
+        description: data.description ?? undefined,
+        latitude: data.latitude ?? undefined,
+        longitude: data.longitude ?? undefined,
+      };
+
+      const updateData = Object.entries(fieldsToCheck).reduce(
+        (acc, [key, value]) => {
+          if (value !== undefined) {
+            acc[key] = value === '' ? null : value;
+          }
+          return acc;
+        },
+        {} as Record<string, string | number | null>,
+      );
+
+      if (Object.keys(updateData).length === 0) {
+        return;
+      }
+
+      updatePhotoBatchMutation.mutate({
+        ids: selectedPhotos,
+        data: updateData,
+      });
+    },
+    [form, selectedPhotos, updatePhotoBatchMutation, unsavedChangesState.isDialogOpen, dispatch],
+  );
+
+  const handleDeletePhotos = useCallback(() => {
+    if (selectedPhotos.length === 0) {
+      return;
+    }
+
+    deletePhotosMutation.mutate({
+      photoIds: selectedPhotos,
+    });
+  }, [deletePhotosMutation, selectedPhotos]);
+
+  const handleCancelEdit = useCallback(() => {
+    form.reset(
+      {
+        dateTaken: null,
+        locationName: '',
+        description: '',
+        latitude: null,
+        longitude: null,
+      },
+      {
+        keepDirty: false,
+        keepTouched: false,
+      },
+    );
+
+    setSelectedPhotos([]);
+  }, [form]);
+
+  const handleFinish = useCallback(() => {
+    publishAlbumMutation.mutate();
+  }, [publishAlbumMutation]);
+
+  const openFinishDialog = useCallback(() => {
+    setIsFinishDialogOpen(true);
+  }, []);
+
+  const closeFinishDialog = useCallback(() => {
+    setIsFinishDialogOpen(false);
+  }, []);
+
+  const openDeleteDialog = useCallback(() => {
+    setIsDeleteDialogOpen(true);
+  }, []);
+
+  const closeDeleteDialog = useCallback(() => {
+    setIsDeleteDialogOpen(false);
+  }, []);
+
+  const isLoading = albumDatesQuery.isLoading || photosQuery.isLoading;
+  const isPhotosLoading = photosQuery.isLoading;
+  const error = albumDatesQuery.error?.message || photosQuery.error?.message;
 
   useEffect(() => {
     if (initializedRef.current || albumDatesQuery?.isLoading || !albumDatesQuery?.data?.dates) {
@@ -88,7 +448,6 @@ export function useEditAlbum() {
 
     if (oldestDate !== undefined) {
       setSelectedDateLocal(oldestDate);
-
       setDateParam(oldestDate);
     }
 
@@ -101,146 +460,9 @@ export function useEditAlbum() {
     }
   }, [dateParam]);
 
-  const photosQuery = useGetPhotosByDate({
-    albumId: params.id,
-    date: selectedDateLocal || undefined,
-    noDate: selectedDateLocal === null,
-    page: currentPage,
-    enabled: !!params.id && (selectedDateLocal !== undefined || initializedRef.current),
-  });
-
-  const updatePhotoMutation = useUpdatePhoto({
-    albumId: params.id,
-  });
-
-  const updatePhotoBatchMutation = useUpdatePhotoBatch({
-    albumId: params.id,
-  });
-
-  const queryClient = useQueryClient();
-
-  const publishAlbumMutation = usePublishAlbum({
-    albumId: params.id,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [albumKeys.all],
-      });
-      router.push(`/${params.locale}/album/${params.id}`);
-    },
-  });
-
-  const deletePhotosMutation = useDeletePhotos({
-    albumId: params.id,
-    onSuccess: () => {
-      deselectAllPhotos();
-      setIsDeleteDialogOpen(false);
-    },
-  });
-
-  const handleDateSelect = async (date: string | null) => {
-    setSelectedDateLocal(date);
-
-    await setPageParam('1');
-
-    await setDateParam(date);
-
-    deselectAllPhotos();
-  };
-
-  const handlePageChange = async (page: number) => {
-    await setPageParam(page.toString());
-  };
-
-  const handlePhotoClick = (photoId: string) => {
-    const photos = photosQuery.data?.photos.filter(p => p.id === photoId);
-    if (photos) {
-      setSelectedPhotos(photos?.map(p => p?.id));
-    }
-  };
-
-  const getModifiedStatus = (photoId: string) => {
-    // As this is a real time update, we can use the mutation status to show changes in progress
-    return updatePhotoMutation.isPending && updatePhotoMutation.variables?.id === photoId;
-  };
-
-  const handleSavePhotoEdit = (data: PhotoEditFormData) => {
-    if (selectedPhotos.length === 0 || selectedPhotos.length > 1) return;
-
-    updatePhotoMutation.mutate({
-      id: selectedPhotos[0],
-      dateTaken: dateToAPIString(data.dateTaken),
-      locationName: data.locationName || null,
-      description: data.description || null,
-      latitude: data.latitude || null,
-      longitude: data.longitude || null,
-    });
-  };
-
-  const handleSaveBatchEdit = (data: PhotoEditFormData) => {
-    if (selectedPhotos.length === 0) return;
-
-    const fieldsToCheck = {
-      dateTaken: data.dateTaken ? dateToAPIString(data.dateTaken) : undefined,
-      locationName: data.locationName ?? undefined,
-      description: data.description ?? undefined,
-      latitude: data.latitude ?? undefined,
-      longitude: data.longitude ?? undefined,
-    };
-
-    const updateData = Object.entries(fieldsToCheck).reduce(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = value === '' ? null : value;
-        }
-        return acc;
-      },
-      {} as Record<string, string | number | null>,
-    );
-
-    if (Object.keys(updateData).length > 0) {
-      updatePhotoBatchMutation.mutate({
-        ids: selectedPhotos,
-        data: updateData,
-      });
-    }
-  };
-
-  const handleDeletePhotos = () => {
-    if (selectedPhotos.length === 0) return;
-
-    deletePhotosMutation.mutate({
-      photoIds: selectedPhotos,
-    });
-  };
-
-  const handleCancelEdit = () => {
-    deselectAllPhotos();
-  };
-
-  const handleFinish = () => {
-    publishAlbumMutation.mutate();
-  };
-
-  const openFinishDialog = () => {
-    setIsFinishDialogOpen(true);
-  };
-
-  const closeFinishDialog = () => {
-    setIsFinishDialogOpen(false);
-  };
-
-  const openDeleteDialog = () => {
-    setIsDeleteDialogOpen(true);
-  };
-
-  const closeDeleteDialog = () => {
-    setIsDeleteDialogOpen(false);
-  };
-
-  const isLoading = albumDatesQuery.isLoading || photosQuery.isLoading;
-  const isPhotosLoading = photosQuery.isLoading;
-
-  const error = albumDatesQuery.error?.message || photosQuery.error?.message;
+  useEffect(() => {
+    deselectPhotosRef.current = deselectAllPhotos;
+  }, [deselectAllPhotos]);
 
   return {
     albumDates: albumDatesQuery.data?.dates || [],
@@ -251,8 +473,9 @@ export function useEditAlbum() {
     isPhotosLoading,
     isFinishDialogOpen,
     isDeleteDialogOpen,
+    isUnsavedChangesDialogOpen: unsavedChangesState.isDialogOpen,
     isDeletingPhotos: deletePhotosMutation.isPending,
-    isPublished: isPublishedParam === 'true',
+    form,
 
     error,
     photoPagination: photosQuery.data?.pagination || null,
@@ -273,5 +496,7 @@ export function useEditAlbum() {
     closeFinishDialog,
     openDeleteDialog,
     closeDeleteDialog,
+    closeUnsavedChangesDialog,
+    handleUnsavedChanges,
   };
 }

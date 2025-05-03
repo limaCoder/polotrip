@@ -31,7 +31,6 @@ export function PhotoEditForm({
   onCancel,
   isDisabled = false,
   deselectAllPhotos,
-  isPublished,
 }: PhotoEditFormProps) {
   const {
     form,
@@ -41,10 +40,10 @@ export function PhotoEditForm({
     preserveFields,
     setPreserveFields,
     isMultipleSelection,
+    isSaving,
   } = usePhotoEditForm({ selectedPhotos, onSave, deselectAllPhotos });
 
-  const isDescriptionPreserveSwitchEnabled =
-    isMultipleSelection && preserveFields?.description && isPublished;
+  const isDescriptionPreserveSwitchEnabled = isMultipleSelection && preserveFields?.description;
 
   return (
     <div className={cn('bg-background p-8 rounded-lg shadow-md', isDisabled && 'opacity-40')}>
@@ -148,7 +147,7 @@ export function PhotoEditForm({
             )}
           />
 
-          {isMultipleSelection && isPublished && (
+          {isMultipleSelection && (
             <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
                 <Label className="font-body_two text-text/90">Preservar descrição original</Label>
@@ -205,7 +204,7 @@ export function PhotoEditForm({
               <Button
                 type="button"
                 onClick={onCancel}
-                disabled={isDisabled}
+                disabled={isDisabled || isSaving()}
                 className="bg-secondary-50 text-text rounded px-4 py-2 hover:bg-secondary-100 font-body_two"
                 aria-label="Cancelar edição"
               >
@@ -215,7 +214,7 @@ export function PhotoEditForm({
 
             <Button
               type="submit"
-              disabled={isDisabled}
+              disabled={isDisabled || isSaving()}
               className={cn(
                 'rounded px-6 py-2 font-body_two flex items-center gap-2',
                 showSuccess

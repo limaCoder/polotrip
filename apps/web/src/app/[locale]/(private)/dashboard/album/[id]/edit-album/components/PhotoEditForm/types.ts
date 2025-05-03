@@ -14,7 +14,7 @@ type PhotoEditFormData = z.infer<typeof formSchema>;
 interface PhotoEditFormProps {
   selectedPhotos: Photo[];
   onSave: (data: PhotoEditFormData) => void;
-  deselectAllPhotos: () => void;
+  deselectAllPhotos: (skipUnsavedCheck?: boolean) => void;
   onCancel?: () => void;
   isDisabled?: boolean;
   isPublished?: boolean;
@@ -23,7 +23,7 @@ interface PhotoEditFormProps {
 interface UsePhotoEditFormProps {
   selectedPhotos: Photo[];
   onSave: (data: PhotoEditFormData) => void;
-  deselectAllPhotos: () => void;
+  deselectAllPhotos: (skipUnsavedCheck?: boolean) => void;
 }
 
 export { formSchema };

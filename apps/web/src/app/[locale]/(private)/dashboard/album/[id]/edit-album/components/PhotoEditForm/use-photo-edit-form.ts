@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { PhotoEditFormData, UsePhotoEditFormProps } from './types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { formSchema } from './types';
 import { apiStringToDate } from '@/utils/dates';
 
 export function usePhotoEditForm({
@@ -17,117 +15,172 @@ export function usePhotoEditForm({
   });
 
   const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const previousSelectionRef = useRef<string[]>([]);
+  const isSavingRef = useRef(false);
 
   const isMultipleSelection = selectedPhotos?.length > 1;
 
-  const form = useForm<PhotoEditFormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      dateTaken: null,
-      locationName: '',
-      description: '',
-      latitude: null,
-      longitude: null,
+  const form = useFormContext<PhotoEditFormData>();
+
+  const resetForm = useCallback(
+    (formData: Partial<PhotoEditFormData>) => {
+      form.reset(formData, {
+        keepDirty: false,
+        keepTouched: false,
+      });
     },
-  });
+    [form],
+  );
 
-  function onSubmit(data: PhotoEditFormData) {
-    const showSuccess = () => {
-      setShowSuccess(true);
+  const showSuccessFeedback = useCallback(() => {
+    setShowSuccess(true);
 
-      if (successTimeoutRef.current) {
-        clearTimeout(successTimeoutRef.current);
+    setPreserveFields({
+      location: true,
+      description: true,
+    });
+
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+
+    successTimeoutRef.current = setTimeout(() => {
+      setShowSuccess(false);
+      isSavingRef.current = false;
+    }, 2000);
+  }, []);
+
+  const handleSubmit = useCallback(
+    (data: PhotoEditFormData) => {
+      isSavingRef.current = true;
+
+      form.clearErrors();
+
+      const dataToUse = { ...data };
+
+      if (isMultipleSelection) {
+        let formData = { ...dataToUse };
+
+        if (preserveFields?.location) {
+          const { locationName, latitude, longitude, ...rest } = formData;
+          formData = rest as PhotoEditFormData;
+        }
+
+        if (preserveFields?.description) {
+          const { description, ...rest } = formData;
+          formData = rest as PhotoEditFormData;
+        }
+
+        onSave(formData);
+
+        resetForm(dataToUse);
+        deselectAllPhotos(true);
+
+        showSuccessFeedback();
+        return;
       }
 
-      successTimeoutRef.current = setTimeout(() => {
-        setShowSuccess(false);
-      }, 2000);
+      onSave(dataToUse);
 
-      deselectAllPhotos();
-    };
+      resetForm(dataToUse);
+      deselectAllPhotos(true);
 
+      showSuccessFeedback();
+    },
+    [
+      isMultipleSelection,
+      onSave,
+      preserveFields,
+      form,
+      resetForm,
+      showSuccessFeedback,
+      deselectAllPhotos,
+    ],
+  );
+
+  const getSelectionText = useCallback(() => {
     if (isMultipleSelection) {
-      let formData = { ...data };
+      return `Editar ${selectedPhotos.length} fotos selecionadas`;
+    }
 
-      if (preserveFields?.location) {
-        const { locationName, latitude, longitude, ...rest } = formData;
-        formData = rest as PhotoEditFormData;
-      }
+    if (selectedPhotos.length === 1) {
+      return 'Editar foto';
+    }
 
-      if (preserveFields?.description) {
-        const { description, ...rest } = formData;
-        formData = rest as PhotoEditFormData;
-      }
+    return 'Selecione uma foto para editar';
+  }, [isMultipleSelection, selectedPhotos.length]);
 
-      onSave(formData);
-      showSuccess();
+  const selectionText = getSelectionText();
+
+  useEffect(() => {
+    if (isSavingRef.current) {
       return;
     }
 
-    onSave(data);
-    showSuccess();
-  }
+    const currentSelectionIds =
+      selectedPhotos
+        ?.map(p => p?.id)
+        .sort()
+        .join(',') || '';
 
-  const selectionText = isMultipleSelection
-    ? `Editar ${selectedPhotos.length} fotos selecionadas`
-    : selectedPhotos.length === 1
-      ? 'Editar foto'
-      : 'Selecione uma foto para editar';
+    const previousSelectionIds = previousSelectionRef.current.sort().join(',');
 
-  useEffect(() => {
+    if (currentSelectionIds === previousSelectionIds) {
+      return;
+    }
+
+    previousSelectionRef.current = selectedPhotos?.map(p => p?.id) || [];
+
     if (selectedPhotos.length === 0) {
-      form.reset({
+      resetForm({
         dateTaken: null,
         locationName: '',
         description: '',
         latitude: null,
         longitude: null,
       });
-
       return;
     }
 
     if (selectedPhotos.length === 1) {
       const photo = selectedPhotos[0];
-      form.reset({
+      resetForm({
         dateTaken: apiStringToDate(photo.dateTaken),
         locationName: photo.locationName || '',
         description: photo.description || '',
         latitude: photo.latitude,
         longitude: photo.longitude,
       });
-
       return;
     }
 
     const firstPhoto = selectedPhotos[0];
-    form.reset(
-      {
-        dateTaken: apiStringToDate(firstPhoto.dateTaken),
-        locationName: '',
-        description: '',
-        latitude: null,
-        longitude: null,
-      },
-      {
-        keepDirty: false,
-        keepTouched: false,
-      },
-    );
+    resetForm({
+      dateTaken: apiStringToDate(firstPhoto.dateTaken),
+      locationName: '',
+      description: '',
+      latitude: null,
+      longitude: null,
+    });
 
     setPreserveFields({
       location: true,
       description: true,
     });
-  }, [selectedPhotos, form]);
+  }, [selectedPhotos, resetForm]);
+
+  const isSaving = useCallback(() => {
+    return isSavingRef.current;
+  }, []);
 
   return {
     form,
-    onSubmit,
+    onSubmit: handleSubmit,
     selectionText,
     showSuccess,
     preserveFields,
     setPreserveFields,
     isMultipleSelection,
+    isSaving,
   };
 }

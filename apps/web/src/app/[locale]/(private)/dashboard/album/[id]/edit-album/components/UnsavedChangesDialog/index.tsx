@@ -16,13 +16,15 @@ export function UnsavedChangesDialog({ isOpen, onClose, onConfirm }: UnsavedChan
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Alterações não salvas</AlertDialogTitle>
-          <AlertDialogDescription>
-            <p className="mb-2">Você tem alterações não salvas no formulário. Se continuar:</p>
-            <ul className="list-disc pl-5 mb-2 space-y-1">
-              <li>As alterações atuais serão perdidas</li>
-              <li>O formulário será preenchido com os dados da nova seleção</li>
-            </ul>
-            <p className="font-medium">Deseja continuar mesmo assim?</p>
+          <AlertDialogDescription asChild>
+            <div>
+              <p className="mb-2">Você tem alterações não salvas no formulário. Se continuar:</p>
+              <ul className="list-disc pl-5 mb-2 space-y-1">
+                <li>As alterações atuais serão perdidas</li>
+                <li>O formulário será preenchido com os dados da nova seleção</li>
+              </ul>
+              <p className="font-medium">Deseja continuar mesmo assim?</p>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
