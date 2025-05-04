@@ -44,8 +44,8 @@ async function createCheckoutSession({
   let amount = getAlbumStripePrice(currency);
 
   if (isAdditionalPhotos && additionalPhotosCount > 0) {
-    // R$9,99 or USD 9,99 for each 100 additional photos
-    amount = 999 * Math.ceil(additionalPhotosCount / 100);
+    // R$9,90 or USD 9,90 for each 100 additional photos
+    amount = 990 * Math.ceil(additionalPhotosCount / 100);
     description = `${additionalPhotosCount} additional photos to the album: ${album.title}`;
   }
 
