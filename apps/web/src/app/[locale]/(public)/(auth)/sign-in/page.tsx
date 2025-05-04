@@ -20,9 +20,9 @@ export default async function LoginPage({ params }: LoginPageProps) {
   return (
     <>
       <Header />
-      <main className="min-h-screen lg:min-h-[calc(100vh-200px)] bg-background flex flex-col pt-16 lg:pt-0">
-        <section className="flex flex-grow bg-secondary/5">
-          <div className="container mx-auto px-4 lg:px-9 flex justify-center items-center">
+      <main className="lg:min-h-[calc(100vh-200px)] bg-background flex flex-col">
+        <section className="flex flex-grow bg-secondary/5 pt-28 lg:pt-16">
+          <div className="container mx-auto px-4 lg:px-9 flex justify-center items-center flex-col">
             <div className="flex flex-col items-center max-w-md w-full gap-6">
               <div className="bg-secondary/50 rounded-full p-2.5 w-[50px] h-[50px] flex items-center justify-center">
                 <LogIn size={24} color="#03AED2" strokeWidth={2} />
@@ -80,10 +80,10 @@ export default async function LoginPage({ params }: LoginPageProps) {
                   <span className="font-body_two">Sign in with Google</span>
                 </OAuthButton>
               </div>
+            </div>
 
-              <div className="w-full h-[320px] mt-4 rounded-lg overflow-hidden">
-                <LottieAnimation animationData={womanTakingSunbathOnBeach} />
-              </div>
+            <div className="w-full h-[250px]  lg:h-[320px] lg:mt-4 rounded-lg overflow-hidden">
+              <LottieAnimation animationData={womanTakingSunbathOnBeach} />
             </div>
           </div>
         </section>
