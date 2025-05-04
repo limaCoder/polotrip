@@ -29,7 +29,7 @@ if (typeof document !== 'undefined') {
       margin-top: -1px !important;
     }
     .photos-scroll-container {
-      max-height: 400px;
+      max-height: 240px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
@@ -48,7 +48,7 @@ if (typeof document !== 'undefined') {
       display: grid;
       gap: 16px;
       padding: 12px;
-      padding-bottom: 100px;
+      padding-bottom: 0;
     }
   `;
   document.head.appendChild(style);

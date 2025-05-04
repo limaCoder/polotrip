@@ -105,7 +105,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ duration: 0.2 }}
                   onClick={() => setSelectedPhoto(null)}
                   className="absolute top-0 right-0 xl:-right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
                   aria-label="Fechar"
@@ -114,14 +114,24 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                 </motion.button>
               </motion.div>
               {selectedPhoto?.description && (
-                <div className="w-full max-w-3xl mt-4">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ 
+                    opacity: {
+                      duration: 0.2,
+                    }
+                  }}
+                  className="w-full max-w-3xl mt-4"
+                >
                   <ScrollArea
                     type="always"
-                    className="h-24 rounded-md border bg-background/80 p-3 text-text"
+                    className="h-24 rounded-md border bg-background/80 p-3 text-text border-0"
                   >
                     <p className="whitespace-pre-line">{selectedPhoto?.description}</p>
                   </ScrollArea>
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
