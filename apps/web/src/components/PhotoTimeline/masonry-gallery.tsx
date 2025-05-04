@@ -1,18 +1,32 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Photo } from './types';
+import {
+  MorphingDialog,
+  MorphingDialogClose,
+  MorphingDialogContainer,
+  MorphingDialogContent,
+  MorphingDialogImage,
+  MorphingDialogTrigger,
+} from '../ui/morphing-dialog';
+import { XIcon } from 'lucide-react';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
-export function MasonryGallery({
-  photos,
-  onPhotoClick,
-}: {
-  photos: Photo[];
-  onPhotoClick: (photo: Photo) => void;
-}) {
+export function MasonryGallery({ photos }: { photos: Photo[] }) {
   const [columns, setColumns] = useState<Photo[][]>([[], [], []]);
+
+  const getOptimalPaddingBottom = (photo: Photo) => {
+    const aspectRatio = photo?.height / photo?.width;
+    const maxAspectRatio = 1.1;
+
+    if (aspectRatio > maxAspectRatio) {
+      return `${maxAspectRatio * 100}%`;
+    }
+
+    return `${aspectRatio * 100}%`;
+  };
 
   useEffect(() => {
     const distributePhotos = () => {
@@ -48,36 +62,81 @@ export function MasonryGallery({
       {columns?.map((column, columnIndex) => (
         <div key={columnIndex} className="flex flex-col gap-4 flex-1">
           {column?.map(photo => (
-            <motion.div
+            <MorphingDialog
               key={photo?.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.5 }}
-              className="relative overflow-hidden rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
-              onClick={() => {
-                onPhotoClick(photo);
+              transition={{
+                duration: 0.3,
+                ease: 'easeInOut',
               }}
             >
-              <div
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  paddingBottom: `${(photo?.height / photo?.width) * 100}%`,
-                }}
-              >
-                <motion.div layoutId={`photo-${photo?.id}`} className="absolute inset-0">
-                  <Image
+              <MorphingDialogTrigger>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.5 }}
+                  className="relative overflow-hidden rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      paddingBottom: getOptimalPaddingBottom(photo),
+                    }}
+                  >
+                    <motion.div layoutId={`photo-${photo?.id}`} className="absolute inset-0">
+                      <MorphingDialogImage
+                        src={photo?.src}
+                        alt={photo?.alt}
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </MorphingDialogTrigger>
+              <MorphingDialogContainer>
+                <MorphingDialogContent className="relative">
+                  <MorphingDialogImage
                     src={photo?.src}
                     alt={photo?.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
+                    className="h-auto w-full max-w-[90vw] rounded-[4px] object-cover lg:h-[70vh]"
                   />
-                </motion.div>
-              </div>
-            </motion.div>
+                  {photo?.description && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        opacity: {
+                          duration: 0.2,
+                        },
+                      }}
+                      className="w-full mt-4"
+                    >
+                      <ScrollArea
+                        type="always"
+                        className="h-24 rounded-md bg-background/80 p-3 text-text border-0"
+                      >
+                        <p className="whitespace-pre-line">{photo?.description}</p>
+                      </ScrollArea>
+                    </motion.div>
+                  )}
+                </MorphingDialogContent>
+                <MorphingDialogClose
+                  className="fixed right-6 top-6 h-fit w-fit rounded-full bg-white p-1"
+                  variants={{
+                    initial: { opacity: 0 },
+                    animate: {
+                      opacity: 1,
+                      transition: { delay: 0.3, duration: 0.1 },
+                    },
+                    exit: { opacity: 0, transition: { duration: 0 } },
+                  }}
+                >
+                  <XIcon className="h-5 w-5 text-zinc-500" />
+                </MorphingDialogClose>
+              </MorphingDialogContainer>
+            </MorphingDialog>
           ))}
         </div>
       ))}

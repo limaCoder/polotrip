@@ -1,19 +1,14 @@
 'use client';
 
-import Image from 'next/image';
-import { AnimatePresence, motion } from 'motion/react';
-import { X } from 'lucide-react';
+import { motion } from 'motion/react';
 import { MasonryGallery } from './masonry-gallery';
 import { PhotoTimelineProps } from './types';
 import { InfiniteScroll } from '@/components/InfiniteScroll';
-import { ScrollArea } from '../ui/scroll-area';
 import { usePhotoTimeline } from './use-photo-timeline';
 
 export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
   const {
     timelineEvents,
-    selectedPhoto,
-    setSelectedPhoto,
     heightTransform,
     opacityTransform,
     containerRef,
@@ -26,7 +21,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
   return (
     <div className="relative w-full bg-secondary-10" ref={containerRef}>
       <div className="container py-10">
-        {timelineEvents.length === 0 ? (
+        {timelineEvents?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
             <p className="text-lg text-gray-500">Nenhuma foto encontrada neste álbum.</p>
           </div>
@@ -56,7 +51,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                 </div>
 
                 <div className="px-12 md:pl-20">
-                  <MasonryGallery photos={event?.photos} onPhotoClick={setSelectedPhoto} />
+                  <MasonryGallery photos={event?.photos} />
                 </div>
               </div>
             ))}
@@ -74,69 +69,6 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
           </div>
         )}
       </div>
-
-      <AnimatePresence>
-        {selectedPhoto && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-black/80"
-              onClick={() => setSelectedPhoto(null)}
-            />
-
-            <div className="relative z-50 w-full h-full max-w-7xl max-h-[90vh] flex flex-col items-center justify-center p-4">
-              <motion.div
-                layoutId={`photo-${selectedPhoto?.id}`}
-                className="relative w-full max-w-5xl h-[65vh] flex items-center justify-center"
-                onClick={e => e.stopPropagation()}
-              >
-                <Image
-                  src={selectedPhoto?.src}
-                  alt={selectedPhoto?.alt}
-                  fill
-                  sizes="100vw"
-                  className="object-contain rounded-sm"
-                  priority
-                />
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.2 }}
-                  onClick={() => setSelectedPhoto(null)}
-                  className="absolute top-0 right-0 xl:-right-12 bg-white/20 backdrop-blur-sm text-white p-2 rounded-full hover:bg-white/30 transition-colors"
-                  aria-label="Fechar"
-                >
-                  <X size={24} />
-                </motion.button>
-              </motion.div>
-              {selectedPhoto?.description && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ 
-                    opacity: {
-                      duration: 0.2,
-                    }
-                  }}
-                  className="w-full max-w-3xl mt-4"
-                >
-                  <ScrollArea
-                    type="always"
-                    className="h-24 rounded-md border bg-background/80 p-3 text-text border-0"
-                  >
-                    <p className="whitespace-pre-line">{selectedPhoto?.description}</p>
-                  </ScrollArea>
-                </motion.div>
-              )}
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

@@ -26,6 +26,7 @@ export async function extractExifData(file: File): Promise<{
     const exif = await exifr.parse(file, {
       gps: true,
       exif: true,
+      tiff: true,
     });
 
     if (!exif) {
@@ -53,9 +54,37 @@ export async function extractExifData(file: File): Promise<{
     let width = null;
     let height = null;
 
+    const orientation = exif?.Orientation || null;
+
     if (exif?.ExifImageWidth && exif?.ExifImageHeight) {
       width = exif.ExifImageWidth;
       height = exif.ExifImageHeight;
+
+      if (orientation) {
+        let orientationValue: number;
+
+        if (typeof orientation === 'number') {
+          orientationValue = orientation;
+        } else if (typeof orientation === 'string') {
+          const orientationMap: Record<string, number> = {
+            'Horizontal (normal)': 1,
+            'Mirror horizontal': 2,
+            'Rotate 180': 3,
+            'Mirror vertical': 4,
+            'Mirror horizontal and rotate 270 CW': 5,
+            'Rotate 90 CW': 6,
+            'Mirror horizontal and rotate 90 CW': 7,
+            'Rotate 270 CW': 8,
+          };
+          orientationValue = orientationMap[orientation] || 1;
+        } else {
+          orientationValue = 1;
+        }
+
+        if ([5, 6, 7, 8].includes(orientationValue)) {
+          [width, height] = [height, width];
+        }
+      }
     } else {
       try {
         const imageBitmap = await createImageBitmap(file);

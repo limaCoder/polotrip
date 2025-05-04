@@ -70,6 +70,10 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
     initialPageParam: null,
   });
 
+  const coverImageUrl = albumData?.album?.coverImageUrl
+    ? albumData?.album?.coverImageUrl
+    : '/pages/album/album-cover-placeholder.jpg';
+
   return (
     <>
       <main className="min-h-screen bg-secondary-10 flex flex-col">
@@ -77,7 +81,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-text/70 via-transparent to-transparent z-10" />
             <Image
-              src={albumData?.album.coverImageUrl ?? '/pages/album/album-card-fallback.png'}
+              src={coverImageUrl}
               alt="Capa do álbum"
               fill
               sizes="100vw"

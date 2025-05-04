@@ -7,8 +7,6 @@ import { Photo as TimelinePhoto, TimelineEvent } from '@/components/PhotoTimelin
 import { format, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-const MASONRY_COLUMN_WIDTH = 300;
-
 const useGetPublicAlbumPhotos = (albumId: string) => {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } = useSuspenseInfiniteQuery({
     queryKey: albumKeys.publicPhotosList(albumId),
@@ -35,19 +33,23 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
       const formattedDate = format(parsedDate, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
 
       const transformedPhotos: TimelinePhoto[] = event?.photos?.map(photo => {
-        const displayWidth = MASONRY_COLUMN_WIDTH;
-        let displayHeight = 400;
+        let width = photo?.width || 0;
+        let height = photo?.height || 0;
 
-        if (photo?.width && photo?.height) {
-          displayHeight = Math.round((photo?.height / photo?.width) * displayWidth);
+        if (width > 0 && height > 0) {
+          const aspectRatio = height / width;
+
+          if (aspectRatio > 3 || aspectRatio < 0.33) {
+            [width, height] = [height, width];
+          }
         }
 
         return {
           id: photo?.id,
           src: photo?.imageUrl,
           alt: photo?.description || 'Foto do álbum',
-          width: displayWidth,
-          height: displayHeight,
+          width: photo?.width || 0,
+          height: photo?.height || 0,
           description: photo?.description || '',
         };
       });
