@@ -11,6 +11,7 @@ import { SkeletonList } from '@/components/SkeletonList';
 import { NetworkKeys } from '@/hooks/network/keys';
 import { getAlbums } from '@/http/get-albums';
 import { OnboardingModalWrapper } from './(components)/onboarding-modal-wrapper';
+import { InstallPwaModalWrapper } from './(components)/install-pwa-modal-wrapper';
 
 import { Metadata } from 'next';
 
@@ -69,6 +70,7 @@ export default async function DashboardPage() {
           </div>
         </section>
         <OnboardingModalWrapper />
+        <InstallPwaModalWrapper />
       </main>
       <Footer />
     </>
