@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
@@ -7,14 +7,15 @@ import { db } from '@polotrip/db';
 import { getCurrentUser } from '@/lib/auth/server';
 import { generateAlbumMetadata } from './metadata';
 
-type PublicAlbumLayoutProps = {
-  children: ReactNode;
-  params: Promise<{ id: string }>;
-};
-
 export const generateMetadata = generateAlbumMetadata;
 
-export default async function PublicAlbumLayout({ children, params }: PublicAlbumLayoutProps) {
+export default async function PublicAlbumLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const { id } = await params;
   const user = await getCurrentUser();
 

@@ -34,7 +34,7 @@ const pwaIcons = [
     sizes: '188x188',
     type: 'image/png',
   },
-    {
+  {
     src: 'pwa/windows11/Square150x150Logo.scale-150.png',
     sizes: '225x225',
     type: 'image/png',

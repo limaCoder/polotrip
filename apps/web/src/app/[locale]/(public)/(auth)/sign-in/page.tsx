@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { LogIn } from 'lucide-react';
+import { PageProps } from '@/types/next';
 
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -9,11 +10,10 @@ import womanTakingSunbathOnBeach from '@/assets/lottie/woman-taking-sunbath-on-b
 import { OAuthButton } from '@/components/OAuthButton';
 
 import { loginWithEmailPassword } from '@/actions/loginWithEmailPassword';
-import { LoginPageProps } from './types';
 
 const isLoginWithEmailPasswordEnabled = false;
 
-export default async function LoginPage({ params }: LoginPageProps) {
+export default async function LoginPage({ params }: PageProps) {
   const { locale } = await params;
   const signInUserWithLocale = loginWithEmailPassword.bind(null, locale);
 

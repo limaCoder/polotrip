@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -11,7 +12,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/i18n/routing';
 import { Locale } from '@/i18n/types';
 import { cn } from '@/lib/cn';
-import { RootLayoutProps } from './types';
 import { Toaster } from '@/components/ui/sooner';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
@@ -45,7 +45,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children, params }: RootLayoutProps) {
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
 
   if (!routing.locales.includes(locale as Locale)) {

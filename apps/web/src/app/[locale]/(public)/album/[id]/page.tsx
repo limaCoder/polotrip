@@ -13,9 +13,9 @@ import { getPublicAlbum } from '@/http/get-public-album';
 import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
 import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { AlbumViewPageProps } from './types';
+import { PageProps } from '@/types/next';
 
-export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
+export default async function AlbumViewPage({ params }: PageProps) {
   const { id: albumId } = await params;
 
   const albumData = await getPublicAlbum({ albumId });

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import { redirect } from '@/i18n/routing';
 
 import { getCurrentUser } from '@/lib/auth/server';
+import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: 'Acesso à plataforma | Polotrip',
@@ -23,12 +23,13 @@ export const metadata: Metadata = {
   },
 };
 
-type AuthLayoutProps = {
+export default async function AuthLayout({
+  children,
+  params,
+}: {
   children: ReactNode;
   params: Promise<{ locale: string }>;
-};
-
-export default async function AuthLayout({ children, params }: AuthLayoutProps) {
+}) {
   const { locale } = await params;
 
   const user = await getCurrentUser();

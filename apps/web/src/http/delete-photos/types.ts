@@ -1,5 +1,3 @@
-import { Album } from '@polotrip/db/models';
-
 export type DeletePhotosRequest = {
   params: {
     albumId: string;

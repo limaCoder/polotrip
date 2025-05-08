@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
@@ -6,15 +6,13 @@ import { albums } from '@polotrip/db/schema';
 import { db } from '@polotrip/db';
 import { getCurrentUser } from '@/lib/auth/server';
 
-type AlbumProtectedLayoutProps = {
-  children: ReactNode;
-  params: Promise<{ id: string }>;
-};
-
 export default async function AlbumProtectedLayout({
   children,
   params,
-}: AlbumProtectedLayoutProps) {
+}: {
+  children: ReactNode;
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   const user = await getCurrentUser();

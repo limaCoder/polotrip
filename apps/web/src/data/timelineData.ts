@@ -10,6 +10,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 1',
         width: 300,
         height: 400,
+        description: 'Foto 1',
       },
       {
         id: '2',
@@ -17,6 +18,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 2',
         width: 300,
         height: 300,
+        description: 'Foto 2',
       },
       {
         id: '3',
@@ -24,6 +26,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 3',
         width: 300,
         height: 350,
+        description: 'Foto 3',
       },
       {
         id: '4',
@@ -31,6 +34,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 4',
         width: 300,
         height: 250,
+        description: 'Foto 4',
       },
       {
         id: '5',
@@ -38,6 +42,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 5',
         width: 300,
         height: 450,
+        description: 'Foto 5',
       },
     ],
   },
@@ -50,6 +55,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 6',
         width: 300,
         height: 500,
+        description: 'Foto 6',
       },
       {
         id: '7',
@@ -57,6 +63,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 7',
         width: 300,
         height: 300,
+        description: 'Foto 7',
       },
       {
         id: '8',
@@ -64,6 +71,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 8',
         width: 300,
         height: 400,
+        description: 'Foto 8',
       },
       {
         id: '9',
@@ -71,6 +79,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 9',
         width: 300,
         height: 350,
+        description: 'Foto 9',
       },
       {
         id: '10',
@@ -78,6 +87,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 10',
         width: 300,
         height: 450,
+        description: 'Foto 10',
       },
       {
         id: '11',
@@ -85,6 +95,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 11',
         width: 300,
         height: 280,
+        description: 'Foto 11',
       },
       {
         id: '12',
@@ -92,6 +103,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 12',
         width: 300,
         height: 320,
+        description: 'Foto 12',
       },
     ],
   },
@@ -104,6 +116,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 13',
         width: 300,
         height: 380,
+        description: 'Foto 13',
       },
       {
         id: '14',
@@ -111,6 +124,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 14',
         width: 300,
         height: 420,
+        description: 'Foto 14',
       },
       {
         id: '15',
@@ -118,6 +132,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 15',
         width: 300,
         height: 300,
+        description: 'Foto 15',
       },
       {
         id: '16',
@@ -125,6 +140,7 @@ const timelineData: TimelineEvent[] = [
         alt: 'Foto 16',
         width: 300,
         height: 350,
+        description: 'Foto 16',
       },
     ],
   },

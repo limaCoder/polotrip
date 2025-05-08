@@ -1,8 +1,11 @@
 import { getPublicAlbum } from '@/http/get-public-album';
 import { Metadata } from 'next';
-import { AlbumViewPageProps } from './types';
 
-export async function generateAlbumMetadata({ params }: AlbumViewPageProps): Promise<Metadata> {
+export async function generateAlbumMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { id: albumId } = await params;
   const albumData = await getPublicAlbum({ albumId }).catch(() => null);
 

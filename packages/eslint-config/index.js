@@ -41,8 +41,13 @@ module.exports = {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "ignoreRestSiblings": true,
+      "destructuredArrayIgnorePattern": "^_"
+    }],
     "@typescript-eslint/no-explicit-any": "error",
     "react/jsx-no-constructed-context-values": "off",
     "react/jsx-props-no-spreading": "off",
@@ -61,7 +66,7 @@ module.exports = {
     ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",
-    "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/no-empty-function": "off",
     "no-irregular-whitespace": "off",
   },
 };

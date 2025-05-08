@@ -1,5 +1,14 @@
 'use client';
-import React, { useEffect, useRef, useState, createContext, useContext, JSX } from 'react';
+
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+  useContext,
+  JSX,
+  useCallback,
+} from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { motion } from 'motion/react';
@@ -173,10 +182,10 @@ export const Card = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const { onCardClose } = useContext(CarouselContext);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     onCardClose(index);
-  };
+  }, [onCardClose, index]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -193,7 +202,7 @@ export const Card = ({
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [open]);
+  }, [open, handleClose]);
 
   useOutsideClick(containerRef as React.RefObject<HTMLDivElement>, () => handleClose());
 

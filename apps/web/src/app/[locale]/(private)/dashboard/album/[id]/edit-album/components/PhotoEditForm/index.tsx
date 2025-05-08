@@ -126,8 +126,8 @@ export function PhotoEditForm({
                     longitude={form.getValues('longitude')}
                     onChange={(value, latitude, longitude) => {
                       field.onChange(value);
-                      form.setValue('latitude', latitude);
-                      form.setValue('longitude', longitude);
+                      form.setValue('latitude', latitude ?? null);
+                      form.setValue('longitude', longitude ?? null);
                     }}
                     disabled={isDisabled || (isMultipleSelection && preserveFields?.location)}
                     placeholder={

@@ -6,9 +6,9 @@ import { HowItWorks } from './(sections)/HowItWorks';
 import { Benefits } from './(sections)/Benefits';
 import { Faq } from './(sections)/Faq';
 import { Cta } from './(sections)/Cta';
-import { PageWithLocale } from '@/types/pageWithLocale';
+import { PageProps } from '@/types/next';
 
-export default async function Home({ params }: PageWithLocale) {
+export default async function Home({ params }: PageProps) {
   const { locale } = await params;
 
   return (

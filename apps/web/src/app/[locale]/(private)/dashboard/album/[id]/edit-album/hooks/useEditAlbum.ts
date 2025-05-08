@@ -6,7 +6,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useQueryState } from 'nuqs';
-import { formSchema, type PhotoEditFormData } from '../components/PhotoEditForm/types';
+import { formSchema, type PhotoEditFormSchemaData } from '../components/PhotoEditForm/types';
+import type { PhotoEditFormData } from '../components/PhotoEditForm/types';
 import { dateToAPIString } from '@/utils/dates';
 
 import { useGetAlbumDates } from '@/hooks/network/queries/useGetAlbumDates';
@@ -45,8 +46,10 @@ export function useEditAlbum() {
   const [dateParam, setDateParam] = useQueryState('date');
   const [pageParam, setPageParam] = useQueryState('page', { defaultValue: '1' });
 
-  const form = useForm<PhotoEditFormData>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<PhotoEditFormSchemaData>({
+    resolver: zodResolver(formSchema) as unknown as (
+      data: PhotoEditFormSchemaData,
+    ) => Promise<{ values: PhotoEditFormSchemaData; errors: {} }>,
     defaultValues: {
       dateTaken: null,
       locationName: '',

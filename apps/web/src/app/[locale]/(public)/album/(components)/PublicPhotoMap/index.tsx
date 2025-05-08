@@ -125,7 +125,7 @@ export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
       const imagesContainer = document.createElement('div');
       imagesContainer.className = 'photos-grid';
 
-      (groupLocations as Location[]).forEach((location, index) => {
+      (groupLocations as Location[]).forEach(location => {
         const imageWrapper = document.createElement('div');
         imageWrapper.className = 'relative flex flex-col bg-white';
 
