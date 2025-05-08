@@ -1,9 +1,7 @@
-import { NetworkKeys } from './index';
-
 export const albumKeys = {
-  all: [NetworkKeys.ALBUMS] as const,
+  all: ['albums'] as const,
   lists: () => [...albumKeys.all, 'list'] as const,
-  list: (filters: Record<string, unknown>) => [...albumKeys.lists(), { ...filters }] as const,
+  list: (filters: string) => [...albumKeys.lists(), { filters }] as const,
   details: () => [...albumKeys.all, 'detail'] as const,
   detail: (id: string) => [...albumKeys.details(), id] as const,
   dates: (albumId: string) => [...albumKeys.detail(albumId), 'dates'] as const,
@@ -13,4 +11,4 @@ export const albumKeys = {
 
   publicPhotos: 'publicPhotos' as const,
   publicPhotosList: (albumId: string) => [albumKeys.publicPhotos, 'list', albumId] as const,
-};
+} as const;

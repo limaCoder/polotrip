@@ -14,6 +14,7 @@ import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 
 import { useEditAlbum } from '../hooks/useEditAlbum';
 import { FormProvider } from 'react-hook-form';
+import { AlbumDetailsCard } from './AlbumDetailsCard';
 
 export function EditAlbumContent() {
   const {
@@ -91,6 +92,8 @@ export function EditAlbumContent() {
               <PhotoMap photos={filteredPhotos} onMarkerClick={handlePhotoClick} />
             </div>
           </div>
+
+          <AlbumDetailsCard />
         </div>
 
         <div className="flex flex-col gap-9">

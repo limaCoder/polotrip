@@ -16,7 +16,7 @@ const paramsSchema = z.object({
 const bodySchema = z.object({
   title: z.string().min(3).max(255).optional(),
   description: z.string().max(1000).nullable().optional(),
-  coverImageUrl: z.string().url().nullable().optional(),
+  coverImageUrl: z.union([z.string().url(), z.string().length(0), z.null()]).optional(),
   spotifyTrackId: z.string().nullable().optional(),
   spotifyPlaylistId: z.string().nullable().optional(),
   isPublished: z.boolean().optional(),
@@ -70,9 +70,26 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
             }),
             message: z.string(),
           }),
-          400: z.object({
-            message: z.string(),
-          }),
+          400: z.union([
+            z.object({ message: z.string() }),
+            z.object({ error: z.object({ message: z.string() }) }),
+          ]),
+          401: z.union([
+            z.object({ message: z.string() }),
+            z.object({ error: z.object({ message: z.string() }) }),
+          ]),
+          403: z.union([
+            z.object({ message: z.string() }),
+            z.object({ error: z.object({ message: z.string() }) }),
+          ]),
+          404: z.union([
+            z.object({ message: z.string() }),
+            z.object({ error: z.object({ message: z.string() }) }),
+          ]),
+          500: z.union([
+            z.object({ message: z.string() }),
+            z.object({ error: z.object({ message: z.string() }) }),
+          ]),
         },
       },
     },
@@ -131,7 +148,10 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
       } catch (error) {
         app.log.error('Error updating album:', error);
 
-        reply.status(500).send({ error: 'Failed to process the request.' });
+        return reply.status(500).send({
+          success: false,
+          message: 'Failed to process the request.',
+        });
       }
     },
   );

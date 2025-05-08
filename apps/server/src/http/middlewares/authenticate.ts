@@ -9,9 +9,7 @@ async function authenticate(request: FastifyRequest, reply: FastifyReply) {
     });
 
     if (!session) {
-      return reply.status(401).send({
-        error: 'Unauthorized',
-      });
+      throw new UnauthorizedError('Unauthorized', 'NO_SESSION');
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -29,6 +27,10 @@ async function authenticate(request: FastifyRequest, reply: FastifyReply) {
       },
       'Error in authentication',
     );
+
+    if (error instanceof UnauthorizedError) {
+      throw error;
+    }
 
     throw new UnauthorizedError('Invalid or expired session', 'INVALID_SESSION', {
       originalError: errorMessage,

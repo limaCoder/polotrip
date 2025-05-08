@@ -10,9 +10,11 @@ import { deletePhotosRoute } from './delete-photos';
 import { getPublicAlbumRoute } from './get-public-album';
 import { getPublicAlbumLocationsRoute } from './get-public-album-locations';
 import { getPublicAlbumPhotosRoute } from './get-public-album-photos';
+import { getAlbumRoute } from './get-album';
 
 const albumsController: FastifyPluginAsyncZod = async app => {
   app.register(getAlbumsRoute);
+  app.register(getAlbumRoute);
   app.register(createAlbumRoute);
   app.register(getUploadUrlsRoute);
   app.register(uploadPhotosRoute);
