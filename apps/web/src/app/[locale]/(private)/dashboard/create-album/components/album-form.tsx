@@ -7,10 +7,20 @@ import { cn } from '@/lib/cn';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { MonthPicker } from '@/components/MonthPicker';
 import { useAlbumForm } from './use-album-form';
+import { getPlanName, getPlanPhotoLimit } from '@/utils/getAlbumPrice';
 
 export function AlbumForm() {
-  const { formState, albumPrice, handleImageChange, formAction, isPending, selectedImage, locale } =
-    useAlbumForm();
+  const {
+    formState,
+    albumPrice,
+    handleImageChange,
+    formAction,
+    isPending,
+    selectedImage,
+    locale,
+    selectedPlan,
+    handlePlanChange,
+  } = useAlbumForm();
 
   return (
     <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
@@ -138,6 +148,23 @@ export function AlbumForm() {
             <p className="text-sm text-red-500">{formState?.coverImageError?.join(', ')}</p>
           )}
         </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="plan" className="font-body_two">
+            Plano do Álbum
+          </label>
+          <select
+            id="plan"
+            name="plan"
+            className="border border-text/25 rounded p-3 font-body_two text-sm"
+            onChange={handlePlanChange}
+            value={selectedPlan}
+          >
+            <option value="basic">Básico - 50 fotos</option>
+            <option value="standard">Padrão - 100 fotos</option>
+            <option value="premium">Premium - 150 fotos</option>
+          </select>
+        </div>
       </div>
 
       <hr className="border-text/25 my-6" />
@@ -147,8 +174,12 @@ export function AlbumForm() {
 
         <div className="w-full flex justify-between">
           <div>
-            <h3 className="font-body_two font-bold">Criação do álbum</h3>
-            <p className="text-xs">Inclui até 100 fotos e todas as funcionalidades premium</p>
+            <h3 className="font-body_two font-bold">
+              Criação do álbum - {getPlanName(selectedPlan)}
+            </h3>
+            <p className="text-xs">
+              Inclui até {getPlanPhotoLimit(selectedPlan)} fotos e todas as funcionalidades premium
+            </p>
           </div>
           <span className="font-body_two text-primary">
             {formatCurrency(locale as string, albumPrice)}

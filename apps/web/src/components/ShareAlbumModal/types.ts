@@ -3,6 +3,7 @@ interface ShareAlbumModalProps {
   onClose: () => void;
   albumId: string;
   albumTitle: string;
+  albumOwnerName: string;
   albumDescription?: string;
 }
 

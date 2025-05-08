@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import pLimit from 'p-limit';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 
 import { getSignedUrls, saveUploadedPhotos } from '@/http/upload-photos';
 import { PhotoMetadata } from '@/http/upload-photos/types';
@@ -16,11 +17,18 @@ import {
 import { PhotoFile, UseUploadFormOptions, UploadFormState, Params } from './types';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { QueryClient } from '@tanstack/react-query';
+import { getAlbum } from '@/http/get-album';
 
 export function useUploadForm(options?: UseUploadFormOptions) {
   const { id: albumId, locale } = useParams<Params>();
   const router = useRouter();
   const queryClient = useMemo(() => new QueryClient(), []);
+
+  const { data: albumData } = useQuery({
+    queryKey: albumKeys.detail(albumId),
+    queryFn: () => getAlbum({ albumId }),
+    enabled: !!albumId,
+  });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadFormState, setUploadFormState] = useState<UploadFormState>({
@@ -60,15 +68,15 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
   const handleFiles = useCallback(
     async (newFiles: FileList | null) => {
-      if (!newFiles?.length) return;
+      if (!newFiles?.length || !albumData?.album?.photoLimit) return;
 
       const imageFiles = Array.from(newFiles).filter(file => file?.type?.startsWith('image/'));
 
-      const remainingSlots = 100 - uploadFormState.files.length;
+      const remainingSlots = albumData?.album?.photoLimit - uploadFormState?.files?.length;
 
       if (remainingSlots <= 0) {
         toast.error('Limite excedido', {
-          description: 'Você já atingiu o limite de 100 fotos por álbum.',
+          description: `Você já atingiu o limite de ${albumData?.album?.photoLimit} fotos por álbum.`,
           duration: 5000,
           richColors: true,
         });
@@ -79,7 +87,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
       if (imageFiles.length > remainingSlots) {
         toast.warning('Algumas imagens foram ignoradas', {
-          description: `Apenas ${remainingSlots} ${remainingSlots === 1 ? 'foto foi adicionada' : 'fotos foram adicionadas'} para respeitar o limite de 100 fotos por álbum.`,
+          description: `Apenas ${remainingSlots} ${remainingSlots === 1 ? 'foto foi adicionada' : 'fotos foram adicionadas'} para respeitar o limite de ${albumData?.album?.photoLimit} fotos por álbum.`,
           duration: 5000,
           richColors: true,
         });
@@ -116,7 +124,6 @@ export function useUploadForm(options?: UseUploadFormOptions) {
           );
 
           const compressedFile = await compressImage(photo?.file);
-
           const metadata = await extractExifData(photo?.file);
 
           updateFiles(prev =>
@@ -133,6 +140,25 @@ export function useUploadForm(options?: UseUploadFormOptions) {
             ),
           );
         } catch (error) {
+          if (error instanceof Error && error.message.includes('photos per album exceeded')) {
+            const limitMatch = error.message.match(/Limit of (\d+) photos/);
+            const photoLimit = limitMatch
+              ? limitMatch[1]
+              : albumData.album.photoLimit?.toString() || '100';
+
+            toast.error('Limite excedido', {
+              description: `Você já atingiu o limite de ${photoLimit} fotos por álbum.`,
+              duration: 5000,
+              richColors: true,
+            });
+
+            updateUploadFormState({
+              isUploading: false,
+              error: error.message,
+            });
+            return;
+          }
+
           console.error('Error processing image:', error);
           toast.error('Erro ao processar imagem', {
             description: 'Por favor, tente novamente.',
@@ -148,7 +174,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         }
       }
     },
-    [uploadFormState?.files, updateFiles, updateUploadFormState],
+    [uploadFormState?.files, updateFiles, updateUploadFormState, albumData],
   );
 
   const removeFile = useCallback(
@@ -254,12 +280,12 @@ export function useUploadForm(options?: UseUploadFormOptions) {
           });
           urls = response.urls;
         } catch (error) {
-          if (
-            error instanceof Error &&
-            error.message === 'Limit of 100 photos per album exceeded'
-          ) {
+          if (error instanceof Error && error.message.includes('photos per album exceeded')) {
+            const limitMatch = error.message.match(/Limit of (\d+) photos/);
+            const photoLimit = limitMatch ? limitMatch[1] : '100';
+
             toast.error('Limite excedido', {
-              description: 'Você já atingiu o limite de 100 fotos por álbum.',
+              description: `Você já atingiu o limite de ${photoLimit} fotos por álbum.`,
               duration: 5000,
               richColors: true,
             });
@@ -369,7 +395,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     } catch (error) {
       console.error('Error during upload:', error);
 
-      if (!(error instanceof Error && error.message === 'Limit of 100 photos per album exceeded')) {
+      if (!(error instanceof Error && error.message.includes('photos per album exceeded'))) {
         toast.error('Erro no upload', {
           description: 'Falha ao fazer upload das imagens. Por favor, tente novamente.',
           duration: 5000,

@@ -14,7 +14,11 @@ import { HeaderAlbumProps } from '../types';
 
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
-export function HeaderAlbumMobile({ albumTitle, albumDescription }: HeaderAlbumProps) {
+export function HeaderAlbumMobile({
+  albumTitle,
+  albumDescription,
+  albumOwnerName,
+}: HeaderAlbumProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id: albumId } = useParams();
@@ -75,6 +79,7 @@ export function HeaderAlbumMobile({ albumTitle, albumDescription }: HeaderAlbumP
           albumId={albumId as string}
           albumTitle={albumTitle}
           albumDescription={albumDescription}
+          albumOwnerName={albumOwnerName}
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
         />

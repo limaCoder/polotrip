@@ -44,8 +44,8 @@ async function saveUploadedPhotos({
     .where(eq(photos.albumId, albumId))
     .then(rows => Number(rows[0]?.count || 0));
 
-  if (currentPhotos + uploadedPhotosData?.length > 100) {
-    throw new Error('Limit of 100 photos per album exceeded');
+  if (currentPhotos + uploadedPhotosData?.length > album.photoLimit) {
+    throw new Error(`Limit of ${album.photoLimit} photos per album exceeded`);
   }
 
   const storageProvider = StorageProviderFactory.getProvider();

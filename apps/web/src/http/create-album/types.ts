@@ -1,4 +1,5 @@
 import type { NewAlbum } from '@polotrip/db/models';
+import { AlbumPlan } from '@/constants/pricingEnum';
 
 type CreateAlbumRequest = {
   body: {
@@ -6,6 +7,7 @@ type CreateAlbumRequest = {
     date: string;
     description?: string | null | undefined;
     coverImageUrl?: string | null | undefined;
+    plan: AlbumPlan;
   };
 };
 

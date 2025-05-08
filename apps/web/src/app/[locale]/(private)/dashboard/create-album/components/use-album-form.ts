@@ -1,18 +1,21 @@
+import { useActionState, useEffect, useRef, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { Stripe } from '@stripe/stripe-js';
 import { createAlbumWithCheckout } from '@/actions/createAlbumWithCheckout';
+import { AlbumPlan } from '@/constants/pricingEnum';
 import getStripe from '@/lib/stripe/get-stripejs';
 import { getAlbumPrice } from '@/utils/getAlbumPrice';
-import { Stripe } from '@stripe/stripe-js';
-import { useParams } from 'next/navigation';
-import { useActionState, useEffect, useRef, useState } from 'react';
 
 export function useAlbumForm() {
   const { locale } = useParams();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<AlbumPlan>('standard');
   const stripeClientRef = useRef<Stripe | null>(null);
 
   const createAlbumWithCheckoutAction = createAlbumWithCheckout.bind(null, {
     locale: locale as string,
     stripePromise: stripeClientRef?.current,
+    plan: selectedPlan,
   });
 
   const [state, formAction, isPending] = useActionState(createAlbumWithCheckoutAction, null);
@@ -29,11 +32,15 @@ export function useAlbumForm() {
     coverImageError: state?.error?.errors?.coverImage,
   };
 
-  const albumPrice = getAlbumPrice(locale as string);
+  const albumPrice = getAlbumPrice(selectedPlan, locale as string);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setSelectedImage(file);
+  };
+
+  const handlePlanChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPlan(e.target.value as AlbumPlan);
   };
 
   useEffect(() => {
@@ -64,9 +71,11 @@ export function useAlbumForm() {
     formState,
     albumPrice,
     handleImageChange,
+    handlePlanChange,
     formAction,
     isPending,
     selectedImage,
+    selectedPlan,
     locale,
   };
 }

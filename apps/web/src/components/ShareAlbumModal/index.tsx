@@ -12,6 +12,7 @@ export function ShareAlbumModal({
   albumId,
   albumTitle,
   albumDescription,
+  albumOwnerName,
 }: ShareAlbumModalProps) {
   const shareUrl = `${window.location.origin}/album/${albumId}`;
 
@@ -33,7 +34,12 @@ export function ShareAlbumModal({
           </TabsList>
 
           <TabsContent value="links">
-            <ShareButtons url={shareUrl} title={albumTitle} description={albumDescription} />
+            <ShareButtons
+              url={shareUrl}
+              title={albumTitle}
+              description={albumDescription}
+              ownerName={albumOwnerName}
+            />
           </TabsContent>
 
           <TabsContent value="qrcode">

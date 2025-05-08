@@ -12,7 +12,11 @@ import { useAlbumOwnership } from '@/hooks/use-album-ownership';
 import { HeaderAlbumProps } from '../types';
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
-export function HeaderAlbumDesktop({ albumTitle, albumDescription }: HeaderAlbumProps) {
+export function HeaderAlbumDesktop({
+  albumTitle,
+  albumDescription,
+  albumOwnerName,
+}: HeaderAlbumProps) {
   const { handleTvMode } = useDesktopAlbumInTvMode();
   const { id: albumId } = useParams();
   const { isOwner } = useAlbumOwnership();
@@ -53,6 +57,7 @@ export function HeaderAlbumDesktop({ albumTitle, albumDescription }: HeaderAlbum
           albumId={albumId as string}
           albumTitle={albumTitle}
           albumDescription={albumDescription}
+          albumOwnerName={albumOwnerName}
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
         />

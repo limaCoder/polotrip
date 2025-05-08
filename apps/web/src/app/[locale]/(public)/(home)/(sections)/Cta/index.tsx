@@ -2,9 +2,10 @@ import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { getAlbumPrice } from '@/utils/getAlbumPrice';
 import { CtaProps } from './types';
+import { PricingEnum } from '@/constants/pricingEnum';
 
 export async function Cta({ locale }: CtaProps) {
-  const albumPrice = getAlbumPrice(locale);
+  const albumPrice = getAlbumPrice(PricingEnum.BASIC, locale);
 
   return (
     <section className="relative overflow-hidden py-20">

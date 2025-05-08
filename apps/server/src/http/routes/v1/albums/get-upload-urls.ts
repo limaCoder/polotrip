@@ -83,6 +83,9 @@ export const getUploadUrlsRoute: FastifyPluginAsyncZod = async app => {
             if (error.message === 'Album does not belong to user') {
               return reply.status(403).send({ message: error.message });
             }
+            if (error.message.includes('photos per album exceeded')) {
+              return reply.status(400).send({ message: error.message });
+            }
           }
           throw error;
         }

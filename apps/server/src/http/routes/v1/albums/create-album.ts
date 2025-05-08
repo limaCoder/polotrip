@@ -13,6 +13,7 @@ const bodySchema = z.object({
   date: z.string(),
   description: z.string().max(1000).nullable().optional(),
   coverImageUrl: z.string().url().nullable().optional(),
+  plan: z.enum(['basic', 'standard', 'premium']).default('standard'),
 });
 
 type CreateAlbumBody = z.infer<typeof bodySchema>;
@@ -39,6 +40,8 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
               isPublished: z.boolean(),
               shareableLink: z.string(),
               photoCount: z.number(),
+              photoLimit: z.number(),
+              plan: z.enum(['basic', 'standard', 'premium']),
               createdAt: z.date(),
               updatedAt: z.date(),
             }),
@@ -58,7 +61,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         const userId = session.user.id;
 
-        const { title, coverImageUrl, description, date } = request.body;
+        const { title, coverImageUrl, description, date, plan } = request.body;
 
         const sanitizedInput = {
           title: DOMPurify.sanitize(title),
@@ -72,6 +75,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
           date,
           description: sanitizedInput?.description,
           coverImageUrl: sanitizedInput?.coverImageUrl,
+          plan,
         });
 
         return reply.status(201).send({ album });

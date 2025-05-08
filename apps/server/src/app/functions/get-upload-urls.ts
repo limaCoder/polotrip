@@ -22,22 +22,22 @@ async function getUploadUrls({ albumId, userId, fileNames, fileTypes }: GetUploa
     .where(eq(albums.id, albumId))
     .then(rows => rows[0]);
 
-  const currentPhotos = await db
-    .select({ count: sql`count(*)` })
-    .from(photos)
-    .where(eq(photos.albumId, albumId))
-    .then(rows => Number(rows[0]?.count || 0));
-
-  if (currentPhotos + fileNames.length > 100) {
-    throw new Error('Limit of 100 photos per album exceeded');
-  }
-
   if (!album) {
     throw new Error('Album not found');
   }
 
   if (album.userId !== userId) {
     throw new Error('Album does not belong to user');
+  }
+
+  const currentPhotos = await db
+    .select({ count: sql`count(*)` })
+    .from(photos)
+    .where(eq(photos.albumId, albumId))
+    .then(rows => Number(rows[0]?.count || 0));
+
+  if (currentPhotos + fileNames.length > album.photoLimit) {
+    throw new Error(`Limit of ${album.photoLimit} photos per album exceeded`);
   }
 
   const storageProvider = StorageProviderFactory.getProvider();

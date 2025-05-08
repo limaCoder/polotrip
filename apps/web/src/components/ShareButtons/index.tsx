@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ShareButtonsProps } from './types';
-export function ShareButtons({ url, title, description }: ShareButtonsProps) {
-  const shareText = `${title}${description ? ` - ${description}` : ''}`;
+
+export function ShareButtons({ url, title, description, ownerName }: ShareButtonsProps) {
+  const shareText = `Confira o álbum ${title} de ${ownerName} no Polotrip`;
 
   const shareLinks = {
     whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + url)}`,

@@ -64,6 +64,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
           <HeaderAlbum
             albumTitle={albumData?.album?.title}
             albumDescription={albumData?.album?.description || ''}
+            albumOwnerName={albumOwnerName}
           />
 
           <div className="relative z-20 w-full flex flex-col items-start p-4 sm:p-8 md:pl-12 md:pb-10">

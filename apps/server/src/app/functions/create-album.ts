@@ -2,12 +2,15 @@ import { db } from '@polotrip/db';
 import { albums } from '@polotrip/db/schema';
 import { createId } from '@paralleldrive/cuid2';
 
+import { type AlbumPlan, PHOTO_LIMITS } from '@/app/constants/pricingEnum';
+
 interface CreateAlbumRequest {
   userId: string;
   title: string;
   date: string;
   description?: string | null;
   coverImageUrl?: string | null;
+  plan: AlbumPlan;
 }
 
 async function createAlbum({
@@ -16,8 +19,10 @@ async function createAlbum({
   date,
   description,
   coverImageUrl,
+  plan,
 }: CreateAlbumRequest) {
   const shareableLink = `album=${createId()}`;
+  const photoLimit = PHOTO_LIMITS[plan];
 
   const [originalAlbum] = await db
     .insert(albums)
@@ -30,6 +35,8 @@ async function createAlbum({
       shareableLink,
       isPublished: false,
       isPaid: false,
+      plan,
+      photoLimit,
     })
     .returning();
 

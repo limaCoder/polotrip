@@ -11,6 +11,8 @@ const currentStepAfterPaymentEnum = pgEnum('current_step_after_payment', [
   'published',
 ]);
 
+const albumPlanEnum = pgEnum('album_plan', ['basic', 'standard', 'premium']);
+
 const albums = pgTable('albums', {
   id: text('id')
     .primaryKey()
@@ -29,6 +31,8 @@ const albums = pgTable('albums', {
   currentStepAfterPayment: currentStepAfterPaymentEnum('current_step_after_payment'),
   shareableLink: text('shareable_link').notNull().unique(),
   photoCount: integer('photo_count').notNull().default(0),
+  photoLimit: integer('photo_limit').notNull().default(100),
+  plan: albumPlanEnum('plan').notNull().default('standard'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
@@ -41,4 +45,4 @@ const albumsRelations = relations(albums, ({ one, many }) => ({
   photos: many(photos),
 }));
 
-export { albums, albumsRelations };
+export { albums, albumsRelations, albumPlanEnum };

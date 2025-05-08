@@ -8,9 +8,10 @@ import { uploadImage } from './utils/upload-image';
 import { env } from '@/lib/env';
 import { createCheckout } from '@/http/create-checkout';
 import { getCurrency } from '@/utils/getCurrency';
+import { AlbumPlan } from '@/constants/pricingEnum';
 
 export async function createAlbumWithCheckout(
-  extra: { locale: string; stripePromise: Stripe | null },
+  extra: { locale: string; stripePromise: Stripe | null; plan: AlbumPlan },
   prevState: unknown,
   formData: FormData,
 ) {
@@ -50,12 +51,13 @@ export async function createAlbumWithCheckout(
         date: dateWithDay,
         description: description || null,
         coverImageUrl,
+        plan: extra.plan,
       },
     });
 
     const origin = env.NEXT_PUBLIC_WEB_URL;
     const successUrl = `${origin}/${extra?.locale}/dashboard/album/${album?.id}/upload`;
-    const cancelUrl = `${origin}/${extra?.locale}/create-album`;
+    const cancelUrl = `${origin}/${extra?.locale}/dashboard/create-album`;
 
     const currency = getCurrency(extra?.locale as string);
 

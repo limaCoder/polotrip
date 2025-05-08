@@ -76,7 +76,7 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async app => {
             if (error.message === 'Album does not belong to user') {
               return reply.status(403).send({ message: error.message });
             }
-            if (error.message === 'Limite de 100 fotos por álbum excedido') {
+            if (error.message.includes('photos per album exceeded')) {
               return reply.status(400).send({ message: error.message });
             }
           }
