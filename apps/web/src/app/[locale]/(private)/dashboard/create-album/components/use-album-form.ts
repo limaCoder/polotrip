@@ -1,3 +1,5 @@
+'use client';
+
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Stripe } from '@stripe/stripe-js';
@@ -39,8 +41,8 @@ export function useAlbumForm() {
     setSelectedImage(file);
   };
 
-  const handlePlanChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedPlan(e.target.value as AlbumPlan);
+  const handlePlanChange = (value: string) => {
+    setSelectedPlan(value as AlbumPlan);
   };
 
   useEffect(() => {

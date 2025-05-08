@@ -18,7 +18,7 @@ export function ShareAlbumModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="px-2 w-[90%] overflow-hidden">
         <DialogHeader>
           <DialogTitle>Compartilhar álbum</DialogTitle>
         </DialogHeader>

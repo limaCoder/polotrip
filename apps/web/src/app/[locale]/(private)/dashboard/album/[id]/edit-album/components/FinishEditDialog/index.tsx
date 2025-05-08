@@ -15,7 +15,7 @@ import { FinishEditDialogProps } from './types';
 export function FinishEditDialog({ isOpen, onClose, onConfirm }: FinishEditDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+      <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
         <AlertDialogHeader>
           <AlertDialogTitle>Finalizar edição do álbum?</AlertDialogTitle>
           <AlertDialogDescription asChild>

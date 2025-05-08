@@ -128,7 +128,7 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden">
         <DialogHeader>
           <DialogTitle>Editar Álbum</DialogTitle>
           <DialogDescription>

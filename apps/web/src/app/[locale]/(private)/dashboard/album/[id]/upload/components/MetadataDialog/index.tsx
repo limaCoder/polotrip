@@ -42,7 +42,7 @@ export function MetadataDialog({
   return (
     <>
       <AlertDialog open={isOpen && !showConfirmRemoveDialog} onOpenChange={onClose}>
-        <AlertDialogContent>
+        <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
           <AlertDialogHeader>
             <AlertDialogTitle>Informação sobre metadados das fotos</AlertDialogTitle>
             <AlertDialogDescription asChild>
@@ -83,7 +83,7 @@ export function MetadataDialog({
       </AlertDialog>
 
       <AlertDialog open={showConfirmRemoveDialog} onOpenChange={handleCancelRemove}>
-        <AlertDialogContent>
+        <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar remoção dos metadados?</AlertDialogTitle>
             <AlertDialogDescription asChild>

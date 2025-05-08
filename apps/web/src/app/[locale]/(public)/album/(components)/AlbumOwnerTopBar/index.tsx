@@ -11,8 +11,10 @@ export function AlbumOwnerTopBar() {
 
   return (
     <div className="w-full bg-primary text-background">
-      <div className="container mx-auto px-4 lg:px-9 py-2 flex items-center justify-between">
-        <p className="font-body_two">👋 Oi! Este é o seu álbum sendo visualizado como público.</p>
+      <div className="container mx-auto px-4 lg:px-9 py-3 flex flex-col lg:flex-row items-center justify-between gap-2">
+        <p className="font-body_two text-center lg:text-left">
+          👋 Oi! Este é o seu álbum sendo visualizado como público.
+        </p>
         <Link
           href="/dashboard"
           className="flex items-center gap-2 text-background hover:text-secondary transition-colors font-body_two"

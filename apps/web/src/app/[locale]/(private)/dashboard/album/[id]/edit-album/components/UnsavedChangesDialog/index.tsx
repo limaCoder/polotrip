@@ -13,7 +13,7 @@ import { UnsavedChangesDialogProps } from './types';
 export function UnsavedChangesDialog({ isOpen, onClose, onConfirm }: UnsavedChangesDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+      <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
         <AlertDialogHeader>
           <AlertDialogTitle>Alterações não salvas</AlertDialogTitle>
           <AlertDialogDescription asChild>

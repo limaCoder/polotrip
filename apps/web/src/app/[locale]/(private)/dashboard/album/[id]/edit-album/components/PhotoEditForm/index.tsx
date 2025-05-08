@@ -94,7 +94,7 @@ export function PhotoEditForm({
           />
 
           {isMultipleSelection && (
-            <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
                 <Label className="font-body_two text-text/90">Preservar localização original</Label>
                 <p className="text-sm text-text/60 mt-1">
@@ -148,7 +148,7 @@ export function PhotoEditForm({
           />
 
           {isMultipleSelection && (
-            <div className="flex items-center justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
                 <Label className="font-body_two text-text/90">Preservar descrição original</Label>
                 <p className="text-sm text-text/60 mt-1">

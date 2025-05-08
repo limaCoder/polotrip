@@ -8,6 +8,13 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { MonthPicker } from '@/components/MonthPicker';
 import { useAlbumForm } from './use-album-form';
 import { getPlanName, getPlanPhotoLimit } from '@/utils/getAlbumPrice';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export function AlbumForm() {
   const {
@@ -153,17 +160,16 @@ export function AlbumForm() {
           <label htmlFor="plan" className="font-body_two">
             Plano do Álbum
           </label>
-          <select
-            id="plan"
-            name="plan"
-            className="border border-text/25 rounded p-3 font-body_two text-sm"
-            onChange={handlePlanChange}
-            value={selectedPlan}
-          >
-            <option value="basic">Básico - 50 fotos</option>
-            <option value="standard">Padrão - 100 fotos</option>
-            <option value="premium">Premium - 150 fotos</option>
-          </select>
+          <Select name="plan" value={selectedPlan} onValueChange={handlePlanChange}>
+            <SelectTrigger className="border border-text/25 rounded p-3 font-body_two text-sm">
+              <SelectValue placeholder="Selecione um plano" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="basic">Básico - 50 fotos</SelectItem>
+              <SelectItem value="standard">Padrão - 100 fotos</SelectItem>
+              <SelectItem value="premium">Premium - 150 fotos</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

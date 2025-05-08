@@ -11,6 +11,7 @@ import { formatFileSize } from '@/helpers/uploadHelpers';
 import { useUploadForm } from '@/app/[locale]/(private)/dashboard/album/[id]/upload/components/UploadForm/useUploadForm';
 import { CityUnscrambleGame } from '../CityUnscrambleGame';
 import { LoadingGameWrapper } from '../LoadingGameWrapper';
+import { UploadFormProcessWaiting } from '../UploadFormProcessWaiting';
 
 export function UploadForm() {
   const {
@@ -38,6 +39,13 @@ export function UploadForm() {
           {uploadFormState?.error}
         </div>
       )}
+
+      {isCompressingState || uploadFormState?.isUploading ? (
+        <UploadFormProcessWaiting
+          isCompressingState={isCompressingState}
+          uploadFormState={uploadFormState}
+        />
+      ) : null}
 
       <div
         className={cn(

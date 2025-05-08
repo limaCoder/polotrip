@@ -12,7 +12,7 @@ export function CityUnscrambleGame({ className }: CityUnscrambleGameProps) {
         <p className="text-sm text-gray-500">{currentCity.hint}</p>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col lg:flex-row gap-2 mb-4">
         <input
           type="text"
           value={input}

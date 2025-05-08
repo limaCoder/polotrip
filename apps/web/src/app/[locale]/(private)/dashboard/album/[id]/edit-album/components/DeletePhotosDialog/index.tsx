@@ -20,7 +20,7 @@ export function DeletePhotosDialog({
 }: DeletePhotosDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+      <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
         <AlertDialogHeader>
           <div className="flex justify-center mb-4">
             <div className="bg-red-100 text-red-600 p-3 rounded-full">
