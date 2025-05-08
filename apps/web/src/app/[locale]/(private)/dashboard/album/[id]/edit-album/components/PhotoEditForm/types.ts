@@ -1,29 +1,19 @@
 import { Photo } from '@polotrip/db/models';
 import { z } from 'zod';
 
-type PhotoEditFormData = {
-  dateTaken: Date | null;
-  locationName: string | null;
-  description: string | null;
-  latitude: number | null;
-  longitude: number | null;
-};
+const formSchema = z.object({
+  dateTaken: z.date().optional().nullable(),
+  locationName: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  latitude: z.number().optional().nullable(),
+  longitude: z.number().optional().nullable(),
+});
 
-const formSchema = z
-  .object({
-    dateTaken: z.date().nullable(),
-    locationName: z.string().nullable(),
-    description: z.string().nullable(),
-    latitude: z.number().nullable(),
-    longitude: z.number().nullable(),
-  })
-  .strict();
-
-type PhotoEditFormSchemaData = z.infer<typeof formSchema>;
+type PhotoEditFormData = z.infer<typeof formSchema>;
 
 interface PhotoEditFormProps {
   selectedPhotos: Photo[];
-  onSave: (data: PhotoEditFormSchemaData) => void;
+  onSave: (data: PhotoEditFormData) => void;
   deselectAllPhotos: (skipUnsavedCheck?: boolean) => void;
   onCancel?: () => void;
   isDisabled?: boolean;
@@ -32,15 +22,10 @@ interface PhotoEditFormProps {
 
 interface UsePhotoEditFormProps {
   selectedPhotos: Photo[];
-  onSave: (data: PhotoEditFormSchemaData) => void;
+  onSave: (data: PhotoEditFormData) => void;
   deselectAllPhotos: (skipUnsavedCheck?: boolean) => void;
 }
 
 export { formSchema };
 
-export type {
-  PhotoEditFormProps,
-  PhotoEditFormData,
-  UsePhotoEditFormProps,
-  PhotoEditFormSchemaData,
-};
+export type { PhotoEditFormProps, PhotoEditFormData, UsePhotoEditFormProps };
