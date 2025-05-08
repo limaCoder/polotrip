@@ -7,11 +7,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useMobileAlbumInTvMode } from '@/hooks/use-mobile-album-in-tv-mode';
 import { cn } from '@/lib/cn';
+import { useParams } from 'next/navigation';
+import { ShareAlbumModal } from '@/components/ShareAlbumModal';
+import { useAlbumOwnership } from '@/hooks/use-album-ownership';
+import { HeaderAlbumProps } from '../types';
 
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
-export function HeaderAlbumMobile() {
+export function HeaderAlbumMobile({ albumTitle, albumDescription }: HeaderAlbumProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const { id: albumId } = useParams();
+  const { isOwner } = useAlbumOwnership();
 
   const { handleTvMode } = useMobileAlbumInTvMode();
 
@@ -36,12 +43,18 @@ export function HeaderAlbumMobile() {
             isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none',
           )}
         >
-          <button
-            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
-            aria-label="Compartilhar"
-          >
-            <Share2 className="h-6 w-6 text-primary relative -left-0.5" />
-          </button>
+          {isOwner && (
+            <button
+              className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
+              aria-label="Compartilhar"
+              onClick={() => {
+                setIsShareModalOpen(true);
+                setIsOpen(false);
+              }}
+            >
+              <Share2 className="h-6 w-6 text-primary relative -left-0.5" />
+            </button>
+          )}
           <button
             className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
             aria-label="Modo TV"
@@ -56,6 +69,16 @@ export function HeaderAlbumMobile() {
           )}
         </div>
       </div>
+
+      {isOwner && (
+        <ShareAlbumModal
+          albumId={albumId as string}
+          albumTitle={albumTitle}
+          albumDescription={albumDescription}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

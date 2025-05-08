@@ -1,10 +1,7 @@
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
-import { PageWithLocale } from '@/types/pageWithLocale';
 
-export default async function PrivacyPolicy({ params }: PageWithLocale) {
-  const { locale } = await params;
-
+export default async function PrivacyPolicy() {
   return (
     <>
       <Header />
@@ -97,7 +94,10 @@ export default async function PrivacyPolicy({ params }: PageWithLocale) {
             <ul className="list-disc ml-6 mt-2">
               <li>
                 <strong>Com pessoas que você autoriza:</strong> Seus álbuns são visíveis apenas para
-                pessoas com quem você compartilha o link único.
+                pessoas com quem você compartilha o link único. As imagens dos álbuns são
+                armazenadas em um bucket público, o que significa que, tecnicamente, qualquer pessoa
+                com o endereço exato da imagem pode acessá-la. No entanto, o endereço das imagens é
+                difícil de adivinhar e não é divulgado publicamente pela plataforma.
               </li>
               <li>
                 <strong>Com provedores de serviços:</strong> Compartilhamos dados com prestadores de
@@ -109,7 +109,10 @@ export default async function PrivacyPolicy({ params }: PageWithLocale) {
                 obrigados por lei ou para proteger nossos direitos legais.
               </li>
             </ul>
-            <p className="mt-2">Não vendemos ou alugamos suas informações pessoais a terceiros.</p>
+            <p className="mt-2">
+              Não vendemos ou alugamos suas informações pessoais a terceiros. Recomendamos que você
+              compartilhe seus álbuns apenas com pessoas de confiança.
+            </p>
           </div>
 
           <div>

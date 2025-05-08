@@ -5,11 +5,18 @@ import { Tv, Share2 } from 'lucide-react';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import Image from 'next/image';
 import { useDesktopAlbumInTvMode } from '@/hooks/use-desktop-album-in-tv-mode';
-
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { ShareAlbumModal } from '@/components/ShareAlbumModal';
+import { useAlbumOwnership } from '@/hooks/use-album-ownership';
+import { HeaderAlbumProps } from '../types';
 const IS_INTERNATIONALIZATION_ENABLED = false;
 
-export function HeaderAlbumDesktop() {
+export function HeaderAlbumDesktop({ albumTitle, albumDescription }: HeaderAlbumProps) {
   const { handleTvMode } = useDesktopAlbumInTvMode();
+  const { id: albumId } = useParams();
+  const { isOwner } = useAlbumOwnership();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   return (
     <div className="hidden md:flex w-full justify-between items-center">
@@ -27,16 +34,29 @@ export function HeaderAlbumDesktop() {
           <span className="font-body_one w-max">Modo TV</span>
         </button>
 
-        <button
-          className="flex items-center gap-2 text-background hover:text-primary transition-colors"
-          aria-label="Compartilhar"
-        >
-          <Share2 size={20} className="text-primary" />
-          <span className="font-body_one w-max">Compartilhar</span>
-        </button>
+        {isOwner && (
+          <button
+            className="flex items-center gap-2 text-background hover:text-primary transition-colors"
+            aria-label="Compartilhar"
+            onClick={() => setIsShareModalOpen(true)}
+          >
+            <Share2 size={20} className="text-primary" />
+            <span className="font-body_one w-max">Compartilhar</span>
+          </button>
+        )}
 
         {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher whiteTrigger />}
       </div>
+
+      {isOwner && (
+        <ShareAlbumModal
+          albumId={albumId as string}
+          albumTitle={albumTitle}
+          albumDescription={albumDescription}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

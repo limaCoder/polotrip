@@ -1,10 +1,7 @@
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
-import { PageWithLocale } from '@/types/pageWithLocale';
 
-export default async function TermsOfUse({ params }: PageWithLocale) {
-  const { locale } = await params;
-
+export default async function TermsOfUse() {
   return (
     <>
       <Header />
@@ -89,14 +86,13 @@ export default async function TermsOfUse({ params }: PageWithLocale) {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-4">
-              8. Armazenamento e Processamento de Dados
-            </h2>
+            <h2 className="mt-8 mb-2 text-xl font-bold">8. Armazenamento e Acesso às Imagens</h2>
             <p>
-              As capas dos álbuns são armazenadas em um bucket público no Supabase, enquanto as
-              fotos dos álbuns são armazenadas em um bucket privado no R2 Cloudflare. Ao utilizar o
-              Polotrip, você concorda com o armazenamento e processamento de seus dados conforme
-              descrito em nossa Política de Privacidade.
+              As imagens enviadas para a plataforma são armazenadas em um serviço de armazenamento
+              público, porém o acesso aos álbuns é restrito por meio de links únicos. Ao
+              compartilhar um álbum, você concorda que qualquer pessoa com o link poderá visualizar
+              as imagens contidas nele. Não nos responsabilizamos por acessos não autorizados
+              decorrentes do compartilhamento do link por parte do usuário.
             </p>
           </div>
 

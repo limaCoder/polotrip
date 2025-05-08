@@ -1,55 +1,23 @@
-import { HeaderAlbum } from '../(components)/HeaderAlbum';
-import { MapPin } from 'lucide-react';
-import { Footer } from '@/components/Footer';
-import { PhotoTimeline } from '@/components/PhotoTimeline';
-import { getPublicAlbum } from '@/http/get-public-album';
-import { AlbumViewPageProps } from './types';
-import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
 import { Suspense } from 'react';
-import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
-import { Metadata } from 'next';
 import Image from 'next/image';
+import { MapPin } from 'lucide-react';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
-type Props = {
-  params: { id: string; locale: string };
-};
+import { PhotoTimeline } from '@/components/PhotoTimeline';
+import { Footer } from '@/components/Footer';
+import { HeaderAlbum } from '../(components)/HeaderAlbum';
+import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
+import { AlbumOwnerTopBar } from '../(components)/AlbumOwnerTopBar';
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id: albumId } = await params;
-  const albumData = await getPublicAlbum({ albumId }).catch(() => null);
-
-  if (!albumData) {
-    return {
-      title: 'Álbum não encontrado | Polotrip',
-    };
-  }
-
-  return {
-    title: `${albumData.album.title} | Polotrip`,
-    description:
-      albumData.album.description || 'Confira as fotos e memórias deste álbum especial no Polotrip',
-    openGraph: {
-      title: `${albumData.album.title} | Polotrip`,
-      description:
-        albumData.album.description ||
-        'Confira as fotos e memórias deste álbum especial no Polotrip',
-      type: 'article',
-      images: [
-        {
-          url: albumData.album.coverImageUrl || 'https://polotrip.com/openGraph/og-image.jpg',
-          width: 1200,
-          height: 630,
-        },
-      ],
-    },
-  };
-}
+import { getPublicAlbum } from '@/http/get-public-album';
+import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
+import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
+import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import { AlbumViewPageProps } from './types';
 
 export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
   const { id: albumId } = await params;
+
   const albumData = await getPublicAlbum({ albumId });
   const locationsDataPromise = getPublicAlbumLocations({ albumId });
 
@@ -74,8 +42,11 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
     ? albumData?.album?.coverImageUrl
     : '/pages/album/album-cover-placeholder.jpg';
 
+  const albumOwnerName = albumData?.user?.name?.split(' ')[0];
+
   return (
     <>
+      <AlbumOwnerTopBar />
       <main className="min-h-screen bg-secondary-10 flex flex-col">
         <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
           <div className="absolute inset-0 z-0">
@@ -90,16 +61,19 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
             />
           </div>
 
-          <HeaderAlbum />
+          <HeaderAlbum
+            albumTitle={albumData?.album?.title}
+            albumDescription={albumData?.album?.description || ''}
+          />
 
           <div className="relative z-20 w-full flex flex-col items-start p-4 sm:p-8 md:pl-12 md:pb-10">
             <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-secondary">
-              {albumData?.album.title}
+              {albumData?.album?.title}
             </h1>
 
-            {albumData?.album.description && (
+            {albumData?.album?.description && (
               <p className="font-title_three text-lg md:text-2xl text-background font-bold pt-2">
-                {albumData?.album.description}
+                {albumData?.album?.description}
               </p>
             )}
           </div>
@@ -110,7 +84,7 @@ export default async function AlbumViewPage({ params }: AlbumViewPageProps) {
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="text-primary hidden md:block" size={24} />
               <h2 className="font-title_two text-2xl text-primary">
-                ✨ Esses foram os momentos incríveis de {albumData?.user?.name.split(' ')[0]}
+                ✨ Esses foram os momentos incríveis de {albumOwnerName}
               </h2>
             </div>
             <div className="w-full h-[400px] rounded-lg overflow-hidden">

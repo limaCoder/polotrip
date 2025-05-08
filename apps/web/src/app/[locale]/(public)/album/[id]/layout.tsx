@@ -4,14 +4,19 @@ import { eq } from 'drizzle-orm';
 
 import { albums } from '@polotrip/db/schema';
 import { db } from '@polotrip/db';
+import { getCurrentUser } from '@/lib/auth/server';
+import { generateAlbumMetadata } from './metadata';
 
 type PublicAlbumLayoutProps = {
   children: ReactNode;
   params: Promise<{ id: string }>;
 };
 
+export const generateMetadata = generateAlbumMetadata;
+
 export default async function PublicAlbumLayout({ children, params }: PublicAlbumLayoutProps) {
   const { id } = await params;
+  const user = await getCurrentUser();
 
   const album = await db
     .select()
@@ -23,5 +28,7 @@ export default async function PublicAlbumLayout({ children, params }: PublicAlbu
     notFound();
   }
 
-  return <>{children}</>;
+  const isOwner = user?.id === album.userId;
+
+  return <div data-is-owner={isOwner}>{children}</div>;
 }

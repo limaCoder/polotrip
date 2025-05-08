@@ -1,6 +1,7 @@
 type AlbumViewPageProps = {
   params: {
     id: string;
+    locale: string;
   };
 };
 

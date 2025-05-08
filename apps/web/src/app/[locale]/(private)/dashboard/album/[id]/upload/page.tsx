@@ -1,8 +1,8 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { UploadForm } from './components/UploadForm';
 import { BackButton } from '../../../(components)/back-button';
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Upload de Fotos | Polotrip',

@@ -17,7 +17,7 @@ const questions = [
   {
     question: 'Minhas fotos ficam seguras no Polotrip?',
     answer:
-      'Sim! Usamos armazenamento seguro em nuvem e cuidamos da sua privacidade em todas as etapas.',
+      'As fotos dos seus álbuns só podem ser visualizadas por quem tem o link do álbum. No entanto, as imagens são armazenadas em um servidor público, o que significa que, tecnicamente, qualquer pessoa com o endereço exato da imagem pode acessá-la. O endereço das imagens é difícil de adivinhar e não é divulgado publicamente pela plataforma. Recomendamos que você compartilhe o link do álbum apenas com pessoas de confiança.',
   },
   {
     question: 'O álbum expira depois de um tempo?',
