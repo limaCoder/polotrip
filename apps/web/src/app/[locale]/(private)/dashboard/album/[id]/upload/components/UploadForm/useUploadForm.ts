@@ -240,16 +240,38 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
         if (!validFileNames?.length) continue;
 
-        const { urls } = await getSignedUrls({
-          params: {
-            albumId,
-            count: validFileNames?.length,
-          },
-          body: {
-            fileNames: validFileNames,
-            fileTypes: validFileTypes,
-          },
-        });
+        let urls;
+        try {
+          const response = await getSignedUrls({
+            params: {
+              albumId,
+              count: validFileNames?.length,
+            },
+            body: {
+              fileNames: validFileNames,
+              fileTypes: validFileTypes,
+            },
+          });
+          urls = response.urls;
+        } catch (error) {
+          if (
+            error instanceof Error &&
+            error.message === 'Limit of 100 photos per album exceeded'
+          ) {
+            toast.error('Limite excedido', {
+              description: 'Você já atingiu o limite de 100 fotos por álbum.',
+              duration: 5000,
+              richColors: true,
+            });
+
+            updateUploadFormState({
+              isUploading: false,
+              error: error.message,
+            });
+            return;
+          }
+          throw error;
+        }
 
         const limit = pLimit(options?.maxConcurrentUploads || 5);
         const uploadTasks = [];
@@ -347,10 +369,18 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     } catch (error) {
       console.error('Error during upload:', error);
 
-      updateUploadFormState({
-        error: 'Falha ao fazer upload das imagens. Por favor, tente novamente.',
-        isUploading: false,
-      });
+      if (!(error instanceof Error && error.message === 'Limit of 100 photos per album exceeded')) {
+        toast.error('Erro no upload', {
+          description: 'Falha ao fazer upload das imagens. Por favor, tente novamente.',
+          duration: 5000,
+          richColors: true,
+        });
+
+        updateUploadFormState({
+          error: error instanceof Error ? error.message : 'Erro desconhecido',
+          isUploading: false,
+        });
+      }
     }
   }, [
     albumId,

@@ -1,9 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { createId } from '@paralleldrive/cuid2';
-import { env } from '@/env';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { db } from '@polotrip/db';
-import { albums } from '@polotrip/db/schema';
+import { albums, photos } from '@polotrip/db/schema';
 import { StorageProviderFactory } from '../factories/storage-provider.factory';
 
 interface GetUploadUrlsRequest {
@@ -23,6 +21,16 @@ async function getUploadUrls({ albumId, userId, fileNames, fileTypes }: GetUploa
     .from(albums)
     .where(eq(albums.id, albumId))
     .then(rows => rows[0]);
+
+  const currentPhotos = await db
+    .select({ count: sql`count(*)` })
+    .from(photos)
+    .where(eq(photos.albumId, albumId))
+    .then(rows => Number(rows[0]?.count || 0));
+
+  if (currentPhotos + fileNames.length > 100) {
+    throw new Error('Limit of 100 photos per album exceeded');
+  }
 
   if (!album) {
     throw new Error('Album not found');
