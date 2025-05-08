@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import { Upload, X, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/Button';
@@ -10,37 +9,25 @@ import { cn } from '@/lib/cn';
 
 import { formatFileSize } from '@/helpers/uploadHelpers';
 import { useUploadForm } from '@/app/[locale]/(private)/dashboard/album/[id]/upload/components/UploadForm/useUploadForm';
-import { Params } from './types';
+import { CityUnscrambleGame } from '../CityUnscrambleGame';
+import { LoadingGameWrapper } from '../LoadingGameWrapper';
 
 export function UploadForm() {
-  const { id: albumId, locale } = useParams<Params>();
-
-  const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
-
   const {
     uploadFormState,
     fileInputRef,
-    handleFiles,
+    isCompressingState,
+    getTotalSize,
+    uploadButtonDisabled,
+    clearAllButtonDisabled,
+    handleCompressProgress,
     removeFile,
     clearAll,
     handleUploadClick,
     handleKeepMetadata,
     handleRemoveMetadata,
     handleCloseMetadataDialog,
-  } = useUploadForm(albumId, {
-    redirectPath,
-  });
-
-  const getTotalSize = () => uploadFormState?.files?.reduce((total, file) => total + file?.size, 0);
-
-  const uploadButtonDisabled =
-    uploadFormState?.files?.length === 0 ||
-    uploadFormState?.files?.some(photo => photo?.loading) ||
-    uploadFormState?.isUploading ||
-    uploadFormState?.files?.every(photo => photo?.error);
-
-  const clearAllButtonDisabled =
-    uploadFormState?.files?.length === 0 || uploadFormState?.isUploading;
+  } = useUploadForm();
 
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
@@ -64,7 +51,7 @@ export function UploadForm() {
           accept="image/png, image/jpeg, image/jpg, image/heic, image/heif, image/heic-sequence"
           className="absolute inset-0 opacity-0 cursor-pointer z-10"
           multiple
-          onChange={e => handleFiles(e.target.files)}
+          onChange={e => handleCompressProgress(e.target.files)}
           disabled={uploadFormState?.isUploading}
         />
         <Upload size={24} className="text-text/25 mb-2" />
@@ -134,6 +121,14 @@ export function UploadForm() {
           <p className="text-sm text-center">Fazendo upload... {uploadFormState?.progress}%</p>
         </div>
       )}
+
+      <LoadingGameWrapper
+        isCompressing={isCompressingState}
+        isUploading={uploadFormState?.isUploading}
+        className="mb-6"
+      >
+        <CityUnscrambleGame className="bg-white p-4 rounded-lg shadow-sm" />
+      </LoadingGameWrapper>
 
       <div className="w-full flex justify-end gap-4">
         <Button

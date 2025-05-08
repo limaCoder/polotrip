@@ -37,4 +37,26 @@ interface UploadFormState {
   willMetadataBeRemoved: boolean | null;
 }
 
-export type { PhotoFile, PhotoPreview, UseUploadFormOptions, Params, UploadFormState };
+interface City {
+  name: string;
+  hint: string;
+}
+
+interface GameState {
+  score: number;
+  currentCity: {
+    original: string;
+    scrambled: string;
+    hint: string;
+  };
+}
+
+export type {
+  PhotoFile,
+  PhotoPreview,
+  UseUploadFormOptions,
+  Params,
+  UploadFormState,
+  City,
+  GameState,
+};

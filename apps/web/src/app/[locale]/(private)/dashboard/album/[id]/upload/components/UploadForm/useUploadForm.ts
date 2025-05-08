@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import pLimit from 'p-limit';
 import { toast } from 'sonner';
 
@@ -13,11 +13,12 @@ import {
   revokePreviewUrl,
   createPreviewUrlAsync,
 } from '@/helpers/uploadHelpers';
-import { PhotoFile, UseUploadFormOptions, UploadFormState } from './types';
+import { PhotoFile, UseUploadFormOptions, UploadFormState, Params } from './types';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { QueryClient } from '@tanstack/react-query';
 
-export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
+export function useUploadForm(options?: UseUploadFormOptions) {
+  const { id: albumId, locale } = useParams<Params>();
   const router = useRouter();
   const queryClient = useMemo(() => new QueryClient(), []);
 
@@ -31,6 +32,20 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     keepMetadata: null,
     willMetadataBeRemoved: null,
   });
+  const [isCompressingState, setIsCompressingState] = useState(false);
+
+  const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
+
+  const getTotalSize = () => uploadFormState?.files?.reduce((total, file) => total + file?.size, 0);
+
+  const uploadButtonDisabled =
+    uploadFormState?.files?.length === 0 ||
+    uploadFormState?.files?.some(photo => photo?.loading) ||
+    uploadFormState?.isUploading ||
+    uploadFormState?.files?.every(photo => photo?.error);
+
+  const clearAllButtonDisabled =
+    uploadFormState?.files?.length === 0 || uploadFormState?.isUploading;
 
   const updateUploadFormState = useCallback((newState: Partial<UploadFormState>) => {
     setUploadFormState(prev => ({ ...prev, ...newState }));
@@ -309,8 +324,8 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
 
       clearAll();
 
-      if (options?.redirectPath) {
-        router.push(options?.redirectPath);
+      if (redirectPath) {
+        router.push(redirectPath);
       } else if (options?.onSuccess) {
         options?.onSuccess();
       }
@@ -337,7 +352,16 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
         isUploading: false,
       });
     }
-  }, [albumId, uploadFormState, clearAll, router, options, updateUploadFormState, queryClient]);
+  }, [
+    albumId,
+    uploadFormState,
+    clearAll,
+    router,
+    redirectPath,
+    options,
+    updateUploadFormState,
+    queryClient,
+  ]);
 
   const handleUploadClick = useCallback(() => {
     const { files, isUploading, keepMetadata } = uploadFormState;
@@ -385,6 +409,17 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
     updateUploadFormState({ showMetadataDialog: false });
   }, [updateUploadFormState]);
 
+  const handleCompressProgress = async (files: FileList | null) => {
+    if (!files?.length) return;
+
+    setIsCompressingState(true);
+    try {
+      await handleFiles(files);
+    } finally {
+      setIsCompressingState(false);
+    }
+  };
+
   useEffect(() => {
     return () => {
       uploadFormState?.files?.forEach(file => {
@@ -401,8 +436,13 @@ export function useUploadForm(albumId: string, options?: UseUploadFormOptions) {
 
   return {
     uploadFormState,
+    isCompressingState,
+    getTotalSize,
+    uploadButtonDisabled,
+    clearAllButtonDisabled,
     fileInputRef,
     handleFiles,
+    handleCompressProgress,
     removeFile,
     clearAll,
     handleUploadClick,
