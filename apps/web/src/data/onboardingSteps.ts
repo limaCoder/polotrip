@@ -11,7 +11,7 @@ export const onboardingSteps: OnboardingStep[] = [
     title: 'Criando um Novo Álbum',
     description:
       'Para criar um álbum, clique em "Novo Álbum", preencha as informações básicas e faça o pagamento. Cada álbum é uma nova oportunidade de organizar suas memórias de viagem.',
-    image: '/pages/dashboard/onboarding/step-two.jpg',
+    video: '/pages/dashboard/onboarding/step-two.mp4',
   },
   {
     title: 'Upload de Fotos',
@@ -23,12 +23,12 @@ export const onboardingSteps: OnboardingStep[] = [
     title: 'Organizando seu Álbum',
     description:
       'Antes de publicar, organize suas fotos da maneira que desejar. Você pode reordenar, adicionar legendas e garantir que seu álbum conte a história perfeita da sua viagem.',
-    image: '/pages/dashboard/onboarding/placeholder.png',
+    video: '/pages/dashboard/onboarding/step-four.mp4',
   },
   {
     title: 'Álbum Publicado!',
     description:
       'Seu álbum está pronto para ser compartilhado! Envie o link para amigos e familiares para que todos possam reviver os momentos especiais da sua viagem.',
-    image: '/pages/dashboard/onboarding/placeholder.png',
+    video: '/pages/dashboard/onboarding/step-five.mp4',
   },
 ];

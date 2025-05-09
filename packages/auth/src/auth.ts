@@ -42,6 +42,11 @@ export const config: BetterAuthOptions = {
   trustedOrigins: [env.AUTH_WEB_URL],
   advanced: {
     cookiePrefix: 'polotrip',
+    cookies: {
+      session_token: {
+        name: 'polotrip.session',
+      },
+    },
   },
   basePath: '/api/v1/auth',
   plugins: [nextCookies()],

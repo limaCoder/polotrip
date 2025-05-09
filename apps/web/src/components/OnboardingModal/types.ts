@@ -1,7 +1,8 @@
 interface OnboardingStep {
   title: string;
   description: string;
-  image: string;
+  image?: string;
+  video?: string;
 }
 
 interface OnboardingModalProps {

@@ -7,6 +7,14 @@ import { env } from '@/lib/env';
 const authClient = createAuthClient({
   baseURL: `${env.NEXT_PUBLIC_WEB_URL}/api/v1/auth`,
   credentials: 'include',
+  cookieOptions: {
+    path: '/',
+    sameSite: 'lax',
+  },
+  advanced: {
+    cookiePrefix: 'polotrip',
+    cookieName: 'session',
+  },
 });
 
 type AuthClient = ReturnType<typeof createAuthClient>;

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import {
   Dialog,
   DialogContent,
@@ -38,16 +37,6 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
           <DialogTitle>Bem vindo ao Polotrip</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center p-6">
-          <div className="relative w-full h-48 md:h-64 mb-6">
-            <Image
-              src={steps[currentStep].image || '/placeholder.svg'}
-              alt={steps[currentStep].title}
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-
           <h2 className="text-xl font-semibold mb-2">{steps[currentStep].title}</h2>
           <p className="text-center text-muted-foreground mb-6">{steps[currentStep].description}</p>
 
