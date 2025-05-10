@@ -482,6 +482,12 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@polotrip/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@polotrip/ts-config':
+        specifier: workspace:*
+        version: link:../ts-config
       '@types/react':
         specifier: ^19
         version: 19.0.8
@@ -491,6 +497,9 @@ importers:
       react-email:
         specifier: 4.0.4
         version: 4.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      tsup:
+        specifier: 8.2.4
+        version: 8.2.4(jiti@2.4.2)(postcss@8.5.3)(tsx@4.17.0)(typescript@5.8.3)(yaml@2.7.0)
 
   packages/ts-config: {}
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@react-email/render';
 
 import { Resend } from 'resend';
-import WelcomeEmail from '@polotrip/transactional/emails/welcome';
+import WelcomeEmail from '@polotrip/transactional/welcome';
 import { env } from '@/env';
 
 class EmailService {
