@@ -5,12 +5,12 @@
   "type": "module",
   "exports": {
     "./welcome": {
-      "import": "./dist/emails/welcome.mjs",
-      "types": "./dist/emails/welcome.d.ts"
+      "import": "./dist/welcome.mjs",
+      "types": "./dist/welcome.d.ts"
     },
     "./email-example": {
-      "import": "./dist/emails/email-example.mjs",
-      "types": "./dist/emails/email-example.d.ts"
+      "import": "./dist/email-example.mjs",
+      "types": "./dist/email-example.d.ts"
     }
   },
   "scripts": {
