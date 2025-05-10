@@ -1,9 +1,15 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/**/*.{ts,tsx}'],
+  entry: ['src/http/server.ts', 'src/http/plugins/**/*.ts', 'src/http/routes/**/*.ts'],
   clean: true,
-  format: 'esm',
+  format: ['esm'],
   outDir: 'dist',
-  external: ['@polotrip/auth', '@polotrip/db'],
+  splitting: false,
+  sourcemap: true,
+  treeshake: true,
+  outExtension: () => ({
+    js: `.mjs`,
+  }),
+  external: ['@polotrip/auth', '@polotrip/db', '@polotrip/transactional'],
 });

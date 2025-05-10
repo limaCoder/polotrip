@@ -33,18 +33,22 @@ app.register(fastifyCookie, {
   prefix: 'polotrip',
 });
 
+const baseDir = process.env.NODE_ENV === 'production' ? 'dist/http' : 'src/http';
+
 app.register(autoload, {
-  dir: join(__dirname, 'plugins'),
+  dir: join(process.cwd(), baseDir, 'plugins'),
   options: {},
   dirNameRoutePrefix: false,
+  forceESM: true,
 });
 
 app.register(autoload, {
-  dir: join(__dirname, 'routes', 'v1'),
+  dir: join(process.cwd(), baseDir, 'routes', 'v1'),
   options: {
     prefix: '/api/v1',
   },
   dirNameRoutePrefix: false,
+  forceESM: true,
 });
 
 app.get('/', (_, reply) => {
