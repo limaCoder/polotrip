@@ -9,4 +9,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   treeshake: true,
+  outExtension: () => ({
+    js: `.mjs`,
+  }),
 });
