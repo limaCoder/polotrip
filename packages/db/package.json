@@ -4,12 +4,27 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./schema": "./src/schema/index.ts",
-    "./models": "./src/models/index.ts"
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs"
+    },
+    "./schema": {
+      "import": "./dist/schema/index.mjs",
+      "types": "./dist/schema/index.d.ts",
+      "require": "./dist/schema/index.cjs"
+    },
+    "./models": {
+      "import": "./dist/models/index.mjs",
+      "types": "./dist/models/index.d.ts",
+      "require": "./dist/models/index.cjs"
+    }
   },
   "scripts": {
+    "build": "tsup",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
@@ -27,6 +42,7 @@
     "@faker-js/faker": "~9.4.0",
     "@polotrip/eslint-config": "workspace:*",
     "@polotrip/ts-config": "workspace:*",
-    "drizzle-kit": "~0.30.4"
+    "drizzle-kit": "~0.30.4",
+    "tsup": "8.2.4"
   }
 }
