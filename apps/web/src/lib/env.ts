@@ -17,7 +17,7 @@ export const env = createEnv({
 
   runtimeEnv: {
     // local
-    NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
+    // NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_STRIPE_PUB_KEY: process.env.NEXT_PUBLIC_STRIPE_PUB_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
@@ -25,6 +25,6 @@ export const env = createEnv({
     SUPABASE_KEY: process.env.SUPABASE_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
     // production
-    // NEXT_PUBLIC_WEB_URL: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
+    NEXT_PUBLIC_WEB_URL: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
   },
 });
