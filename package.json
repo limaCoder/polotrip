@@ -15,7 +15,9 @@
     "commit": "git-cz",
     "prepare": "husky",
     "build:server": "pnpm --filter @polotrip/db build && pnpm --filter @polotrip/auth build && pnpm --filter @polotrip/server build",
-    "start:server": "pnpm --filter @polotrip/server start"
+    "start:server": "pnpm --filter @polotrip/server start",
+    "build:web": "pnpm --filter @polotrip/db build && pnpm --filter @polotrip/auth build && pnpm --filter @polotrip/web build",
+    "start:web": "pnpm --filter @polotrip/web start"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
