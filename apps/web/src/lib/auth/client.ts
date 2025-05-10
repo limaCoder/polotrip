@@ -10,6 +10,9 @@ const authClient = createAuthClient({
   cookieOptions: {
     path: '/',
     sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined,
+    httpOnly: true,
   },
   advanced: {
     cookiePrefix: 'polotrip',

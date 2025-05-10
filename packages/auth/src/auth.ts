@@ -45,6 +45,13 @@ export const config: BetterAuthOptions = {
     cookies: {
       session_token: {
         name: 'polotrip.session',
+        attributes: {
+          path: '/',
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === 'production',
+          domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined,
+          httpOnly: true,
+        },
       },
     },
   },
