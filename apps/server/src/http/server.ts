@@ -1,7 +1,8 @@
 import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
 import autoload from '@fastify/autoload';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyCookie from '@fastify/cookie';
@@ -9,6 +10,9 @@ import fastifyCookie from '@fastify/cookie';
 import { env } from '@/env';
 
 import { setupErrorHandler } from './errors';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = fastify({
   logger: false,
