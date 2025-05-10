@@ -13,7 +13,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "tsc --noEmit --pretty",
     "commit": "git-cz",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build:server": "pnpm --filter @polotrip/server build",
+    "start:server": "pnpm --filter @polotrip/server start"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
