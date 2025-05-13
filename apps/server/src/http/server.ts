@@ -1,18 +1,19 @@
 import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
-import autoload from '@fastify/autoload';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyCookie from '@fastify/cookie';
-
 import { env } from '@/env';
-
 import { setupErrorHandler } from './errors';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import authPlugin from './plugins/auth.js';
+import dbPlugin from './plugins/db.js';
+import rateLimitPlugin from './plugins/rate-limit.js';
+import swaggerPlugin from './plugins/swagger.js';
+
+import healthRoute from './routes/v1/health.js';
+import authRoute from './routes/v1/auth/index.js';
+import albumsController from './routes/v1/albums/index.js';
+import checkoutController from './routes/v1/checkout/index.js';
 
 const app = fastify({
   logger: false,
@@ -33,23 +34,15 @@ app.register(fastifyCookie, {
   prefix: 'polotrip',
 });
 
-const baseDir = process.env.NODE_ENV === 'production' ? 'dist/http' : 'src/http';
+app.register(dbPlugin);
+app.register(authPlugin);
+app.register(rateLimitPlugin);
+app.register(swaggerPlugin);
 
-app.register(autoload, {
-  dir: join(process.cwd(), baseDir, 'plugins'),
-  options: {},
-  dirNameRoutePrefix: false,
-  forceESM: true,
-});
-
-app.register(autoload, {
-  dir: join(process.cwd(), baseDir, 'routes', 'v1'),
-  options: {
-    prefix: '/api/v1',
-  },
-  dirNameRoutePrefix: false,
-  forceESM: true,
-});
+app.register(healthRoute, { prefix: '/api/v1' });
+app.register(authRoute, { prefix: '/api/v1' });
+app.register(albumsController, { prefix: '/api/v1' });
+app.register(checkoutController, { prefix: '/api/v1' });
 
 app.get('/', (_, reply) => {
   reply.status(200).send('OK');
