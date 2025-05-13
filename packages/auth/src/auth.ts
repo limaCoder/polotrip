@@ -46,7 +46,7 @@ export const config: BetterAuthOptions = {
         name: 'polotrip.session',
         attributes: {
           path: '/',
-          sameSite: 'lax',
+          sameSite: 'None',
           secure: process.env.NODE_ENV === 'production',
           domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined,
           httpOnly: true,
