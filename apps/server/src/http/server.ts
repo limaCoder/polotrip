@@ -1,4 +1,4 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import http, { IncomingMessage, ServerResponse } from 'http';
 
 import { fastify, FastifyServerFactory } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
@@ -23,7 +23,7 @@ const app = fastify({
   keepAliveTimeout: 120000,
   maxRequestsPerSocket: 0,
   serverFactory: (handler => {
-    const server = require('http').createServer((req: IncomingMessage, res: ServerResponse) => {
+    const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
       handler(req, res);
     });
 
