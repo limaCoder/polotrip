@@ -25,6 +25,7 @@ export const env = createEnv({
     SUPABASE_KEY: process.env.SUPABASE_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
     // production
-    NEXT_PUBLIC_WEB_URL: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
+    NEXT_PUBLIC_WEB_URL:
+      process.env.NEXT_PUBLIC_WEB_URL || `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
   },
 });
