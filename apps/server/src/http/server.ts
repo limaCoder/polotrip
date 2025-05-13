@@ -1,10 +1,12 @@
-import { fastify } from 'fastify';
+import { IncomingMessage, ServerResponse } from 'http';
+
+import { fastify, FastifyServerFactory } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyCookie from '@fastify/cookie';
+
 import { env } from '@/env';
 import { setupErrorHandler } from './errors';
-
 import authPlugin from './plugins/auth.js';
 import dbPlugin from './plugins/db.js';
 import rateLimitPlugin from './plugins/rate-limit.js';
@@ -17,6 +19,19 @@ import checkoutController from './routes/v1/checkout/index.js';
 
 const app = fastify({
   logger: false,
+  connectionTimeout: 120000,
+  keepAliveTimeout: 120000,
+  maxRequestsPerSocket: 0,
+  serverFactory: (handler => {
+    const server = require('http').createServer((req: IncomingMessage, res: ServerResponse) => {
+      handler(req, res);
+    });
+
+    server.keepAliveTimeout = 120000;
+    server.headersTimeout = 125000;
+
+    return server;
+  }) as FastifyServerFactory,
 });
 
 setupErrorHandler(app);
