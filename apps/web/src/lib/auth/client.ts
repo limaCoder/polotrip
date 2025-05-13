@@ -5,7 +5,7 @@ import { createAuthClient } from 'better-auth/react';
 import { env } from '@/lib/env';
 
 const authClient = createAuthClient({
-  baseURL: `${env.NEXT_PUBLIC_WEB_URL}/api/v1/auth`,
+  baseURL: `${env.NEXT_PUBLIC_API_URL}/api/v1/auth`,
   credentials: 'include',
   cookieOptions: {
     path: '/',
