@@ -1,0 +1,18 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://polotrip.com</loc>
+    <xhtml:link
+      rel="alternate"
+      hreflang="pt"
+      href="https://polotrip.com/pt"/>
+    <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  </url>
+  <url>
+    <loc>https://polotrip.com/sign-in</loc>
+    <xhtml:link
+      rel="alternate"
+      hreflang="pt"
+      href="https://polotrip.com/pt/sign-in"/>
+    <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  </url>
+</urlset>
