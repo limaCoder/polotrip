@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: {
         languages: {
           pt: 'https://polotrip.com/pt',
-          en: 'https://polotrip.com/en',
         },
       },
     },
@@ -22,7 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: {
         languages: {
           pt: 'https://polotrip.com/pt/sign-in',
-          en: 'https://polotrip.com/en/sign-in',
         },
       },
     },
