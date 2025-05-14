@@ -8,38 +8,22 @@
 
 
 <url>
-  <loc>https://polotrip.com</loc>
-  <xhtml:link
-    rel="alternate"
-    hreflang="pt"
-    href="https://polotrip.com/pt"/>
+  <loc>https://polotrip.com/pt</loc>
   <lastmod>2025-05-13T15:02:24.021Z</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://polotrip.com/sign-in</loc>
-  <xhtml:link
-    rel="alternate"
-    hreflang="pt"
-    href="https://polotrip.com/pt/sign-in"/>
+  <loc>https://polotrip.com/pt/sign-in</loc>
   <lastmod>2025-05-13T15:02:24.021Z</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://polotrip.com/terms-of-use</loc>
-  <xhtml:link
-    rel="alternate"
-    hreflang="pt"
-    href="https://polotrip.com/pt/terms-of-use"/>
+  <loc>https://polotrip.com/pt/terms-of-use</loc>
   <lastmod>2025-05-13T15:02:24.021Z</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://polotrip.com/privacy-policy</loc>
-  <xhtml:link
-    rel="alternate"
-    hreflang="pt"
-    href="https://polotrip.com/pt/privacy-policy"/>
+  <loc>https://polotrip.com/pt/privacy-policy</loc>
   <lastmod>2025-05-13T15:02:24.021Z</lastmod>
   <priority>0.80</priority>
 </url>
