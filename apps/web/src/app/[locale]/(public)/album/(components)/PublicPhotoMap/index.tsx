@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { use } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { type PublicPhotoMapProps } from './types';

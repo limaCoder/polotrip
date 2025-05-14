@@ -12,7 +12,7 @@ export const metadata: Metadata = {
       'Faça login ou crie sua conta na Polotrip para começar a compartilhar suas memórias de viagem.',
     images: [
       {
-        url: 'https://polotrip.com/api/og',
+        url: 'https://polotrip.com/api/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'Polotrip - Acesso à plataforma',

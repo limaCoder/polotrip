@@ -18,7 +18,7 @@ export default async function Image() {
           padding: '40px',
         }}
       >
-        <img src="https://polotrip.com/brand/logo.svg" width="100" />
+        <img src="https://polotrip.com/brand/logo.svg" width="300" />
       </div>
     ),
   );
