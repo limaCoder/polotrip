@@ -44,11 +44,11 @@ export async function Hero() {
               <span className="font-bold">Como funciona?</span>
             </ButtonNavigation>
             <ButtonNavigation
-              href="/sign-in"
+              href="/album/a9jrss8qhxerqnsglmpks2da"
               className="bg-yellow text-black button-shadow"
-              aria-label="Comece agora"
+              aria-label="Veja um exemplo"
             >
-              <span className="font-bold">Comece agora</span>
+              <span className="font-bold">Veja um exemplo</span>
             </ButtonNavigation>
           </MotionDiv>
         </div>
