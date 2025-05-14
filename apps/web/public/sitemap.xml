@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://polotrip.com</loc>
-    <xhtml:link
-      rel="alternate"
-      hreflang="pt"
-      href="https://polotrip.com/pt"/>
-    <lastmod>2025-05-13T15:02:24.021Z</lastmod>
-  </url>
-  <url>
-    <loc>https://polotrip.com/sign-in</loc>
-    <xhtml:link
-      rel="alternate"
-      hreflang="pt"
-      href="https://polotrip.com/pt/sign-in"/>
-    <lastmod>2025-05-13T15:02:24.021Z</lastmod>
-  </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+
+<url>
+  <loc>https://polotrip.com</loc>
+  <xhtml:link
+    rel="alternate"
+    hreflang="pt"
+    href="https://polotrip.com/pt"/>
+  <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://polotrip.com/sign-in</loc>
+  <xhtml:link
+    rel="alternate"
+    hreflang="pt"
+    href="https://polotrip.com/pt/sign-in"/>
+  <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://polotrip.com/terms-of-use</loc>
+  <xhtml:link
+    rel="alternate"
+    hreflang="pt"
+    href="https://polotrip.com/pt/terms-of-use"/>
+  <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://polotrip.com/privacy-policy</loc>
+  <xhtml:link
+    rel="alternate"
+    hreflang="pt"
+    href="https://polotrip.com/pt/privacy-policy"/>
+  <lastmod>2025-05-13T15:02:24.021Z</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
 </urlset>
