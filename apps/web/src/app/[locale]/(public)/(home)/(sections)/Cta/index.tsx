@@ -26,11 +26,11 @@ export async function Cta({ locale }: CtaProps) {
             viagem digital único e memorável.
           </p>
           <ButtonNavigation
-            href="/sign-in"
+            href="/album/a9jrss8qhxerqnsglmpks2da"
             className="h-[60px] bg-primary text-white hover:bg-primary/90"
-            aria-label="Comece agora"
+            aria-label="Veja um exemplo"
           >
-            <span className="font-bold">Comece agora</span>
+            <span className="font-bold">Veja um exemplo</span>
           </ButtonNavigation>
         </div>
       </div>
