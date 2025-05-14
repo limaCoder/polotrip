@@ -45,7 +45,7 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
               <div
                 key={index}
                 className={cn(
-                  'h-2 w-2 rounded-full',
+                  'h-2 w-2 rounded-full border-secondary',
                   index === currentStep ? 'bg-primary' : 'bg-muted',
                 )}
               />

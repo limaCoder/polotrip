@@ -31,7 +31,7 @@ export function AlbumForm() {
 
   return (
     <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
-      <h1 className="font-title_three mb-6 font-bold">Criar Novo Álbum</h1>
+      <h1 className="font-title_three mb-6 font-bold">Criar novo álbum</h1>
 
       {formState?.hasError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 flex items-start gap-2">
@@ -58,7 +58,7 @@ export function AlbumForm() {
       <div className="space-y-4 mb-6">
         <div className="flex flex-col gap-1">
           <label htmlFor="title" className="font-body_two">
-            Título do Álbum
+            Título do álbum
           </label>
           <input
             id="title"
@@ -158,7 +158,7 @@ export function AlbumForm() {
 
         <div className="flex flex-col gap-1">
           <label htmlFor="plan" className="font-body_two">
-            Plano do Álbum
+            Plano do álbum
           </label>
           <Select name="plan" value={selectedPlan} onValueChange={handlePlanChange}>
             <SelectTrigger className="border border-text/25 rounded p-3 font-body_two text-sm">
@@ -176,7 +176,7 @@ export function AlbumForm() {
       <hr className="border-text/25 my-6" />
 
       <div className="flex flex-col items-start bg-secondary/5 p-6 rounded-lg mb-6">
-        <h2 className="font-body_one font-bold text-primary mb-6">Resumo do Pedido</h2>
+        <h2 className="font-body_one font-bold text-primary mb-6">Resumo do pedido</h2>
 
         <div className="w-full flex justify-between">
           <div>

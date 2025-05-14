@@ -77,7 +77,7 @@ export default async function LoginPage({ params }: PageProps) {
 
                 <OAuthButton provider="google" aria-label="Entrar com Google">
                   <Image src="/icons/google.png" alt="Google" width={24} height={24} />
-                  <span className="font-body_two">Sign in with Google</span>
+                  <span className="font-body_two">Entrar com o Google</span>
                 </OAuthButton>
               </div>
             </div>

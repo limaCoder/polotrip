@@ -5,7 +5,7 @@ import { EditAlbumContent } from './components/edit-album-content';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Editar Álbum | Polotrip',
+  title: 'Editar álbum | Polotrip',
   description:
     'Edite suas fotos, defina datas e localizações para suas memórias de viagem na Polotrip',
 };

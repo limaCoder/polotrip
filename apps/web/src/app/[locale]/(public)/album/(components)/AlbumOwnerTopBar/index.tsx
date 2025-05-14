@@ -17,7 +17,7 @@ export function AlbumOwnerTopBar() {
         </p>
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 text-background hover:text-secondary transition-colors font-body_two"
+          className="flex items-center gap-2 text-background hover:underline transition-colors font-body_two"
         >
           <ArrowLeft size={16} />
           <span>Voltar para Dashboard</span>

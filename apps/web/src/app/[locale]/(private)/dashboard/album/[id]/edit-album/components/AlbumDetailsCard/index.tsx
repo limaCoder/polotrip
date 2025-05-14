@@ -25,18 +25,18 @@ export function AlbumDetailsCard() {
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex flex-col items-start justify-between mb-4">
           <div>
-            <h2 className="text-xl font-semibold mb-2">Detalhes do Álbum</h2>
+            <h2 className="text-xl font-semibold mb-2">Detalhes do álbum</h2>
             <p className="text-sm text-gray-500">Gerencie as informações básicas do seu álbum</p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            aria-label="Editar Álbum"
-            aria-labelledby="Editar Álbum"
+            aria-label="Editar álbum"
+            aria-labelledby="Editar álbum"
             type="button"
             className="flex items-center gap-2 mt-2 text-primary font-bold hover:text-primary/80 transition-colors"
           >
             <Pencil size={16} />
-            Editar Álbum
+            Editar álbum
           </button>
         </div>
 
