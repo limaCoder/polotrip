@@ -27,7 +27,7 @@ const questions = [
   {
     question: 'Posso editar o álbum depois de publicá-lo?',
     answer:
-      'Sim! Você pode excluir fotos, mudar legendas ou ajustar locais no mapa a qualquer momento.',
+      'Sim! Você pode editar o título, a descrição, a foto de capa, excluir fotos, mudar legendas ou ajustar locais no mapa a qualquer momento.',
   },
 ];
 

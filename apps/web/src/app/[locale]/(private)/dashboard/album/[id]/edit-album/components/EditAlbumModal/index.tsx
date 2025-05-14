@@ -130,7 +130,7 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Editar Álbum</DialogTitle>
+          <DialogTitle>Editar álbum</DialogTitle>
           <DialogDescription>
             Atualize as informações do seu álbum. Deixe os campos em branco para manter os valores
             atuais.

@@ -5,7 +5,7 @@ import { BackButton } from '../(components)/back-button';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Criar Álbum | Polotrip',
+  title: 'Criar álbum | Polotrip',
   description: 'Crie um novo álbum para compartilhar suas memórias de viagem na Polotrip',
 };
 

@@ -41,7 +41,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
               <div key={index} className="mb-16 md:mb-24">
                 <div className="flex items-center mb-6 md:mb-8 pl-4">
                   <div className="relative flex items-center justify-center">
-                    <div className="absolute left-4 md:left-8 h-8 w-8 rounded-full bg-white border-2 border-secondary flex items-center justify-center z-10 transform -translate-x-1/2">
+                    <div className="absolute left-4 md:left-8 h-8 w-8 rounded-full bg-white border-2 border-secondary flex items-center justify-center transform -translate-x-1/2">
                       <div className="h-3 w-3 rounded-full bg-secondary" />
                     </div>
                   </div>

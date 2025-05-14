@@ -34,7 +34,7 @@ export function HeaderAlbumDesktop({
           aria-label="Modo TV"
           onClick={handleTvMode}
         >
-          <Tv size={20} className="text-primary" />
+          <Tv size={20} className="text-primary relative top-[-3px]" />
           <span className="font-body_one w-max">Modo TV</span>
         </button>
 
@@ -44,7 +44,7 @@ export function HeaderAlbumDesktop({
             aria-label="Compartilhar"
             onClick={() => setIsShareModalOpen(true)}
           >
-            <Share2 size={20} className="text-primary" />
+            <Share2 size={20} className="text-primary relative top-[-2px]" />
             <span className="font-body_one w-max">Compartilhar</span>
           </button>
         )}
