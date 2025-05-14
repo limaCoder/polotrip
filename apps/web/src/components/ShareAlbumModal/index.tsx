@@ -5,6 +5,7 @@ import { ShareAlbumModalProps } from './types';
 import { ShareButtons } from '@/components/ShareButtons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QRCodeShare } from '@/components/QRCodeShare';
+import { useParams } from 'next/navigation';
 
 export function ShareAlbumModal({
   isOpen,
@@ -14,7 +15,8 @@ export function ShareAlbumModal({
   albumDescription,
   albumOwnerName,
 }: ShareAlbumModalProps) {
-  const shareUrl = `${window.location.origin}/album/${albumId}`;
+  const { locale } = useParams();
+  const shareUrl = `${window.location.origin}/${locale}/album/${albumId}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

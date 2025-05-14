@@ -95,7 +95,7 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
                 </motion.div>
               </MorphingDialogTrigger>
               <MorphingDialogContainer>
-                <MorphingDialogContent className="relative">
+                <MorphingDialogContent className="relative z-20">
                   <MorphingDialogImage
                     src={photo?.src}
                     alt={photo?.alt}

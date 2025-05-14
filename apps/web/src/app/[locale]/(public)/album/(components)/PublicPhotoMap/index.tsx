@@ -61,10 +61,6 @@ export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
 
-  const handleMarkerClick = useCallback((photoId: string) => {
-    console.log('Clicked photo:', photoId);
-  }, []);
-
   useEffect(() => {
     if (typeof window === 'undefined' || !L) return;
 
@@ -180,12 +176,12 @@ export function PublicPhotoMap({ locationsPromise }: PublicPhotoMapProps) {
     if (markers?.length > 0) {
       mapInstanceRef.current?.fitBounds(bounds, { padding: [30, 30] });
     }
-  }, [locations, handleMarkerClick]);
+  }, [locations]);
 
   return (
     <div
       ref={mapRef}
-      className="w-full h-full rounded-md overflow-hidden relative z-10"
+      className="w-full h-full rounded-md overflow-hidden relative z-0"
       style={{ minHeight: '400px' }}
     />
   );
