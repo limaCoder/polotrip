@@ -37,9 +37,10 @@ export const metadata: Metadata = {
     url: 'https://polotrip.com',
     images: [
       {
-        url: 'https://polotrip.com/openGraph/og-image.jpg',
+        url: 'https://polotrip.com/api/og',
         width: 1200,
         height: 630,
+        alt: 'Polotrip - Fotos e Memórias de Viagens',
       },
     ],
   },
