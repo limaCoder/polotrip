@@ -1,14 +1,9 @@
 import { ImageResponse } from 'next/og';
-import { join } from 'node:path';
-import { readFile } from 'node:fs/promises';
 
 export const contentType = 'image/png';
 export const alt = 'Polotrip - Fotos e Memórias de Viagens';
 
 export default async function Image() {
-  const logoData = await readFile(join(process.cwd(), 'brand/logo.svg'));
-  const logoSrc = logoData.toString();
-
   return new ImageResponse(
     (
       <div
@@ -23,7 +18,7 @@ export default async function Image() {
           padding: '40px',
         }}
       >
-        <img src={logoSrc} width="100" />
+        <img src="https://polotrip.com/brand/logo.svg" width="100" />
       </div>
     ),
   );
