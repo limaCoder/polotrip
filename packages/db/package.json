@@ -9,15 +9,18 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
     },
     "./schema": {
       "import": "./dist/schema/index.mjs",
-      "types": "./dist/schema/index.d.ts"
+      "types": "./dist/schema/index.d.ts",
+      "default": "./dist/schema/index.mjs"
     },
     "./models": {
       "import": "./dist/models/index.mjs",
-      "types": "./dist/models/index.d.ts"
+      "types": "./dist/models/index.d.ts",
+      "default": "./dist/models/index.mjs"
     }
   },
   "scripts": {
