@@ -8,6 +8,7 @@ const authClient = createAuthClient({
   baseURL: `${env.NEXT_PUBLIC_WEB_URL}/api/v1/auth`,
   credentials: 'include',
   cookieOptions: {
+    // in local environment, comment the lines between path and domain properties
     path: '/',
     sameSite: 'None',
     secure: process.env.NODE_ENV === 'production',

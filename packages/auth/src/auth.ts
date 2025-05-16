@@ -45,6 +45,7 @@ export const config: BetterAuthOptions = {
       session_token: {
         name: 'polotrip.session',
         attributes: {
+          // in local environment, comment the lines between path and domain properties
           path: '/',
           sameSite: 'None',
           secure: process.env.NODE_ENV === 'production',
