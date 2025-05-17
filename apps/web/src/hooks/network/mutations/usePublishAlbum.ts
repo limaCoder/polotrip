@@ -1,9 +1,10 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { updateAlbum } from '@/http/update-album';
+import { albumKeys } from '../keys/albumKeys';
 
 interface UsePublishAlbumProps {
   albumId: string;
@@ -11,6 +12,8 @@ interface UsePublishAlbumProps {
 }
 
 export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async () => {
       return updateAlbum({
@@ -24,6 +27,10 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
     onSuccess: () => {
       toast.success('Álbum publicado com sucesso', {
         description: 'Todas as alterações foram salvas.',
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [albumKeys.all],
       });
 
       if (onSuccess) {

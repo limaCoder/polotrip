@@ -82,9 +82,6 @@ export function useEditAlbum() {
   const publishAlbumMutation = usePublishAlbum({
     albumId: id,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [albumKeys.all],
-      });
       router.push(`/${locale}/album/${id}`);
     },
   });
