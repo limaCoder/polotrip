@@ -307,10 +307,19 @@ export type MorphingDialogImageProps = {
   src: string;
   alt: string;
   className?: string;
+  loading?: 'lazy' | 'eager';
   style?: React.CSSProperties;
+  onLoad?: () => void;
 };
 
-function MorphingDialogImage({ src, alt, className, style }: MorphingDialogImageProps) {
+function MorphingDialogImage({
+  src,
+  alt,
+  className,
+  style,
+  loading = 'lazy',
+  onLoad,
+}: MorphingDialogImageProps) {
   const { uniqueId } = useMorphingDialog();
 
   return (
@@ -321,7 +330,8 @@ function MorphingDialogImage({ src, alt, className, style }: MorphingDialogImage
       layoutId={`dialog-img-${uniqueId}`}
       style={style}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      loading="lazy"
+      loading={loading}
+      onLoad={onLoad}
     />
   );
 }

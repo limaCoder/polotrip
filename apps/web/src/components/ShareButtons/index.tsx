@@ -7,19 +7,23 @@ import { Button } from '@/components/ui/button';
 import { ShareButtonsProps } from './types';
 
 export function ShareButtons({ url, title, description, ownerName }: ShareButtonsProps) {
-  const shareText = `Confira o álbum ${title} de ${ownerName} no Polotrip`;
+  const urlWithShareFlag = `${url}?share=true`;
+
+  const shareText = description
+    ? `${title} - ${description}\n\nÁlbum de ${ownerName} no Polotrip`
+    : `Confira o álbum ${title} de ${ownerName} no Polotrip`;
 
   const shareLinks = {
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + url)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + urlWithShareFlag)}`,
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title,
-          text: description,
-          url,
+          title: `${title} | Polotrip`,
+          text: shareText,
+          url: urlWithShareFlag,
         });
       } catch (error) {
         if ((error as Error).name === 'AbortError') {
@@ -59,14 +63,14 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
       <div className="flex items-center gap-2">
         <input
           type="text"
-          value={url}
+          value={urlWithShareFlag}
           readOnly
           className="flex-1 px-3 py-2 border rounded-md bg-background"
         />
         <Button
           variant="secondary"
           onClick={() => {
-            navigator.clipboard.writeText(url);
+            navigator.clipboard.writeText(urlWithShareFlag);
             toast.success('Link copiado!');
           }}
         >

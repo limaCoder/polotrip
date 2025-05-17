@@ -143,15 +143,18 @@
     @apply !bg-primary w-4 h-2.5;
   }
 
-  .swiper-pagination {
-  }
-
   .leaflet-popup-content-wrapper .leaflet-popup-content {
     height: 15rem;
   }
 
   .leaflet-popup-content:has(p) {
     margin: 15px 24px 25px 20px!important;
+  }
+
+  .leaflet-popup-close-button {
+    background: var(--color-primary) !important;
+    border-radius: 4px !important;
+    color: var(--color-background) !important;
   }
 }
 

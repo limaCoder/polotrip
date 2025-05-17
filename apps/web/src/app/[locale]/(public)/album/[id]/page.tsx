@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { MapPin } from 'lucide-react';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
@@ -8,6 +9,7 @@ import { Footer } from '@/components/Footer';
 import { HeaderAlbum } from '../(components)/HeaderAlbum';
 import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
 import { AlbumOwnerTopBar } from '../(components)/AlbumOwnerTopBar';
+import { AlbumSharedTopBar } from '../(components)/AlbumSharedTopBar';
 
 import { getPublicAlbum } from '@/http/get-public-album';
 import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
@@ -15,8 +17,32 @@ import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { PageProps } from '@/types/next';
 
-export default async function AlbumViewPage({ params }: PageProps) {
+import { getCurrentUser } from '@/lib/auth/server';
+import { albums } from '@polotrip/db/schema';
+import { db } from '@polotrip/db';
+import { eq } from 'drizzle-orm';
+import { generateAlbumMetadata } from './metadata';
+
+export const generateMetadata = generateAlbumMetadata;
+
+export default async function AlbumViewPage({ params, searchParams }: PageProps) {
   const { id: albumId } = await params;
+  const { share } = (await searchParams) || {};
+
+  const user = await getCurrentUser();
+
+  const album = await db
+    .select()
+    .from(albums)
+    .where(eq(albums.id, albumId))
+    .then(rows => rows[0]);
+
+  if (!album) {
+    notFound();
+  }
+
+  const isOwner = user?.id === album.userId;
+  const isShared = share === 'true' && !isOwner;
 
   const albumData = await getPublicAlbum({ albumId });
   const locationsDataPromise = getPublicAlbumLocations({ albumId });
@@ -45,8 +71,9 @@ export default async function AlbumViewPage({ params }: PageProps) {
   const albumOwnerName = albumData?.user?.name?.split(' ')[0];
 
   return (
-    <>
-      <AlbumOwnerTopBar />
+    <div data-is-owner={isOwner} data-is-shared={isShared}>
+      {isOwner && <AlbumOwnerTopBar />}
+      {isShared && <AlbumSharedTopBar />}
       <main className="min-h-screen bg-secondary-10 flex flex-col">
         <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
           <div className="absolute inset-0 z-0">
@@ -115,6 +142,6 @@ export default async function AlbumViewPage({ params }: PageProps) {
         </HydrationBoundary>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

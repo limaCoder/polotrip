@@ -13,9 +13,15 @@ import {
 } from '../ui/morphing-dialog';
 import { XIcon } from 'lucide-react';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { cn } from '@/lib/cn';
+
+interface ImageWithLoadingState extends Photo {
+  isLoaded?: boolean;
+}
 
 export function MasonryGallery({ photos }: { photos: Photo[] }) {
-  const [columns, setColumns] = useState<Photo[][]>([[], [], []]);
+  const [columns, setColumns] = useState<ImageWithLoadingState[][]>([[], [], []]);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
 
   const getOptimalPaddingBottom = (photo: Photo) => {
     const aspectRatio = photo?.height / photo?.width;
@@ -37,7 +43,7 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
         numColumns = 2;
       }
 
-      const newColumns: Photo[][] = Array.from({ length: numColumns }, () => []);
+      const newColumns: ImageWithLoadingState[][] = Array.from({ length: numColumns }, () => []);
 
       photos?.forEach(photo => {
         const columnHeights = newColumns?.map(col =>
@@ -45,7 +51,10 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
         );
         const shortestColumnIndex = columnHeights?.indexOf(Math.min(...columnHeights));
 
-        newColumns[shortestColumnIndex]?.push(photo);
+        newColumns[shortestColumnIndex]?.push({
+          ...photo,
+          isLoaded: loadedImages.has(photo.id),
+        });
       });
 
       setColumns(newColumns);
@@ -55,7 +64,11 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
 
     window.addEventListener('resize', distributePhotos);
     return () => window.removeEventListener('resize', distributePhotos);
-  }, [photos]);
+  }, [photos, loadedImages]);
+
+  const handleImageLoad = (photoId: string) => {
+    setLoadedImages(prev => new Set(prev).add(photoId));
+  };
 
   return (
     <div className="flex gap-4 w-full">
@@ -88,7 +101,12 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
                       <MorphingDialogImage
                         src={photo?.src}
                         alt={photo?.alt}
-                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        className={cn(
+                          'object-cover transition-all duration-300 hover:scale-105',
+                          loadedImages.has(photo.id) ? 'opacity-100' : 'opacity-0',
+                        )}
+                        onLoad={() => handleImageLoad(photo.id)}
+                        loading="eager"
                       />
                     </motion.div>
                   </div>

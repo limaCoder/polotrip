@@ -64,6 +64,13 @@ export function useAlbumForm() {
   }, [formState?.hasSuccess, formState?.sessionId]);
 
   useEffect(() => {
+    if (formState?.hasError) {
+      setSelectedImage(null);
+      setSelectedPlan('standard');
+    }
+  }, [formState?.hasError]);
+
+  useEffect(() => {
     return () => {
       setSelectedImage(null);
     };

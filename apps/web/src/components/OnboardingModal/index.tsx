@@ -45,9 +45,13 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
               <div
                 key={index}
                 className={cn(
-                  'h-2 w-2 rounded-full border-secondary',
+                  'h-2 w-2 rounded-full border-secondary border cursor-pointer transition-all duration-300 hover:scale-125',
                   index === currentStep ? 'bg-primary' : 'bg-muted',
                 )}
+                onClick={() => setCurrentStep(index)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Ir para o passo ${index + 1}`}
               />
             ))}
           </div>

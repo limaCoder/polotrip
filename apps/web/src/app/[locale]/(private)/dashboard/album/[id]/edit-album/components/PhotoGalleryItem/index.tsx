@@ -27,6 +27,8 @@ export function PhotoGalleryItem({
         fill
         className="object-cover"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        placeholder="blur"
+        blurDataURL="data:image/gif;base64,R0lGODlhZABkAIEAAMbGxgAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQACAAAACwAAAAAZABkAEAIoQABCBxIsKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bNmzhz6tzJs6"
       />
 
       {isSelected && (
