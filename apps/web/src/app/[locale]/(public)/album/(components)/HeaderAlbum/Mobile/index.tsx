@@ -60,7 +60,7 @@ export function HeaderAlbumMobile({
             </button>
           )}
           <button
-            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary active:bg-primary transition flex items-center justify-center active-tv-mode"
             aria-label="Modo TV"
             onClick={handleTvMode}
           >

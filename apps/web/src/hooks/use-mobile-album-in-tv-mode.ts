@@ -24,7 +24,16 @@ const isIOS = (): boolean => {
 
 const orientationMessage = {
   landscape: 'Para melhor experiência, gire seu aparelho para o modo paisagem (horizontal).',
+  iosLimitation:
+    'Devido a limitações do iOS, o modo tela cheia não está disponível em iPhones e iPads. O modo TV com scroll automático será ativado mesmo assim. Em PCs e dispositivos Android, o modo tela cheia funciona normalmente.',
 } as const;
+
+const showToast = (message: string, duration = TOAST_DURATION) => {
+  toast.info(message, {
+    duration,
+    richColors: true,
+  });
+};
 
 const fullscreenUtils = {
   async requestFullscreen(element: HTMLElement): Promise<void> {
@@ -61,19 +70,81 @@ interface AutoScrollState {
   animationFrameId?: number;
 }
 
-export function useMobileAlbumInTvMode() {
-  const handleTvMode = async () => {
-    const scrollState: AutoScrollState = {
+class AutoScroll {
+  private state: AutoScrollState;
+  private cleanup?: () => void;
+
+  constructor() {
+    this.state = {
       isAutoScrolling: true,
     };
+  }
 
+  private smoothAutoScroll = () => {
+    if (!this.state.isAutoScrolling) return;
+
+    if (window.scrollY + window.innerHeight < document.body.scrollHeight) {
+      window.scrollBy({
+        top: SCROLL_SPEED,
+        behavior: 'auto',
+      });
+
+      this.state.animationFrameId = requestAnimationFrame(this.smoothAutoScroll);
+    }
+  };
+
+  private handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      this.stop();
+    }
+  };
+
+  private handleScroll = () => {
+    if (this.state.isAutoScrolling) {
+      this.stop();
+    }
+  };
+
+  private stop() {
+    this.state.isAutoScrolling = false;
+    if (this.state.animationFrameId) {
+      cancelAnimationFrame(this.state.animationFrameId);
+    }
+  }
+
+  start() {
+    document.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('wheel', this.handleScroll);
+    window.addEventListener('touchmove', this.handleScroll);
+
+    this.smoothAutoScroll();
+
+    this.cleanup = () => {
+      this.stop();
+      document.removeEventListener('keydown', this.handleKeyPress);
+      window.removeEventListener('wheel', this.handleScroll);
+      window.removeEventListener('touchmove', this.handleScroll);
+    };
+
+    return this.cleanup;
+  }
+}
+
+export function useMobileAlbumInTvMode() {
+  const handleTvMode = async () => {
     try {
+      const autoScroll = new AutoScroll();
+
       if (isIOS()) {
-        toast.info(orientationMessage.landscape, {
-          duration: TOAST_DURATION,
-          richColors: true,
-        });
-        return;
+        showToast(orientationMessage.iosLimitation, TOAST_DURATION * 3);
+
+        try {
+          await fullscreenUtils.lockOrientation();
+        } catch {
+          showToast(orientationMessage.landscape);
+        }
+
+        return autoScroll.start();
       }
 
       await fullscreenUtils.requestFullscreen(document.documentElement);
@@ -81,64 +152,13 @@ export function useMobileAlbumInTvMode() {
       try {
         await fullscreenUtils.lockOrientation();
       } catch {
-        toast.info(orientationMessage.landscape, {
-          duration: TOAST_DURATION,
-          richColors: true,
-        });
+        showToast(orientationMessage.landscape);
       }
 
-      const smoothAutoScroll = () => {
-        if (!scrollState.isAutoScrolling) return;
-
-        if (window.scrollY + window.innerHeight < document.body.scrollHeight) {
-          window.scrollBy({
-            top: SCROLL_SPEED,
-            behavior: 'auto',
-          });
-
-          scrollState.animationFrameId = requestAnimationFrame(smoothAutoScroll);
-        }
-      };
-
-      const handleKeyPress = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          scrollState.isAutoScrolling = false;
-          if (scrollState.animationFrameId) {
-            cancelAnimationFrame(scrollState.animationFrameId);
-          }
-        }
-      };
-
-      const handleScroll = () => {
-        if (scrollState.isAutoScrolling) {
-          scrollState.isAutoScrolling = false;
-          if (scrollState.animationFrameId) {
-            cancelAnimationFrame(scrollState.animationFrameId);
-          }
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyPress);
-      window.addEventListener('wheel', handleScroll);
-      window.addEventListener('touchmove', handleScroll);
-
-      smoothAutoScroll();
-
-      return () => {
-        if (scrollState.animationFrameId) {
-          cancelAnimationFrame(scrollState.animationFrameId);
-        }
-
-        document.removeEventListener('keydown', handleKeyPress);
-        window.removeEventListener('wheel', handleScroll);
-        window.removeEventListener('touchmove', handleScroll);
-      };
+      return autoScroll.start();
     } catch (error) {
       console.error('Erro ao iniciar modo TV:', error);
-      toast.error('Não foi possível iniciar o modo TV. Tente novamente.', {
-        duration: TOAST_DURATION,
-        richColors: true,
-      });
+      showToast('Não foi possível iniciar o modo TV. Tente novamente.');
     }
   };
 

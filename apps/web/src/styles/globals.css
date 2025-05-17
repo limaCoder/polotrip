@@ -156,6 +156,10 @@
     border-radius: 4px !important;
     color: var(--color-background) !important;
   }
+
+  button.active-tv-mode:active svg {
+    color: var(--color-background)!important;
+  }
 }
 
 @theme inline {
