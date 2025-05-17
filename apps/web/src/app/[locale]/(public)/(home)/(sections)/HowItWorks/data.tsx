@@ -13,7 +13,7 @@ const steps = [
   },
   {
     category: '3. Faça upload das fotos',
-    title: 'Adicione suas melhores fotos e vídeos de viagem ao seu álbum digital. ',
+    title: 'Adicione suas melhores fotos de viagem ao seu álbum digital. ',
     src: '/pages/home/how-it-works/step-three.png',
   },
   {

@@ -26,7 +26,7 @@ export function InstallPwaModal({ isOpen, onClose }: InstallPwaModalProps) {
         </DialogHeader>
         <DialogDescription className="text-center text-muted-foreground">
           Para uma experiência melhor, instale o Polotrip como um aplicativo no seu dispositivo e
-          tenha acesso rápido às suas memórias de viagem, mesmo offline!
+          tenha acesso rápido às suas memórias de viagem!
         </DialogDescription>
         <DialogFooter>
           <div className="flex w-full justify-evenly">

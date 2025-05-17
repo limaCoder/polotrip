@@ -370,8 +370,6 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         },
       });
 
-      clearAll();
-
       if (redirectPath) {
         await queryClient.refetchQueries({
           queryKey: [
@@ -386,6 +384,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
         router.refresh();
         window.location.href = redirectPath;
+        clearAll();
       } else if (options?.onSuccess) {
         options?.onSuccess();
       }

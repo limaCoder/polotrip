@@ -20,11 +20,11 @@ export function AlbumSharedTopBar() {
               👋 Oi! Venha criar o seu álbum com a gente!
             </p>
             <Link
-              href="/"
-              className="flex items-center gap-2 text-background hover:underline transition-colors font-body_two"
+              href="/sign-in"
+              className="flex items-center gap-2 text-background underline transition-colors font-body_two"
             >
               <ArrowLeft size={16} />
-              <span>Voltar para Home</span>
+              <span>Criar seu álbum</span>
             </Link>
           </div>
           <button

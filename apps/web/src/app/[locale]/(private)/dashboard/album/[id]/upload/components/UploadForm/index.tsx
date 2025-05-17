@@ -30,6 +30,8 @@ export function UploadForm() {
     handleCloseMetadataDialog,
   } = useUploadForm();
 
+  const plural = uploadFormState?.files?.length !== 1 ? 's' : '';
+
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
       <h1 className="font-title_three font-bold mb-6">Upload de Fotos</h1>
@@ -75,8 +77,8 @@ export function UploadForm() {
         <>
           <div className="flex justify-between items-center mb-6">
             <span className="font-body_two">
-              {uploadFormState?.files?.length} foto
-              {uploadFormState?.files?.length !== 1 ? 's' : ''} selecionada
+              {uploadFormState?.files?.length} foto{plural}
+              selecionada{plural}
             </span>
             <span className="font-body_two">{formatFileSize(getTotalSize())}</span>
           </div>

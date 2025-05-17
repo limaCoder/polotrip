@@ -395,7 +395,10 @@ export function useEditAlbum() {
 
   const handleFinish = useCallback(() => {
     publishAlbumMutation.mutate();
-  }, [publishAlbumMutation]);
+    queryClient.invalidateQueries({
+      queryKey: [albumKeys.all],
+    });
+  }, [publishAlbumMutation, queryClient]);
 
   const openFinishDialog = useCallback(() => {
     setIsFinishDialogOpen(true);

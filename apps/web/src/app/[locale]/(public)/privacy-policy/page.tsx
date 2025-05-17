@@ -27,9 +27,9 @@ export default async function PrivacyPolicy() {
                 realizar login via Google.
               </li>
               <li>
-                <strong>Conteúdo do usuário:</strong> Fotos e vídeos que você carrega, incluindo
-                metadados associados (EXIF) como data, hora, localização geográfica, largura e
-                altura quando disponíveis.
+                <strong>Conteúdo do usuário:</strong> Fotos que você carrega, incluindo metadados
+                associados (EXIF) como data, hora, localização geográfica, largura e altura quando
+                disponíveis.
               </li>
               <li>
                 <strong>Informações de pagamento:</strong> Dados de transação processados através da
