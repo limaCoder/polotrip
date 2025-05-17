@@ -77,8 +77,7 @@ export function UploadForm() {
         <>
           <div className="flex justify-between items-center mb-6">
             <span className="font-body_two">
-              {uploadFormState?.files?.length} foto{plural}
-              selecionada{plural}
+              {uploadFormState?.files?.length} foto{plural} selecionada{plural}
             </span>
             <span className="font-body_two">{formatFileSize(getTotalSize())}</span>
           </div>

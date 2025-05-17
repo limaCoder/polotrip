@@ -371,7 +371,6 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       });
 
       if (redirectPath) {
-        router.refresh();
         window.location.href = redirectPath;
         clearAll();
       } else if (options?.onSuccess) {

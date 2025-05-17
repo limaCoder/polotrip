@@ -395,9 +395,8 @@ export function useEditAlbum() {
 
   const handleFinish = useCallback(() => {
     publishAlbumMutation.mutate();
-    queryClient.refetchQueries({
+    queryClient.resetQueries({
       queryKey: [albumKeys.all],
-      type: 'all',
     });
   }, [publishAlbumMutation, queryClient]);
 
