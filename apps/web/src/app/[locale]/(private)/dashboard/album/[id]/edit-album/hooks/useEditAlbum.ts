@@ -82,7 +82,7 @@ export function useEditAlbum() {
   const publishAlbumMutation = usePublishAlbum({
     albumId: id,
     onSuccess: () => {
-      router.push(`/${locale}/album/${id}`);
+      window.location.href = `/${locale}/album/${id}`;
     },
   });
 
