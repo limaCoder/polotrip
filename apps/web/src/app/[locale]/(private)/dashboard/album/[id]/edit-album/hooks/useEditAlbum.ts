@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { QueryClient } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useQueryState } from 'nuqs';
@@ -16,7 +15,6 @@ import { useUpdatePhoto } from '@/hooks/network/mutations/useUpdatePhoto';
 import { useUpdatePhotoBatch } from '@/hooks/network/mutations/useUpdatePhotoBatch';
 import { usePublishAlbum } from '@/hooks/network/mutations/usePublishAlbum';
 import { useDeletePhotos } from '@/hooks/network/mutations/useDeletePhotos';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import {
   PendingActionTypeEnum,
   UnsavedChangesActionEnum,
@@ -26,8 +24,6 @@ import { Params } from './types';
 
 export function useEditAlbum() {
   const { id, locale } = useParams<Params>();
-  const router = useRouter();
-  const queryClient = new QueryClient();
 
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);

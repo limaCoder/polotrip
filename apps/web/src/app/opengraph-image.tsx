@@ -14,12 +14,16 @@ export default async function Image() {
           justifyContent: 'center',
           width: '100%',
           height: '100%',
-          backgroundColor: '#fff',
-          padding: '40px',
+          backgroundImage: 'url(https://polotrip.com/brand/open-graph.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
-      >
-        <img src="https://polotrip.com/brand/logo.svg" style={{ minWidth: '500px' }} />
-      </div>
+      />
     ),
+    {
+      width: 1200,
+      height: 630,
+    },
   );
 }
