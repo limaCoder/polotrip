@@ -25,7 +25,7 @@ const isIOS = (): boolean => {
 const orientationMessage = {
   landscape: 'Para melhor experiência, gire seu aparelho para o modo paisagem (horizontal).',
   iosLimitation:
-    'Devido a limitações do iOS, o modo tela cheia não está disponível em iPhones e iPads. O modo TV com scroll automático será ativado mesmo assim. Em PCs e dispositivos Android, o modo tela cheia funciona normalmente.',
+    'Devido a limitações do iOS, o modo tela cheia não está disponível em iPhones e iPads. Em PCs e dispositivos Android, o modo tela cheia funciona normalmente.',
 } as const;
 
 const showToast = (message: string, duration = TOAST_DURATION) => {
@@ -138,13 +138,7 @@ export function useMobileAlbumInTvMode() {
       if (isIOS()) {
         showToast(orientationMessage.iosLimitation, TOAST_DURATION * 3);
 
-        try {
-          await fullscreenUtils.lockOrientation();
-        } catch {
-          showToast(orientationMessage.landscape);
-        }
-
-        return autoScroll.start();
+        return;
       }
 
       await fullscreenUtils.requestFullscreen(document.documentElement);
