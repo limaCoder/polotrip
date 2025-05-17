@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useQueryState } from 'nuqs';
@@ -27,7 +27,7 @@ import { Params } from './types';
 export function useEditAlbum() {
   const { id, locale } = useParams<Params>();
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const queryClient = new QueryClient();
 
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);
@@ -395,10 +395,7 @@ export function useEditAlbum() {
 
   const handleFinish = useCallback(() => {
     publishAlbumMutation.mutate();
-    queryClient.resetQueries({
-      queryKey: [albumKeys.all],
-    });
-  }, [publishAlbumMutation, queryClient]);
+  }, [publishAlbumMutation]);
 
   const openFinishDialog = useCallback(() => {
     setIsFinishDialogOpen(true);

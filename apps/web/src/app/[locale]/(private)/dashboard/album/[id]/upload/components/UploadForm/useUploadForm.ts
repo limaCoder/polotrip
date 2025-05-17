@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import pLimit from 'p-limit';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
@@ -21,7 +21,6 @@ import { getAlbum } from '@/http/get-album';
 
 export function useUploadForm(options?: UseUploadFormOptions) {
   const { id: albumId, locale } = useParams<Params>();
-  const router = useRouter();
   const queryClient = useMemo(() => new QueryClient(), []);
 
   const { data: albumData } = useQuery({
@@ -420,12 +419,11 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     albumId,
     uploadFormState,
     clearAll,
-    router,
     redirectPath,
     options,
     updateUploadFormState,
-    queryClient,
     albumData,
+    queryClient,
   ]);
 
   const handleUploadClick = useCallback(() => {
