@@ -24,12 +24,12 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Álbum publicado com sucesso', {
         description: 'Todas as alterações foram salvas.',
       });
 
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [albumKeys.all],
       });
 
