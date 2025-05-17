@@ -8,7 +8,7 @@ export const albumKeys = {
   photos: (albumId: string) => [...albumKeys.detail(albumId), 'photos'] as const,
   photosByDate: (albumId: string, date?: string, page?: number) =>
     [...albumKeys.photos(albumId), { date, page }] as const,
-
+  space: (albumId: string) => [...albumKeys.detail(albumId), 'space'] as const,
   publicPhotos: 'publicPhotos' as const,
   publicPhotosList: (albumId: string) => [albumKeys.publicPhotos, 'list', albumId] as const,
 } as const;

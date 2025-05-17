@@ -11,6 +11,7 @@ import { getPublicAlbumRoute } from './get-public-album';
 import { getPublicAlbumLocationsRoute } from './get-public-album-locations';
 import { getPublicAlbumPhotosRoute } from './get-public-album-photos';
 import { getAlbumRoute } from './get-album';
+import { checkAlbumSpaceRoutes } from './check-album-space';
 
 const albumsController: FastifyPluginAsyncZod = async app => {
   app.register(getAlbumsRoute);
@@ -22,6 +23,7 @@ const albumsController: FastifyPluginAsyncZod = async app => {
   app.register(getPhotosByDateRoute);
   app.register(getAlbumDatesRoute);
   app.register(deletePhotosRoute);
+  app.register(checkAlbumSpaceRoutes);
 
   app.register(getPublicAlbumRoute);
   app.register(getPublicAlbumLocationsRoute);

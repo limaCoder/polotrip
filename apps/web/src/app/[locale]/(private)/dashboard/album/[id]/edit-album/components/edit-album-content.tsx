@@ -11,6 +11,7 @@ import { PhotoGallery } from './PhotoGallery';
 import { FinishEditDialog } from './FinishEditDialog';
 import { DeletePhotosDialog } from './DeletePhotosDialog';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
+import { AddMorePhotosCard } from './AddMorePhotosCard';
 
 import { useEditAlbum } from '../hooks/useEditAlbum';
 import { FormProvider } from 'react-hook-form';
@@ -94,6 +95,8 @@ export function EditAlbumContent() {
           </div>
 
           <AlbumDetailsCard />
+
+          <AddMorePhotosCard />
         </div>
 
         <div className="flex flex-col gap-9">

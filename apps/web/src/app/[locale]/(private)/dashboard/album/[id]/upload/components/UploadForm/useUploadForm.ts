@@ -292,8 +292,8 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
             updateUploadFormState({
               isUploading: false,
-              error: error.message,
             });
+
             return;
           }
           throw error;
@@ -373,7 +373,19 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       clearAll();
 
       if (redirectPath) {
-        router.push(redirectPath);
+        await queryClient.refetchQueries({
+          queryKey: [
+            albumKeys.all,
+            albumKeys.detail(albumId),
+            albumKeys.dates(albumId),
+            albumKeys.photosByDate(albumId),
+            albumKeys.space(albumId),
+          ],
+          type: 'all',
+        });
+
+        router.refresh();
+        window.location.href = redirectPath;
       } else if (options?.onSuccess) {
         options?.onSuccess();
       }
@@ -388,22 +400,20 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         duration: 5000,
         richColors: true,
       });
-
-      queryClient.invalidateQueries({
-        queryKey: [albumKeys.all],
-      });
     } catch (error) {
-      console.error('Error during upload:', error);
-
       if (!(error instanceof Error && error.message.includes('photos per album exceeded'))) {
-        toast.error('Erro no upload', {
-          description: 'Falha ao fazer upload das imagens. Por favor, tente novamente.',
+        const limitMatch = (error as Error).message.match(/Limit of (\d+) photos/);
+        const photoLimit = limitMatch
+          ? limitMatch[1]
+          : albumData?.album.photoLimit?.toString() || '100';
+
+        toast.error('Limite excedido', {
+          description: `Você já atingiu o limite de ${photoLimit} fotos por álbum.`,
           duration: 5000,
           richColors: true,
         });
 
         updateUploadFormState({
-          error: error instanceof Error ? error.message : 'Erro desconhecido',
           isUploading: false,
         });
       }
@@ -417,6 +427,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     options,
     updateUploadFormState,
     queryClient,
+    albumData,
   ]);
 
   const handleUploadClick = useCallback(() => {
