@@ -371,17 +371,6 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       });
 
       if (redirectPath) {
-        await queryClient.refetchQueries({
-          queryKey: [
-            albumKeys.all,
-            albumKeys.detail(albumId),
-            albumKeys.dates(albumId),
-            albumKeys.photosByDate(albumId),
-            albumKeys.space(albumId),
-          ],
-          type: 'all',
-        });
-
         router.refresh();
         window.location.href = redirectPath;
         clearAll();
@@ -392,6 +381,17 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       updateUploadFormState({
         isUploading: false,
         progress: 100,
+      });
+
+      await queryClient.refetchQueries({
+        queryKey: [
+          albumKeys.all,
+          albumKeys.detail(albumId),
+          albumKeys.dates(albumId),
+          albumKeys.photosByDate(albumId),
+          albumKeys.space(albumId),
+        ],
+        type: 'all',
       });
 
       toast.success('Upload realizado com sucesso!', {
