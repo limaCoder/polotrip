@@ -29,13 +29,13 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
         description: 'Todas as alterações foram salvas.',
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: [albumKeys.all],
-      });
-
       if (onSuccess) {
         onSuccess();
       }
+
+      await queryClient.invalidateQueries({
+        queryKey: [albumKeys.all],
+      });
     },
     onError: () => {
       toast.error('Erro ao publicar álbum', {
