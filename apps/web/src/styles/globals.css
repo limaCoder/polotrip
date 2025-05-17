@@ -20,6 +20,11 @@
     @apply border-border;
   }
 
+  html, body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   body {
     @apply bg-background;
   }
