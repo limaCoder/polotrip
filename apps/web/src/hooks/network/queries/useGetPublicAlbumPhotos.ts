@@ -33,8 +33,8 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
       const formattedDate = format(parsedDate, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
 
       const transformedPhotos: TimelinePhoto[] = event?.photos?.map(photo => {
-        let width = photo?.width || 0;
-        let height = photo?.height || 0;
+        let width = photo?.width ?? 1920;
+        let height = photo?.height ?? 1080;
 
         if (width > 0 && height > 0) {
           const aspectRatio = height / width;
@@ -48,8 +48,8 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
           id: photo?.id,
           src: photo?.imageUrl,
           alt: photo?.description || 'Foto do álbum',
-          width: photo?.width || 0,
-          height: photo?.height || 0,
+          width,
+          height,
           description: photo?.description || '',
         };
       });

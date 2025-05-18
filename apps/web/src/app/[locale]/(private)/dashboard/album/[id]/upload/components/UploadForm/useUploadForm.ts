@@ -452,11 +452,8 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     const filesWithoutMetadata = uploadFormState?.files?.map(file => ({
       ...file,
       metadata: {
-        dateTaken: null,
         latitude: null,
         longitude: null,
-        width: null,
-        height: null,
       },
     }));
 

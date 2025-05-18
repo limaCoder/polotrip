@@ -12,6 +12,7 @@ import { FinishEditDialog } from './FinishEditDialog';
 import { DeletePhotosDialog } from './DeletePhotosDialog';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { AddMorePhotosCard } from './AddMorePhotosCard';
+import { UndatedPhotosDialog } from './UndatedPhotosDialog';
 
 import { useEditAlbum } from '../hooks/useEditAlbum';
 import { FormProvider } from 'react-hook-form';
@@ -30,6 +31,7 @@ export function EditAlbumContent() {
     currentPage,
     isFinishDialogOpen,
     isDeleteDialogOpen,
+    isUndatedPhotosDialogOpen,
     isUnsavedChangesDialogOpen,
     isDeletingPhotos,
     form,
@@ -51,6 +53,7 @@ export function EditAlbumContent() {
     openDeleteDialog,
     closeDeleteDialog,
     closeUnsavedChangesDialog,
+    closeUndatedPhotosDialog,
   } = useEditAlbum();
 
   if (isLoading) {
@@ -138,7 +141,7 @@ export function EditAlbumContent() {
                   <span>Processando...</span>
                 </>
               ) : (
-                <span>Finalizar</span>
+                <span>Publicar álbum</span>
               )}
             </Button>
           </div>
@@ -162,6 +165,11 @@ export function EditAlbumContent() {
           isOpen={isUnsavedChangesDialogOpen}
           onClose={closeUnsavedChangesDialog}
           onConfirm={handleUnsavedChanges}
+        />
+
+        <UndatedPhotosDialog
+          isOpen={isUndatedPhotosDialogOpen}
+          onClose={closeUndatedPhotosDialog}
         />
       </div>
     </FormProvider>

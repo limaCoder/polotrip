@@ -34,7 +34,12 @@ export function UploadForm() {
 
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
-      <h1 className="font-title_three font-bold mb-6">Upload de Fotos</h1>
+      <h1 className="font-title_three font-bold mb-2">Upload de Fotos</h1>
+      <h2 className="font-body_two text-text/75 mb-6">
+        📸 Dica: Use fotos tiradas com a câmera do seu celular. Evite imagens salvas de apps como
+        WhatsApp ou redes sociais, pois elas removem dados como data e localização, que são
+        essenciais para o Polotrip.
+      </h2>
 
       {uploadFormState?.error && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-md p-3 mb-4">

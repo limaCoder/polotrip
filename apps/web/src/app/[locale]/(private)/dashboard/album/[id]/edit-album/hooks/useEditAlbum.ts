@@ -30,6 +30,7 @@ export function useEditAlbum() {
 
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isUndatedPhotosDialogOpen, setIsUndatedPhotosDialogOpen] = useState(false);
 
   const [unsavedChangesState, dispatch] = useReducer(unsavedChangesReducer, {
     isDialogOpen: false,
@@ -390,9 +391,19 @@ export function useEditAlbum() {
     publishAlbumMutation.mutate();
   }, [publishAlbumMutation]);
 
+  const hasUndatedPhotos = useCallback(() => {
+    const dates = albumDatesQuery.data?.dates || [];
+    const undatedPhotos = dates.find(dateCount => dateCount?.date === null);
+    return Boolean(undatedPhotos?.count);
+  }, [albumDatesQuery.data?.dates]);
+
   const openFinishDialog = useCallback(() => {
+    if (hasUndatedPhotos()) {
+      setIsUndatedPhotosDialogOpen(true);
+      return;
+    }
     setIsFinishDialogOpen(true);
-  }, []);
+  }, [hasUndatedPhotos]);
 
   const closeFinishDialog = useCallback(() => {
     setIsFinishDialogOpen(false);
@@ -404,6 +415,10 @@ export function useEditAlbum() {
 
   const closeDeleteDialog = useCallback(() => {
     setIsDeleteDialogOpen(false);
+  }, []);
+
+  const closeUndatedPhotosDialog = useCallback(() => {
+    setIsUndatedPhotosDialogOpen(false);
   }, []);
 
   const isLoading = albumDatesQuery.isLoading || photosQuery.isLoading;
@@ -467,6 +482,7 @@ export function useEditAlbum() {
     isPhotosLoading,
     isFinishDialogOpen,
     isDeleteDialogOpen,
+    isUndatedPhotosDialogOpen,
     isUnsavedChangesDialogOpen: unsavedChangesState.isDialogOpen,
     isDeletingPhotos: deletePhotosMutation.isPending,
     form,
@@ -492,5 +508,6 @@ export function useEditAlbum() {
     closeDeleteDialog,
     closeUnsavedChangesDialog,
     handleUnsavedChanges,
+    closeUndatedPhotosDialog,
   };
 }

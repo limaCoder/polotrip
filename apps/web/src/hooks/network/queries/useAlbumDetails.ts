@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery } from '@tanstack/react-query';
 import { getAlbum } from '@/http/get-album';
 import { albumKeys } from '../keys/albumKeys';

@@ -6,11 +6,11 @@ type PhotoFile = {
   loading: boolean;
   error?: string;
   metadata?: {
-    dateTaken: string | null;
+    dateTaken?: string | null;
     latitude: number | null;
     longitude: number | null;
-    width: number | null;
-    height: number | null;
+    width?: number | null;
+    height?: number | null;
   };
 };
 
