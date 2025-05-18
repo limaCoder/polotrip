@@ -1,12 +1,9 @@
 import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { MotionDiv, MotionSection } from '@/lib/motion/motion-components';
-import { getTranslations } from 'next-intl/server';
 import { HeroPhotos } from './photos';
 
 export async function Hero() {
-  const t = await getTranslations('Homepage');
-
   return (
     <MotionSection
       initial={{ opacity: 0, y: 35 }}
@@ -21,14 +18,14 @@ export async function Hero() {
             tag="h1"
             duration={2}
             filter={false}
-            words={t('title')}
+            words="Relembre viagens com quem ama"
           />
           <TextGenerateEffect
             className="lg:w-[526px]"
             tag="p"
             duration={1.2}
             filter={false}
-            words={t('content')}
+            words="Crie álbuns de viagem interativos com fotos, mapas e músicas para compartilhar suas aventuras com quem realmente importa."
           />
           <MotionDiv
             initial={{ opacity: 0, y: 10 }}
