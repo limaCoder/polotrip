@@ -15,7 +15,7 @@ function UploadFormProcessWaiting({
         <p className="text-text/70">
           {isCompressingState
             ? 'Estamos preparando suas fotos para ficarem perfeitas! ✨'
-            : `Já enviamos ${uploadFormState.progress}% das suas fotos! ��`}
+            : `Já enviamos ${uploadFormState.progress}% das suas fotos! ✨`}
         </p>
       </div>
 

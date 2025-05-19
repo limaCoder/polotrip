@@ -59,7 +59,7 @@ export function PhotoGallery({
               aria-label="Limpar seleção"
             >
               <X size={18} />
-              <span className="font-body_two">Limpar Seleção</span>
+              <span className="font-body_two">Limpar seleção</span>
             </button>
             <button
               className="flex items-center gap-2 text-red-500 cursor-pointer hover:text-red-600"
@@ -67,7 +67,7 @@ export function PhotoGallery({
               aria-label="Excluir selecionadas"
             >
               <Trash2 size={18} />
-              <span className="font-body_two">Excluir Selecionadas</span>
+              <span className="font-body_two">Excluir selecionadas</span>
             </button>
           </div>
         )}

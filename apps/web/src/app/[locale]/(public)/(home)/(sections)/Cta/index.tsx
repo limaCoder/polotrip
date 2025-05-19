@@ -22,7 +22,7 @@ export async function Cta({ locale }: CtaProps) {
             Pronto para criar seu primeiro álbum?
           </h2>
           <p className="font-title_three mb-8">
-            Por apenas <strong>{formatCurrency(locale, albumPrice)}</strong>, crie um álbum de
+            Por a partir de <strong>{formatCurrency(locale, albumPrice)}</strong>, crie um álbum de
             viagem digital único e memorável.
           </p>
           <ButtonNavigation
