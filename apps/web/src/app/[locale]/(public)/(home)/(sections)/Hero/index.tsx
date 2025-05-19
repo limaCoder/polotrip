@@ -25,7 +25,7 @@ export async function Hero() {
             tag="p"
             duration={1.2}
             filter={false}
-            words="Crie álbuns de viagem interativos com fotos, mapas e músicas para compartilhar suas aventuras com quem realmente importa."
+            words="Crie álbuns de viagem interativos com fotos e mapas para compartilhar suas aventuras com quem realmente importa."
           />
           <MotionDiv
             initial={{ opacity: 0, y: 10 }}
