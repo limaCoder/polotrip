@@ -34,6 +34,9 @@ export function EditAlbumContent() {
     isUndatedPhotosDialogOpen,
     isUnsavedChangesDialogOpen,
     isDeletingPhotos,
+    isUpdatingPhoto,
+    isUpdatingPhotoBatch,
+    isPublishingAlbum,
     form,
 
     handleDateSelect,
@@ -56,6 +59,9 @@ export function EditAlbumContent() {
     closeUndatedPhotosDialog,
   } = useEditAlbum();
 
+  const isGlobalLoading =
+    isLoading || isUpdatingPhoto || isUpdatingPhotoBatch || isDeletingPhotos || isPublishingAlbum;
+
   if (isLoading) {
     return (
       <div className="flex justify-center my-12">
@@ -74,6 +80,11 @@ export function EditAlbumContent() {
 
   return (
     <FormProvider {...form}>
+      {isGlobalLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary"></div>
+        </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_3fr] gap-9">
         <div className="flex flex-col gap-9">
           <PhotoTimeline

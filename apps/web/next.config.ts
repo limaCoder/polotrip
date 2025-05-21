@@ -31,6 +31,9 @@ const nextConfig = {
       {
         hostname: '*.r2.cloudflarestorage.com',
       },
+      {
+        hostname: 'polotrip-albums-content-bucket.work',
+      },
     ],
   },
   async rewrites() {

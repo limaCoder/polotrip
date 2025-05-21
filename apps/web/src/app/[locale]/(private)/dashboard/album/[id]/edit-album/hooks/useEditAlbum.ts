@@ -485,6 +485,9 @@ export function useEditAlbum() {
     isUndatedPhotosDialogOpen,
     isUnsavedChangesDialogOpen: unsavedChangesState.isDialogOpen,
     isDeletingPhotos: deletePhotosMutation.isPending,
+    isUpdatingPhoto: updatePhotoMutation.isPending,
+    isUpdatingPhotoBatch: updatePhotoBatchMutation.isPending,
+    isPublishingAlbum: publishAlbumMutation.isPending,
     form,
 
     error,

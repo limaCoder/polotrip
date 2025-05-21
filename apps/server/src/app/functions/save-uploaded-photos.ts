@@ -1,7 +1,6 @@
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@polotrip/db';
 import { albums, photos } from '@polotrip/db/schema';
-import { StorageProviderFactory } from '@/app/factories/storage-provider.factory';
 
 type PhotoData = {
   filePath: string;
@@ -48,30 +47,22 @@ async function saveUploadedPhotos({
     throw new Error(`Limit of ${album.photoLimit} photos per album exceeded`);
   }
 
-  const storageProvider = StorageProviderFactory.getProvider();
+  const BUCKET_NAME = 'polotrip-albums-content-bucket.work';
 
-  const LONG_EXPIRY = 604800; // ~ 7 days in seconds
+  const photosToInsert = uploadedPhotosData?.map(photo => {
+    const publicUrl = `https://${BUCKET_NAME}/${photo.filePath}`;
 
-  const photosToInsert = await Promise.all(
-    uploadedPhotosData?.map(async photo => {
-      const data = await storageProvider.createSignedDownloadUrl(
-        'polotrip-albums-content',
-        photo?.filePath,
-        LONG_EXPIRY,
-      );
-
-      return {
-        albumId,
-        imageUrl: data.signedUrl,
-        originalFileName: photo?.originalFileName,
-        dateTaken: photo?.dateTaken,
-        latitude: photo?.latitude,
-        longitude: photo?.longitude,
-        width: photo?.width,
-        height: photo?.height,
-      };
-    }),
-  );
+    return {
+      albumId,
+      imageUrl: publicUrl,
+      originalFileName: photo?.originalFileName,
+      dateTaken: photo?.dateTaken,
+      latitude: photo?.latitude,
+      longitude: photo?.longitude,
+      width: photo?.width,
+      height: photo?.height,
+    };
+  });
 
   const savedPhotos = await db.insert(photos).values(photosToInsert).returning();
 
