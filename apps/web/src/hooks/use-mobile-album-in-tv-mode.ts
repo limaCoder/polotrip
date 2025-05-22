@@ -17,7 +17,7 @@ type OrientationType =
   | 'landscape-secondary';
 
 const TOAST_DURATION = 4000;
-const SCROLL_SPEED = 1;
+const SCROLL_SPEED = 5;
 
 const isIOS = (): boolean => {
   const userAgent = navigator.userAgent || navigator.vendor;

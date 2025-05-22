@@ -66,9 +66,7 @@ async function getPublicAlbumPhotos({ albumId, cursor, limit = 20 }: GetPublicAl
 
     for (const dateObj of dates) {
       const date = typeof dateObj.date === 'string' ? dateObj.date : null;
-      lastDate = date;
-
-      if (!date || remainingLimit <= 0) continue;
+      if (!date || remainingLimit <= 0) break;
 
       let whereCondition;
       if (date === cursorDate && cursorPhotoId) {
@@ -80,21 +78,21 @@ async function getPublicAlbumPhotos({ albumId, cursor, limit = 20 }: GetPublicAl
 
         if (cursorPhoto && cursorPhoto.dateTaken) {
           whereCondition = sql`
-            ${photos.albumId} = ${album.id} AND 
+            ${photos.albumId} = ${album.id} AND
             TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') = ${date} AND
-            (${photos.dateTaken} > ${cursorPhoto.dateTaken} OR 
+            (${photos.dateTaken} > ${cursorPhoto.dateTaken} OR
              (${photos.dateTaken} = ${cursorPhoto.dateTaken} AND ${photos.id} > ${cursorPhotoId}))
           `;
         } else {
           whereCondition = sql`
-            ${photos.albumId} = ${album.id} AND 
+            ${photos.albumId} = ${album.id} AND
             TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') = ${date} AND
             ${photos.id} > ${cursorPhotoId}
           `;
         }
       } else {
         whereCondition = sql`
-          ${photos.albumId} = ${album.id} AND 
+          ${photos.albumId} = ${album.id} AND
           TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') = ${date}
         `;
       }
@@ -106,22 +104,20 @@ async function getPublicAlbumPhotos({ albumId, cursor, limit = 20 }: GetPublicAl
         .orderBy(sql`${photos.dateTaken} ASC NULLS LAST`, photos.id);
 
       const photosForDate = await query.limit(remainingLimit + 1);
-
       const dateHasMore = photosForDate.length > remainingLimit;
       const photosToInclude = dateHasMore ? photosForDate.slice(0, remainingLimit) : photosForDate;
 
       if (photosToInclude.length > 0) {
+        timelineEvents.push({
+          date,
+          photos: photosToInclude,
+        });
+        lastDate = date;
         lastPhotoId = photosToInclude[photosToInclude.length - 1].id;
+        remainingLimit -= photosToInclude.length;
       }
 
-      timelineEvents.push({
-        date,
-        photos: photosToInclude,
-      });
-
-      remainingLimit -= photosToInclude.length;
-
-      if (dateHasMore) {
+      if (dateHasMore || remainingLimit <= 0) {
         hasMore = true;
         break;
       }
@@ -132,10 +128,9 @@ async function getPublicAlbumPhotos({ albumId, cursor, limit = 20 }: GetPublicAl
         .select({ count: sql`count(*)`.mapWith(Number) })
         .from(photos)
         .where(
-          sql`${photos.albumId} = ${album.id} AND TO_CHAR(${photos.dateTaken}::timestamp AT TIME ZONE CURRENT_SETTING('TIMEZONE'), 'YYYY-MM-DD') > ${lastDate}`,
+          sql`${photos.albumId} = ${album.id} AND TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') > ${lastDate}`,
         )
         .then(rows => rows[0].count > 0);
-
       hasMore = moreResults;
     }
 
