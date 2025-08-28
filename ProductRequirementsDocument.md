@@ -3,13 +3,13 @@
 ## 1. Visão Geral
 
 **Objetivo:**  
-O Polotrip é um SaaS inovador que transforma memórias de viagem em álbuns digitais interativos. Inspirado nos álbuns físicos de viagens, o Polotrip permite que os usuários criem, editem e compartilhem álbuns com fotos e vídeos de suas jornadas, reunindo amigos e família por meio de um link único e uma experiência imersiva que inclui timeline, mapa interativo e trilha sonora (via integração com o Spotify).
+O Polotrip é um SaaS inovador que transforma memórias de viagem em álbuns digitais interativos. Inspirado nos álbuns físicos de viagens, o Polotrip permite que os usuários criem, editem e compartilhem álbuns com fotos de suas jornadas, reunindo amigos e família por meio de um link único e uma experiência imersiva que inclui timeline e mapa interativo.
 
 **Problema que Resolve:**
 
 - Fotos dispersas em storages tradicionais (ex.: Drive, Dropbox) se perdem no volume de arquivos.
 - Dificuldade em recriar a experiência íntima e acolhedora de um álbum físico de viagens.
-- Necessidade de uma plataforma que ofereça uma experiência rica em narrativa visual, com recursos diferenciados (scroll infinito, timeline, mapa e widget do Spotify).
+- Necessidade de uma plataforma que ofereça uma experiência rica em narrativa visual, com recursos diferenciados (scroll infinito, timeline, mapa).
 
 **Público-alvo:**  
 Usuários que desejam preservar e compartilhar memórias de viagem de forma íntima, pessoal e interativa, valorizando a experiência emocional e narrativa de um álbum de família.
@@ -23,7 +23,7 @@ Usuários que desejam preservar e compartilhar memórias de viagem de forma ínt
 
 - **Metas de Negócio:**
   - Validar o modelo "pay-per-album": R$19,99 para 100 fotos e R$9,99 a cada 100 fotos adicionais.
-  - Fornecer uma experiência diferenciada com scroll infinito, timeline interativa, mapa (Leaflet) integrado e widget do Spotify.
+  - Fornecer uma experiência diferenciada com scroll infinito, timeline interativa, mapa (Leaflet) integrado.
   - Manter os custos operacionais sob controle por meio de técnicas otimizadas de processamento em lote, compressão com CompressorJS e upload via Signed URLs para o Supabase Storage.
 
 ---
@@ -107,7 +107,7 @@ Este fluxo segue a arquitetura em camadas, mantendo responsabilidades bem defini
   - **Mapa (Leaflet):** Exibir marcadores representando os locais das fotos da viagem.
   - **Timeline:** Barra interativa que se preenche conforme o usuário rola a página, agrupando fotos por data/dia.
   - **Galeria:** Grid estilo Masonry (semelhante ao Pinterest) exibindo as imagens.
-  - **Widget do Spotify:** Exibir um widget flutuante com a música ou playlist selecionada pelo usuário.
+  
   - URL de compartilhamento no formato: `seudominio.com/album/[id]`.
 
 ---
@@ -164,7 +164,6 @@ polotrip/
 - React Hook Form para manipulação de formulários no client-side quando necessário,
   em cenários em que as server actions não são suportáveis
 - Zod para validação de dados
-- Zustand para gerenciamento de estado no client-side, quando necessário
 
 **Backend (apps/server):**
 
@@ -174,8 +173,6 @@ polotrip/
 - Resend para integração de envio de emails
 - Docker para containerização
 - Supabase para Storage e Banco de Dados (Postgres)
-- RabbitMQ para gerenciamento de filas (se necessário)
-- Serverless Functions (para processamento intensivo, se aplicável)
 
 **Arquitetura do Backend:**
 
