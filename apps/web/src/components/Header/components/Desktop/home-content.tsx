@@ -1,19 +1,16 @@
-'use client';
-
 import { Album } from 'lucide-react';
 import { ButtonNavigation } from '@/components/ButtonNavigation';
-import { usePathname } from '@/i18n/routing';
+import { cn } from '@/lib/cn';
+import { HomeContentProps } from '../../types';
 
-export function HomeContent() {
-  const pathname = usePathname();
-
-  const isHome = pathname === `/`;
-
-  if (!isHome) return null;
+export function HomeContent({ isHome: isHomeFromParent = false }: HomeContentProps) {
+  if (!isHomeFromParent) return null;
 
   return (
     <>
-      <p className="block">Pronto para criar seus álbuns?</p>
+      <p className={cn('block', isHomeFromParent && 'text-white drop-shadow-lg')}>
+        Pronto para criar seus álbuns?
+      </p>
       <ButtonNavigation
         href="/sign-in"
         className="bg-gradient-primary text-white button-shadow"

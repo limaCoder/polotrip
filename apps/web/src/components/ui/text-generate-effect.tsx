@@ -42,7 +42,7 @@ export const TextGenerateEffect = ({
             return (
               <motion.h1
                 key={word + idx}
-                className="font-heading text-gradient-primary opacity-0 inline"
+                className="font-heading opacity-0 inline"
                 style={{
                   filter: filter ? 'blur(10px)' : 'none',
                 }}

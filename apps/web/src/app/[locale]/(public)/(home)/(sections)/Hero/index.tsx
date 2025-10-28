@@ -1,27 +1,29 @@
 import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
-import { MotionDiv, MotionSection } from '@/lib/motion/motion-components';
+import { MotionDiv } from '@/lib/motion/motion-components';
 import { HeroPhotos } from './photos';
 
 export async function Hero() {
   return (
-    <MotionSection
-      initial={{ opacity: 0, y: 35 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-      className="py-10 pt-30 lg:pt-0"
-    >
-      <div className="flex flex-col lg:flex-row container justify-between items-center w-full h-full px-4 lg:px-9">
+    <section className="relative py-10 pt-30 lg:pt-20 lg:min-h-screen overflow-hidden">
+      <div className="hidden lg:block absolute inset-0 w-full h-full z-0">
+        <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+          <source src="/pages/home/hero/hero-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
+
+      <div className="relative z-10 flex flex-col lg:flex-row container justify-between items-center w-full h-full lg:min-h-screen px-4 lg:px-9">
         <div className="lg:h-full flex flex-col lg:justify-center text-center lg:text-left max-w-2xl">
           <TextGenerateEffect
-            className="lg:w-[582px]"
+            className="lg:w-[582px] lg:drop-shadow-lg text-primary lg:text-secondary"
             tag="h1"
             duration={2}
             filter={false}
-            words="Relembre viagens com quem ama"
+            words="Guarde memórias que encantam"
           />
           <TextGenerateEffect
-            className="lg:w-[526px]"
+            className="lg:w-[526px] lg:text-white lg:drop-shadow-lg"
             tag="p"
             duration={1.2}
             filter={false}
@@ -50,8 +52,10 @@ export async function Hero() {
           </MotionDiv>
         </div>
 
-        <HeroPhotos />
+        <div className="lg:hidden">
+          <HeroPhotos />
+        </div>
       </div>
-    </MotionSection>
+    </section>
   );
 }
