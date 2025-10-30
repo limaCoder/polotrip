@@ -89,7 +89,7 @@
         "q3_question": "Do people need an account to view my album?",
         "q3_answer": "No! Just share the album link and anyone can access it, without needing to create an account.",
         "q4_question": "Are my photos safe on Polotrip?",
-        "q4_answer": "The photos in your albums can only be viewed by those who have the album link. However, the images are stored on a public server, which means that, technically, anyone with the exact address of the image can access it. The image address is hard to guess and is not publicly disclosed by the platform. We recommend that you share the album link only with people you trust.",
+        "q4_answer": "The photos in your albums can only be viewed by those who have the album link. However, the images are stored on a public server, which means that, technically, anyone with the exact address of the image can access it. The image address is hard to guess and is not publicly disclosed by the platform. We recommend that you share the album link only with people you trust. Albums created on Polotrip remain available via link as long as the platform is active. If we need to terminate the service, we will notify you in advance so you can download a copy of your memories.",
         "q5_question": "Does the album expire after a while?",
         "q5_answer": "No. Once created, your album remains available for you to access and share whenever you want.",
         "q6_question": "Can I edit the album after publishing it?",
