@@ -1,7 +1,16 @@
 import { MotionDiv } from '@/lib/motion/motion-components';
-import { benefits } from './data';
+import { getTranslations } from 'next-intl/server';
+import { benefitsData } from './data';
 
-export function BenefitsGrid() {
+export async function BenefitsGrid() {
+  const t = await getTranslations('Home.Benefits.cards');
+
+  const benefits = benefitsData.map(benefit => ({
+    ...benefit,
+    title: t(benefit.titleKey),
+    description: t(benefit.descriptionKey),
+  }));
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {benefits.map((benefit, index) => (

@@ -9,16 +9,25 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { MonthPickerProps } from './types';
-import { ptBR } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { LocaleDateFnsEnum, LocaleTypesEnum } from '@/constants/localesEnum';
 
 export function MonthPicker({
   value,
   onChange,
   disabled,
   className,
-  placeholder = 'Selecione um mês',
+  placeholder,
   name,
 }: MonthPickerProps) {
+  const t = useTranslations('MonthPicker');
+  const { locale } = useParams();
+
+  const dateLocale =
+    LocaleDateFnsEnum[locale as keyof typeof LocaleDateFnsEnum] ||
+    LocaleDateFnsEnum[LocaleTypesEnum.PT as keyof typeof LocaleDateFnsEnum];
+
   const [date, setDate] = useState<Date>(value || new Date());
   const [open, setOpen] = useState(false);
   const currentDate = useMemo(() => new Date(), []);
@@ -29,20 +38,9 @@ export function MonthPicker({
     }
   }, [value]);
 
-  const months = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
-  ];
+  const months = Array.from({ length: 12 }, (_, i) =>
+    format(new Date(2024, i, 1), 'MMMM', { locale: dateLocale }),
+  );
 
   const handleMonthSelect = (monthIndex: number) => {
     const newDate = setMonth(date, monthIndex);
@@ -69,6 +67,8 @@ export function MonthPicker({
     setDate(newDate);
   };
 
+  const displayPlaceholder = placeholder || t('placeholder');
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -80,15 +80,15 @@ export function MonthPicker({
             className,
           )}
           disabled={disabled}
-          aria-label="Selecionar mês"
+          aria-label={t('select_month_aria')}
         >
           <CalendarIcon color="#08171C40" className="mr-2 h-4 w-4" />
-          {date ? format(date, 'MMMM yyyy', { locale: ptBR }) : placeholder}
+          {date ? format(date, 'MMMM yyyy', { locale: dateLocale }) : displayPlaceholder}
           {name && (
             <input
               type="hidden"
               name={name}
-              value={date ? format(date, 'yyyy-MM', { locale: ptBR }) : ''}
+              value={date ? format(date, 'yyyy-MM', { locale: dateLocale }) : ''}
             />
           )}
         </Button>
@@ -100,22 +100,22 @@ export function MonthPicker({
             size="icon"
             className="h-7 w-7 hover:bg-primary transition-colors duration-300"
             onClick={handlePreviousYear}
-            aria-label="Ano anterior"
+            aria-label={t('previous_year_aria')}
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">Ano anterior</span>
+            <span className="sr-only">{t('previous_year_sr')}</span>
           </Button>
-          <div className="font-medium">{format(date, 'yyyy', { locale: ptBR })}</div>
+          <div className="font-medium">{format(date, 'yyyy', { locale: dateLocale })}</div>
           <Button
             variant="outline"
             size="icon"
             className="h-7 w-7 hover:bg-primary transition-colors duration-300"
             onClick={handleNextYear}
             disabled={date.getFullYear() >= currentDate.getFullYear()}
-            aria-label="Ano posterior"
+            aria-label={t('next_year_aria')}
           >
             <ChevronRight className="h-4 w-4" />
-            <span className="sr-only">Ano posterior</span>
+            <span className="sr-only">{t('next_year_sr')}</span>
           </Button>
         </div>
         <div className="grid grid-cols-3 gap-2 p-2">
@@ -131,14 +131,14 @@ export function MonthPicker({
                 key={month}
                 variant={isCurrentMonth ? 'default' : 'outline'}
                 className={cn(
-                  'h-9 transition-colors duration-300',
+                  'h-9 transition-colors duration-300 capitalize',
                   isFutureMonth ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary',
                 )}
                 onClick={() => handleMonthSelect(index)}
                 disabled={isFutureMonth}
-                aria-label={`Selecionar mês ${month?.substring(0, 3)}`}
+                aria-label={t('select_month_button_aria', { month: month.substring(0, 3) })}
               >
-                {month?.substring(0, 3)}
+                {month.substring(0, 3)}
               </Button>
             );
           })}

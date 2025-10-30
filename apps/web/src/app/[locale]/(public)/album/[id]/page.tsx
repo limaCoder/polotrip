@@ -22,12 +22,15 @@ import { albums } from '@polotrip/db/schema';
 import { db } from '@polotrip/db';
 import { eq } from 'drizzle-orm';
 import { generateAlbumMetadata } from './metadata';
+import { getTranslations } from 'next-intl/server';
 
 export const generateMetadata = generateAlbumMetadata;
 
 export default async function AlbumViewPage({ params, searchParams }: PageProps) {
-  const { id: albumId } = await params;
+  const { id: albumId, locale } = await params;
   const { share } = (await searchParams) || {};
+
+  const t = await getTranslations({ locale, namespace: 'PublicAlbum' });
 
   const user = await getCurrentUser();
 
@@ -80,7 +83,7 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
             <div className="absolute inset-0 bg-text/70 via-transparent to-transparent z-10" />
             <Image
               src={coverImageUrl}
-              alt="Capa do álbum"
+              alt={t('cover_alt')}
               fill
               sizes="100vw"
               className="object-cover"
@@ -112,14 +115,14 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="text-primary hidden md:block" size={24} />
               <h2 className="font-title_two text-2xl text-primary">
-                ✨ Esses foram os momentos incríveis de {albumOwnerName}
+                {t('moments_title', { ownerName: albumOwnerName })}
               </h2>
             </div>
             <div className="w-full h-[400px] rounded-lg overflow-hidden">
               <Suspense
                 fallback={
                   <div className="w-full h-full bg-muted flex items-center justify-center">
-                    Carregando mapa...
+                    {t('loading_map')}
                   </div>
                 }
               >

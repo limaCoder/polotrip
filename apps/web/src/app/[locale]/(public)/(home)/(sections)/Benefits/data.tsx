@@ -1,48 +1,41 @@
 import { Camera, Map, Share2, Lock, Cloud, BookOpen } from 'lucide-react';
+import { BenefitData } from './types';
 
-const benefits = [
+export const benefitsData: BenefitData[] = [
   {
     id: 1,
-    title: 'Memórias digitais organizadas',
-    description:
-      'Chega de fotos perdidas em pastas aleatórias. Mantenha suas memórias de viagem organizadas e fáceis de encontrar.',
+    titleKey: 'organized_memories_title',
+    descriptionKey: 'organized_memories_description',
     icon: <Camera />,
   },
   {
     id: 2,
-    title: 'Mapa interativo',
-    description:
-      'Visualize sua jornada em um mapa com todos os lugares que você visitou, diferente de serviços de armazenamento convencionais.',
+    titleKey: 'interactive_map_title',
+    descriptionKey: 'interactive_map_description',
     icon: <Map />,
   },
   {
     id: 3,
-    title: 'Privacidade garantida',
-    description:
-      'Diferente das redes sociais, você decide quem pode ver suas memórias, sem exposição pública indesejada.',
+    titleKey: 'privacy_guaranteed_title',
+    descriptionKey: 'privacy_guaranteed_description',
     icon: <Lock />,
   },
   {
     id: 4,
-    title: 'Sem limitações de espaço',
-    description:
-      'Esqueça mensagens de "armazenamento cheio" do seu G**gle Drive ou Dr**box. Foque nas memórias, não em gerenciar espaço.',
+    titleKey: 'no_space_limitations_title',
+    descriptionKey: 'no_space_limitations_description',
     icon: <Cloud />,
   },
   {
     id: 5,
-    title: 'Experiência narrativa',
-    description:
-      'Transforme suas fotos em histórias, não apenas arquivos empilhados em uma pasta de armazenamento em nuvem.',
+    titleKey: 'narrative_experience_title',
+    descriptionKey: 'narrative_experience_description',
     icon: <BookOpen />,
   },
   {
     id: 6,
-    title: 'Compartilhamento fácil e controlado',
-    description:
-      'Compartilhe seus álbuns com quem você quiser através de um link, mantendo o controle total sobre suas memórias.',
+    titleKey: 'easy_sharing_title',
+    descriptionKey: 'easy_sharing_description',
     icon: <Share2 />,
   },
 ];
-
-export { benefits };

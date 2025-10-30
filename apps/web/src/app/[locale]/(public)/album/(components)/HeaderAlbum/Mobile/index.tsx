@@ -11,32 +11,35 @@ import { useParams } from 'next/navigation';
 import { ShareAlbumModal } from '@/components/ShareAlbumModal';
 import { useAlbumOwnership } from '@/hooks/use-album-ownership';
 import { HeaderAlbumProps } from '../types';
+import { useTranslations } from 'next-intl';
 
-const IS_INTERNATIONALIZATION_ENABLED = false;
+const IS_INTERNATIONALIZATION_ENABLED = true;
 
 export function HeaderAlbumMobile({
   albumTitle,
   albumDescription,
   albumOwnerName,
 }: HeaderAlbumProps) {
+  const t = useTranslations('PublicAlbum.HeaderAlbum');
+  const tTvMode = useTranslations('MobileAlbumInTvMode');
   const [isOpen, setIsOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id: albumId } = useParams();
   const { isOwner } = useAlbumOwnership();
 
-  const { handleTvMode } = useMobileAlbumInTvMode();
+  const { handleTvMode } = useMobileAlbumInTvMode({ t: tTvMode });
 
   return (
     <div className="flex md:hidden w-full justify-between items-center">
       <Link href="/" className="cursor-pointer">
-        <Image src="/brand/logo-white.svg" alt="Logo" width={120} height={120} />
+        <Image src="/brand/logo-white.svg" alt={t('logo_alt')} width={120} height={120} />
       </Link>
 
       <div className="relative">
         <button
           onClick={() => setIsOpen(prev => !prev)}
           className="p-3 rounded-full bg-white/75 hover:bg-gray-300 transition"
-          aria-label="Abrir menu"
+          aria-label={t('open_menu_aria')}
         >
           <Menu className="h-6 w-6 text-primary" />
         </button>
@@ -50,7 +53,7 @@ export function HeaderAlbumMobile({
           {isOwner && (
             <button
               className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
-              aria-label="Compartilhar"
+              aria-label={t('share_aria')}
               onClick={() => {
                 setIsShareModalOpen(true);
                 setIsOpen(false);
@@ -61,7 +64,7 @@ export function HeaderAlbumMobile({
           )}
           <button
             className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary active:bg-primary transition flex items-center justify-center active-tv-mode"
-            aria-label="Modo TV"
+            aria-label={t('tv_mode_aria')}
             onClick={handleTvMode}
           >
             <Tv className="h-6 w-6 text-primary" />

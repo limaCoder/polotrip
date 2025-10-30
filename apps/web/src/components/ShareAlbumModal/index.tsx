@@ -6,6 +6,7 @@ import { ShareButtons } from '@/components/ShareButtons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QRCodeShare } from '@/components/QRCodeShare';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export function ShareAlbumModal({
   isOpen,
@@ -15,6 +16,7 @@ export function ShareAlbumModal({
   albumDescription,
   albumOwnerName,
 }: ShareAlbumModalProps) {
+  const t = useTranslations('PublicAlbum.ShareModal');
   const { locale } = useParams();
   const shareUrl = `${window.location.origin}/${locale}/album/${albumId}`;
 
@@ -22,16 +24,16 @@ export function ShareAlbumModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="px-2 w-[90%] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Compartilhar álbum</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
 
         <Tabs defaultValue="links" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger className="data-[state=active]:bg-secondary" value="links">
-              Links
+              {t('links_tab')}
             </TabsTrigger>
             <TabsTrigger className="data-[state=active]:bg-secondary" value="qrcode">
-              QR Code
+              {t('qrcode_tab')}
             </TabsTrigger>
           </TabsList>
 

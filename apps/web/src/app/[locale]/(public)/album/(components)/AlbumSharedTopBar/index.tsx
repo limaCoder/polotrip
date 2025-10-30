@@ -4,8 +4,10 @@ import { ArrowLeft, X } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useAlbumShared } from '@/hooks/use-album-shared';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export function AlbumSharedTopBar() {
+  const t = useTranslations('PublicAlbum.SharedTopBar');
   const { isShared } = useAlbumShared();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -16,15 +18,13 @@ export function AlbumSharedTopBar() {
       {isOpen ? (
         <div className="w-full bg-primary text-background relative">
           <div className="container mx-auto px-4 lg:px-9 py-3 flex flex-col lg:flex-row items-center justify-between gap-2">
-            <p className="font-body_two text-center lg:text-left">
-              👋 Oi! Venha criar o seu álbum com a gente!
-            </p>
+            <p className="font-body_two text-center lg:text-left">{t('greeting')}</p>
             <Link
               href="/sign-in"
               className="flex items-center gap-2 text-background underline transition-colors font-body_two"
             >
               <ArrowLeft size={16} />
-              <span>Criar seu álbum</span>
+              <span>{t('create_your_album')}</span>
             </Link>
           </div>
           <button

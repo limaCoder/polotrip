@@ -2,5 +2,834 @@
   "Homepage": {
     "title": "Welcome to the homepage",
     "content": "This is the homepage content"
+  },
+  "RootLayout": {
+    "title": "Polotrip | Travel Photos and Memories",
+    "description": "Polotrip is a platform for sharing travel photos and memories, allowing you to organize albums and share special moments.",
+    "keywords": "photos, travel, albums, memories, photography, sharing, timeline, tourism",
+    "og_alt": "Polotrip - Travel Photos and Memories"
+  },
+  "Header": {
+    "logo_alt": "Polotrip Logo",
+    "create_albums_prompt": "Ready to create your albums?",
+    "access_account_aria": "Access account",
+    "access_account": "Access account",
+    "open_menu_aria": "Open menu",
+    "advantages_aria": "Advantages",
+    "advantages": "Advantages",
+    "how_it_works_aria": "How it works",
+    "how_it_works": "How it works",
+    "faq_aria": "Frequently asked questions",
+    "faq": "FAQ",
+    "open_user_menu_aria": "Open user menu",
+    "my_account": "My account",
+    "logout": "Logout"
+  },
+  "Footer": {
+    "logo_alt": "Polotrip Logo",
+    "copyright": "Copyright © 2025 - All rights reserved",
+    "made_by": "Made by",
+    "legal": "LEGAL",
+    "terms_of_use": "Terms of use",
+    "privacy_policy": "Privacy Policy",
+    "cnpj": "CNPJ: 57.996.361/0001-57"
+  },
+  "Home": {
+    "Hero": {
+      "title": "Keep memories that enchant",
+      "subtitle": "Create interactive travel albums with photos and maps to share your adventures with those who really matter.",
+      "how_it_works_button_aria": "How does it work?",
+      "how_it_works_button": "How does it work?",
+      "see_example_button_aria": "See an example",
+      "see_example_button": "See an example"
+    },
+    "Benefits": {
+      "title": "Why choose Polotrip?",
+      "description": "Unlike conventional storage solutions, Polotrip is exclusively designed to create and share travel memories the way you've always wanted.",
+      "cards": {
+        "organized_memories_title": "Organized digital memories",
+        "organized_memories_description": "No more lost photos in random folders. Keep your travel memories organized and easy to find.",
+        "interactive_map_title": "Interactive map",
+        "interactive_map_description": "Visualize your journey on a map with all the places you've visited, unlike conventional storage services.",
+        "privacy_guaranteed_title": "Guaranteed privacy",
+        "privacy_guaranteed_description": "Unlike social networks, you decide who can see your memories, without unwanted public exposure.",
+        "no_space_limitations_title": "No space limitations",
+        "no_space_limitations_description": "Forget 'storage full' messages from your G**gle Drive or Dr**box. Focus on memories, not managing space.",
+        "narrative_experience_title": "Narrative experience",
+        "narrative_experience_description": "Turn your photos into stories, not just files piled up in a cloud storage folder.",
+        "easy_sharing_title": "Easy and controlled sharing",
+        "easy_sharing_description": "Share your albums with whomever you want through a link, maintaining full control over your memories."
+      }
+    },
+    "HowItWorks": {
+      "title": "How does it work?",
+      "description": "Creating and sharing your travel memories has never been easier. Follow these simple steps to get started.",
+      "steps": {
+        "step_1_category": "1. Create your account",
+        "step_1_title": "Register in a few seconds and start creating your first personalized digital travel album.",
+        "step_2_category": "2. Make your album real",
+        "step_2_title": "After creating the album, complete the purchase quickly and securely to unlock the upload of your memories.",
+        "step_3_category": "3. Upload the photos",
+        "step_3_title": "Add your best travel photos to your digital album.",
+        "step_4_category": "4. Customize your album",
+        "step_4_title": "Organize your photos and add locations to the interactive map to wrap up your memories.",
+        "step_5_category": "5. Share with friends",
+        "step_5_title": "Send the link of your album to friends and family to relive your adventures. They can browse the map and see your photos."
+      }
+    },
+    "Faq": {
+      "title": "Frequently asked questions",
+      "description": "For further questions, send a message to our support contact",
+      "image_alt": "Illustration of a woman holding a balloon with question marks",
+      "questions": {
+        "q1_question": "Do I need to create an account to use it?",
+        "q1_answer": "Yes, you need to create an account to start creating and managing your albums securely.",
+        "q2_question": "Can I share my albums?",
+        "q2_answer": "Yes! After creating an album, you can share a secure link with friends or family, with privacy control.",
+        "q3_question": "Do people need an account to view my album?",
+        "q3_answer": "No! Just share the album link and anyone can access it, without needing to create an account.",
+        "q4_question": "Are my photos safe on Polotrip?",
+        "q4_answer": "The photos in your albums can only be viewed by those who have the album link. However, the images are stored on a public server, which means that, technically, anyone with the exact address of the image can access it. The image address is hard to guess and is not publicly disclosed by the platform. We recommend that you share the album link only with people you trust.",
+        "q5_question": "Does the album expire after a while?",
+        "q5_answer": "No. Once created, your album remains available for you to access and share whenever you want.",
+        "q6_question": "Can I edit the album after publishing it?",
+        "q6_answer": "Yes! You can edit the title, description, cover photo, delete photos, change captions, or adjust locations on the map at any time."
+      }
+    },
+    "Cta": {
+      "title": "Ready to create your first album?",
+      "description": "For as little as <price>{price}</price>, create a unique and memorable digital travel album.",
+      "start_now_button_aria": "Start now",
+      "start_now_button": "Start now"
+    }
+  },
+  "SignIn": {
+    "title": "Welcome!",
+    "subtitle": "Choose one of the options below to authenticate your account",
+    "email_label": "Email",
+    "email_placeholder": "Your email",
+    "password_label": "Password",
+    "password_placeholder": "Your password",
+    "submit_button": "Sign In",
+    "google_oauth_aria": "Sign in with Google",
+    "google_oauth_text": "Sign in with Google",
+    "google_icon_alt": "Google icon"
+  },
+  "CreateAlbum": {
+    "metadata": {
+      "title": "Create album | Polotrip",
+      "description": "Create a new album to share your travel memories on Polotrip"
+    },
+    "back_button_aria": "Back to album list",
+    "back_button": "Back",
+    "form": {
+      "title": "Create new album",
+      "error_title": "Error creating album",
+      "error_field_title": "Title",
+      "error_field_date": "Date",
+      "error_field_description": "Description",
+      "error_field_cover_image": "Image",
+      "album_title_label": "Album title",
+      "album_title_placeholder": "Ex: Trip to Paris",
+      "album_title_error": "Title is required",
+      "trip_date_label": "Trip date",
+      "trip_date_placeholder": "Select the month and year of the trip",
+      "trip_date_error": "Date is required",
+      "description_label": "Description",
+      "description_placeholder": "Tell us a little about this trip...",
+      "cover_label": "Album cover",
+      "cover_selected_success": "Image selected!",
+      "cover_selected_instruction": "If you want to change it, drag and drop again",
+      "cover_upload_prompt": "Upload a photo",
+      "cover_upload_instruction": "or drag and drop",
+      "cover_upload_requirements": "PNG, JPG up to 5MB",
+      "cover_recommendations_title": "✨ Recommendations for an amazing cover:",
+      "cover_recommendations_size": "1600 x 900 px",
+      "cover_recommendations_format": "• Use a horizontal image",
+      "cover_recommendations_resolution": "• Recommended resolution: 1600 x 900 pixels",
+      "cover_recommendations_text": "• Avoid text in the image",
+      "plan_label": "Album plan",
+      "plan_placeholder": "Select a plan",
+      "plan_basic": "Basic - 50 photos",
+      "plan_standard": "Standard - 100 photos",
+      "plan_premium": "Premium - 150 photos",
+      "order_summary_title": "Order summary",
+      "order_summary_album_creation": "Album creation - {planName}",
+      "order_summary_description": "Includes up to {photoLimit} photos and all premium features",
+      "pay_with_card_button_aria": "Pay with card",
+      "processing_button": "Processing...",
+      "pay_with_card_button": "Pay with card"
+    }
+  },
+  "Dashboard": {
+    "metadata": {
+      "title": "Dashboard | Polotrip",
+      "description": "Manage your albums and share your travel memories on Polotrip"
+    },
+    "title": "My albums",
+    "subtitle": "Manage and share your travel memories",
+    "create_album_button_aria": "Create new album",
+    "create_album_button": "Create new album",
+    "onboarding": {
+      "title": "Welcome to Polotrip",
+      "go_to_step_aria": "Go to step {step}",
+      "back_button": "Back",
+      "next_button": "Next",
+      "start_button": "Start",
+      "steps": {
+        "step_1_title": "Your albums",
+        "step_1_description": "On the Dashboard, you will find all your travel albums. Here you can view, manage, and share your memories with just a few clicks.",
+        "step_2_title": "Creating a new album",
+        "step_2_description": "To create an album, click on \"New album\", fill in the basic information, and make the payment. Each album is a new opportunity to organize your travel memories.",
+        "step_3_title": "Photo upload",
+        "step_3_description": "After creating your album, you can upload your best photos. Select, drag, and drop your images to start filling your travel album.",
+        "step_4_title": "Organizing your album",
+        "step_4_description": "Before publishing, organize your photos as you wish. You can reorder, add captions, and ensure your album tells the perfect story of your trip.",
+        "step_5_title": "Album published!",
+        "step_5_description": "Your album is ready to be shared! Send the link to friends and family so everyone can relive the special moments of your trip."
+      }
+    },
+    "install_pwa": {
+      "title": "Install the Polotrip app",
+      "description": "For a better experience, install Polotrip as an app on your device and get quick access to your travel memories!",
+      "later_button_aria": "Maybe later",
+      "later_button": "Maybe later",
+      "install_button_aria": "Install now",
+      "install_button": "Install now"
+    }
+  },
+  "PublicAlbum": {
+    "cover_alt": "Album cover",
+    "moments_title": "✨ These were the incredible moments of {ownerName}",
+    "loading_map": "Loading map...",
+    "HeaderAlbum": {
+      "logo_alt": "Logo",
+      "tv_mode_aria": "TV Mode",
+      "tv_mode": "TV Mode",
+      "share_aria": "Share",
+      "share": "Share",
+      "open_menu_aria": "Open menu"
+    },
+    "ShareModal": {
+      "title": "Share album",
+      "links_tab": "Links",
+      "qrcode_tab": "QR Code",
+      "share_text_with_description": "{title} - {description}\\n\\n{ownerName}'s album on Polotrip",
+      "share_text_without_description": "Check out {ownerName}'s album {title} on Polotrip",
+      "share_error": "Could not share content",
+      "link_copied_toast": "Link copied to clipboard!",
+      "whatsapp_icon_alt": "WhatsApp",
+      "copy_button": "Copy",
+      "qrcode_aria": "QR Code to share the Polotrip album",
+      "qrcode_sr_text": "QR Code to share the Polotrip album. Scan to access the link: {url}",
+      "download_qrcode_error": "Error downloading QR Code",
+      "download_qrcode_aria": "Download QR Code",
+      "download_qrcode": "Download QR Code"
+    },
+    "OwnerTopBar": {
+      "greeting": "👋 Hi! This is your album being viewed as public.",
+      "back_to_dashboard": "Back to Dashboard"
+    },
+    "SharedTopBar": {
+      "greeting": "👋 Hi! Come create your album with us!",
+      "create_your_album": "Create your album"
+    },
+    "PhotoTimeline": {
+      "no_photos_found": "No photos found in this album."
+    }
+  },
+  "AlbumCard": {
+    "photo_singular": "photo",
+    "photo_plural": "photos",
+    "view_album": "View",
+    "edit_album": "Edit",
+    "status": {
+      "upload": "Upload step",
+      "organize": "Organize step",
+      "published": "Published"
+    }
+  },
+  "AlbumsList": {
+    "no_albums_found": "No albums found"
+  },
+  "EditAlbum": {
+    "metadata_title": "Edit album | Polotrip",
+    "metadata_description": "Edit your photos, set dates and locations for your travel memories on Polotrip",
+    "back_button_aria": "Back to album list",
+    "page_title": "Edit album",
+    "page_description": "Organize your photos, set dates and locations for your memories.",
+    "loading": "Loading...",
+    "album_not_found": "Album not found",
+    "map_title": "Map",
+    "map_description": "Select the moments of the trip and check the location on the map below.",
+    "publish_album_button_aria": "Finish editing album",
+    "publishing_album_button": "Processing...",
+    "publish_album_button": "Publish album",
+    "PhotoTimeline": {
+      "title": "Timeline",
+      "select_date_aria": "Select date {date}",
+      "photo_singular": "photo",
+      "photo_plural": "photos",
+      "no_photos_found": "No photos found for this album."
+    },
+    "PhotoMap": {
+      "unnamed_location": "Unnamed"
+    },
+    "PhotoEditForm": {
+      "single_selection_text": "Photo selected",
+      "multiple_selection_text": "{count} photos selected",
+      "no_selection_text": "No photo selected",
+      "date_label": "Date",
+      "select_date_aria": "Select date",
+      "select_date_placeholder": "Select the date",
+      "preserve_location_label": "Preserve original location",
+      "preserve_location_description_true": "The original location of the photos will be kept",
+      "preserve_location_description_false": "The location will be replaced on all photos",
+      "preserve_location_aria": "Preserve original location",
+      "location_label": "Location",
+      "location_placeholder_preserved": "Original location will be preserved",
+      "location_placeholder": "Enter the location name",
+      "location_toggle_tip": "Disable the toggle above to edit the location",
+      "preserve_description_label": "Preserve original description",
+      "preserve_description_description_true": "The original description of the photos will be kept",
+      "preserve_description_description_false": "The description will be replaced on all photos",
+      "preserve_description_aria": "Preserve original description",
+      "description_label": "Description",
+      "description_placeholder_preserved": "Original description will be preserved",
+      "description_placeholder": "Describe this moment...",
+      "description_toggle_tip": "Disable the toggle above to edit the description",
+      "cancel_button_aria": "Cancel edit",
+      "cancel_button": "Cancel",
+      "save_button_aria": "Save edit",
+      "save_button_success": "Saved!",
+      "save_button": "Save edit"
+    },
+    "PhotoGallery": {
+      "title": "Trip moments",
+      "description": "To edit the date and location information, select the photos below.",
+      "photo_count_in_date_singular": "{count} photo on {date}",
+      "photo_count_in_date_plural": "{count} photos on {date}",
+      "no_date_defined": "No date set",
+      "clear_selection_aria": "Clear selection",
+      "clear_selection": "Clear selection",
+      "delete_selected_aria": "Delete selected",
+      "delete_selected": "Delete selected",
+      "no_photos_for_date": "No photos found for this date."
+    },
+    "PhotoGalleryItem": {
+      "alt_text": "Photo {id}",
+      "location_data_present": "Location data present",
+      "location_data_absent": "Location data absent"
+    },
+    "Pagination": {
+      "previous_page_aria": "Go to previous page",
+      "previous_page": "Previous",
+      "next_page_aria": "Go to next page",
+      "next_page": "Next",
+      "more_pages_sr": "More pages",
+      "pagination_aria": "Pagination"
+    },
+    "FinishEditDialog": {
+      "title": "Finish editing album?",
+      "description_intro": "You are about to finish editing your album. This means that:",
+      "item_1": "All edits made will be permanently saved",
+      "item_2": "Your album will be ready to be shared",
+      "item_3": "You will be redirected to the published album",
+      "description_outro": "Make sure all your photos are organized the way you want, with proper dates, locations, and descriptions.",
+      "confirmation": "Are you sure you want to finish editing now?",
+      "cancel_button": "Back to editing",
+      "confirm_button": "Yes, finish"
+    },
+    "DeletePhotosDialog": {
+      "title": "Delete photos",
+      "description_singular": "Are you sure you want to delete {count} selected photo? This action cannot be undone.",
+      "description_plural": "Are you sure you want to delete {count} selected photos? This action cannot be undone.",
+      "cancel_button": "Cancel",
+      "deleting_button": "Deleting...",
+      "delete_button": "Delete"
+    },
+    "UnsavedChangesDialog": {
+      "title": "Unsaved changes",
+      "description_intro": "You have unsaved changes in the form. If you continue:",
+      "item_1": "The current changes will be lost",
+      "item_2": "The form will be filled with the data of the new selection",
+      "confirmation": "Do you want to continue anyway?",
+      "cancel_button": "Cancel",
+      "confirm_button": "Yes, continue"
+    },
+    "AddMorePhotosCard": {
+      "limit_exceeded_error_title": "Limit exceeded",
+      "limit_exceeded_error_description": "You have already reached the photo limit for this album.",
+      "checking_space": "Checking available space...",
+      "limit_reached": "You have reached the photo limit for this album.",
+      "space_available_singular": "You can still add {count} photo to this album.",
+      "space_available_plural": "You can still add {count} photos to this album.",
+      "title": "Add more photos",
+      "add_more_photos_button_aria": "Add more photos to the album",
+      "add_more_photos_button": "Add more photos"
+    },
+    "UndatedPhotosDialog": {
+      "title": "Photos without a set date",
+      "description": "There are photos without a set date in your album. For all photos to be displayed correctly on the public album timeline, a date must be set for each photo.",
+      "confirm_button": "Got it, I'll review"
+    },
+    "AlbumDetailsCard": {
+      "loading": "Loading...",
+      "not_found": "Album not found",
+      "title": "Album details",
+      "description": "Manage the basic information of your album",
+      "edit_album_button_aria": "Edit album",
+      "edit_album_button": "Edit album",
+      "field_title": "Title",
+      "field_description": "Description",
+      "field_cover_image": "Cover Image",
+      "cover_image_alt": "Album cover"
+    },
+    "EditAlbumModal": {
+      "file_too_large_error": "The file must be at most 5MB",
+      "unsupported_format_error": "Unsupported file format. Use PNG or JPG",
+      "update_error": "Error updating album. Try again.",
+      "title": "Edit album",
+      "description": "Update your album information. Leave fields blank to keep current values.",
+      "title_placeholder": "Enter the album title",
+      "description_placeholder": "Enter a description for the album",
+      "uploading_image": "Uploading image...",
+      "updating_album": "Updating album...",
+      "image_selected": "Image selected!",
+      "change_image_prompt": "If you want to change it, drag and drop again",
+      "upload_prompt": "Upload a photo",
+      "drag_and_drop_prompt": "or drag and drop",
+      "file_requirements": "PNG, JPG up to 5MB",
+      "recommendations_title": "✨ Recommendations for an amazing cover:",
+      "recommendations_size": "1600 x 900 px",
+      "recommendations_format": "• Use a horizontal image",
+      "recommendations_resolution": "• Recommended resolution: 1600 x 900 pixels",
+      "recommendations_text": "• Avoid text in the image",
+      "cancel_button": "Cancel",
+      "saving_button": "Saving...",
+      "save_button": "Save"
+    }
+  },
+  "MonthPicker": {
+    "placeholder": "Select a month",
+    "select_month_aria": "Select month",
+    "previous_year_aria": "Previous year",
+    "previous_year_sr": "Previous year",
+    "next_year_aria": "Next year",
+    "next_year_sr": "Next year",
+    "select_month_button_aria": "Select month {month}"
+  },
+  "UploadPage": {
+    "metadata": {
+      "title": "Photo Upload | Polotrip",
+      "description": "Upload photos to your album on Polotrip"
+    },
+    "back_button_aria": "Back to album",
+    "form": {
+      "title": "Photo Upload",
+      "tip": "📸 Tip: Use photos taken with your phone's camera. Avoid images saved from apps like WhatsApp or social media, as they remove data like date and location, which are essential for Polotrip.",
+      "upload_prompt": "Upload photos",
+      "drag_and_drop_prompt": "or drag and drop",
+      "file_requirements": "Accepts JPG, PNG, and HEIC images",
+      "selected_singular": "{count} photo selected",
+      "selected_plural": "{count} photos selected",
+      "remove_photo_aria": "Remove photo",
+      "upload_progress": "Uploading... {progress}%",
+      "clear_all_button_aria": "Clear all",
+      "clear_all_button": "Clear all",
+      "continue_button_aria": "Continue",
+      "sending_button": "Sending...",
+      "continue_button": "Continue"
+    },
+    "UploadFormProcessWaiting": {
+      "optimizing_title": "Optimizing your photos...",
+      "uploading_title": "Sending your photos...",
+      "optimizing_description": "We are preparing your photos to be perfect! ✨",
+      "uploading_description": "We have already sent {progress}% of your photos! ✨",
+      "optimizing_tip": "Optimization may take a few minutes. How about a break for a ☕️ or a little game in the meantime?",
+      "uploading_tip": "The upload may take a little while. Take the opportunity to relax or have fun with our mini-game!",
+      "play_game_button": "Play Word Scramble"
+    },
+    "MetadataDialog": {
+      "initial_dialog": {
+        "title": "Information about photo metadata",
+        "description_1": "The photos you are uploading contain geographic location metadata. This data can significantly enhance your experience on the platform:",
+        "item_1": "Viewing photos on an interactive map",
+        "item_2": "Automatic organization by location",
+        "description_2": "All metadata will be treated with the same level of security as your other personal data, in compliance with LGPD (Brazil) and GDPR (Europe).",
+        "confirmation": "Do you want to keep this metadata?",
+        "remove_button": "Remove metadata",
+        "keep_button": "Keep metadata"
+      },
+      "confirm_remove_dialog": {
+        "title": "Confirm removal of metadata?",
+        "description": "Removing metadata will affect some important features of the platform:",
+        "item_1": "The interactive map will not show the location of the photos",
+        "item_2": "You will need to manually enter this information later",
+        "confirmation": "Are you sure you want to remove the metadata from your photos?",
+        "cancel_button": "Cancel",
+        "confirm_button": "Yes, remove metadata"
+      }
+    },
+    "CityUnscrambleGame": {
+      "title": "Unscramble the City",
+      "placeholder": "Enter the city name...",
+      "check_button": "Check",
+      "score": "Score"
+    }
+  },
+  "LoadingGameWrapper": {
+    "title": "Time for Word Scramble! 🎮",
+    "optimizing_tip": "While our magic gears optimize your photos, how about exercising your vocabulary?",
+    "uploading_tip": "While your photos travel across the internet, let's test your word skills!"
+  },
+  "DatePicker": {
+    "pick_a_date": "Pick a date"
+  },
+  "Dialog": {
+    "close": "Close"
+  },
+  "MobileAlbumInTvMode": {
+    "landscape": "For the best experience, please rotate your device to landscape mode.",
+    "iosLimitation": "Due to iOS limitations, full-screen mode is not available on iPhones and iPads. On PCs and Android devices, full-screen mode works normally.",
+    "start_error": "Could not start TV mode. Please try again."
+  },
+  "LocaleSwitcher": {
+    "select_locale_aria": "Select language",
+    "pt_br_alt": "Flag of Brazil",
+    "en_us_alt": "Flag of the United States"
+  },
+  "LocationAutocomplete": {
+    "placeholder": "Enter location name",
+    "loading_reverse_geocode": "Searching for locations..."
+  },
+  "MorphingDialog": {
+    "open_dialog_aria": "Open dialog {uniqueId}",
+    "close_dialog_aria": "Close dialog"
+  },
+  "AppleCardsCarousel": {
+    "back_aria": "Back",
+    "forward_aria": "Forward",
+    "background_alt": "Background of a beautiful view"
+  },
+  "PlanNames": {
+    "basic": "Basic",
+    "standard": "Standard",
+    "premium": "Premium"
+  },
+  "CityUnscrambleGameHook": {
+    "success_title": "Congratulations! 🎉",
+    "success_description": "You got it right!",
+    "error_title": "Try again! 🤔",
+    "error_description": "Not this time..."
+  },
+  "PhotoEditFormHook": {
+    "edit_single_photo": "Edit photo",
+    "edit_multiple_photos": "Edit {count} selected photos",
+    "no_photo_selected": "Select a photo to edit"
+  },
+  "DatesUtils": {
+    "no_date_defined": "No date set"
+  },
+  "UpdatePhotoBatchHook": {
+    "success": "Photos updated successfully",
+    "error_title": "Error updating photos",
+    "error_description": "Could not save changes. Please try again."
+  },
+  "UpdatePhotoHook": {
+    "success": "Photo updated successfully",
+    "error_title": "Error updating photo",
+    "error_description": "Could not save changes. Please try again."
+  },
+  "UpdateAlbumDetailsHook": {
+    "success": "Album updated successfully!",
+    "error": "Error updating album. Please try again."
+  },
+  "PublishAlbumHook": {
+    "success_title": "Album published successfully",
+    "success_description": "All changes have been saved.",
+    "error_title": "Error publishing album",
+    "error_description": "Could not finalize the album. Please try again."
+  },
+  "DeletePhotosHook": {
+    "success": "Photos deleted successfully",
+    "description_singular": "{count} photo was deleted.",
+    "description_plural": "{count} photos were deleted.",
+    "error_title": "Error deleting photos",
+    "error_description": "Could not delete the selected photos. Please try again."
+  },
+  "UploadFormHook": {
+    "limit_exceeded_title": "Limit exceeded",
+    "limit_exceeded_description": "You have already reached the limit of {photoLimit} photos per album.",
+    "files_ignored_warning_title": "Some images were ignored",
+    "files_ignored_warning_description_singular": "Only {remainingSlots} photo was added to respect the album limit of {photoLimit} photos.",
+    "files_ignored_warning_description_plural": "Only {remainingSlots} photos were added to respect the album limit of {photoLimit} photos.",
+    "image_processing_error_title": "Error processing image",
+    "image_processing_error_description": "Please try again.",
+    "image_processing_error": "Error processing image",
+    "no_valid_files_error": "There are no valid files to upload. Remove the files with errors and try again.",
+    "upload_success_title": "Upload successful!",
+    "upload_success_description": "The images have been sent successfully."
+  },
+  "PublicAlbumPhotosHook": {
+    "default_alt": "Album photo"
+  },
+  "CityHints": {
+    "PARIS": "City of lights and love 🗼",
+    "ROMA": "Eternal city of the Colosseum 🏛️",
+    "LISBOA": "City of tiles and fado 🎸",
+    "VENEZA": "City of gondolas and canals 🚤",
+    "MADRID": "Capital of flamenco and tapas 💃",
+    "PRAGA": "City of a hundred Gothic spires 🏰",
+    "LONDRES": "City of Big Ben and royalty 👑",
+    "ATENAS": "Cradle of democracy and philosophy 🏺",
+    "VIENA": "Capital of classical music 🎻",
+    "BERLIM": "City of the historic Wall 🧱",
+    "AMSTERDAM": "City of canals and tulips 🌷",
+    "BARCELONA": "City of Gaudí and modern art 🎨",
+    "FLORENÇA": "Birthplace of the Italian Renaissance 🎭",
+    "ISTAMBUL": "City between two continents 🕌",
+    "DUBLIN": "Land of Guinness and shamrocks ☘️",
+    "TOKYO": "Metropolis of anime and sushi 🗾",
+    "KYOTO": "City of ancient temples ⛩️",
+    "BANGKOK": "City of golden temples 🛕",
+    "SINGAPURA": "Garden city of the future 🌆",
+    "SEOUL": "Capital of K-pop and technology 🎤",
+    "DUBAI": "City of skyscrapers in the desert 🌇",
+    "BEIJING": "City of the Great Wall 🏯",
+    "MUMBAI": "City of Bollywood and spices 🎬",
+    "HANOI": "City of ancient temples 🍜",
+    "SHANGHAI": "Pearl of the Orient 🌃",
+    "NOVA YORK": "The city that never sleeps 🗽",
+    "RIO DE JANEIRO": "Marvelous city of samba 🏖️",
+    "SÃO PAULO": "Largest metropolis in South America 🌆",
+    "CUSCO": "Gateway to Machu Picchu 🏔️",
+    "HAVANA": "City of vintage cars 🚗",
+    "CANCUN": "Paradise of Caribbean beaches 🏊",
+    "LAS VEGAS": "City of lights and casinos 🎰",
+    "BUENOS AIRES": "City of tango and culture 💃",
+    "VANCOUVER": "City between mountains and sea 🗻",
+    "SANTIAGO": "Capital at the foot of the Andes ⛰️",
+    "CAIRO": "City of ancient pyramids 🔺",
+    "MARRAKECH": "City of souks and palaces 🕌",
+    "CABO": "City between two oceans 🏔️",
+    "ZANZIBAR": "Spice island 🏝️",
+    "NAIROBI": "Gateway to safaris 🦁",
+    "SYDNEY": "City of the Opera House 🏛️",
+    "MELBOURNE": "Cultural capital of Australia 🎨",
+    "AUCKLAND": "City of sails and volcanoes ⛵",
+    "GOLDCOAST": "Surfers' paradise 🏄",
+    "CAIRNS": "Gateway to the Great Barrier Reef 🐠",
+    "PETRA": "Pink city of the desert 🏺",
+    "VARANASI": "Sacred city of the Ganges 🕉️",
+    "JERUSALEM": "Holy city of three religions ✡️",
+    "TIMBUKTU": "Legendary desert city 🐪",
+    "PERSEPOLIS": "Capital of the ancient Persian empire 👑",
+    "DOHA": "Modern pearl of Qatar 🌆",
+    "SHENZHEN": "Silicon Valley of China 📱",
+    "HELSINKI": "Capital of Nordic design 🎨",
+    "MONTREAL": "City of jazz and snow ❄️",
+    "OSLO": "Capital of the Norwegian fjords 🛥️"
+  },
+  "AlbumSchema": {
+    "title_min": "Title must be at least 3 characters long",
+    "title_max": "Title must be at most 255 characters long",
+    "date_required": "Date is required",
+    "date_invalid": "Invalid date format. Use YYYY-MM or YYYY-MM-DD",
+    "description_max": "Description must be at most 1000 characters long",
+    "cover_image_size": "Image must be at most 5MB",
+    "cover_image_type": "File must be a PNG or JPG image"
+  },
+  "ServerActions": {
+    "UpdateCoverImage": {
+      "no_file_provided": "No file was provided",
+      "file_too_large_5mb": "The file must be at most 5MB",
+      "unsupported_format_png_jpg": "Unsupported file format. Use PNG or JPG",
+      "image_processing_error": "Error processing image upload"
+    },
+    "CreateAlbumWithCheckout": {
+      "invalid_data": "Invalid data",
+      "redirecting_to_checkout": "Redirecting to checkout",
+      "checkout_session_error": "Failed to generate checkout session",
+      "order_processing_error": "An error occurred while processing the order"
+    },
+    "UpdateAlbumCover": {
+      "file_or_albumid_not_provided": "File or album ID not provided",
+      "update_cover_error": "Error updating album cover"
+    }
+  },
+  "AuthLayout": {
+    "metadata": {
+      "title": "Platform Access | Polotrip",
+      "description": "Log in or create your account on Polotrip to start sharing your travel memories.",
+      "keywords": "login, signup, access, account, polotrip, albums, photos, travel",
+      "og_alt": "Polotrip - Platform Access"
+    }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "last_updated": "Last updated: April 28, 2025",
+    "sections": {
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "This Privacy Policy describes how Polotrip collects, uses, shares, and protects your personal information when you use our service. By using Polotrip, you agree to the practices described in this policy."
+      },
+      "information_we_collect": {
+        "title": "2. Information We Collect",
+        "content": "We collect the following types of information:",
+        "items": {
+          "account_info": "<bold>Account information:</bold> Name, email, and profile when you register or log in via Google.",
+          "user_content": "<bold>User content:</bold> Photos you upload, including associated metadata (EXIF) such as date, time, geographic location, width, and height when available.",
+          "payment_info": "<bold>Payment information:</bold> Transaction data processed through Stripe (we do not directly store credit card data).",
+          "usage_data": "<bold>Usage data:</bold> Information about how you interact with our service, including access logs and activities performed."
+        }
+      },
+      "photo_metadata_collection": {
+        "title": "3. Collection of Photo Metadata",
+        "content_1": "When you upload photos, Polotrip collects and processes EXIF metadata to provide features like the timeline and interactive map. This includes:",
+        "items": {
+          "date_time": "Date and time the photo was taken",
+          "geo_coordinates": "Geographic coordinates (if available)",
+          "camera_info": "Technical camera information"
+        },
+        "content_2": "We will always inform you about the collection of this data during the upload process, and you will have the option to remove this metadata before completing the upload."
+      },
+      "how_we_use_your_information": {
+        "title": "4. How We Use Your Information",
+        "content": "We use your information to:",
+        "items": {
+          "provide_services": "Provide, maintain, and improve our services",
+          "process_transactions": "Process transactions and manage your account",
+          "enable_sharing": "Allow the creation and sharing of digital albums",
+          "organize_photos": "Organize your photos into timelines and maps based on metadata",
+          "ensure_security": "Ensure the security and integrity of our service",
+          "communicate": "Communicate with you about updates or issues related to your account"
+        }
+      },
+      "data_storage": {
+        "title": "5. Data Storage",
+        "content_1": "Your data is stored as follows:",
+        "items": {
+          "album_covers": "Album covers: Stored in a public bucket on Supabase",
+          "album_photos": "Album photos: Stored in a private bucket on R2 Cloudflare",
+          "metadata_account_info": "Metadata and account information: Stored in a secure database"
+        },
+        "content_2": "We implement technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction."
+      },
+      "information_sharing": {
+        "title": "6. Information Sharing",
+        "content_1": "We share your information in the following circumstances:",
+        "items": {
+          "authorized_people": "<bold>With people you authorize:</bold> Your albums are visible only to people with whom you share the unique link. The images in the albums are stored in a public bucket, which technically means that anyone with the exact image address can access it. However, the image addresses are difficult to guess and are not publicly disclosed by the platform.",
+          "service_providers": "<bold>With service providers:</bold> We share data with service providers that help us operate Polotrip, such as Stripe (payments), Supabase, and Cloudflare (storage).",
+          "legal_requirements": "<bold>When required by law:</bold> We may disclose your information when required by law or to protect our legal rights."
+        },
+        "content_2": "We do not sell or rent your personal information to third parties. We recommend that you share your albums only with people you trust."
+      },
+      "third_party_integrations": {
+        "title": "7. Third-Party Integrations",
+        "content_1": "Polotrip uses third-party services, including:",
+        "items": {
+          "google_login": "Social login via Google",
+          "stripe_payments": "Payment processing via Stripe",
+          "leaflet_maps": "Leaflet for interactive maps"
+        },
+        "content_2": "Each of these services has its own privacy policies, and we recommend that you consult them to understand how they handle your data."
+      },
+      "your_rights": {
+        "title": "8. Your Rights",
+        "content_1": "You have the following rights regarding your personal data:",
+        "items": {
+          "access_data": "Access and receive a copy of your personal data",
+          "correct_data": "Correct inaccurate or incomplete data",
+          "delete_data": "Request the deletion of your data",
+          "withdraw_consent": "Withdraw your consent at any time",
+          "object_processing": "Object to the processing of your data in certain circumstances"
+        },
+        "content_2": "To exercise any of these rights, please contact us at help@polotrip.com."
+      },
+      "data_retention": {
+        "title": "9. Data Retention",
+        "content": "We retain your personal data only for as long as necessary to provide the requested services or to comply with legal obligations. When you delete your account, your albums and photos will be removed from our servers within 30 days."
+      },
+      "policy_changes": {
+        "title": "10. Changes to this Policy",
+        "content": "We may update this Privacy Policy from time to time. We will notify you of significant changes through a notice on our website or by email."
+      },
+      "contact": {
+        "title": "11. Contact",
+        "content": "If you have questions or concerns about this Privacy Policy or how we handle your data, please contact us at privacy@polotrip.com."
+      }
+    }
+  },
+  "TermsOfUse": {
+    "title": "Terms of Use",
+    "last_updated": "Last updated: April 28, 2025",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing or using Polotrip, you agree to these Terms of Use. If you do not agree with any part of these terms, you may not access or use our services."
+      },
+      "service_description": {
+        "title": "2. Description of Service",
+        "content": "Polotrip is a SaaS that allows you to create, edit, and share interactive digital travel albums, including features like a timeline, interactive map, and Spotify integration."
+      },
+      "user_account": {
+        "title": "3. User Account",
+        "content": "To use Polotrip, you need to create an account using your email or social login via Google. You are responsible for maintaining the confidentiality of your credentials and for all activities that occur under your account."
+      },
+      "payments": {
+        "title": "4. Payments and Subscriptions",
+        "content": "Polotrip operates on a \"pay-per-album\" model, charging BRL 19.99 for albums with up to 100 photos. All payments are processed by Stripe and are non-refundable, except in cases provided for by Brazilian law."
+      },
+      "user_content": {
+        "title": "5. User Content",
+        "content_1": "You retain all rights to the photos and other content you upload to Polotrip. By using our service, you grant Polotrip a limited license to store, process, and display your content solely to provide the service to you and the people with whom you share your albums.",
+        "content_2": "You are responsible for ensuring that you have the right to share any content you upload to Polotrip and that this content does not violate third-party rights."
+      },
+      "album_sharing": {
+        "title": "6. Album Sharing",
+        "content": "Polotrip allows you to share albums through unique links. Only people with access to the link will be able to view the album. You are responsible for managing who you share your links with and for the content of the shared albums."
+      },
+      "prohibited_use": {
+        "title": "7. Prohibited Use",
+        "content": "You agree not to use Polotrip to:",
+        "items": {
+          "illegal_content": "Upload illegal, offensive, defamatory, or third-party rights-violating content",
+          "violate_laws": "Violate any applicable laws or regulations",
+          "unauthorized_access": "Attempt to access other users' accounts or parts of the service to which you do not have permission",
+          "distribute_malware": "Distribute malware or carry out attacks on the service",
+          "unauthorized_commercial_use": "Use the service for unauthorized commercial purposes"
+        }
+      },
+      "storage_and_access": {
+        "title": "8. Storage and Access to Images",
+        "content": "Images uploaded to the platform are stored in a public storage service, but access to the albums is restricted through unique links. By sharing an album, you agree that anyone with the link can view the images it contains. We are not responsible for unauthorized access resulting from the user sharing the link."
+      },
+      "cancellation": {
+        "title": "9. Cancellation and Termination",
+        "content": "We reserve the right to suspend or terminate your account if you violate these Terms of Use."
+      },
+      "terms_changes": {
+        "title": "10. Changes to Terms",
+        "content": "We may modify these terms at any time, notifying users of significant changes. Your continued use of the service after such modifications constitutes your acceptance of the new terms."
+      },
+      "governing_law": {
+        "title": "11. Governing Law",
+        "content": "These terms are governed by the laws of Brazil. Any dispute related to these terms will be submitted to the exclusive jurisdiction of the Brazilian courts."
+      }
+    }
+  },
+  "NotFound": {
+    "logo_alt": "Polotrip Logo",
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist.",
+    "back_to_home": "Go back to home"
+  },
+  "AlbumNotFound": {
+    "logo_alt": "Polotrip Logo",
+    "title": "Album not found",
+    "description": "The album you are looking for does not exist.",
+    "back_to_dashboard": "Go back to dashboard"
   }
 }

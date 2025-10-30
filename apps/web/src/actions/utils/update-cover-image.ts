@@ -1,25 +1,32 @@
 import { createClient } from '@supabase/supabase-js';
 import { env } from '@/lib/env';
 import sharp from 'sharp';
+import { getTranslations } from 'next-intl/server';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 export async function updateCoverImage(
+  locale: string,
   file: File,
   albumId: string,
   currentCoverUrl?: string | null,
 ): Promise<string> {
+  const t = await getTranslations({
+    locale,
+    namespace: 'ServerActions.UpdateCoverImage',
+  });
+
   if (!file) {
-    throw new Error('Nenhum arquivo foi fornecido');
+    throw new Error(t('no_file_provided'));
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error('O arquivo deve ter no máximo 5MB');
+    throw new Error(t('file_too_large_5mb'));
   }
 
   if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-    throw new Error('Formato de arquivo não suportado. Use PNG ou JPG');
+    throw new Error(t('unsupported_format_png_jpg'));
   }
 
   try {
@@ -75,6 +82,6 @@ export async function updateCoverImage(
       throw error;
     }
 
-    throw new Error('Erro ao processar o upload da imagem');
+    throw new Error(t('image_processing_error'));
   }
 }

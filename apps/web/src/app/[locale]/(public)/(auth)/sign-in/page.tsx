@@ -10,12 +10,14 @@ import womanTakingSunbathOnBeach from '@/assets/lottie/woman-taking-sunbath-on-b
 import { OAuthButton } from '@/components/OAuthButton';
 
 import { loginWithEmailPassword } from '@/actions/loginWithEmailPassword';
+import { getTranslations } from 'next-intl/server';
 
 const isLoginWithEmailPasswordEnabled = false;
 
 export default async function LoginPage({ params }: PageProps) {
   const { locale } = await params;
   const signInUserWithLocale = loginWithEmailPassword.bind(null, locale);
+  const t = await getTranslations('SignIn');
 
   return (
     <>
@@ -29,10 +31,8 @@ export default async function LoginPage({ params }: PageProps) {
               </div>
 
               <div className="text-center space-y-2">
-                <h1 className="font-title_three font-bold">Seja bem-vindo!</h1>
-                <p className="font-body_two">
-                  Escolha uma das opções abaixo para autenticar na sua conta
-                </p>
+                <h1 className="font-title_three font-bold">{t('title')}</h1>
+                <p className="font-body_two">{t('subtitle')}</p>
               </div>
 
               <div className="flex flex-col gap-4 w-full">
@@ -40,13 +40,13 @@ export default async function LoginPage({ params }: PageProps) {
                   <form action={signInUserWithLocale} className="w-full space-y-4 mb-4">
                     <div className="flex flex-col gap-2">
                       <label htmlFor="email" className="font-body_two">
-                        Email
+                        {t('email_label')}
                       </label>
                       <input
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Seu email"
+                        placeholder={t('email_placeholder')}
                         className="w-full p-3 border border-gray-300 rounded-lg"
                         required
                       />
@@ -54,13 +54,13 @@ export default async function LoginPage({ params }: PageProps) {
 
                     <div className="flex flex-col gap-2">
                       <label htmlFor="password" className="font-body_two">
-                        Senha
+                        {t('password_label')}
                       </label>
                       <input
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Sua senha"
+                        placeholder={t('password_placeholder')}
                         className="w-full p-3 border border-gray-300 rounded-lg"
                         required
                       />
@@ -70,14 +70,19 @@ export default async function LoginPage({ params }: PageProps) {
                       type="submit"
                       className="w-full bg-primary text-white font-body_two p-3 rounded-lg hover:bg-primary/90"
                     >
-                      Entrar
+                      {t('submit_button')}
                     </button>
                   </form>
                 )}
 
-                <OAuthButton provider="google" aria-label="Entrar com Google">
-                  <Image src="/icons/google.png" alt="Google" width={24} height={24} />
-                  <span className="font-body_two">Entrar com o Google</span>
+                <OAuthButton provider="google" aria-label={t('google_oauth_aria')}>
+                  <Image
+                    src="/icons/google.png"
+                    alt={t('google_icon_alt')}
+                    width={24}
+                    height={24}
+                  />
+                  <span className="font-body_two">{t('google_oauth_text')}</span>
                 </OAuthButton>
               </div>
             </div>

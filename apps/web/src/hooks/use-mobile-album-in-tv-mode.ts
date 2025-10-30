@@ -1,6 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface ScreenOrientationWithLock extends ScreenOrientation {
   lock?: (orientation: OrientationType) => Promise<void>;
@@ -23,12 +24,6 @@ const isIOS = (): boolean => {
   const userAgent = navigator.userAgent || navigator.vendor;
   return /iPad|iPhone|iPod/.test(userAgent);
 };
-
-const orientationMessage = {
-  landscape: 'Para melhor experiência, gire seu aparelho para o modo paisagem (horizontal).',
-  iosLimitation:
-    'Devido a limitações do iOS, o modo tela cheia não está disponível em iPhones e iPads. Em PCs e dispositivos Android, o modo tela cheia funciona normalmente.',
-} as const;
 
 const showToast = (message: string, duration = TOAST_DURATION) => {
   toast.info(message, {
@@ -132,13 +127,17 @@ class AutoScroll {
   }
 }
 
-export function useMobileAlbumInTvMode() {
+type UseMobileAlbumInTvModeProps = {
+  t: ReturnType<typeof useTranslations<'MobileAlbumInTvMode'>>;
+};
+
+export function useMobileAlbumInTvMode({ t }: UseMobileAlbumInTvModeProps) {
   const handleTvMode = async () => {
     try {
       const autoScroll = new AutoScroll();
 
       if (isIOS()) {
-        showToast(orientationMessage.iosLimitation, TOAST_DURATION * 3);
+        showToast(t('iosLimitation'), TOAST_DURATION * 3);
 
         return;
       }
@@ -148,13 +147,13 @@ export function useMobileAlbumInTvMode() {
       try {
         await fullscreenUtils.lockOrientation();
       } catch {
-        showToast(orientationMessage.landscape);
+        showToast(t('landscape'));
       }
 
       return autoScroll.start();
     } catch (error) {
       console.error('Erro ao iniciar modo TV:', error);
-      showToast('Não foi possível iniciar o modo TV. Tente novamente.');
+      showToast(t('start_error'));
     }
   };
 

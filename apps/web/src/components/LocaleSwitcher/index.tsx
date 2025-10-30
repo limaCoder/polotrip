@@ -1,7 +1,7 @@
 'use client';
 
-import { useLocale } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter, usePathname } from '@/i18n/routing';
 import {
   Select,
   SelectContent,
@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { options } from './options';
+import { getOptions } from './options';
 import { cn } from '@/lib/cn';
 import Image from 'next/image';
 
@@ -21,9 +21,13 @@ interface LocaleSwitcherProps {
 export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: LocaleSwitcherProps) {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
+  const t = useTranslations('LocaleSwitcher');
+
+  const options = getOptions(t);
 
   const handleChange = (value: string) => {
-    router.replace('/', { locale: value });
+    router.replace(pathname, { locale: value });
   };
 
   return (
@@ -35,7 +39,7 @@ export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: Lo
             whiteTrigger ? 'text-white' : '',
             hideChevron ? '[&>svg]:hidden' : '',
           )}
-          aria-label="Selecione o idioma"
+          aria-label={t('select_locale_aria')}
         >
           <SelectValue />
         </SelectTrigger>
@@ -44,7 +48,7 @@ export function LocaleSwitcher({ whiteTrigger = false, hideChevron = false }: Lo
           {options.map(option => (
             <SelectItem key={option.value} value={option.value}>
               <div className="flex items-center gap-2">
-                <Image src={option.flag} alt={option.label} width={20} height={20} />
+                <Image src={option.flag} alt={option.alt} width={20} height={20} />
               </div>
             </SelectItem>
           ))}

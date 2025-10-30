@@ -5,14 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { QRCodeShareProps } from './types';
+import { useTranslations } from 'next-intl';
 
 export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
+  const t = useTranslations('PublicAlbum.ShareModal');
+
   const handleDownload = () => {
     try {
       const canvas = document.createElement('canvas');
-      const svg = document.querySelector(
-        'svg[aria-label="QR Code para compartilhar o álbum Polotrip"]',
-      );
+      const svg = document.querySelector(`svg[aria-label="${t('qrcode_aria')}"]`);
       const ctx = canvas.getContext('2d');
 
       if (!svg || !ctx) return;
@@ -37,7 +38,7 @@ export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
       img.src = url;
     } catch (error) {
       console.error(error);
-      toast.error('Erro ao baixar QR Code');
+      toast.error(t('download_qrcode_error'));
     }
   };
 
@@ -46,7 +47,7 @@ export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
       <div
         className="bg-white p-4 rounded-lg shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl focus-within:ring-2 focus-within:ring-primary"
         tabIndex={0}
-        aria-label="QR Code para compartilhar o álbum Polotrip"
+        aria-label={t('qrcode_aria')}
         role="img"
         style={{ outline: 'none' }}
       >
@@ -61,23 +62,21 @@ export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
             width: 40,
             excavate: true,
           }}
-          aria-label="QR Code para compartilhar o álbum Polotrip"
+          aria-label={t('qrcode_aria')}
           bgColor="#fff"
           fgColor="#22223b"
         />
-        <span className="sr-only">
-          QR Code para compartilhar o álbum Polotrip. Escaneie para acessar o link: {url}
-        </span>
+        <span className="sr-only">{t('qrcode_sr_text', { url })}</span>
       </div>
 
       <Button
         variant="outline"
         onClick={handleDownload}
         className="flex items-center gap-2 hover:bg-secondary/50"
-        aria-label="Baixar QR Code"
+        aria-label={t('download_qrcode_aria')}
       >
         <Download className="h-4 w-4" />
-        Baixar QR Code
+        {t('download_qrcode')}
       </Button>
     </div>
   );

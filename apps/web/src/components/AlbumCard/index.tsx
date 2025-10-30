@@ -10,6 +10,7 @@ import {
 import { cn } from '@/lib/cn';
 import { EllipsisVertical } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useTranslations, useLocale } from 'next-intl';
 
 export function AlbumCard({
   id,
@@ -19,13 +20,15 @@ export function AlbumCard({
   imageUrl,
   stepAfterPayment,
 }: AlbumCardProps) {
-  const photosCountLabel = photosCount === 1 ? 'foto' : 'fotos';
+  const t = useTranslations('AlbumCard');
+  const locale = useLocale();
+
+  const photosCountLabel = photosCount === 1 ? t('photo_singular') : t('photo_plural');
   const albumImage = imageUrl || '/pages/dashboard/album-card-fallback.png';
 
   const albumLink = generateAlbumLink(id, stepAfterPayment);
 
-  const albumStatusLabel =
-    AlbumStatusLabelEnum[stepAfterPayment as keyof typeof AlbumStatusLabelEnum];
+  const albumStatusLabel = t(`status.${stepAfterPayment as keyof typeof AlbumStatusLabelEnum}`);
   const albumStatusColor =
     AlbumStatusColorEnum[stepAfterPayment as keyof typeof AlbumStatusColorEnum];
   const albumStatusTextColor =
@@ -62,7 +65,7 @@ export function AlbumCard({
             <div className="flex justify-between w-full">
               <span className="font-body_two text-background">
                 {(() => {
-                  const dateString = new Date(date).toLocaleDateString('pt-BR', {
+                  const dateString = new Date(date).toLocaleDateString(locale, {
                     month: 'long',
                     year: 'numeric',
                   });
@@ -76,7 +79,7 @@ export function AlbumCard({
           </div>
         </div>
         <div className="h-16 flex items-center justify-between px-3 border-t border-black/10 shadow-xl">
-          <p className="font-body_one text-primary hover:underline">Visualizar</p>
+          <p className="font-body_one text-primary hover:underline">{t('view_album')}</p>
         </div>
       </Link>
       {isAlbumPublished && (
@@ -92,7 +95,7 @@ export function AlbumCard({
                 className="text-primary w-full flex flex-grow hover:brightness-130 transition-all duration-300"
                 href={`/dashboard/album/${id}/edit-album`}
               >
-                Editar
+                {t('edit_album')}
               </Link>
             </PopoverContent>
           </Popover>

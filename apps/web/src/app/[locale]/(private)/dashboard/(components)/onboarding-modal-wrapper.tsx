@@ -2,12 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { OnboardingModal } from '@/components/OnboardingModal';
-import { onboardingSteps } from '@/data/onboardingSteps';
+import { useTranslations } from 'next-intl';
+
+import { onboardingStepsData } from '@/data/onboardingSteps';
 
 export const ONBOARDING_COMPLETED_EVENT = 'onboarding-completed';
 
 export function OnboardingModalWrapper() {
+  const t = useTranslations('Dashboard.onboarding.steps');
   const [isOpen, setIsOpen] = useState(false);
+
+  const onboardingSteps = onboardingStepsData.map(step => ({
+    ...step,
+    title: t(step.titleKey),
+    description: t(step.descriptionKey),
+  }));
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem('onboarding') === 'completed';

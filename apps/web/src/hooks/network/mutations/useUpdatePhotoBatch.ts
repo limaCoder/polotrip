@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { updateAlbum } from '@/http/update-album';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import { useTranslations } from 'next-intl';
 
 interface PhotoBatchUpdate {
   ids: string[];
@@ -23,6 +24,7 @@ interface UseUpdatePhotoBatchProps {
 
 export const useUpdatePhotoBatch = ({ albumId }: UseUpdatePhotoBatchProps) => {
   const queryClient = useQueryClient();
+  const t = useTranslations('UpdatePhotoBatchHook');
 
   return useMutation({
     mutationFn: async ({ ids, data }: PhotoBatchUpdate) => {
@@ -39,14 +41,14 @@ export const useUpdatePhotoBatch = ({ albumId }: UseUpdatePhotoBatchProps) => {
       });
     },
     onSuccess: () => {
-      toast.success('Fotos atualizadas com sucesso');
+      toast.success(t('success'));
 
       queryClient.invalidateQueries({ queryKey: albumKeys.photos(albumId) });
       queryClient.invalidateQueries({ queryKey: albumKeys.dates(albumId) });
     },
     onError: () => {
-      toast.error('Erro ao atualizar fotos', {
-        description: 'Não foi possível salvar as alterações. Tente novamente.',
+      toast.error(t('error_title'), {
+        description: t('error_description'),
       });
     },
   });

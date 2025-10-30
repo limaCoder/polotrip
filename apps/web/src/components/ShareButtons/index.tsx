@@ -5,13 +5,15 @@ import Image from 'next/image';
 import { Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ShareButtonsProps } from './types';
+import { useTranslations } from 'next-intl';
 
 export function ShareButtons({ url, title, description, ownerName }: ShareButtonsProps) {
+  const t = useTranslations('PublicAlbum.ShareModal');
   const urlWithShareFlag = `${url}?share=true`;
 
   const shareText = description
-    ? `${title} - ${description}\n\nÁlbum de ${ownerName} no Polotrip`
-    : `Confira o álbum ${title} de ${ownerName} no Polotrip`;
+    ? t('share_text_with_description', { title, description, ownerName })
+    : t('share_text_without_description', { title, ownerName });
 
   const shareLinks = {
     whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + urlWithShareFlag)}`,
@@ -30,11 +32,11 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           return;
         }
 
-        toast.error('Não foi possível compartilhar o conteúdo');
+        toast.error(t('share_error'));
       }
     } else {
       navigator.clipboard.writeText(url);
-      toast.success('Link copiado para a área de transferência!');
+      toast.success(t('link_copied_toast'));
     }
   };
 
@@ -47,7 +49,7 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           onClick={() => window.open(shareLinks.whatsapp, '_blank')}
           className="h-12 w-12 hover:bg-secondary/50"
         >
-          <Image src="/icons/whatsapp.svg" alt="WhatsApp" width={24} height={24} />
+          <Image src="/icons/whatsapp.svg" alt={t('whatsapp_icon_alt')} width={24} height={24} />
         </Button>
 
         <Button
@@ -71,10 +73,10 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           variant="secondary"
           onClick={() => {
             navigator.clipboard.writeText(urlWithShareFlag);
-            toast.success('Link copiado!');
+            toast.success(t('link_copied_toast'));
           }}
         >
-          Copiar
+          {t('copy_button')}
         </Button>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Upload, X, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/Button';
 import { MetadataDialog } from '../MetadataDialog';
@@ -14,6 +15,8 @@ import { LoadingGameWrapper } from '../LoadingGameWrapper';
 import { UploadFormProcessWaiting } from '../UploadFormProcessWaiting';
 
 export function UploadForm() {
+  const t = useTranslations('UploadPage.form');
+
   const {
     uploadFormState,
     fileInputRef,
@@ -30,16 +33,15 @@ export function UploadForm() {
     handleCloseMetadataDialog,
   } = useUploadForm();
 
-  const plural = uploadFormState?.files?.length !== 1 ? 's' : '';
+  const selected_text =
+    uploadFormState?.files?.length === 1
+      ? t('selected_singular', { count: uploadFormState?.files?.length })
+      : t('selected_plural', { count: uploadFormState?.files?.length });
 
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
-      <h1 className="font-title_three font-bold mb-2">Upload de Fotos</h1>
-      <h2 className="font-body_two text-text/75 mb-6">
-        📸 Dica: Use fotos tiradas com a câmera do seu celular. Evite imagens salvas de apps como
-        WhatsApp ou redes sociais, pois elas removem dados como data e localização, que são
-        essenciais para o Polotrip.
-      </h2>
+      <h1 className="font-title_three font-bold mb-2">{t('title')}</h1>
+      <h2 className="font-body_two text-text/75 mb-6">{t('tip')}</h2>
 
       {uploadFormState?.error && (
         <div className="bg-red-50 border border-red-200 text-red-700 rounded-md p-3 mb-4">
@@ -71,19 +73,17 @@ export function UploadForm() {
         />
         <Upload size={24} className="text-text/25 mb-2" />
         <p className="font-body_two text-sm">
-          <span className="text-primary font-bold">Faça upload de fotos</span>
+          <span className="text-primary font-bold">{t('upload_prompt')}</span>
           <br />
-          ou arraste e solte
+          {t('drag_and_drop_prompt')}
         </p>
-        <span className="text-primary text-xs mt-1">Aceita imagens JPG, PNG e HEIC</span>
+        <span className="text-primary text-xs mt-1">{t('file_requirements')}</span>
       </div>
 
       {uploadFormState?.files?.length > 0 && (
         <>
           <div className="flex justify-between items-center mb-6">
-            <span className="font-body_two">
-              {uploadFormState?.files?.length} foto{plural} selecionada{plural}
-            </span>
+            <span className="font-body_two">{selected_text}</span>
             <span className="font-body_two">{formatFileSize(getTotalSize())}</span>
           </div>
 
@@ -114,7 +114,7 @@ export function UploadForm() {
                   type="button"
                   onClick={() => removeFile(photo?.id)}
                   disabled={uploadFormState?.isUploading}
-                  aria-label="Remover foto"
+                  aria-label={t('remove_photo_aria')}
                 >
                   <X size={16} />
                 </button>
@@ -132,7 +132,9 @@ export function UploadForm() {
               style={{ width: `${uploadFormState?.progress}%` }}
             ></div>
           </div>
-          <p className="text-sm text-center">Fazendo upload... {uploadFormState?.progress}%</p>
+          <p className="text-sm text-center">
+            {t('upload_progress', { progress: uploadFormState?.progress })}
+          </p>
         </div>
       )}
 
@@ -150,9 +152,9 @@ export function UploadForm() {
           className="font-bold border border-text-opacity-25 rounded px-4 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={clearAll}
           disabled={clearAllButtonDisabled}
-          aria-label="Limpar tudo"
+          aria-label={t('clear_all_button_aria')}
         >
-          Limpar tudo
+          {t('clear_all_button')}
         </Button>
 
         <Button
@@ -160,9 +162,9 @@ export function UploadForm() {
           className="font-bold border border-text-opacity-25 bg-primary text-background rounded px-4 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleUploadClick}
           disabled={uploadButtonDisabled}
-          aria-label="Continuar"
+          aria-label={t('continue_button_aria')}
         >
-          {uploadFormState?.isUploading ? 'Enviando...' : 'Continuar'}
+          {uploadFormState?.isUploading ? t('sending_button') : t('continue_button')}
         </Button>
       </div>
 

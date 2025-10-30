@@ -1,4 +1,7 @@
+'use client';
+
 import { Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +21,13 @@ export function DeletePhotosDialog({
   photoCount,
   isDeleting,
 }: DeletePhotosDialogProps) {
+  const t = useTranslations('EditAlbum.DeletePhotosDialog');
+
+  const description =
+    photoCount === 1
+      ? t('description_singular', { count: photoCount })
+      : t('description_plural', { count: photoCount });
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
@@ -27,12 +37,8 @@ export function DeletePhotosDialog({
               <Trash2 size={24} />
             </div>
           </div>
-          <AlertDialogTitle className="text-center">Excluir fotos</AlertDialogTitle>
-          <AlertDialogDescription className="text-center">
-            Tem certeza que deseja excluir {photoCount} {photoCount === 1 ? 'foto' : 'fotos'}{' '}
-            selecionada
-            {photoCount !== 1 ? 's' : ''}? Esta ação não pode ser desfeita.
-          </AlertDialogDescription>
+          <AlertDialogTitle className="text-center">{t('title')}</AlertDialogTitle>
+          <AlertDialogDescription className="text-center">{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
@@ -40,7 +46,7 @@ export function DeletePhotosDialog({
             onClick={onClose}
             disabled={isDeleting}
           >
-            Cancelar
+            {t('cancel_button')}
           </AlertDialogCancel>
           <AlertDialogAction
             className="font-medium bg-red-600 text-white hover:bg-red-700 transition-colors flex justify-center items-center gap-2"
@@ -50,10 +56,10 @@ export function DeletePhotosDialog({
             {isDeleting ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                <span>Excluindo...</span>
+                <span>{t('deleting_button')}</span>
               </>
             ) : (
-              'Excluir'
+              t('delete_button')
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

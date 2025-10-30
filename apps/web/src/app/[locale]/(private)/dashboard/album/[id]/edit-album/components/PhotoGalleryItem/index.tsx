@@ -2,6 +2,7 @@ import { cn } from '@/lib/cn';
 import { type PhotoGalleryItemProps } from './types';
 import Image from 'next/image';
 import { Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function PhotoGalleryItem({
   photo,
@@ -9,6 +10,7 @@ export function PhotoGalleryItem({
   isModified,
   togglePhotoSelection,
 }: PhotoGalleryItemProps) {
+  const t = useTranslations('EditAlbum.PhotoGalleryItem');
   const isLocationsMetadataAvailable = photo?.latitude && photo?.longitude;
 
   return (
@@ -23,7 +25,7 @@ export function PhotoGalleryItem({
     >
       <Image
         src={photo?.imageUrl}
-        alt={photo?.originalFileName || `Foto ${photo?.id}`}
+        alt={photo?.originalFileName || t('alt_text', { id: photo?.id })}
         fill
         className="object-cover"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -45,9 +47,9 @@ export function PhotoGalleryItem({
 
       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
         {isLocationsMetadataAvailable ? (
-          <div className="text-white text-sm text-center">Dados de localidade presentes</div>
+          <div className="text-white text-sm text-center">{t('location_data_present')}</div>
         ) : (
-          <div className="text-white text-sm text-center">Dados de localidade ausentes</div>
+          <div className="text-white text-sm text-center">{t('location_data_absent')}</div>
         )}
       </div>
     </div>

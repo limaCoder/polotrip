@@ -3,6 +3,7 @@
 import { useCallback, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { Upload, Check, Loader } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -18,12 +19,17 @@ import { EditAlbumModalProps, EditAlbumFormValues } from './types';
 import { cn } from '@/lib/cn';
 import { updateAlbumCover } from '@/actions/updateAlbumCover';
 import { toast } from 'sonner';
+import { useParams } from 'next/navigation';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAlbumModalProps) {
+  const { locale } = useParams();
+  const t = useTranslations('EditAlbum.EditAlbumModal');
+
   const { mutate: updateAlbum, isPending: isUpdating } = useUpdateAlbumDetails();
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -41,12 +47,12 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
 
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        setImageError('O arquivo deve ter no máximo 5MB');
+        setImageError(t('file_too_large_error'));
         return;
       }
 
       if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-        setImageError('Formato de arquivo não suportado. Use PNG ou JPG');
+        setImageError(t('unsupported_format_error'));
         return;
       }
 
@@ -72,7 +78,7 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
               formData.append('currentCoverUrl', initialData?.coverImageUrl);
             }
 
-            const result = await updateAlbumCover(null, formData);
+            const result = await updateAlbumCover({ locale: locale as string }, null, formData);
 
             if (result?.error) {
               toast.error(result?.error);
@@ -118,10 +124,19 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
         );
       } catch (error) {
         console.error(error);
-        toast.error('Erro ao atualizar o álbum. Tente novamente.');
+        toast.error(t('update_error'));
       }
     },
-    [albumId, updateAlbum, onClose, selectedImage, initialData?.coverImageUrl, imageError],
+    [
+      albumId,
+      updateAlbum,
+      onClose,
+      selectedImage,
+      initialData?.coverImageUrl,
+      imageError,
+      t,
+      locale,
+    ],
   );
 
   const isLoading = isPending || isUpdating;
@@ -130,23 +145,17 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Editar álbum</DialogTitle>
-          <DialogDescription>
-            Atualize as informações do seu álbum. Deixe os campos em branco para manter os valores
-            atuais.
-          </DialogDescription>
+          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogDescription>{t('description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <Input {...register('title')} placeholder="Digite o título do álbum" />
+            <Input {...register('title')} placeholder={t('title_placeholder')} />
           </div>
 
           <div>
-            <Textarea
-              {...register('description')}
-              placeholder="Digite uma descrição para o álbum"
-            />
+            <Textarea {...register('description')} placeholder={t('description_placeholder')} />
           </div>
 
           <div>
@@ -169,7 +178,7 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
                   <Loader size={24} className="text-primary mb-2 animate-spin" />
                   <p className="font-body_two text-sm">
                     <span className="text-primary font-bold">
-                      {isPending ? 'Enviando imagem...' : 'Atualizando álbum...'}
+                      {isPending ? t('uploading_image') : t('updating_album')}
                     </span>
                   </p>
                 </>
@@ -177,9 +186,9 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
                 <>
                   <Check size={24} className="text-primary mb-2" />
                   <p className="font-body_two text-sm">
-                    <span className="text-primary font-bold">Imagem selecionada!</span>
+                    <span className="text-primary font-bold">{t('image_selected')}</span>
                     <br />
-                    Se deseja alterar, arraste e solte novamente
+                    {t('change_image_prompt')}
                   </p>
                   <span className="text-primary text-xs mt-1">{selectedImage?.name}</span>
                 </>
@@ -187,25 +196,25 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
                 <>
                   <Upload size={24} className="text-text/25 mb-2" />
                   <p className="font-body_two text-sm">
-                    <span className="text-primary font-bold">Faça upload de uma foto</span>
+                    <span className="text-primary font-bold">{t('upload_prompt')}</span>
                     <br />
-                    ou arraste e solte
+                    {t('drag_and_drop_prompt')}
                   </p>
-                  <span className="text-primary text-xs mt-1">PNG, JPG até 5MB</span>
+                  <span className="text-primary text-xs mt-1">{t('file_requirements')}</span>
                 </>
               )}
             </div>
             {imageError && <p className="mt-2 text-sm text-red-500">{imageError}</p>}
             <div className="mt-2 p-3 bg-secondary/5 rounded-lg">
-              <p className="text-sm font-body_two mb-2">✨ Recomendações para uma capa incrível:</p>
+              <p className="text-sm font-body_two mb-2">{t('recommendations_title')}</p>
               <div className="flex items-center gap-3">
                 <div className="w-[120px] h-[68px] bg-secondary/20 rounded flex items-center justify-center border border-dashed border-primary/30">
-                  <span className="text-[10px] text-primary/70">1600 x 900 px</span>
+                  <span className="text-[10px] text-primary/70">{t('recommendations_size')}</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-text/70">• Use uma imagem no formato horizontal</p>
-                  <p className="text-sm text-text/70">• Resolução recomendada: 1600 x 900 pixels</p>
-                  <p className="text-sm text-text/70">• Evite textos na imagem</p>
+                  <p className="text-sm text-text/70">{t('recommendations_format')}</p>
+                  <p className="text-sm text-text/70">{t('recommendations_resolution')}</p>
+                  <p className="text-sm text-text/70">{t('recommendations_text')}</p>
                 </div>
               </div>
             </div>
@@ -219,14 +228,14 @@ export function EditAlbumModal({ isOpen, onClose, albumId, initialData }: EditAl
               onClick={onClose}
               disabled={isLoading}
             >
-              Cancelar
+              {t('cancel_button')}
             </Button>
             <Button
               type="submit"
               disabled={isLoading || !!imageError}
               className="bg-primary text-white"
             >
-              {isLoading ? 'Salvando...' : 'Salvar'}
+              {isLoading ? t('saving_button') : t('save_button')}
             </Button>
           </div>
         </form>

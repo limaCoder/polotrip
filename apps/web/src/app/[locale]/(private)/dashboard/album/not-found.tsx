@@ -1,14 +1,17 @@
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
 export default function NotFound() {
+  const t = useTranslations('AlbumNotFound');
+
   return (
     <main className="flex flex-col items-center justify-center h-screen">
-      <Image src="/brand/logo.svg" alt="Polotrip" width={400} height={200} />
-      <h1 className="text-2xl mt-4">Album not found</h1>
-      <p className="text-sm mt-2">The album you are looking for does not exist.</p>
+      <Image src="/brand/logo.svg" alt={t('logo_alt')} width={400} height={200} />
+      <h1 className="text-2xl mt-4">{t('title')}</h1>
+      <p className="text-sm mt-2">{t('description')}</p>
       <Link href="/dashboard" className="text-sm mt-4 text-primary font-bold hover:underline">
-        Go back to dashboard
+        {t('back_to_dashboard')}
       </Link>
     </main>
   );

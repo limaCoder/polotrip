@@ -3,10 +3,13 @@ import { useCallback, useEffect } from 'react';
 import { useMemo } from 'react';
 
 import { useState } from 'react';
-import { citiesData } from './data';
+import { cities as cityNames } from './data';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 const useCityUnscrambleGame = () => {
+  const t = useTranslations('CityUnscrambleGameHook');
+  const tHints = useTranslations('CityHints');
   const [score, setScore] = useState(0);
   const [input, setInput] = useState('');
   const [currentCity, setCurrentCity] = useState<{
@@ -19,7 +22,10 @@ const useCityUnscrambleGame = () => {
     hint: '',
   });
 
-  const cities = useMemo(() => citiesData, []);
+  const cities = useMemo(
+    () => cityNames.map(city => ({ name: city, hint: tHints(city) })),
+    [tHints],
+  );
 
   const scrambleWord = useCallback((word: string) => {
     return word
@@ -42,15 +48,15 @@ const useCityUnscrambleGame = () => {
     if (input.toUpperCase() === currentCity.original) {
       setScore(prev => prev + 10);
       getNewCity();
-      toast.success('Parabéns! 🎉', {
-        description: 'Você acertou!',
+      toast.success(t('success_title'), {
+        description: t('success_description'),
       });
     } else {
-      toast.error('Tente novamente! 🤔', {
-        description: 'Não foi dessa vez...',
+      toast.error(t('error_title'), {
+        description: t('error_description'),
       });
     }
-  }, [input, currentCity, getNewCity]);
+  }, [input, currentCity, getNewCity, t]);
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);

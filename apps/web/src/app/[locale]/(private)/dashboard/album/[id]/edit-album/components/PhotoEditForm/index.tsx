@@ -4,7 +4,6 @@ import { Check, CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +23,9 @@ import { LocationAutocomplete } from '../LocationAutocomplete';
 
 import { usePhotoEditForm } from './use-photo-edit-form';
 import { PhotoEditFormProps } from './types';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { LocaleDateFnsEnum, LocaleTypesEnum } from '@/constants/localesEnum';
 
 export function PhotoEditForm({
   selectedPhotos,
@@ -32,6 +34,13 @@ export function PhotoEditForm({
   isDisabled = false,
   deselectAllPhotos,
 }: PhotoEditFormProps) {
+  const t = useTranslations('EditAlbum.PhotoEditForm');
+  const { locale } = useParams();
+
+  const dateLocale =
+    LocaleDateFnsEnum[locale as keyof typeof LocaleDateFnsEnum] ||
+    LocaleDateFnsEnum[LocaleTypesEnum.PT];
+
   const {
     form,
     onSubmit,
@@ -56,7 +65,7 @@ export function PhotoEditForm({
             name="dateTaken"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="font-body_two">Data</FormLabel>
+                <FormLabel className="font-body_two">{t('date_label')}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -67,13 +76,13 @@ export function PhotoEditForm({
                           'text-left font-normal justify-start border-neutral-400 hover:bg-secondary-10',
                           !field.value && 'text-muted-foreground',
                         )}
-                        aria-label="Selecionar data"
+                        aria-label={t('select_date_aria')}
                       >
                         <CalendarIcon className="h-4 w-4 opacity-50" />
                         {field.value ? (
-                          format(field.value, 'PPP', { locale: ptBR })
+                          format(field.value, 'PPP', { locale: dateLocale })
                         ) : (
-                          <span>Selecione a data</span>
+                          <span>{t('select_date_placeholder')}</span>
                         )}
                       </Button>
                     </FormControl>
@@ -96,11 +105,11 @@ export function PhotoEditForm({
           {isMultipleSelection && (
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
-                <Label className="font-body_two text-text/90">Preservar localização original</Label>
+                <Label className="font-body_two text-text/90">{t('preserve_location_label')}</Label>
                 <p className="text-sm text-text/60 mt-1">
                   {preserveFields?.location
-                    ? 'A localização original das fotos será mantida'
-                    : 'A localização será substituída em todas as fotos'}
+                    ? t('preserve_location_description_true')
+                    : t('preserve_location_description_false')}
                 </p>
               </div>
               <Switch
@@ -108,7 +117,7 @@ export function PhotoEditForm({
                 onCheckedChange={() =>
                   setPreserveFields({ ...preserveFields, location: !preserveFields?.location })
                 }
-                aria-label="Preservar localização original"
+                aria-label={t('preserve_location_aria')}
               />
             </div>
           )}
@@ -118,7 +127,7 @@ export function PhotoEditForm({
             name="locationName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-body_two">Localização</FormLabel>
+                <FormLabel className="font-body_two">{t('location_label')}</FormLabel>
                 <FormControl>
                   <LocationAutocomplete
                     value={field.value || ''}
@@ -132,15 +141,13 @@ export function PhotoEditForm({
                     disabled={isDisabled || (isMultipleSelection && preserveFields?.location)}
                     placeholder={
                       isMultipleSelection && preserveFields?.location
-                        ? 'Localização original será preservada'
-                        : 'Digite o nome da localização'
+                        ? t('location_placeholder_preserved')
+                        : t('location_placeholder')
                     }
                   />
                 </FormControl>
                 {isMultipleSelection && preserveFields?.location && (
-                  <p className="text-sm text-text/60 mt-1">
-                    Desabilite o toggle acima para editar a localização
-                  </p>
+                  <p className="text-sm text-text/60 mt-1">{t('location_toggle_tip')}</p>
                 )}
                 <FormMessage />
               </FormItem>
@@ -150,11 +157,13 @@ export function PhotoEditForm({
           {isMultipleSelection && (
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 justify-between border border-text/10 rounded-md p-3 bg-secondary/5">
               <div className="flex flex-col">
-                <Label className="font-body_two text-text/90">Preservar descrição original</Label>
+                <Label className="font-body_two text-text/90">
+                  {t('preserve_description_label')}
+                </Label>
                 <p className="text-sm text-text/60 mt-1">
                   {preserveFields?.description
-                    ? 'A descrição original das fotos será mantida'
-                    : 'A descrição será substituída em todas as fotos'}
+                    ? t('preserve_description_description_true')
+                    : t('preserve_description_description_false')}
                 </p>
               </div>
               <Switch
@@ -165,7 +174,7 @@ export function PhotoEditForm({
                     description: !preserveFields?.description,
                   })
                 }
-                aria-label="Preservar descrição original"
+                aria-label={t('preserve_description_aria')}
               />
             </div>
           )}
@@ -175,24 +184,22 @@ export function PhotoEditForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-body_two">Descrição</FormLabel>
+                <FormLabel className="font-body_two">{t('description_label')}</FormLabel>
                 <FormControl>
                   <Textarea
                     disabled={isDisabled || isDescriptionPreserveSwitchEnabled}
                     className="border border-text/25 rounded mt-1 p-3 font-body_two text-text/75 bg-transparent w-full outline-none h-24 resize-none"
                     placeholder={
                       isDescriptionPreserveSwitchEnabled
-                        ? 'Descrição original será preservada'
-                        : 'Descreva este momento...'
+                        ? t('description_placeholder_preserved')
+                        : t('description_placeholder')
                     }
                     {...field}
                     value={field.value || ''}
                   />
                 </FormControl>
                 {isDescriptionPreserveSwitchEnabled && (
-                  <p className="text-sm text-text/60 mt-1">
-                    Desabilite o toggle acima para editar a descrição
-                  </p>
+                  <p className="text-sm text-text/60 mt-1">{t('description_toggle_tip')}</p>
                 )}
                 <FormMessage />
               </FormItem>
@@ -206,9 +213,9 @@ export function PhotoEditForm({
                 onClick={onCancel}
                 disabled={isDisabled || isSaving()}
                 className="bg-secondary-50 text-text rounded px-4 py-2 hover:bg-secondary-100 font-body_two"
-                aria-label="Cancelar edição"
+                aria-label={t('cancel_button_aria')}
               >
-                Cancelar
+                {t('cancel_button')}
               </Button>
             )}
 
@@ -221,15 +228,15 @@ export function PhotoEditForm({
                   ? 'bg-green-500 text-white'
                   : 'bg-primary text-background hover:bg-primary/90',
               )}
-              aria-label="Salvar edição"
+              aria-label={t('save_button_aria')}
             >
               {showSuccess ? (
                 <>
                   <Check size={18} />
-                  Salvo!
+                  {t('save_button_success')}
                 </>
               ) : (
-                'Salvar edição'
+                t('save_button')
               )}
             </Button>
           </div>

@@ -11,8 +11,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { InstallPwaModalProps } from './types';
 import { ExternalLink } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function InstallPwaModal({ isOpen, onClose }: InstallPwaModalProps) {
+  const t = useTranslations('Dashboard.install_pwa');
+
   const handleOpenInstallGuide = () => {
     window.open('https://www.installpwa.com/from/polotrip.com', '_blank');
     onClose();
@@ -22,24 +25,23 @@ export function InstallPwaModal({ isOpen, onClose }: InstallPwaModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="px-2 w-[90%] overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Instale o aplicativo Polotrip</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-center text-muted-foreground">
-          Para uma experiência melhor, instale o Polotrip como um aplicativo no seu dispositivo e
-          tenha acesso rápido às suas memórias de viagem!
+          {t('description')}
         </DialogDescription>
         <DialogFooter>
           <div className="flex w-full justify-evenly">
-            <Button variant="outline" onClick={onClose} aria-label="Talvez depois">
-              Talvez depois
+            <Button variant="outline" onClick={onClose} aria-label={t('later_button_aria')}>
+              {t('later_button')}
             </Button>
 
             <Button
               className="text-white flex items-center gap-2"
               onClick={handleOpenInstallGuide}
-              aria-label="Instalar agora"
+              aria-label={t('install_button_aria')}
             >
-              Instalar agora
+              {t('install_button')}
               <ExternalLink size={16} />
             </Button>
           </div>

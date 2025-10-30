@@ -3,12 +3,13 @@
 import { Stripe } from '@stripe/stripe-js';
 
 import { createAlbum } from '@/http/create-album';
-import { albumFormSchema } from './schema/album-schema';
+import { getAlbumFormSchema } from './schema/album-schema';
 import { uploadImage } from './utils/upload-image';
 import { env } from '@/lib/env';
 import { createCheckout } from '@/http/create-checkout';
 import { getCurrency } from '@/utils/getCurrency';
 import { AlbumPlan } from '@/constants/pricingEnum';
+import { getTranslations } from 'next-intl/server';
 
 export async function createAlbumWithCheckout(
   extra: { locale: string; stripePromise: Stripe | null; plan: AlbumPlan },
@@ -16,6 +17,12 @@ export async function createAlbumWithCheckout(
   formData: FormData,
 ) {
   try {
+    const t = await getTranslations({
+      locale: extra.locale,
+      namespace: 'ServerActions.CreateAlbumWithCheckout',
+    });
+    const albumFormSchema = await getAlbumFormSchema(extra.locale);
+
     const title = formData.get('title') as string;
     const dateString = formData.get('date') as string;
     const description = formData.get('description') as string;
@@ -34,7 +41,7 @@ export async function createAlbumWithCheckout(
       return {
         status: 'invalidData',
         error: {
-          message: 'Invalid data',
+          message: t('invalid_data'),
           errors: validationResult.error.flatten().fieldErrors,
         },
       };
@@ -76,23 +83,27 @@ export async function createAlbumWithCheckout(
       return {
         status: 'success',
         sessionId: checkoutSession.id,
-        message: 'Redirecting to checkout',
+        message: t('redirecting_to_checkout'),
       };
     } else {
       return {
         status: 'error',
         error: {
-          message: 'Failed to generate checkout session',
+          message: t('checkout_session_error'),
         },
       };
     }
   } catch (error) {
     console.error('Error creating album and checkout:', error);
 
+    const t = await getTranslations({
+      locale: extra.locale,
+      namespace: 'ServerActions.CreateAlbumWithCheckout',
+    });
     return {
       status: 'error',
       error: {
-        message: 'An error occurred while processing the order',
+        message: t('order_processing_error'),
       },
     };
   }

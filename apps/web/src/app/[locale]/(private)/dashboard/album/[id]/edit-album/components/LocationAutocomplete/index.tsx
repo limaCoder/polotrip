@@ -5,6 +5,7 @@ import { MapPin, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/cn';
 import { LocationAutocompleteProps, LocationResult } from './types';
+import { useTranslations } from 'next-intl';
 
 export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocompleteProps>(
   (
@@ -12,13 +13,16 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       value,
       onChange,
       disabled = false,
-      placeholder = 'Digite o nome da localização',
+      placeholder: initialPlaceholder,
       className,
       latitude,
       longitude,
     },
     ref,
   ) => {
+    const t = useTranslations('LocationAutocomplete');
+    const placeholder = initialPlaceholder || t('placeholder');
+
     const [inputValue, setInputValue] = useState(value || '');
     const [results, setResults] = useState<LocationResult[]>([]);
     const [isLoadingReverseGeocode, setIsLoadingReverseGeocode] = useState(false);
@@ -122,7 +126,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }
     };
 
-    const inputValueMessage = isLoadingReverseGeocode ? 'Buscando localizações...' : inputValue;
+    const inputValueMessage = isLoadingReverseGeocode ? t('loading_reverse_geocode') : inputValue;
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {

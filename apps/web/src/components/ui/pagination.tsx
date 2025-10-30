@@ -4,15 +4,20 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { ButtonProps, buttonVariants } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 
-const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
-  <nav
-    role="navigation"
-    aria-label="pagination"
-    className={cn('mx-auto flex w-full justify-center', className)}
-    {...props}
-  />
-);
+const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => {
+  const t = useTranslations('EditAlbum.Pagination');
+
+  return (
+    <nav
+      role="navigation"
+      aria-label={t('pagination_aria')}
+      className={cn('mx-auto flex w-full justify-center', className)}
+      {...props}
+    />
+  );
+};
 Pagination.displayName = 'Pagination';
 
 const PaginationContent = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'>>(
@@ -50,42 +55,51 @@ PaginationLink.displayName = 'PaginationLink';
 const PaginationPrevious = ({
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to previous page"
-    size="default"
-    className={cn('gap-1 pl-2.5', className)}
-    {...props}
-  >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Anterior</span>
-  </PaginationLink>
-);
+}: React.ComponentProps<typeof PaginationLink>) => {
+  const t = useTranslations('EditAlbum.Pagination');
+  return (
+    <PaginationLink
+      aria-label={t('previous_page_aria')}
+      size="default"
+      className={cn('gap-1 pl-2.5', className)}
+      {...props}
+    >
+      <ChevronLeft className="h-4 w-4" />
+      <span>{t('previous_page')}</span>
+    </PaginationLink>
+  );
+};
 PaginationPrevious.displayName = 'PaginationPrevious';
 
-const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to next page"
-    size="default"
-    className={cn('gap-1 pr-2.5', className)}
-    {...props}
-  >
-    <span>Próximo</span>
-    <ChevronRight className="h-4 w-4" />
-  </PaginationLink>
-);
+const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => {
+  const t = useTranslations('EditAlbum.Pagination');
+  return (
+    <PaginationLink
+      aria-label={t('next_page_aria')}
+      size="default"
+      className={cn('gap-1 pr-2.5', className)}
+      {...props}
+    >
+      <span>{t('next_page')}</span>
+      <ChevronRight className="h-4 w-4" />
+    </PaginationLink>
+  );
+};
 PaginationNext.displayName = 'PaginationNext';
 
-const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
-  <span
-    aria-hidden
-    className={cn('flex h-9 w-9 items-center justify-center', className)}
-    {...props}
-  >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">Mais páginas</span>
-  </span>
-);
+const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => {
+  const t = useTranslations('EditAlbum.Pagination');
+  return (
+    <span
+      aria-hidden
+      className={cn('flex h-9 w-9 items-center justify-center', className)}
+      {...props}
+    >
+      <MoreHorizontal className="h-4 w-4" />
+      <span className="sr-only">{t('more_pages_sr')}</span>
+    </span>
+  );
+};
 PaginationEllipsis.displayName = 'PaginationEllipsis';
 
 export {

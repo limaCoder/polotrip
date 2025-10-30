@@ -14,6 +14,7 @@ import { cn } from '@/lib/cn';
 import { motion } from 'motion/react';
 import Image, { ImageProps } from 'next/image';
 import { useOutsideClick } from '@/hooks/use-outside-click';
+import { useTranslations } from 'next-intl';
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -39,6 +40,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const t = useTranslations('AppleCardsCarousel');
 
   const checkScrollability = () => {
     if (carouselRef.current) {
@@ -133,7 +135,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
             className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
-            aria-label="Voltar"
+            aria-label={t('back_aria')}
           >
             <ArrowLeft className="h-6 w-6 text-gray-500" />
           </button>
@@ -141,7 +143,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
             className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
-            aria-label="Avançar"
+            aria-label={t('forward_aria')}
           >
             <ArrowRight className="h-6 w-6 text-gray-500" />
           </button>
@@ -153,6 +155,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
 export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
   const [isLoading, setLoading] = useState(true);
+  const t = useTranslations('AppleCardsCarousel');
   return (
     <Image
       className={cn('transition duration-300', isLoading ? 'blur-sm' : 'blur-0', className)}
@@ -163,7 +166,7 @@ export const BlurImage = ({ height, width, src, className, alt, ...rest }: Image
       loading="lazy"
       decoding="async"
       blurDataURL={typeof src === 'string' ? src : undefined}
-      alt={alt ? alt : 'Background of a beautiful view'}
+      alt={alt ? alt : t('background_alt')}
       {...rest}
     />
   );

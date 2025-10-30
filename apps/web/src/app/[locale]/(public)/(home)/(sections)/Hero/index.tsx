@@ -1,9 +1,12 @@
 import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { MotionDiv } from '@/lib/motion/motion-components';
+import { getTranslations } from 'next-intl/server';
 import { HeroPhotos } from './photos';
 
 export async function Hero() {
+  const t = await getTranslations('Home.Hero');
+
   return (
     <section className="relative py-10 pt-30 lg:pt-20 lg:min-h-screen overflow-hidden">
       <div className="hidden lg:block absolute inset-0 w-full h-full z-0">
@@ -20,14 +23,14 @@ export async function Hero() {
             tag="h1"
             duration={2}
             filter={false}
-            words="Guarde memórias que encantam"
+            words={t('title')}
           />
           <TextGenerateEffect
             className="lg:w-[526px] lg:text-white lg:drop-shadow-lg"
             tag="p"
             duration={1.2}
             filter={false}
-            words="Crie álbuns de viagem interativos com fotos e mapas para compartilhar suas aventuras com quem realmente importa."
+            words={t('subtitle')}
           />
           <MotionDiv
             initial={{ opacity: 0, y: 10 }}
@@ -38,16 +41,16 @@ export async function Hero() {
             <ButtonNavigation
               href="#how-it-works"
               className="bg-primary text-white button-shadow"
-              aria-label="Como funciona?"
+              aria-label={t('how_it_works_button_aria')}
             >
-              <span className="font-bold">Como funciona?</span>
+              <span className="font-bold">{t('how_it_works_button')}</span>
             </ButtonNavigation>
             <ButtonNavigation
               href="/album/a9jrss8qhxerqnsglmpks2da"
               className="bg-yellow text-black button-shadow"
-              aria-label="Veja um exemplo"
+              aria-label={t('see_example_button_aria')}
             >
-              <span className="font-bold">Veja um exemplo</span>
+              <span className="font-bold">{t('see_example_button')}</span>
             </ButtonNavigation>
           </MotionDiv>
         </div>

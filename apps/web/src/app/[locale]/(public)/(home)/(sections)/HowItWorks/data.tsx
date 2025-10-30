@@ -1,32 +1,29 @@
-const steps = [
+import { HowItWorksData } from './types';
+
+export const howItWorksData: HowItWorksData[] = [
   {
-    category: '1. Crie sua conta',
-    title:
-      'Registre-se em poucos segundos e comece a criar seu primeiro álbum de viagem digital personalizado.',
+    categoryKey: 'step_1_category',
+    titleKey: 'step_1_title',
     src: '/pages/home/how-it-works/step-one.png',
   },
   {
-    category: '2. Torne seu álbum real',
-    title:
-      'Após criar o álbum, finalize a compra de forma rápida e segura para liberar o upload das suas memórias.',
+    categoryKey: 'step_2_category',
+    titleKey: 'step_2_title',
     src: '/pages/home/how-it-works/step-two.png',
   },
   {
-    category: '3. Faça upload das fotos',
-    title: 'Adicione suas melhores fotos de viagem ao seu álbum digital. ',
+    categoryKey: 'step_3_category',
+    titleKey: 'step_3_title',
     src: '/pages/home/how-it-works/step-three.png',
   },
   {
-    category: '4. Personalize seu álbum',
-    title: 'Organize suas fotos e adicione locais no mapa interativo para embalar suas memórias.',
+    categoryKey: 'step_4_category',
+    titleKey: 'step_4_title',
     src: '/pages/home/how-it-works/step-four.png',
   },
   {
-    category: '5. Compartilhe com amigos',
-    title:
-      'Envie o link do seu álbum para amigos e familiares reviverem suas aventuras. Eles poderão navegar pelo mapa e ver suas fotos.',
+    categoryKey: 'step_5_category',
+    titleKey: 'step_5_title',
     src: '/pages/home/how-it-works/step-five.png',
   },
 ];
-
-export { steps };

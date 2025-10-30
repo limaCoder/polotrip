@@ -4,8 +4,13 @@ import { Calendar } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { formatDateToDisplay } from '@/utils/dates';
 import { PhotoTimelineProps } from './types';
+import { useLocale, useTranslations } from 'next-intl';
 
 export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimelineProps) {
+  const t = useTranslations('EditAlbum.PhotoTimeline');
+  const tDates = useTranslations('DatesUtils');
+  const locale = useLocale() as 'pt' | 'en';
+
   const sortedDates = [...dates].sort((a, b) => {
     if (a.date === null) return 1;
     if (b.date === null) return -1;
@@ -16,7 +21,7 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
     <div className="bg-background p-8 rounded-lg shadow-md">
       <div className="flex items-center gap-3 mb-6">
         <Calendar size={24} className="text-primary" />
-        <h2 className="font-title_three font-bold">Timeline</h2>
+        <h2 className="font-title_three font-bold">{t('title')}</h2>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -28,7 +33,9 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
               selectedDate === dateCount?.date ? 'bg-primary' : 'hover:bg-secondary/10',
             )}
             onClick={() => onSelectDate(dateCount?.date)}
-            aria-label={`Selecionar data ${formatDateToDisplay(dateCount?.date)}`}
+            aria-label={t('select_date_aria', {
+              date: formatDateToDisplay(dateCount?.date, locale, tDates),
+            })}
           >
             <p
               className={cn(
@@ -36,7 +43,7 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
                 selectedDate === dateCount?.date ? 'text-background' : '',
               )}
             >
-              {formatDateToDisplay(dateCount?.date)}
+              {formatDateToDisplay(dateCount?.date, locale, tDates)}
             </p>
             <p
               className={cn(
@@ -44,15 +51,13 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
                 selectedDate === dateCount?.date ? 'text-background' : '',
               )}
             >
-              {dateCount?.count} {dateCount?.count === 1 ? 'foto' : 'fotos'}
+              {dateCount?.count} {dateCount?.count === 1 ? t('photo_singular') : t('photo_plural')}
             </p>
           </button>
         ))}
 
         {dates?.length === 0 && (
-          <p className="text-center text-text/50 italic">
-            Nenhuma foto encontrada para este álbum.
-          </p>
+          <p className="text-center text-text/50 italic">{t('no_photos_found')}</p>
         )}
       </div>
     </div>

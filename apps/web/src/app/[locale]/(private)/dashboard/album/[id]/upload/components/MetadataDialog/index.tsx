@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,8 @@ export function MetadataDialog({
   onRemoveMetadata,
 }: MetadataDialogProps) {
   const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);
+
+  const t = useTranslations('UploadPage.MetadataDialog');
 
   const handleShowConfirmRemoveDialog = () => {
     setShowConfirmRemoveDialog(true);
@@ -44,22 +47,16 @@ export function MetadataDialog({
       <AlertDialog open={isOpen && !showConfirmRemoveDialog} onOpenChange={onClose}>
         <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
           <AlertDialogHeader>
-            <AlertDialogTitle>Informação sobre metadados das fotos</AlertDialogTitle>
+            <AlertDialogTitle>{t('initial_dialog.title')}</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div>
-                <p>
-                  As fotos que você está enviando contêm metadados de localização geográfica. Estes
-                  dados podem aprimorar significativamente sua experiência na plataforma:
-                </p>
+                <p>{t('initial_dialog.description_1')}</p>
                 <ul className="list-disc pl-5 mb-2 space-y-1">
-                  <li>Visualização das fotos em um mapa interativo</li>
-                  <li>Organização automática por local</li>
+                  <li>{t('initial_dialog.item_1')}</li>
+                  <li>{t('initial_dialog.item_2')}</li>
                 </ul>
-                <p className="mb-2">
-                  Todos os metadados serão tratados com o mesmo nível de segurança dos seus demais
-                  dados pessoais, em conformidade com a LGPD (Brasil) e GDPR (Europa).
-                </p>
-                <p className="font-medium">Você deseja manter estes metadados?</p>
+                <p className="mb-2">{t('initial_dialog.description_2')}</p>
+                <p className="font-medium">{t('initial_dialog.confirmation')}</p>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -68,13 +65,13 @@ export function MetadataDialog({
               className="font-bold bg-red-500 text-background hover:bg-red-600 transition-colors"
               onClick={handleShowConfirmRemoveDialog}
             >
-              Remover metadados
+              {t('initial_dialog.remove_button')}
             </AlertDialogCancel>
             <AlertDialogAction
               className="font-bold bg-primary text-background"
               onClick={handleKeepMetadata}
             >
-              Manter metadados
+              {t('initial_dialog.keep_button')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -83,19 +80,15 @@ export function MetadataDialog({
       <AlertDialog open={showConfirmRemoveDialog} onOpenChange={handleCancelRemove}>
         <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar remoção dos metadados?</AlertDialogTitle>
+            <AlertDialogTitle>{t('confirm_remove_dialog.title')}</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div>
-                <p className="mb-2">
-                  A remoção dos metadados afetará algumas funcionalidades importantes da plataforma:
-                </p>
+                <p className="mb-2">{t('confirm_remove_dialog.description')}</p>
                 <ul className="list-disc pl-5 mb-2 space-y-1">
-                  <li>O mapa interativo não mostrará a localização das fotos</li>
-                  <li>Você precisará inserir manualmente estas informações posteriormente</li>
+                  <li>{t('confirm_remove_dialog.item_1')}</li>
+                  <li>{t('confirm_remove_dialog.item_2')}</li>
                 </ul>
-                <p className="font-medium">
-                  Tem certeza que deseja remover os metadados de suas fotos?
-                </p>
+                <p className="font-medium">{t('confirm_remove_dialog.confirmation')}</p>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -104,13 +97,13 @@ export function MetadataDialog({
               className="font-bold bg-primary text-background hover:bg-primary/90 transition-colors"
               onClick={handleCancelRemove}
             >
-              Cancelar
+              {t('confirm_remove_dialog.cancel_button')}
             </AlertDialogCancel>
             <AlertDialogAction
               className="font-bold bg-red-500 text-background hover:bg-red-600 transition-colors"
               onClick={handleConfirmRemove}
             >
-              Sim, remover metadados
+              {t('confirm_remove_dialog.confirm_button')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

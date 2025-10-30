@@ -5,8 +5,10 @@ import { MasonryGallery } from './masonry-gallery';
 import { PhotoTimelineProps } from './types';
 import { InfiniteScroll } from '@/components/InfiniteScroll';
 import { usePhotoTimeline } from './use-photo-timeline';
+import { useTranslations } from 'next-intl';
 
 export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
+  const t = useTranslations('PublicAlbum.PhotoTimeline');
   const {
     timelineEvents,
     heightTransform,
@@ -23,7 +25,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
       <div className="container py-10">
         {timelineEvents?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <p className="text-lg text-gray-500">Nenhuma foto encontrada neste álbum.</p>
+            <p className="text-lg text-gray-500">{t('no_photos_found')}</p>
           </div>
         ) : (
           <div ref={timelineRef} className="relative">

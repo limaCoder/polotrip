@@ -6,10 +6,12 @@ import { DashboardContent } from '../../dashboard-content';
 import { Link, usePathname } from '@/i18n/routing';
 import Image from 'next/image';
 import { HeaderDesktopProps } from '../../types';
+import { useTranslations } from 'next-intl';
 
-const IS_INTERNATIONALIZATION_ENABLED = false;
+const IS_INTERNATIONALIZATION_ENABLED = true;
 
 export function HeaderDesktop({ isHome }: HeaderDesktopProps) {
+  const t = useTranslations('Header');
   const pathname = usePathname();
 
   const isDashboard = pathname?.startsWith(`/dashboard`);
@@ -22,7 +24,7 @@ export function HeaderDesktop({ isHome }: HeaderDesktopProps) {
       <Link className="cursor-pointer" href={logoHref}>
         <Image
           src={logoSrc}
-          alt="Logo"
+          alt={t('logo_alt')}
           width={180}
           height={40}
           sizes="(max-width: 768px) 150px, 180px"
@@ -32,8 +34,8 @@ export function HeaderDesktop({ isHome }: HeaderDesktopProps) {
 
       <div className="flex gap-4 items-center">
         <HomeContent isHome={isHome} />
-        <DashboardContent />
         {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
+        <DashboardContent />
       </div>
     </div>
   );

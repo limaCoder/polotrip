@@ -3,17 +3,20 @@
 import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
-import { ptBR } from 'date-fns/locale';
 
 import { cn } from '@/lib/cn';
 import { buttonVariants } from '@/components/ui/button';
+import { useLocale } from 'next-intl';
+import { LocaleDateFnsEnum } from '@/constants/localesEnum';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+  const locale = useLocale() as 'pt' | 'en';
+
   return (
     <DayPicker
-      locale={ptBR}
+      locale={LocaleDateFnsEnum[locale]}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       classNames={{

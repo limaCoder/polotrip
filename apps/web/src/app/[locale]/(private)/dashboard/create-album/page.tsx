@@ -3,13 +3,25 @@ import { Footer } from '@/components/Footer';
 import { AlbumForm } from './components/album-form';
 import { BackButton } from '../(components)/back-button';
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Criar álbum | Polotrip',
-  description: 'Crie um novo álbum para compartilhar suas memórias de viagem na Polotrip',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'CreateAlbum.metadata' });
 
-export default function CreateAlbumPage() {
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
+
+export default async function CreateAlbumPage() {
+  const t = await getTranslations('CreateAlbum');
+
   return (
     <>
       <Header />
@@ -17,7 +29,7 @@ export default function CreateAlbumPage() {
         <section className="py-8 bg-secondary/5 flex-grow">
           <div className="container mx-auto px-4 lg:px-9">
             <div className="mb-6">
-              <BackButton aria-label="Voltar para a lista de álbuns" />
+              <BackButton aria-label={t('back_button_aria')} />
             </div>
 
             <div className="max-w-[704px] mx-auto">

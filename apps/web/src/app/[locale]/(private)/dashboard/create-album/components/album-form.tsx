@@ -15,8 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTranslations } from 'next-intl';
 
 export function AlbumForm() {
+  const t = useTranslations('CreateAlbum.form');
+  const tPlanNames = useTranslations('PlanNames');
+
   const {
     formState,
     albumPrice,
@@ -31,25 +35,33 @@ export function AlbumForm() {
 
   return (
     <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
-      <h1 className="font-title_three mb-6 font-bold">Criar novo álbum</h1>
+      <h1 className="font-title_three mb-6 font-bold">{t('title')}</h1>
 
       {formState?.hasError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 flex items-start gap-2">
           <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-body_two font-bold">Erro ao criar álbum</p>
+            <p className="font-body_two font-bold">{t('error_title')}</p>
             <p className="text-sm">{formState?.errorMessage}</p>
             {formState?.titleError && (
-              <p className="text-sm mt-1">Título: {formState?.titleError?.join(', ')}</p>
+              <p className="text-sm mt-1">
+                {t('error_field_title')}: {formState?.titleError?.join(', ')}
+              </p>
             )}
             {formState?.dateError && (
-              <p className="text-sm mt-1">Data: {formState?.dateError?.join(', ')}</p>
+              <p className="text-sm mt-1">
+                {t('error_field_date')}: {formState?.dateError?.join(', ')}
+              </p>
             )}
             {formState?.descriptionError && (
-              <p className="text-sm">Descrição: {formState?.descriptionError?.join(', ')}</p>
+              <p className="text-sm">
+                {t('error_field_description')}: {formState?.descriptionError?.join(', ')}
+              </p>
             )}
             {formState?.coverImageError && (
-              <p className="text-sm">Imagem: {formState?.coverImageError?.join(', ')}</p>
+              <p className="text-sm">
+                {t('error_field_cover_image')}: {formState?.coverImageError?.join(', ')}
+              </p>
             )}
           </div>
         </div>
@@ -58,49 +70,49 @@ export function AlbumForm() {
       <div className="space-y-4 mb-6">
         <div className="flex flex-col gap-1">
           <label htmlFor="title" className="font-body_two">
-            Título do álbum
+            {t('album_title_label')}
           </label>
           <input
             id="title"
             name="title"
             type="text"
-            placeholder="Ex: Viagem para Paris"
+            placeholder={t('album_title_placeholder')}
             className="border border-text/25 rounded p-3 font-body_two text-sm"
           />
           {formState?.hasInvalidData && formState?.titleError && (
-            <p className="text-sm text-red-500">Título é obrigatório</p>
+            <p className="text-sm text-red-500">{t('album_title_error')}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
           <label htmlFor="date" className="font-body_two">
-            Data da viagem
+            {t('trip_date_label')}
           </label>
           <MonthPicker
             className="border border-text/25 rounded p-3 font-body_two text-sm"
             name="date"
-            placeholder="Selecione o mês e o ano da viagem"
+            placeholder={t('trip_date_placeholder')}
           />
           {formState?.hasInvalidData && formState?.dateError && (
-            <p className="text-sm text-red-500">Data é obrigatório</p>
+            <p className="text-sm text-red-500">{t('trip_date_error')}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
           <label htmlFor="description" className="font-body_two">
-            Descrição
+            {t('description_label')}
           </label>
           <textarea
             id="description"
             name="description"
-            placeholder="Conte um pouco sobre esta viagem..."
+            placeholder={t('description_placeholder')}
             className="border border-text/25 rounded p-3 h-24 font-body_two text-sm"
           />
         </div>
 
         <div className="flex flex-col gap-1">
           <label htmlFor="cover" className="font-body_two">
-            Capa do álbum
+            {t('cover_label')}
           </label>
           <div
             className={cn(
@@ -120,9 +132,9 @@ export function AlbumForm() {
               <>
                 <Check size={24} className="text-primary mb-2" />
                 <p className="font-body_two text-sm">
-                  <span className="text-primary font-bold">Imagem selecionada!</span>
+                  <span className="text-primary font-bold">{t('cover_selected_success')}</span>
                   <br />
-                  Se deseja alterar, arraste e solte novamente
+                  {t('cover_selected_instruction')}
                 </p>
                 <span className="text-primary text-xs mt-1">{selectedImage?.name}</span>
               </>
@@ -130,24 +142,26 @@ export function AlbumForm() {
               <>
                 <Upload size={24} className="text-text/25 mb-2" />
                 <p className="font-body_two text-sm">
-                  <span className="text-primary font-bold">Faça upload de uma foto</span>
+                  <span className="text-primary font-bold">{t('cover_upload_prompt')}</span>
                   <br />
-                  ou arraste e solte
+                  {t('cover_upload_instruction')}
                 </p>
-                <span className="text-primary text-xs mt-1">PNG, JPG até 5MB</span>
+                <span className="text-primary text-xs mt-1">{t('cover_upload_requirements')}</span>
               </>
             )}
           </div>
           <div className="mt-2 p-3 bg-secondary/5 rounded-lg">
-            <p className="text-sm font-body_two mb-2">✨ Recomendações para uma capa incrível:</p>
+            <p className="text-sm font-body_two mb-2">{t('cover_recommendations_title')}</p>
             <div className="flex flex-col lg:flex-row items-center gap-3">
               <div className="w-[120px] h-[68px] bg-secondary/20 rounded flex items-center justify-center border border-dashed border-primary/30">
-                <span className="text-[10px] text-primary/70">1600 x 900 px</span>
+                <span className="text-[10px] text-primary/70">
+                  {t('cover_recommendations_size')}
+                </span>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-sm text-text/70">• Use uma imagem no formato horizontal</p>
-                <p className="text-sm text-text/70">• Resolução recomendada: 1600 x 900 pixels</p>
-                <p className="text-sm text-text/70">• Evite textos na imagem</p>
+                <p className="text-sm text-text/70">{t('cover_recommendations_format')}</p>
+                <p className="text-sm text-text/70">{t('cover_recommendations_resolution')}</p>
+                <p className="text-sm text-text/70">{t('cover_recommendations_text')}</p>
               </div>
             </div>
           </div>
@@ -158,16 +172,16 @@ export function AlbumForm() {
 
         <div className="flex flex-col gap-1">
           <label htmlFor="plan" className="font-body_two">
-            Plano do álbum
+            {t('plan_label')}
           </label>
           <Select name="plan" value={selectedPlan} onValueChange={handlePlanChange}>
             <SelectTrigger className="border border-text/25 rounded p-3 font-body_two text-sm">
-              <SelectValue placeholder="Selecione um plano" />
+              <SelectValue placeholder={t('plan_placeholder')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="basic">Básico - 50 fotos</SelectItem>
-              <SelectItem value="standard">Padrão - 100 fotos</SelectItem>
-              <SelectItem value="premium">Premium - 150 fotos</SelectItem>
+              <SelectItem value="basic">{t('plan_basic')}</SelectItem>
+              <SelectItem value="standard">{t('plan_standard')}</SelectItem>
+              <SelectItem value="premium">{t('plan_premium')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -176,15 +190,19 @@ export function AlbumForm() {
       <hr className="border-text/25 my-6" />
 
       <div className="flex flex-col items-start bg-secondary/5 p-6 rounded-lg mb-6">
-        <h2 className="font-body_one font-bold text-primary mb-6">Resumo do pedido</h2>
+        <h2 className="font-body_one font-bold text-primary mb-6">{t('order_summary_title')}</h2>
 
         <div className="w-full flex justify-between">
           <div>
             <h3 className="font-body_two font-bold">
-              Criação do álbum - {getPlanName(selectedPlan)}
+              {t('order_summary_album_creation', {
+                planName: getPlanName(selectedPlan, tPlanNames),
+              })}
             </h3>
             <p className="text-xs">
-              Inclui até {getPlanPhotoLimit(selectedPlan)} fotos e todas as funcionalidades premium
+              {t('order_summary_description', {
+                photoLimit: getPlanPhotoLimit(selectedPlan),
+              })}
             </p>
           </div>
           <span className="font-body_two text-primary">
@@ -198,17 +216,17 @@ export function AlbumForm() {
           type="submit"
           disabled={isPending}
           className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded"
-          aria-label="Pagar com cartão"
+          aria-label={t('pay_with_card_button_aria')}
         >
           {isPending ? (
             <>
               <Loader size={20} className="animate-spin" color="#F7FCFD" />
-              <span>Processando...</span>
+              <span>{t('processing_button')}</span>
             </>
           ) : (
             <>
               <CreditCard size={20} color="#F7FCFD" />
-              <span>Pagar com cartão</span>
+              <span>{t('pay_with_card_button')}</span>
             </>
           )}
         </Button>

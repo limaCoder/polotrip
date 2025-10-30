@@ -11,8 +11,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
 import { OnboardingModalProps } from './types';
+import { useTranslations } from 'next-intl';
 
 export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps) {
+  const t = useTranslations('Dashboard.onboarding');
   const [currentStep, setCurrentStep] = useState(0);
 
   const isFirstStep = currentStep === 0;
@@ -34,7 +36,7 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Bem vindo ao Polotrip</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center p-6">
           <h2 className="text-xl font-semibold mb-2">{steps[currentStep].title}</h2>
@@ -51,7 +53,7 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
                 onClick={() => setCurrentStep(index)}
                 role="button"
                 tabIndex={0}
-                aria-label={`Ir para o passo ${index + 1}`}
+                aria-label={t('go_to_step_aria', { step: index + 1 })}
               />
             ))}
           </div>
@@ -63,13 +65,17 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
               variant="outline"
               onClick={handlePrevious}
               disabled={isFirstStep}
-              aria-label="Voltar"
+              aria-label={t('back_button')}
             >
-              Voltar
+              {t('back_button')}
             </Button>
 
-            <Button className="text-white" onClick={handleNext} aria-label="Próximo">
-              {isLastStep ? 'Começar' : 'Próximo'}
+            <Button
+              className="text-white"
+              onClick={handleNext}
+              aria-label={isLastStep ? t('start_button') : t('next_button')}
+            >
+              {isLastStep ? t('start_button') : t('next_button')}
             </Button>
           </div>
         </DialogFooter>

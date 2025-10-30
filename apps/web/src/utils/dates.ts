@@ -1,5 +1,11 @@
 import { format, parseISO } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { ptBR, enUS } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
+
+const locales = {
+  pt: ptBR,
+  en: enUS,
+};
 
 /**
  * Converts a Date object to an ISO string for the API
@@ -19,12 +25,17 @@ export const apiStringToDate = (dateStr: string | null | undefined): Date | null
  * Formats a date to display in the Brazilian format
  * Example: "Quinta-feira, 12 de janeiro"
  */
-export const formatDateToDisplay = (dateString: string | null): string => {
-  if (!dateString) return 'Sem data definida';
+export const formatDateToDisplay = (
+  dateString: string | null,
+  locale: 'pt' | 'en',
+  t: ReturnType<typeof useTranslations<'DatesUtils'>>,
+): string => {
+  if (!dateString) return t('no_date_defined');
 
   try {
     const date = parseISO(dateString);
-    return format(date, "EEEE, dd 'de' MMMM", { locale: ptBR });
+    const formatString = locale === 'pt' ? "EEEE, dd 'de' MMMM" : 'EEEE, MMMM dd';
+    return format(date, formatString, { locale: locales[locale] });
   } catch (error) {
     console.error('Error parsing date:', error);
     return dateString;
@@ -35,12 +46,16 @@ export const formatDateToDisplay = (dateString: string | null): string => {
  * Formats a date to display in the short format
  * Example: "12/01/2023"
  */
-export const formatDateShort = (date: Date | string | null | undefined): string => {
+export const formatDateShort = (
+  date: Date | string | null | undefined,
+  locale: 'pt' | 'en',
+): string => {
   if (!date) return '';
 
   try {
     const dateObj = typeof date === 'string' ? parseISO(date) : date;
-    return format(dateObj, 'dd/MM/yyyy', { locale: ptBR });
+    const formatString = locale === 'pt' ? 'dd/MM/yyyy' : 'MM/dd/yyyy';
+    return format(dateObj, formatString, { locale: locales[locale] });
   } catch (error) {
     console.error('Error formatting date:', error);
     return '';

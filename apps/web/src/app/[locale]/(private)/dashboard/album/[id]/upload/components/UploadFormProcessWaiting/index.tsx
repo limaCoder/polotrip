@@ -1,21 +1,26 @@
+'use client';
+
 import LottieAnimation from '@/components/LottieAnimation';
 import waitingAnimation from '@/assets/lottie/waiting.json';
+import { useTranslations } from 'next-intl';
 import { UploadFormProcessWaitingProps } from './types';
 
 function UploadFormProcessWaiting({
   isCompressingState,
   uploadFormState,
 }: UploadFormProcessWaitingProps) {
+  const t = useTranslations('UploadPage.UploadFormProcessWaiting');
+
   return (
     <div className="w-full space-y-6 py-4">
       <div className="text-center space-y-2">
         <h3 className="font-title_three text-primary">
-          {isCompressingState ? 'Otimizando suas fotos...' : 'Enviando suas fotos...'}
+          {isCompressingState ? t('optimizing_title') : t('uploading_title')}
         </h3>
         <p className="text-text/70">
           {isCompressingState
-            ? 'Estamos preparando suas fotos para ficarem perfeitas! ✨'
-            : `Já enviamos ${uploadFormState.progress}% das suas fotos! ✨`}
+            ? t('optimizing_description')
+            : t('uploading_description', { progress: uploadFormState.progress })}
         </p>
       </div>
 
@@ -25,16 +30,14 @@ function UploadFormProcessWaiting({
 
       <div className="max-w-md mx-auto text-center space-y-4">
         <p className="text-sm text-text/70">
-          {isCompressingState
-            ? 'A otimização pode levar alguns minutos. Que tal uma pausa para um ☕️ ou um joguinho enquanto isso?'
-            : 'O upload pode demorar um pouquinho. Aproveite para relaxar ou se divertir com nosso mini-game!'}
+          {isCompressingState ? t('optimizing_tip') : t('uploading_tip')}
         </p>
 
         <a
           href="#waiting-game"
           className="inline-flex items-center gap-2 px-6 py-3 bg-secondary/10 hover:bg-secondary/20 rounded-lg transition-colors"
         >
-          <span className="text-sm font-medium">Jogar Word Scramble</span>
+          <span className="text-sm font-medium">{t('play_game_button')}</span>
           <svg
             width="20"
             height="20"

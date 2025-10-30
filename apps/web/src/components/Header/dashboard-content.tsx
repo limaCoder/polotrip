@@ -12,8 +12,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronDownIcon } from 'lucide-react';
 import { useHeaderDashboardContent } from './useHeaderDashboardContent';
+import { useTranslations } from 'next-intl';
 
 export function DashboardContent() {
+  const t = useTranslations('Header');
   const headerContent = useHeaderDashboardContent();
 
   if (!headerContent) return null;
@@ -23,7 +25,10 @@ export function DashboardContent() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2" aria-label="Abrir menu de usuário">
+        <DropdownMenuTrigger
+          className="flex items-center gap-2"
+          aria-label={t('open_user_menu_aria')}
+        >
           <Avatar>
             {userData?.userAvatar || userData?.usernameInitials ? (
               <>
@@ -40,14 +45,14 @@ export function DashboardContent() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-background">
           <DropdownMenuLabel className="cursor-pointer hover:bg-primary/10 transition-colors duration-200">
-            Minha conta
+            {t('my_account')}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer hover:bg-primary/10 transition-colors duration-200"
             onClick={handleLogout}
           >
-            Logout
+            {t('logout')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

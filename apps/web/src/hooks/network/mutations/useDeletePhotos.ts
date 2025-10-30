@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { deletePhotos } from '@/http/delete-photos';
 import { albumKeys } from '../keys/albumKeys';
+import { useTranslations } from 'next-intl';
 
 interface UseDeletePhotosProps {
   albumId: string;
@@ -17,6 +18,7 @@ interface DeletePhotosVariables {
 
 export const useDeletePhotos = ({ albumId, onSuccess }: UseDeletePhotosProps) => {
   const queryClient = useQueryClient();
+  const t = useTranslations('DeletePhotosHook');
 
   return useMutation({
     mutationFn: async ({ photoIds }: DeletePhotosVariables) => {
@@ -26,8 +28,13 @@ export const useDeletePhotos = ({ albumId, onSuccess }: UseDeletePhotosProps) =>
       });
     },
     onSuccess: data => {
-      toast.success('Fotos excluídas com sucesso', {
-        description: `${data.deletedCount} ${data.deletedCount === 1 ? 'foto foi excluída' : 'fotos foram excluídas'}.`,
+      const description =
+        data.deletedCount === 1
+          ? t('description_singular', { count: data.deletedCount })
+          : t('description_plural', { count: data.deletedCount });
+
+      toast.success(t('success'), {
+        description,
       });
       queryClient.invalidateQueries({ queryKey: albumKeys.detail(albumId) });
       queryClient.invalidateQueries({ queryKey: albumKeys.photos(albumId) });
@@ -37,8 +44,8 @@ export const useDeletePhotos = ({ albumId, onSuccess }: UseDeletePhotosProps) =>
       }
     },
     onError: () => {
-      toast.error('Erro ao excluir fotos', {
-        description: 'Não foi possível excluir as fotos selecionadas. Tente novamente.',
+      toast.error(t('error_title'), {
+        description: t('error_description'),
       });
     },
   });

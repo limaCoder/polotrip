@@ -5,9 +5,19 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { MotionSection } from '@/lib/motion/motion-components';
-import { questions } from './data';
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
-export function Faq() {
+import { faqData } from './data';
+
+export async function Faq() {
+  const t = await getTranslations('Home.Faq');
+  const tQuestions = await getTranslations('Home.Faq.questions');
+
+  const questions = faqData.map(q => ({
+    question: tQuestions(q.questionKey),
+    answer: tQuestions(q.answerKey),
+  }));
+
   return (
     <MotionSection
       initial={{ opacity: 0, y: 35 }}
@@ -18,9 +28,9 @@ export function Faq() {
     >
       <div className="container mx-auto lg:px-9 px-4 flex flex-col lg:flex-row gap-12">
         <div className="flex w-full lg:w-2/5 flex-col">
-          <h2 className="font-title_two text-primary font-bold">Perguntas frequentes</h2>
+          <h2 className="font-title_two text-primary font-bold">{t('title')}</h2>
           <p className="mt-4 font-body_one">
-            Para maiores dúvidas, mande uma mensagem para o nosso contato de suporte
+            {t('description')}
             <a href="mailto:help@polotrip.com" className="ml-2 font-bold">
               help@polotrip.com
             </a>
@@ -28,7 +38,7 @@ export function Faq() {
           <div className="flex justify-center">
             <Image
               src="/pages/home/faq/question.svg"
-              alt="Ilustração de uma mulher segurando um balao de pontos de interrogação"
+              alt={t('image_alt')}
               className="h-[250px] lg:h-[330px] mt-6"
               width={232}
               height={327}

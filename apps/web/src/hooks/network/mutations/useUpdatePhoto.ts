@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { updateAlbum } from '@/http/update-album';
 import { albumKeys } from '../keys/albumKeys';
+import { useTranslations } from 'next-intl';
 
 interface PhotoUpdate {
   id: string;
@@ -21,6 +22,7 @@ interface UseUpdatePhotoProps {
 
 export const useUpdatePhoto = ({ albumId }: UseUpdatePhotoProps) => {
   const queryClient = useQueryClient();
+  const t = useTranslations('UpdatePhotoHook');
 
   return useMutation({
     mutationFn: async (photoUpdate: PhotoUpdate) => {
@@ -32,13 +34,13 @@ export const useUpdatePhoto = ({ albumId }: UseUpdatePhotoProps) => {
       });
     },
     onSuccess: () => {
-      toast.success('Foto atualizada com sucesso');
+      toast.success(t('success'));
       queryClient.invalidateQueries({ queryKey: albumKeys.photos(albumId) });
       queryClient.invalidateQueries({ queryKey: albumKeys.dates(albumId) });
     },
     onError: () => {
-      toast.error('Erro ao atualizar foto', {
-        description: 'Não foi possível salvar as alterações. Tente novamente.',
+      toast.error(t('error_title'), {
+        description: t('error_description'),
       });
     },
   });

@@ -14,13 +14,25 @@ import { OnboardingModalWrapper } from './(components)/onboarding-modal-wrapper'
 import { InstallPwaModalWrapper } from './(components)/install-pwa-modal-wrapper';
 
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Dashboard | Polotrip',
-  description: 'Gerencie seus álbuns e compartilhe suas memórias de viagem na Polotrip',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Dashboard.metadata' });
 
-export default async function DashboardPage() {
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
+
+export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Dashboard' });
   const queryClient = new QueryClient();
 
   queryClient.prefetchInfiniteQuery({
@@ -39,16 +51,16 @@ export default async function DashboardPage() {
             <div className="flex flex-col gap-9">
               <div className="flex justify-between items-left lg:items-center flex-col lg:flex-row gap-4">
                 <div>
-                  <h1 className="font-title_two">Meus álbuns</h1>
-                  <p className="font-title_three">Gerencie e compartilhe suas memórias de viagem</p>
+                  <h1 className="font-title_two">{t('title')}</h1>
+                  <p className="font-title_three">{t('subtitle')}</p>
                 </div>
                 <ButtonNavigation
                   href="/dashboard/create-album"
                   className="bg-primary text-background py-4 px-8 flex items-center gap-2 shadow-lg hover:brightness-105"
-                  aria-label="Criar novo álbum"
+                  aria-label={t('create_album_button_aria')}
                 >
                   <Plus size={24} color="#F7FCFD" />
-                  <span>Criar novo álbum</span>
+                  <span>{t('create_album_button')}</span>
                 </ButtonNavigation>
               </div>
 

@@ -1,5 +1,6 @@
 'use server';
 
+import { getTranslations } from 'next-intl/server';
 import { updateCoverImage } from './utils/update-cover-image';
 
 interface UpdateAlbumCoverState {
@@ -9,9 +10,15 @@ interface UpdateAlbumCoverState {
 }
 
 export async function updateAlbumCover(
+  extra: { locale: string },
   prevState: UpdateAlbumCoverState | null,
   formData: FormData,
 ) {
+  const t = await getTranslations({
+    locale: extra?.locale,
+    namespace: 'ServerActions.UpdateAlbumCover',
+  });
+
   try {
     const file = formData.get('file') as File;
     const albumId = formData.get('albumId') as string;
@@ -19,11 +26,16 @@ export async function updateAlbumCover(
 
     if (!file || !albumId) {
       return {
-        error: 'Arquivo ou ID do álbum não fornecido',
+        error: t('file_or_albumid_not_provided'),
       };
     }
 
-    const publicUrl = await updateCoverImage(file, albumId, currentCoverUrl || null);
+    const publicUrl = await updateCoverImage(
+      extra?.locale as string,
+      file,
+      albumId,
+      currentCoverUrl || null,
+    );
 
     return {
       success: true,
@@ -32,7 +44,7 @@ export async function updateAlbumCover(
   } catch (error) {
     console.error('Error updating album cover:', error);
     return {
-      error: error instanceof Error ? error.message : 'Erro ao atualizar a capa do álbum',
+      error: error instanceof Error ? error.message : t('update_cover_error'),
     };
   }
 }

@@ -2,12 +2,15 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { PhotoEditFormData, UsePhotoEditFormProps } from './types';
 import { apiStringToDate } from '@/utils/dates';
+import { useTranslations } from 'next-intl';
 
 export function usePhotoEditForm({
   selectedPhotos,
   onSave,
   deselectAllPhotos,
 }: UsePhotoEditFormProps) {
+  const t = useTranslations('PhotoEditFormHook');
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [preserveFields, setPreserveFields] = useState({
     location: true,
@@ -100,15 +103,15 @@ export function usePhotoEditForm({
 
   const getSelectionText = useCallback(() => {
     if (isMultipleSelection) {
-      return `Editar ${selectedPhotos.length} fotos selecionadas`;
+      return t('edit_multiple_photos', { count: selectedPhotos.length });
     }
 
     if (selectedPhotos.length === 1) {
-      return 'Editar foto';
+      return t('edit_single_photo');
     }
 
-    return 'Selecione uma foto para editar';
-  }, [isMultipleSelection, selectedPhotos.length]);
+    return t('no_photo_selected');
+  }, [isMultipleSelection, selectedPhotos.length, t]);
 
   const selectionText = getSelectionText();
 

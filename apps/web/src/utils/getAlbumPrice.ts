@@ -1,5 +1,6 @@
 import { AlbumPriceEnum, AlbumStripePriceEnum } from '@/constants/albumsPriceEnum';
 import { AlbumPlan } from '@/constants/pricingEnum';
+import { useTranslations } from 'next-intl';
 
 const getAlbumPrice = (plan: string, locale: string) => {
   return AlbumPriceEnum[plan as keyof typeof AlbumPriceEnum]?.[
@@ -13,11 +14,11 @@ const getAlbumStripePrice = (plan: string, locale: string) => {
   ] as number;
 };
 
-const getPlanName = (plan: AlbumPlan) => {
+const getPlanName = (plan: AlbumPlan, t: ReturnType<typeof useTranslations<'PlanNames'>>) => {
   const names = {
-    basic: 'Básico',
-    standard: 'Padrão',
-    premium: 'Premium',
+    basic: t('basic'),
+    standard: t('standard'),
+    premium: t('premium'),
   };
   return names[plan];
 };

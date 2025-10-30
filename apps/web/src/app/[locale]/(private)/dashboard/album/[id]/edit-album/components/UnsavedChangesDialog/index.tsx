@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,19 +14,21 @@ import {
 import { UnsavedChangesDialogProps } from './types';
 
 export function UnsavedChangesDialog({ isOpen, onClose, onConfirm }: UnsavedChangesDialogProps) {
+  const t = useTranslations('EditAlbum.UnsavedChangesDialog');
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent className="px-2 w-[90%] overflow-hidden">
         <AlertDialogHeader>
-          <AlertDialogTitle>Alterações não salvas</AlertDialogTitle>
+          <AlertDialogTitle>{t('title')}</AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div>
-              <p className="mb-2">Você tem alterações não salvas no formulário. Se continuar:</p>
+              <p className="mb-2">{t('description_intro')}</p>
               <ul className="list-disc pl-5 mb-2 space-y-1">
-                <li>As alterações atuais serão perdidas</li>
-                <li>O formulário será preenchido com os dados da nova seleção</li>
+                <li>{t('item_1')}</li>
+                <li>{t('item_2')}</li>
               </ul>
-              <p className="font-medium">Deseja continuar mesmo assim?</p>
+              <p className="font-medium">{t('confirmation')}</p>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -32,13 +37,13 @@ export function UnsavedChangesDialog({ isOpen, onClose, onConfirm }: UnsavedChan
             className="font-medium hover:bg-secondary-10 transition-colors"
             onClick={onClose}
           >
-            Cancelar
+            {t('cancel_button')}
           </AlertDialogCancel>
           <AlertDialogAction
             className="font-medium bg-primary text-background hover:bg-primary/90 transition-colors"
             onClick={onConfirm}
           >
-            Sim, continuar
+            {t('confirm_button')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

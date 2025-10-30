@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -10,15 +13,14 @@ import { Button } from '@/components/ui/button';
 import { UndatedPhotosDialogProps } from './types';
 
 export function UndatedPhotosDialog({ isOpen, onClose }: UndatedPhotosDialogProps) {
+  const t = useTranslations('EditAlbum.UndatedPhotosDialog');
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Fotos sem data definida</AlertDialogTitle>
-          <AlertDialogDescription>
-            Existem fotos sem data definida no seu álbum. Para que todas as fotos sejam exibidas
-            corretamente na timeline pública do álbum, é necessário definir uma data para cada foto.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+          <AlertDialogDescription>{t('description')}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button
@@ -26,7 +28,7 @@ export function UndatedPhotosDialog({ isOpen, onClose }: UndatedPhotosDialogProp
             onClick={onClose}
             className="hover:bg-primary/90 hover:text-background transition-colors"
           >
-            Entendi, vou revisar
+            {t('confirm_button')}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

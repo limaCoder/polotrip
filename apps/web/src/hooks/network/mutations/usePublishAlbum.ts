@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { updateAlbum } from '@/http/update-album';
 import { albumKeys } from '../keys/albumKeys';
+import { useTranslations } from 'next-intl';
 
 interface UsePublishAlbumProps {
   albumId: string;
@@ -13,6 +14,7 @@ interface UsePublishAlbumProps {
 
 export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) => {
   const queryClient = useQueryClient();
+  const t = useTranslations('PublishAlbumHook');
 
   return useMutation({
     mutationFn: async () => {
@@ -25,8 +27,8 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
       });
     },
     onSuccess: () => {
-      toast.success('Álbum publicado com sucesso', {
-        description: 'Todas as alterações foram salvas.',
+      toast.success(t('success_title'), {
+        description: t('success_description'),
       });
 
       if (onSuccess) {
@@ -38,8 +40,8 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
       });
     },
     onError: () => {
-      toast.error('Erro ao publicar álbum', {
-        description: 'Não foi possível finalizar o álbum. Tente novamente.',
+      toast.error(t('error_title'), {
+        description: t('error_description'),
       });
     },
   });

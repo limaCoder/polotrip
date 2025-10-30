@@ -5,9 +5,13 @@ import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { Photo as TimelinePhoto, TimelineEvent } from '@/components/PhotoTimeline/types';
 import { format, parse } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { useLocale, useTranslations } from 'next-intl';
+import { LocaleDateFnsEnum } from '@/constants/localesEnum';
 
 const useGetPublicAlbumPhotos = (albumId: string) => {
+  const locale = useLocale() as 'pt' | 'en';
+  const t = useTranslations('PublicAlbumPhotosHook');
+
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } = useSuspenseInfiniteQuery({
     queryKey: albumKeys.publicPhotosList(albumId),
     initialPageParam: undefined as string | undefined,
@@ -30,7 +34,8 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
   data?.pages.forEach(page => {
     page?.timelineEvents.forEach(event => {
       const parsedDate = parse(event.date, 'yyyy-MM-dd', new Date());
-      const formattedDate = format(parsedDate, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
+      const formatString = locale === 'pt' ? "d 'de' MMMM 'de' yyyy" : 'MMMM d, yyyy';
+      const formattedDate = format(parsedDate, formatString, { locale: LocaleDateFnsEnum[locale] });
 
       const transformedPhotos: TimelinePhoto[] = event?.photos?.map(photo => {
         let width = photo?.width ?? 1920;
@@ -47,7 +52,7 @@ const useGetPublicAlbumPhotos = (albumId: string) => {
         return {
           id: photo?.id,
           src: photo?.imageUrl,
-          alt: photo?.description || 'Foto do álbum',
+          alt: photo?.description || t('default_alt'),
           width,
           height,
           description: photo?.description || '',

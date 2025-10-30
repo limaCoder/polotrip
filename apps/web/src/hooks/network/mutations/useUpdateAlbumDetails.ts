@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { updateAlbum } from '@/http/update-album';
 import { albumKeys } from '../keys/albumKeys';
+import { useTranslations } from 'next-intl';
 
 interface UpdateAlbumDetailsData {
   albumId: string;
@@ -15,6 +16,7 @@ interface UpdateAlbumDetailsData {
 
 export function useUpdateAlbumDetails() {
   const queryClient = useQueryClient();
+  const t = useTranslations('UpdateAlbumDetailsHook');
 
   return useMutation({
     mutationFn: async ({ albumId, ...data }: UpdateAlbumDetailsData) => {
@@ -26,7 +28,7 @@ export function useUpdateAlbumDetails() {
       return response;
     },
     onSuccess: (_, variables) => {
-      toast.success('Álbum atualizado com sucesso!');
+      toast.success(t('success'));
 
       queryClient.invalidateQueries({
         queryKey: [albumKeys.all],
@@ -36,7 +38,7 @@ export function useUpdateAlbumDetails() {
       });
     },
     onError: () => {
-      toast.error('Erro ao atualizar o álbum. Tente novamente.');
+      toast.error(t('error'));
     },
   });
 }

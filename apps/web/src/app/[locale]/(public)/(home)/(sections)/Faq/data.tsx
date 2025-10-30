@@ -1,34 +1,28 @@
-const questions = [
+import { FaqData } from './types';
+
+export const faqData: FaqData[] = [
   {
-    question: 'Preciso criar uma conta para usar?',
-    answer:
-      'Sim, é necessário criar uma conta para começar a criar e gerenciar seus álbuns com segurança.',
+    questionKey: 'q1_question',
+    answerKey: 'q1_answer',
   },
   {
-    question: 'Posso compartilhar meus álbuns?',
-    answer:
-      'Sim! Após criar um álbum, você pode compartilhar um link seguro com amigos ou familiares, com controle de privacidade.',
+    questionKey: 'q2_question',
+    answerKey: 'q2_answer',
   },
   {
-    question: 'As pessoas precisam ter conta para visualizar meu álbum?',
-    answer:
-      'Não! Basta compartilhar o link do álbum e qualquer pessoa poderá acessar, sem precisar criar conta.',
+    questionKey: 'q3_question',
+    answerKey: 'q3_answer',
   },
   {
-    question: 'Minhas fotos ficam seguras no Polotrip?',
-    answer:
-      'As fotos dos seus álbuns só podem ser visualizadas por quem tem o link do álbum. No entanto, as imagens são armazenadas em um servidor público, o que significa que, tecnicamente, qualquer pessoa com o endereço exato da imagem pode acessá-la. O endereço das imagens é difícil de adivinhar e não é divulgado publicamente pela plataforma. Recomendamos que você compartilhe o link do álbum apenas com pessoas de confiança.',
+    questionKey: 'q4_question',
+    answerKey: 'q4_answer',
   },
   {
-    question: 'O álbum expira depois de um tempo?',
-    answer:
-      'Não. Depois de criado, seu álbum permanece disponível para você acessar e compartilhar quando quiser.',
+    questionKey: 'q5_question',
+    answerKey: 'q5_answer',
   },
   {
-    question: 'Posso editar o álbum depois de publicá-lo?',
-    answer:
-      'Sim! Você pode editar o título, a descrição, a foto de capa, excluir fotos, mudar legendas ou ajustar locais no mapa a qualquer momento.',
+    questionKey: 'q6_question',
+    answerKey: 'q6_answer',
   },
 ];
-
-export { questions };

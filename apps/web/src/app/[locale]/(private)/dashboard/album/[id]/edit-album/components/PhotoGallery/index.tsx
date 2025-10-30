@@ -3,6 +3,8 @@ import { type PhotoGalleryProps } from './types';
 import { PhotoGalleryPagination } from '../PhotoGalleryPagination';
 import { PhotoGalleryItem } from '../PhotoGalleryItem';
 import { Trash2, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 export function PhotoGallery({
   filteredPhotos,
@@ -17,38 +19,45 @@ export function PhotoGallery({
   onPageChange,
   onDeletePhotos,
 }: PhotoGalleryProps) {
+  const t = useTranslations('EditAlbum.PhotoGallery');
+  const { locale } = useParams();
+
   const formattedSelectedDate = selectedDate
     ? new Date(selectedDate)
-        .toLocaleDateString('pt-BR', {
+        .toLocaleDateString(locale as string, {
           month: 'long',
           year: 'numeric',
         })
         .charAt(0)
         .toUpperCase() +
       new Date(selectedDate)
-        .toLocaleDateString('pt-BR', {
+        .toLocaleDateString(locale as string, {
           month: 'long',
           year: 'numeric',
         })
         .slice(1)
-    : 'Sem data definida';
+    : t('no_date_defined');
 
   return (
     <div className="bg-background p-8 rounded-lg shadow-md">
       <div className="mb-3">
-        <h2 className="font-title_three font-bold mb-1">Momentos da viagem</h2>
-        <p className="font-body_two text-text/75">
-          Para realizar a edição das informações de data e localidade, selecione as fotos abaixo.
-        </p>
+        <h2 className="font-title_three font-bold mb-1">{t('title')}</h2>
+        <p className="font-body_two text-text/75">{t('description')}</p>
       </div>
 
       <div className="flex justify-between items-startmd:items-center mb-6 flex-col md:flex-row gap-4">
         <p className="font-body_two">
           <span className="text-primary font-bold">
-            {pagination?.total || filteredPhotos.length}
-            {(pagination?.total || filteredPhotos.length) === 1 ? ' foto ' : ' fotos '}
+            {(pagination?.total || filteredPhotos.length) === 1
+              ? t('photo_count_in_date_singular', {
+                  count: pagination?.total || filteredPhotos.length,
+                  date: formattedSelectedDate,
+                })
+              : t('photo_count_in_date_plural', {
+                  count: pagination?.total || filteredPhotos.length,
+                  date: formattedSelectedDate,
+                })}
           </span>
-          em {formattedSelectedDate}
         </p>
 
         {selectedPhotos.length > 0 && (
@@ -56,18 +65,18 @@ export function PhotoGallery({
             <button
               className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
               onClick={deselectAllPhotos}
-              aria-label="Limpar seleção"
+              aria-label={t('clear_selection_aria')}
             >
               <X size={18} />
-              <span className="font-body_two">Limpar seleção</span>
+              <span className="font-body_two">{t('clear_selection')}</span>
             </button>
             <button
               className="flex items-center gap-2 text-red-500 cursor-pointer hover:text-red-600"
               onClick={onDeletePhotos}
-              aria-label="Excluir selecionadas"
+              aria-label={t('delete_selected_aria')}
             >
               <Trash2 size={18} />
-              <span className="font-body_two">Excluir selecionadas</span>
+              <span className="font-body_two">{t('delete_selected')}</span>
             </button>
           </div>
         )}
@@ -97,7 +106,7 @@ export function PhotoGallery({
 
         {filteredPhotos?.length === 0 && (
           <div className="col-span-full text-center py-12 text-text/50">
-            Nenhuma foto encontrada para esta data.
+            {t('no_photos_for_date')}
           </div>
         )}
       </div>

@@ -8,10 +8,12 @@ import { cn } from '@/lib/cn';
 import Image from 'next/image';
 import { Link, usePathname } from '@/i18n/routing';
 import { DashboardContent } from '../../dashboard-content';
+import { useTranslations } from 'next-intl';
 
-const IS_INTERNATIONALIZATION_ENABLED = false;
+const IS_INTERNATIONALIZATION_ENABLED = true;
 
 export function HeaderMobile() {
+  const t = useTranslations('Header');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pathname = usePathname();
@@ -31,7 +33,7 @@ export function HeaderMobile() {
       <Link href={logoHref}>
         <Image
           src="/brand/logo.svg"
-          alt="Logo"
+          alt={t('logo_alt')}
           width={180}
           height={40}
           className="w-[150px] md:w-[180px]"
@@ -47,7 +49,7 @@ export function HeaderMobile() {
       </div>
 
       {isHomePage && (
-        <button className="text-primary z-20" onClick={toggleMenu} aria-label="Abrir menu">
+        <button className="text-primary z-20" onClick={toggleMenu} aria-label={t('open_menu_aria')}>
           {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       )}
@@ -59,31 +61,31 @@ export function HeaderMobile() {
         )}
       >
         <>
-          <a href="#benefits" className="text-black" onClick={toggleMenu} aria-label="Vantagens">
-            Vantagens
+          <a
+            href="#benefits"
+            className="text-black"
+            onClick={toggleMenu}
+            aria-label={t('advantages_aria')}
+          >
+            {t('advantages')}
           </a>
           <a
             href="#how-it-works"
             className="text-black"
             onClick={toggleMenu}
-            aria-label="Como funciona"
+            aria-label={t('how_it_works_aria')}
           >
-            Como funciona
+            {t('how_it_works')}
           </a>
-          <a
-            href="#faq"
-            className="text-black"
-            onClick={toggleMenu}
-            aria-label="Perguntas frequentes"
-          >
-            Perguntas frequentes
+          <a href="#faq" className="text-black" onClick={toggleMenu} aria-label={t('faq_aria')}>
+            {t('faq')}
           </a>
           <ButtonNavigation
             href="/sign-in"
             className="bg-gradient-primary text-white w-full justify-center mt-3"
-            aria-label="Acessar conta"
+            aria-label={t('access_account_aria')}
           >
-            <span className="font-semibold">Acessar conta</span>
+            <span className="font-semibold">{t('access_account')}</span>
             <Album />
           </ButtonNavigation>
         </>

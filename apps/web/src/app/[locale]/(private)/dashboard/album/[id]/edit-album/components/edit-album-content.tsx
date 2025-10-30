@@ -17,8 +17,11 @@ import { UndatedPhotosDialog } from './UndatedPhotosDialog';
 import { useEditAlbum } from '../hooks/useEditAlbum';
 import { FormProvider } from 'react-hook-form';
 import { AlbumDetailsCard } from './AlbumDetailsCard';
+import { useTranslations } from 'next-intl';
 
 export function EditAlbumContent() {
+  const t = useTranslations('EditAlbum');
+
   const {
     albumDates,
     selectedDate,
@@ -96,12 +99,10 @@ export function EditAlbumContent() {
           <div className="bg-background p-8 rounded-lg shadow-md">
             <div className="flex items-center gap-3 mb-3">
               <MapPin size={24} className="text-primary" />
-              <h2 className="font-title_three font-bold">Mapa</h2>
+              <h2 className="font-title_three font-bold">{t('map_title')}</h2>
             </div>
 
-            <p className="font-body_two text-text/75 mb-6">
-              Selecione os momentos da viagem e verifique a localização abaixo no mapa.
-            </p>
+            <p className="font-body_two text-text/75 mb-6">{t('map_description')}</p>
 
             <div className="w-full h-[300px] overflow-hidden rounded-md">
               <PhotoMap photos={filteredPhotos} onMarkerClick={handlePhotoClick} />
@@ -144,15 +145,15 @@ export function EditAlbumContent() {
                 'bg-primary text-background rounded px-8 py-3 hover:bg-primary/90 font-body_two flex items-center gap-2',
                 isLoading && 'opacity-50 cursor-not-allowed',
               )}
-              aria-label="Finalizar edição do álbum"
+              aria-label={t('publish_album_button_aria')}
             >
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Processando...</span>
+                  <span>{t('publishing_album_button')}</span>
                 </>
               ) : (
-                <span>Publicar álbum</span>
+                <span>{t('publish_album_button')}</span>
               )}
             </Button>
           </div>

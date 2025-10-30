@@ -1,34 +1,29 @@
-import { OnboardingStep } from '@/components/OnboardingModal/types';
+import { OnboardingStepData } from '@/components/OnboardingModal/types';
 
-export const onboardingSteps: OnboardingStep[] = [
+export const onboardingStepsData: OnboardingStepData[] = [
   {
-    title: 'Seus álbuns',
-    description:
-      'Na Dashboard, você encontrará todos os seus álbuns de viagem. Aqui você pode visualizar, gerenciar e compartilhar suas recordações com apenas alguns cliques.',
+    titleKey: 'step_1_title',
+    descriptionKey: 'step_1_description',
     image: '/pages/dashboard/onboarding/step-one.jpg',
   },
   {
-    title: 'Criando um novo álbum',
-    description:
-      'Para criar um álbum, clique em "Novo álbum", preencha as informações básicas e faça o pagamento. Cada álbum é uma nova oportunidade de organizar suas memórias de viagem.',
+    titleKey: 'step_2_title',
+    descriptionKey: 'step_2_description',
     video: '/pages/dashboard/onboarding/step-two.mp4',
   },
   {
-    title: 'Upload de fotos',
-    description:
-      'Após criar seu álbum, você poderá fazer o upload das suas melhores fotos. Selecione, arraste e solte suas imagens para começar a preencher seu álbum de viagem.',
+    titleKey: 'step_3_title',
+    descriptionKey: 'step_3_description',
     image: '/pages/dashboard/onboarding/step-three.jpg',
   },
   {
-    title: 'Organizando seu álbum',
-    description:
-      'Antes de publicar, organize suas fotos da maneira que desejar. Você pode reordenar, adicionar legendas e garantir que seu álbum conte a história perfeita da sua viagem.',
+    titleKey: 'step_4_title',
+    descriptionKey: 'step_4_description',
     video: '/pages/dashboard/onboarding/step-four.mp4',
   },
   {
-    title: 'Álbum publicado!',
-    description:
-      'Seu álbum está pronto para ser compartilhado! Envie o link para amigos e familiares para que todos possam reviver os momentos especiais da sua viagem.',
+    titleKey: 'step_5_title',
+    descriptionKey: 'step_5_description',
     video: '/pages/dashboard/onboarding/step-five.mp4',
   },
 ];
