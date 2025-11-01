@@ -6,9 +6,13 @@ import { Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ShareButtonsProps } from './types';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
+import { useParams } from 'next/navigation';
 
 export function ShareButtons({ url, title, description, ownerName }: ShareButtonsProps) {
   const t = useTranslations('PublicAlbum.ShareModal');
+  const { capture } = usePostHog();
+  const { id: albumId } = useParams();
   const urlWithShareFlag = `${url}?share=true`;
 
   const shareText = description
@@ -19,6 +23,15 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
     whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + urlWithShareFlag)}`,
   };
 
+  const handleWhatsAppShare = () => {
+    capture('album_shared', {
+      album_id: albumId,
+      share_method: 'whatsapp',
+      album_title: title,
+    });
+    window.open(shareLinks.whatsapp, '_blank');
+  };
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -26,6 +39,12 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           title: `${title} | Polotrip`,
           text: shareText,
           url: urlWithShareFlag,
+        });
+
+        capture('album_shared', {
+          album_id: albumId,
+          share_method: 'native_share',
+          album_title: title,
         });
       } catch (error) {
         if ((error as Error).name === 'AbortError') {
@@ -37,7 +56,24 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
     } else {
       navigator.clipboard.writeText(url);
       toast.success(t('link_copied_toast'));
+
+      capture('album_shared', {
+        album_id: albumId,
+        share_method: 'copy_link_fallback',
+        album_title: title,
+      });
     }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(urlWithShareFlag);
+    toast.success(t('link_copied_toast'));
+
+    capture('album_shared', {
+      album_id: albumId,
+      share_method: 'copy_link',
+      album_title: title,
+    });
   };
 
   return (
@@ -46,7 +82,7 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
         <Button
           variant="outline"
           size="icon"
-          onClick={() => window.open(shareLinks.whatsapp, '_blank')}
+          onClick={handleWhatsAppShare}
           className="h-12 w-12 hover:bg-secondary/50"
         >
           <Image src="/icons/whatsapp.svg" alt={t('whatsapp_icon_alt')} width={24} height={24} />
@@ -69,13 +105,7 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           readOnly
           className="flex-1 px-3 py-2 border rounded-md bg-background"
         />
-        <Button
-          variant="secondary"
-          onClick={() => {
-            navigator.clipboard.writeText(urlWithShareFlag);
-            toast.success(t('link_copied_toast'));
-          }}
-        >
+        <Button variant="secondary" onClick={handleCopyLink}>
           {t('copy_button')}
         </Button>
       </div>

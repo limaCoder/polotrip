@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QRCodeShare } from '@/components/QRCodeShare';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
+import { useEffect } from 'react';
 
 export function ShareAlbumModal({
   isOpen,
@@ -18,7 +20,26 @@ export function ShareAlbumModal({
 }: ShareAlbumModalProps) {
   const t = useTranslations('PublicAlbum.ShareModal');
   const { locale } = useParams();
+  const { capture } = usePostHog();
   const shareUrl = `${window.location.origin}/${locale}/album/${albumId}`;
+
+  useEffect(() => {
+    if (isOpen) {
+      capture('share_modal_opened', {
+        album_id: albumId,
+        album_title: albumTitle,
+      });
+    }
+  }, [isOpen, capture, albumId, albumTitle]);
+
+  const handleTabChange = (value: string) => {
+    if (value === 'qrcode') {
+      capture('qrcode_tab_viewed', {
+        album_id: albumId,
+        album_title: albumTitle,
+      });
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -27,7 +48,7 @@ export function ShareAlbumModal({
           <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="links" className="w-full">
+        <Tabs defaultValue="links" className="w-full" onValueChange={handleTabChange}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger className="data-[state=active]:bg-secondary" value="links">
               {t('links_tab')}

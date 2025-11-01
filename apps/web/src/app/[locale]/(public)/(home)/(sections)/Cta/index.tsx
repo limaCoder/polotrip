@@ -1,9 +1,9 @@
-import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { getAlbumPrice } from '@/utils/getAlbumPrice';
 import { CtaProps } from './types';
 import { PricingEnum } from '@/constants/pricingEnum';
 import { getTranslations } from 'next-intl/server';
+import { CtaButton } from './cta-button';
 
 export async function Cta({ locale }: CtaProps) {
   const t = await getTranslations('Home.Cta');
@@ -26,13 +26,12 @@ export async function Cta({ locale }: CtaProps) {
               price: _price => <strong>{formatCurrency(locale, albumPrice)}</strong>,
             })}
           </p>
-          <ButtonNavigation
-            href="/sign-in"
-            className="h-[60px] bg-primary text-white hover:bg-primary/90"
-            aria-label={t('start_now_button_aria')}
-          >
-            <span className="font-bold">{t('start_now_button')}</span>
-          </ButtonNavigation>
+          <CtaButton
+            buttonText={t('start_now_button')}
+            buttonAria={t('start_now_button_aria')}
+            locale={locale}
+            price={albumPrice}
+          />
         </div>
       </div>
     </section>

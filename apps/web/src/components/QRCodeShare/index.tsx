@@ -6,9 +6,13 @@ import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { QRCodeShareProps } from './types';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
+import { useParams } from 'next/navigation';
 
 export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
   const t = useTranslations('PublicAlbum.ShareModal');
+  const { capture } = usePostHog();
+  const { id: albumId } = useParams();
 
   const handleDownload = () => {
     try {
@@ -33,6 +37,12 @@ export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {
         downloadLink.download = 'polotrip-qrcode.png';
         downloadLink.href = pngFile;
         downloadLink.click();
+
+        capture('qrcode_downloaded', {
+          album_id: albumId,
+          qrcode_size: size,
+          file_format: 'png',
+        });
       };
 
       img.src = url;

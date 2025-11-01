@@ -1,13 +1,8 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { MotionSection } from '@/lib/motion/motion-components';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { faqData } from './data';
+import { FaqAccordion } from './faq-accordion';
 
 export async function Faq() {
   const t = await getTranslations('Home.Faq');
@@ -47,14 +42,7 @@ export async function Faq() {
         </div>
 
         <div className="flex flex-col w-full lg:w-3/5 justify-center">
-          <Accordion type="single" collapsible>
-            {questions.map((q, i) => (
-              <AccordionItem key={i} value={`item-${i + 1}`}>
-                <AccordionTrigger>{q.question}</AccordionTrigger>
-                <AccordionContent>{q.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <FaqAccordion questions={questions} />
         </div>
       </div>
     </MotionSection>

@@ -2,4 +2,11 @@ interface CtaProps {
   locale: string;
 }
 
-export type { CtaProps };
+interface CtaButtonProps {
+  buttonText: string;
+  buttonAria: string;
+  locale: string;
+  price: number;
+}
+
+export type { CtaProps, CtaButtonProps };

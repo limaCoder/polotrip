@@ -1,8 +1,8 @@
-import { ButtonNavigation } from '@/components/ButtonNavigation';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import { MotionDiv } from '@/lib/motion/motion-components';
 import { getTranslations } from 'next-intl/server';
 import { HeroPhotos } from './photos';
+import { HeroButtons } from './hero-buttons';
 
 export async function Hero() {
   const t = await getTranslations('Home.Hero');
@@ -38,20 +38,12 @@ export async function Hero() {
             transition={{ duration: 0.7 }}
             className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start"
           >
-            <ButtonNavigation
-              href="#how-it-works"
-              className="bg-primary text-white button-shadow"
-              aria-label={t('how_it_works_button_aria')}
-            >
-              <span className="font-bold">{t('how_it_works_button')}</span>
-            </ButtonNavigation>
-            <ButtonNavigation
-              href="/album/a9jrss8qhxerqnsglmpks2da"
-              className="bg-yellow text-black button-shadow"
-              aria-label={t('see_example_button_aria')}
-            >
-              <span className="font-bold">{t('see_example_button')}</span>
-            </ButtonNavigation>
+            <HeroButtons
+              howItWorksText={t('how_it_works_button')}
+              howItWorksAria={t('how_it_works_button_aria')}
+              seeExampleText={t('see_example_button')}
+              seeExampleAria={t('see_example_button_aria')}
+            />
           </MotionDiv>
         </div>
 
