@@ -14,6 +14,8 @@ import { Locale } from '@/i18n/types';
 import { cn } from '@/lib/cn';
 import { Toaster } from '@/components/ui/sooner';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { PostHogIdentifier } from '@/components/PostHogIdentifier';
+import { getCurrentUser } from '@/lib/auth/server';
 
 export async function generateMetadata({
   params,
@@ -65,12 +67,14 @@ export default async function RootLayout({
   }
 
   const messages = await getMessages();
+  const user = await getCurrentUser();
 
   return (
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
         <body className={cn(fontEpilogueVariable, 'antialiased font-epilogue')}>
           <Providers>
+            <PostHogIdentifier user={user} />
             <NuqsAdapter>{children}</NuqsAdapter>
           </Providers>
           <Toaster />

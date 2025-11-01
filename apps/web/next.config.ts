@@ -36,11 +36,21 @@ const nextConfig = {
       },
     ],
   },
+  // This is required to support PostHog trailing slash API requests
+  skipTrailingSlashRedirect: true,
   async rewrites() {
     return [
       {
         source: '/api/:path*',
         destination: `${env.NEXT_PUBLIC_API_URL}/api/:path*`,
+      },
+      {
+        source: '/ingest/static/:path*',
+        destination: 'https://us-assets.i.posthog.com/static/:path*',
+      },
+      {
+        source: '/ingest/:path*',
+        destination: 'https://us.i.posthog.com/:path*',
       },
     ];
   },

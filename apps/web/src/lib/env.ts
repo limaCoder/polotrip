@@ -6,6 +6,8 @@ export const env = createEnv({
     NEXT_PUBLIC_WEB_URL: z.string().url(),
     NEXT_PUBLIC_API_URL: z.string().url(),
     NEXT_PUBLIC_STRIPE_PUB_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().url(),
   },
 
   server: {
@@ -24,6 +26,8 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     SUPABASE_KEY: process.env.SUPABASE_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     // production
     NEXT_PUBLIC_WEB_URL:
       process.env.NEXT_PUBLIC_WEB_URL || `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
