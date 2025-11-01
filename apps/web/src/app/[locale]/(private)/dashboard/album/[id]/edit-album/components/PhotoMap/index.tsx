@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import { type PhotoMapProps } from './types';
 import type * as LeafletTypes from 'leaflet';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
+import { useParams } from 'next/navigation';
 
 let L: typeof LeafletTypes;
 if (typeof window !== 'undefined') {
@@ -13,6 +15,9 @@ if (typeof window !== 'undefined') {
 
 export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
   const t = useTranslations('EditAlbum.PhotoMap');
+  const { capture } = usePostHog();
+  const { id: albumId } = useParams();
+  const hasTrackedView = useRef(false);
 
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -44,6 +49,14 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
       }).addTo(map);
 
       mapInstanceRef.current = map;
+
+      if (!hasTrackedView.current) {
+        hasTrackedView.current = true;
+        capture('map_viewed', {
+          album_id: albumId,
+          photos_with_coordinates: photos.filter(p => p?.latitude && p?.longitude).length,
+        });
+      }
     }
 
     markersRef.current.forEach(marker => marker?.remove());
@@ -83,7 +96,7 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
     if (markers?.length > 0) {
       mapInstanceRef.current?.fitBounds(bounds, { padding: [30, 30] });
     }
-  }, [photos, onMarkerClick, t]);
+  }, [photos, onMarkerClick, t, capture, albumId]);
 
   return (
     <div

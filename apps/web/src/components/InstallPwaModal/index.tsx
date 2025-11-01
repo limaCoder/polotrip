@@ -13,11 +13,12 @@ import { InstallPwaModalProps } from './types';
 import { ExternalLink } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-export function InstallPwaModal({ isOpen, onClose }: InstallPwaModalProps) {
+export function InstallPwaModal({ isOpen, onClose, onInstall }: InstallPwaModalProps) {
   const t = useTranslations('Dashboard.install_pwa');
 
   const handleOpenInstallGuide = () => {
     window.open('https://www.installpwa.com/from/polotrip.com', '_blank');
+    onInstall?.();
     onClose();
   };
 

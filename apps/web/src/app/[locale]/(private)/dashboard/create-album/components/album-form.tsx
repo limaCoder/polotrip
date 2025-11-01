@@ -16,10 +16,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
+import { useState } from 'react';
 
 export function AlbumForm() {
   const t = useTranslations('CreateAlbum.form');
   const tPlanNames = useTranslations('PlanNames');
+  const { capture } = usePostHog();
+  const [hasInteractedWithText, setHasInteractedWithText] = useState(false);
 
   const {
     formState,
@@ -33,8 +37,27 @@ export function AlbumForm() {
     handlePlanChange,
   } = useAlbumForm();
 
+  const handleTextInputFocus = () => {
+    if (!hasInteractedWithText) {
+      setHasInteractedWithText(true);
+      capture('album_form_started', {
+        plan: selectedPlan,
+      });
+    }
+  };
+
+  const handleFormSubmit = (formData: FormData) => {
+    capture('album_form_submitted', {
+      plan: selectedPlan,
+      price: albumPrice,
+      has_cover_image: selectedImage !== null,
+      has_description: !!formData.get('description'),
+    });
+    formAction(formData);
+  };
+
   return (
-    <form action={formAction} className="bg-background p-8 rounded-lg shadow-md">
+    <form action={handleFormSubmit} className="bg-background p-8 rounded-lg shadow-md">
       <h1 className="font-title_three mb-6 font-bold">{t('title')}</h1>
 
       {formState?.hasError && (
@@ -78,6 +101,7 @@ export function AlbumForm() {
             type="text"
             placeholder={t('album_title_placeholder')}
             className="border border-text/25 rounded p-3 font-body_two text-sm"
+            onFocus={handleTextInputFocus}
           />
           {formState?.hasInvalidData && formState?.titleError && (
             <p className="text-sm text-red-500">{t('album_title_error')}</p>
@@ -107,6 +131,7 @@ export function AlbumForm() {
             name="description"
             placeholder={t('description_placeholder')}
             className="border border-text/25 rounded p-3 h-24 font-body_two text-sm"
+            onFocus={handleTextInputFocus}
           />
         </div>
 

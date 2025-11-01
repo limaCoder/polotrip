@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { InstallPwaModal } from '@/components/InstallPwaModal';
 import { ONBOARDING_COMPLETED_EVENT } from './onboarding-modal-wrapper';
+import { usePostHog } from '@/hooks/usePostHog';
 
 export function InstallPwaModalWrapper() {
   const [isOpen, setIsOpen] = useState(false);
+  const { capture } = usePostHog();
 
-  const checkAndShowPwaModal = () => {
+  const checkAndShowPwaModal = useCallback(() => {
     const hasSeenPwaInstall = localStorage.getItem('pwa-install') === 'completed';
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -16,8 +18,12 @@ export function InstallPwaModalWrapper() {
 
     if (!hasSeenPwaInstall && isMobile) {
       setIsOpen(true);
+      capture('pwa_install_prompt_shown', {
+        device_type: /iPad|Tablet/i.test(window.navigator.userAgent) ? 'tablet' : 'mobile',
+        user_agent: window.navigator.userAgent,
+      });
     }
-  };
+  }, [capture]);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem('onboarding') === 'completed';
@@ -35,12 +41,23 @@ export function InstallPwaModalWrapper() {
     return () => {
       window.removeEventListener(ONBOARDING_COMPLETED_EVENT, handleOnboardingCompleted);
     };
-  }, []);
+  }, [checkAndShowPwaModal]);
 
   const handleClose = () => {
     setIsOpen(false);
     localStorage.setItem('pwa-install', 'completed');
+
+    capture('pwa_install_dismissed', {
+      device_type: /iPad|Tablet/i.test(window.navigator.userAgent) ? 'tablet' : 'mobile',
+    });
   };
 
-  return <InstallPwaModal isOpen={isOpen} onClose={handleClose} />;
+  const handleInstall = () => {
+    capture('pwa_install_accepted', {
+      device_type: /iPad|Tablet/i.test(window.navigator.userAgent) ? 'tablet' : 'mobile',
+    });
+    handleClose();
+  };
+
+  return <InstallPwaModal isOpen={isOpen} onClose={handleClose} onInstall={handleInstall} />;
 }

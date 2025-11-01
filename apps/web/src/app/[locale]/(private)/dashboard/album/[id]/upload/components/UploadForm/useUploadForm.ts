@@ -19,11 +19,14 @@ import { albumKeys } from '@/hooks/network/keys/albumKeys';
 import { QueryClient } from '@tanstack/react-query';
 import { getAlbum } from '@/http/get-album';
 import { useTranslations } from 'next-intl';
+import { usePostHog } from '@/hooks/usePostHog';
 
 export function useUploadForm(options?: UseUploadFormOptions) {
   const { id: albumId, locale } = useParams<Params>();
   const queryClient = useMemo(() => new QueryClient(), []);
   const t = useTranslations('UploadFormHook');
+  const { capture } = usePostHog();
+  const uploadStartTimeRef = useRef<number>(0);
 
   const { data: albumData } = useQuery({
     queryKey: albumKeys.detail(albumId),
@@ -121,6 +124,12 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         error: null,
       });
 
+      capture('photos_selected', {
+        album_id: albumId,
+        photos_count: filesToAdd.length,
+        total_size_mb: (filesToAdd.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
+      });
+
       for (const photo of newPhotos) {
         try {
           const preview = await createPreviewUrlAsync(photo.file);
@@ -189,7 +198,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         }
       }
     },
-    [uploadFormState?.files, updateFiles, updateUploadFormState, albumData, t],
+    [uploadFormState?.files, updateFiles, updateUploadFormState, albumData, t, capture, albumId],
   );
 
   const removeFile = useCallback(
@@ -250,6 +259,13 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       isUploading: true,
       progress: 0,
       error: null,
+    });
+
+    uploadStartTimeRef.current = Date.now();
+    capture('upload_started', {
+      album_id: albumId,
+      photos_count: validFiles.length,
+      total_size_mb: (validFiles.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
     });
 
     try {
@@ -396,6 +412,14 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         progress: 100,
       });
 
+      const uploadDuration = ((Date.now() - uploadStartTimeRef.current) / 1000).toFixed(2);
+      capture('upload_completed', {
+        album_id: albumId,
+        photos_count: validFiles.length,
+        upload_duration_seconds: uploadDuration,
+        total_size_mb: (validFiles.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
+      });
+
       await queryClient.refetchQueries({
         queryKey: [
           albumKeys.all,
@@ -413,8 +437,14 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         richColors: true,
       });
     } catch (error) {
-      if (!(error instanceof Error && error.message.includes('photos per album exceeded'))) {
-        const limitMatch = (error as Error).message.match(/Limit of (\d+) photos/);
+      capture('upload_failed', {
+        album_id: albumId,
+        photos_count: validFiles.length,
+        error_message: error instanceof Error ? error.message : 'Unknown error',
+      });
+
+      if (error instanceof Error && !error.message.includes('photos per album exceeded')) {
+        const limitMatch = error.message.match(/Limit of (\d+) photos/);
         const photoLimit = limitMatch
           ? limitMatch[1]
           : albumData?.album.photoLimit?.toString() || '100';
@@ -440,6 +470,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     albumData,
     queryClient,
     t,
+    capture,
   ]);
 
   const handleUploadClick = useCallback(() => {
@@ -449,11 +480,16 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
     if (keepMetadata === null && checkForMetadata()) {
       updateUploadFormState({ showMetadataDialog: true });
+
+      capture('metadata_dialog_opened', {
+        album_id: albumId,
+        photos_count: files.length,
+      });
       return;
     }
 
     startUpload();
-  }, [uploadFormState, checkForMetadata, updateUploadFormState, startUpload]);
+  }, [uploadFormState, checkForMetadata, updateUploadFormState, startUpload, capture, albumId]);
 
   const handleKeepMetadata = useCallback(() => {
     updateUploadFormState({

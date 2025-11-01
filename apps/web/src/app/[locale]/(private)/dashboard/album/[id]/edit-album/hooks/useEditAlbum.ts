@@ -21,9 +21,11 @@ import {
   unsavedChangesReducer,
 } from '../reducers/unsavedChangesReducer';
 import { Params } from './types';
+import { usePostHog } from '@/hooks/usePostHog';
 
 export function useEditAlbum() {
   const { id, locale } = useParams<Params>();
+  const { capture } = usePostHog();
 
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
   const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);
@@ -196,8 +198,14 @@ export function useEditAlbum() {
       }
 
       setSelectedPhotos(prev => [...prev, photoId]);
+
+      capture('photo_selected', {
+        album_id: id,
+        photo_id: photoId,
+        selection_mode: 'single',
+      });
     },
-    [hasUnsavedChanges, selectedPhotos],
+    [hasUnsavedChanges, selectedPhotos, capture, id],
   );
 
   const handleDateSelect = useCallback(
@@ -214,9 +222,14 @@ export function useEditAlbum() {
         return;
       }
 
+      capture('timeline_viewed', {
+        album_id: id,
+        selected_date: date,
+      });
+
       await updateDateSelection(date);
     },
-    [hasUnsavedChanges, selectedDateLocal, updateDateSelection],
+    [hasUnsavedChanges, selectedDateLocal, updateDateSelection, capture, id],
   );
 
   const closeUnsavedChangesDialog = useCallback(() => {
@@ -302,6 +315,19 @@ export function useEditAlbum() {
         keepTouched: false,
       });
 
+      const editedFields = [];
+      if (data.dateTaken) editedFields.push('date');
+      if (data.locationName) editedFields.push('location');
+      if (data.description) editedFields.push('description');
+      if (data.latitude && data.longitude) editedFields.push('coordinates');
+
+      capture('photo_edited', {
+        album_id: id,
+        photo_id: selectedPhotos[0],
+        edited_fields: editedFields,
+        edit_mode: 'single',
+      });
+
       updatePhotoMutation.mutate({
         id: selectedPhotos[0],
         dateTaken: dateToAPIString(data.dateTaken),
@@ -311,7 +337,15 @@ export function useEditAlbum() {
         longitude: data.longitude || null,
       });
     },
-    [form, selectedPhotos, updatePhotoMutation, unsavedChangesState.isDialogOpen, dispatch],
+    [
+      form,
+      selectedPhotos,
+      updatePhotoMutation,
+      unsavedChangesState.isDialogOpen,
+      dispatch,
+      capture,
+      id,
+    ],
   );
 
   const handleSaveBatchEdit = useCallback(
@@ -351,12 +385,27 @@ export function useEditAlbum() {
         return;
       }
 
+      capture('photo_edited', {
+        album_id: id,
+        photos_count: selectedPhotos.length,
+        edited_fields: Object.keys(updateData),
+        edit_mode: 'batch',
+      });
+
       updatePhotoBatchMutation.mutate({
         ids: selectedPhotos,
         data: updateData,
       });
     },
-    [form, selectedPhotos, updatePhotoBatchMutation, unsavedChangesState.isDialogOpen, dispatch],
+    [
+      form,
+      selectedPhotos,
+      updatePhotoBatchMutation,
+      unsavedChangesState.isDialogOpen,
+      dispatch,
+      capture,
+      id,
+    ],
   );
 
   const handleDeletePhotos = useCallback(() => {
@@ -364,10 +413,15 @@ export function useEditAlbum() {
       return;
     }
 
+    capture('photo_deleted', {
+      album_id: id,
+      photos_count: selectedPhotos.length,
+    });
+
     deletePhotosMutation.mutate({
       photoIds: selectedPhotos,
     });
-  }, [deletePhotosMutation, selectedPhotos]);
+  }, [deletePhotosMutation, selectedPhotos, capture, id]);
 
   const handleCancelEdit = useCallback(() => {
     form.reset(
@@ -388,8 +442,12 @@ export function useEditAlbum() {
   }, [form]);
 
   const handleFinish = useCallback(() => {
+    capture('edit_completed', {
+      album_id: id,
+    });
+
     publishAlbumMutation.mutate();
-  }, [publishAlbumMutation]);
+  }, [publishAlbumMutation, capture, id]);
 
   const hasUndatedPhotos = useCallback(() => {
     const dates = albumDatesQuery.data?.dates || [];
@@ -398,12 +456,20 @@ export function useEditAlbum() {
   }, [albumDatesQuery.data?.dates]);
 
   const openFinishDialog = useCallback(() => {
+    capture('finish_edit_clicked', {
+      album_id: id,
+      has_undated_photos: hasUndatedPhotos(),
+    });
+
     if (hasUndatedPhotos()) {
+      capture('undated_photos_dialog_opened', {
+        album_id: id,
+      });
       setIsUndatedPhotosDialogOpen(true);
       return;
     }
     setIsFinishDialogOpen(true);
-  }, [hasUndatedPhotos]);
+  }, [hasUndatedPhotos, capture, id]);
 
   const closeFinishDialog = useCallback(() => {
     setIsFinishDialogOpen(false);

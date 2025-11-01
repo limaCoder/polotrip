@@ -13,23 +13,29 @@ import { cn } from '@/lib/cn';
 import { OnboardingModalProps } from './types';
 import { useTranslations } from 'next-intl';
 
-export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps) {
+export function OnboardingModal({ steps, isOpen, onClose, onStepChange }: OnboardingModalProps) {
   const t = useTranslations('Dashboard.onboarding');
   const [currentStep, setCurrentStep] = useState(0);
 
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
 
+  const handleStepChange = (newStep: number) => {
+    setCurrentStep(newStep);
+    onStepChange?.(newStep);
+  };
+
   const handleNext = () => {
     if (isLastStep) {
       onClose();
     } else {
-      setCurrentStep(prev => prev + 1);
+      handleStepChange(currentStep + 1);
     }
   };
 
   const handlePrevious = () => {
-    setCurrentStep(prev => Math.max(0, prev - 1));
+    const newStep = Math.max(0, currentStep - 1);
+    handleStepChange(newStep);
   };
 
   return (
@@ -50,7 +56,7 @@ export function OnboardingModal({ steps, isOpen, onClose }: OnboardingModalProps
                   'h-2 w-2 rounded-full border-secondary border cursor-pointer transition-all duration-300 hover:scale-125',
                   index === currentStep ? 'bg-primary' : 'bg-muted',
                 )}
-                onClick={() => setCurrentStep(index)}
+                onClick={() => handleStepChange(index)}
                 role="button"
                 tabIndex={0}
                 aria-label={t('go_to_step_aria', { step: index + 1 })}

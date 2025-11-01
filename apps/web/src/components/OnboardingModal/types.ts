@@ -22,6 +22,7 @@ interface OnboardingModalProps {
   steps: OnboardingStep[];
   isOpen: boolean;
   onClose: () => void;
+  onStepChange?: (step: number) => void;
 }
 
 export type { OnboardingStep, OnboardingModalProps, OnboardingStepData };
