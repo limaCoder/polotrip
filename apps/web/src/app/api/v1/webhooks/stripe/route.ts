@@ -7,10 +7,13 @@ import { albums, payments } from '@polotrip/db/schema';
 import { eq } from 'drizzle-orm';
 import { QueryClient } from '@tanstack/react-query';
 import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import PostHogClient from '@/lib/posthog';
 
 const secret = env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(req: Request) {
+  let posthog: ReturnType<typeof PostHogClient> | null = null;
+
   try {
     const body = await req.text();
     const signature = (await headers()).get('stripe-signature');
@@ -22,16 +25,17 @@ export async function POST(req: Request) {
     const event = stripe.webhooks.constructEvent(body, signature, secret);
 
     const queryClient = new QueryClient();
+    posthog = PostHogClient();
 
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
+        const userId = session.metadata?.userId;
+        const albumId = session.metadata?.albumId;
 
         if (session.payment_status === 'paid') {
-          const albumId = session.metadata?.albumId;
-
           if (albumId) {
-            await db
+            const [updatedPayment] = await db
               .update(payments)
               .set({ status: 'completed' })
               .where(eq(payments.gatewayPaymentId, session.id))
@@ -46,6 +50,25 @@ export async function POST(req: Request) {
             queryClient.invalidateQueries({
               queryKey: [albumKeys.all],
             });
+
+            if (userId && updatedPayment) {
+              posthog.capture({
+                distinctId: userId,
+                event: 'payment_completed',
+                properties: {
+                  album_id: albumId,
+                  payment_id: updatedPayment.id,
+                  payment_method: updatedPayment.paymentMethod,
+                  amount: updatedPayment.amount / 100, // Convert from cents
+                  currency: updatedPayment.currency,
+                  gateway: 'stripe',
+                  is_additional_photos: updatedPayment.isAdditionalPhotos,
+                  additional_photos_count: updatedPayment.additionalPhotosCount,
+                  payment_type: 'credit_card',
+                  session_id: session.id,
+                },
+              });
+            }
 
             /* if (session.customer_details?.email) {
               await sendEmail({
@@ -68,6 +91,21 @@ export async function POST(req: Request) {
           if (hostedVoucherUrl) {
             const userEmail = session.customer_details?.email;
 
+            if (userId && albumId) {
+              posthog.capture({
+                distinctId: userId,
+                event: 'boleto_generated',
+                properties: {
+                  album_id: albumId,
+                  session_id: session.id,
+                  payment_intent_id: paymentIntent.id,
+                  amount: paymentIntent.amount ? paymentIntent.amount / 100 : null,
+                  currency: paymentIntent.currency,
+                  has_voucher_url: !!hostedVoucherUrl,
+                },
+              });
+            }
+
             if (userEmail) {
               console.log(`Boleto generated for ${userEmail}: ${hostedVoucherUrl}`);
 
@@ -79,38 +117,58 @@ export async function POST(req: Request) {
             }
           }
         }
+
         break;
       }
 
       case 'checkout.session.expired': {
         const session = event.data.object;
+        const userId = session.metadata?.userId;
+        const albumId = session.metadata?.albumId;
 
         if (session.payment_status === 'unpaid') {
-          const albumId = session.metadata?.albumId;
           console.log(`Checkout expired for album: ${albumId}`);
 
-          await db
+          const [updatedPayment] = await db
             .update(payments)
             .set({ status: 'expired' })
             .where(eq(payments.gatewayPaymentId, session.id))
             .returning();
 
+          if (userId && albumId && updatedPayment) {
+            posthog.capture({
+              distinctId: userId,
+              event: 'checkout_expired',
+              properties: {
+                album_id: albumId,
+                payment_id: updatedPayment.id,
+                payment_method: updatedPayment.paymentMethod,
+                amount: updatedPayment.amount / 100,
+                currency: updatedPayment.currency,
+                session_id: session.id,
+                expiration_reason: 'session_timeout',
+              },
+            });
+          }
+
           if (albumId) {
             await db.delete(albums).where(eq(albums.id, albumId));
           }
         }
+
         break;
       }
 
       case 'checkout.session.async_payment_succeeded': {
         const session = event.data.object;
+        const userId = session.metadata?.userId;
+        const albumId = session.metadata?.albumId;
 
         if (session.payment_status === 'paid') {
-          const albumId = session.metadata?.albumId;
           console.log(`Boleto payment confirmed for album: ${albumId}`);
 
           if (albumId) {
-            await db
+            const [updatedPayment] = await db
               .update(payments)
               .set({ status: 'completed' })
               .where(eq(payments.gatewayPaymentId, session.id))
@@ -122,6 +180,25 @@ export async function POST(req: Request) {
               .where(eq(albums.id, albumId))
               .returning();
 
+            if (userId && updatedPayment) {
+              posthog.capture({
+                distinctId: userId,
+                event: 'payment_completed',
+                properties: {
+                  album_id: albumId,
+                  payment_id: updatedPayment.id,
+                  payment_method: updatedPayment.paymentMethod,
+                  amount: updatedPayment.amount / 100,
+                  currency: updatedPayment.currency,
+                  gateway: 'stripe',
+                  is_additional_photos: updatedPayment.isAdditionalPhotos,
+                  additional_photos_count: updatedPayment.additionalPhotosCount,
+                  payment_type: 'boleto',
+                  session_id: session.id,
+                },
+              });
+            }
+
             if (session.customer_details?.email) {
               /* await sendEmail({
                 to: session.customer_details.email,
@@ -131,21 +208,40 @@ export async function POST(req: Request) {
             }
           }
         }
+
         break;
       }
 
       case 'checkout.session.async_payment_failed': {
         const session = event.data.object;
+        const userId = session.metadata?.userId;
+        const albumId = session.metadata?.albumId;
 
         if (session.payment_status === 'unpaid') {
-          const albumId = session.metadata?.albumId;
           console.log(`Boleto payment failed for album: ${albumId}`);
 
-          await db
+          const [updatedPayment] = await db
             .update(payments)
             .set({ status: 'failed' })
             .where(eq(payments.gatewayPaymentId, session.id))
             .returning();
+
+          if (userId && albumId && updatedPayment) {
+            posthog.capture({
+              distinctId: userId,
+              event: 'payment_failed',
+              properties: {
+                album_id: albumId,
+                payment_id: updatedPayment.id,
+                payment_method: updatedPayment.paymentMethod,
+                amount: updatedPayment.amount / 100,
+                currency: updatedPayment.currency,
+                payment_type: 'boleto',
+                failure_reason: 'boleto_expired',
+                session_id: session.id,
+              },
+            });
+          }
 
           /* if (session.customer_details?.email) {
             await sendEmail({
@@ -155,6 +251,7 @@ export async function POST(req: Request) {
             });
           } */
         }
+
         break;
       }
 
@@ -162,12 +259,31 @@ export async function POST(req: Request) {
         const paymentIntent = event.data.object;
         const paymentIntentId = paymentIntent.id;
         const albumId = paymentIntent.metadata?.albumId;
+        const userId = paymentIntent.metadata?.userId;
 
-        await db
+        const [updatedPayment] = await db
           .update(payments)
           .set({ status: 'failed' })
           .where(eq(payments.gatewayPaymentId, paymentIntentId))
           .returning();
+
+        if (userId && updatedPayment) {
+          posthog.capture({
+            distinctId: userId,
+            event: 'payment_failed',
+            properties: {
+              album_id: albumId || null,
+              payment_id: updatedPayment.id,
+              payment_method: updatedPayment.paymentMethod,
+              amount: updatedPayment.amount / 100,
+              currency: updatedPayment.currency,
+              payment_type: 'credit_card',
+              failure_reason: paymentIntent.last_payment_error?.message || 'unknown',
+              failure_code: paymentIntent.last_payment_error?.code || null,
+              payment_intent_id: paymentIntentId,
+            },
+          });
+        }
 
         if (albumId) {
           await db.delete(albums).where(eq(albums.id, albumId));
@@ -180,12 +296,30 @@ export async function POST(req: Request) {
         const paymentIntent = event.data.object;
         const paymentIntentId = paymentIntent.id;
         const albumId = paymentIntent.metadata?.albumId;
+        const userId = paymentIntent.metadata?.userId;
 
-        await db
+        const [updatedPayment] = await db
           .update(payments)
           .set({ status: 'canceled' })
           .where(eq(payments.gatewayPaymentId, paymentIntentId))
           .returning();
+
+        if (userId && updatedPayment) {
+          posthog.capture({
+            distinctId: userId,
+            event: 'payment_canceled',
+            properties: {
+              album_id: albumId || null,
+              payment_id: updatedPayment.id,
+              payment_method: updatedPayment.paymentMethod,
+              amount: updatedPayment.amount / 100,
+              currency: updatedPayment.currency,
+              payment_type: 'credit_card',
+              cancellation_reason: 'user_canceled',
+              payment_intent_id: paymentIntentId,
+            },
+          });
+        }
 
         if (albumId) {
           await db.delete(albums).where(eq(albums.id, albumId));
@@ -196,7 +330,26 @@ export async function POST(req: Request) {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
+
         console.log(`Subscription canceled: ${subscription.id}`);
+
+        const customerId = subscription.customer?.toString();
+        const userId = subscription.metadata?.userId;
+
+        if (userId) {
+          posthog.capture({
+            distinctId: userId,
+            event: 'subscription_canceled',
+            properties: {
+              subscription_id: subscription.id,
+              customer_id: customerId || null,
+              canceled_at: subscription.canceled_at
+                ? new Date(subscription.canceled_at * 1000).toISOString()
+                : null,
+              cancellation_reason: 'user_requested',
+            },
+          });
+        }
 
         break;
       }
@@ -215,5 +368,9 @@ export async function POST(req: Request) {
       },
       { status: 500 },
     );
+  } finally {
+    if (posthog) {
+      await posthog.shutdown();
+    }
   }
 }
