@@ -31,6 +31,12 @@ function PostHogPageView() {
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    const optOutFromStorage = localStorage.getItem('posthog_opt_out') === 'true';
+    const hasDeclinedCookie = document.cookie.includes('cookieConsent=declined');
+    const hasAcceptedCookie = document.cookie.includes('cookieConsent=true');
+
+    const shouldOptOut = optOutFromStorage || hasDeclinedCookie || !hasAcceptedCookie;
+
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
       api_host: '/ingest',
       ui_host: 'https://us.posthog.com',
@@ -39,7 +45,16 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       capture_pageleave: true,
       capture_exceptions: true,
       debug: process.env.NODE_ENV === 'development',
+      opt_out_capturing_by_default: shouldOptOut,
     });
+
+    if (shouldOptOut) {
+      localStorage.setItem('posthog_opt_out', 'true');
+      posthog.opt_out_capturing();
+    } else if (hasAcceptedCookie) {
+      localStorage.setItem('posthog_opt_out', 'false');
+      posthog.opt_in_capturing();
+    }
   }, []);
 
   return (

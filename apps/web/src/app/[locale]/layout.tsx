@@ -16,6 +16,7 @@ import { Toaster } from '@/components/ui/sooner';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { PostHogIdentifier } from '@/components/PostHogIdentifier';
 import { getCurrentUser } from '@/lib/auth/server';
+import { CookieConsentWrapper } from '@/components/blocks/cookie-consent-wrapper';
 
 export async function generateMetadata({
   params,
@@ -78,6 +79,7 @@ export default async function RootLayout({
             <NuqsAdapter>{children}</NuqsAdapter>
           </Providers>
           <Toaster />
+          <CookieConsentWrapper />
         </body>
       </NextIntlClientProvider>
     </html>

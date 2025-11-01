@@ -119,8 +119,91 @@ export default async function PrivacyPolicy() {
               <li>{t('sections.third_party_integrations.items.google_login')}</li>
               <li>{t('sections.third_party_integrations.items.stripe_payments')}</li>
               <li>{t('sections.third_party_integrations.items.leaflet_maps')}</li>
+              <li>{t('sections.third_party_integrations.items.posthog_analytics')}</li>
             </ul>
             <p className="mt-2">{t('sections.third_party_integrations.content_2')}</p>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold mb-4">
+              {t('sections.cookies_and_analytics.title')}
+            </h2>
+            <p>{t('sections.cookies_and_analytics.content_1')}</p>
+
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-3">
+                {t('sections.cookies_and_analytics.cookies_usage.title')}
+              </h3>
+              <p className="mb-2">{t('sections.cookies_and_analytics.cookies_usage.content')}</p>
+              <ul className="list-disc ml-6 mt-2">
+                <li>
+                  {t('sections.cookies_and_analytics.cookies_usage.items.remember_preferences')}
+                </li>
+                <li>{t('sections.cookies_and_analytics.cookies_usage.items.store_consent')}</li>
+                <li>{t('sections.cookies_and_analytics.cookies_usage.items.maintain_session')}</li>
+              </ul>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-3">
+                {t('sections.cookies_and_analytics.analytics_posthog.title')}
+              </h3>
+              <p className="mb-2">
+                {t('sections.cookies_and_analytics.analytics_posthog.content_1')}
+              </p>
+              <ul className="list-disc ml-6 mt-2 mb-4">
+                <li>{t('sections.cookies_and_analytics.analytics_posthog.items.improve_ux')}</li>
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.items.understand_behavior')}
+                </li>
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.items.identify_errors')}
+                </li>
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.items.optimize_features')}
+                </li>
+              </ul>
+              <p className="mb-2">
+                {t('sections.cookies_and_analytics.analytics_posthog.content_2')}
+              </p>
+              <ul className="list-disc ml-6 mt-2 mb-4">
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.data_collected.page_views')}
+                </li>
+                <li>
+                  {t(
+                    'sections.cookies_and_analytics.analytics_posthog.data_collected.user_interactions',
+                  )}
+                </li>
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.data_collected.device_info')}
+                </li>
+                <li>
+                  {t('sections.cookies_and_analytics.analytics_posthog.data_collected.error_logs')}
+                </li>
+                <li>
+                  {t(
+                    'sections.cookies_and_analytics.analytics_posthog.data_collected.performance_metrics',
+                  )}
+                </li>
+              </ul>
+              <p className="mb-4">
+                {t('sections.cookies_and_analytics.analytics_posthog.content_3')}
+              </p>
+              <div className="mt-4">
+                <h4 className="text-base font-semibold mb-2">
+                  {t('sections.cookies_and_analytics.analytics_posthog.opt_out.title')}
+                </h4>
+                <p>{t('sections.cookies_and_analytics.analytics_posthog.opt_out.content')}</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-3">
+                {t('sections.cookies_and_analytics.consent_management.title')}
+              </h3>
+              <p>{t('sections.cookies_and_analytics.consent_management.content')}</p>
+            </div>
           </div>
 
           <div>

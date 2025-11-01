@@ -34,6 +34,15 @@
     "privacy_policy": "Privacy Policy",
     "cnpj": "CNPJ: 57.996.361/0001-57"
   },
+  "CookieConsent": {
+    "title": "We use cookies",
+    "description": "We use cookies to ensure you get the best experience on our website. For more information on how we use cookies, please see our cookie policy.",
+    "accept_button": "Accept",
+    "decline_button": "Decline",
+    "learn_more": "Learn more",
+    "by_accepting": "By clicking \"Accept\", you agree to our use of cookies.",
+    "by_accepting_short": "By clicking \"Accept\", you agree."
+  },
   "Home": {
     "Hero": {
       "title": "Keep memories that enchant",
@@ -732,12 +741,53 @@
         "items": {
           "google_login": "Social login via Google",
           "stripe_payments": "Payment processing via Stripe",
-          "leaflet_maps": "Leaflet for interactive maps"
+          "leaflet_maps": "Leaflet for interactive maps",
+          "posthog_analytics": "PostHog for product analytics and web analytics"
         },
         "content_2": "Each of these services has its own privacy policies, and we recommend that you consult them to understand how they handle your data."
       },
+      "cookies_and_analytics": {
+        "title": "8. Cookies and Analytics",
+        "content_1": "Polotrip uses cookies and analytics tools to improve your experience and understand how you use our service.",
+        "cookies_usage": {
+          "title": "Cookie Usage",
+          "content": "We use cookies to:",
+          "items": {
+            "remember_preferences": "Remember your language preferences and settings",
+            "store_consent": "Store your consent for cookie and analytics usage",
+            "maintain_session": "Maintain your authenticated user session"
+          }
+        },
+        "analytics_posthog": {
+          "title": "PostHog Analytics",
+          "content_1": "We use PostHog, a product analytics platform, to collect information about how you interact with our service. This helps us to:",
+          "items": {
+            "improve_ux": "Improve user experience",
+            "understand_behavior": "Understand how users navigate and use our features",
+            "identify_errors": "Identify and fix technical errors",
+            "optimize_features": "Optimize features and workflows"
+          },
+          "content_2": "PostHog collects information such as:",
+          "data_collected": {
+            "page_views": "Page views and navigation",
+            "user_interactions": "Interactions with buttons, forms, and features",
+            "device_info": "Device type, browser, and operating system",
+            "error_logs": "Technical error logs for diagnostics",
+            "performance_metrics": "Application performance metrics"
+          },
+          "content_3": "All collected information is anonymized whenever possible and does not include sensitive personal data such as passwords or payment information.",
+          "opt_out": {
+            "title": "Analytics Opt-Out",
+            "content": "You can opt out of PostHog tracking at any time through the cookie banner that appears on your first visit or by changing your preferences. When you opt out, we do not collect analytics data, although some cookies essential for the service to function are still necessary."
+          }
+        },
+        "consent_management": {
+          "title": "Consent Management",
+          "content": "Your consent for cookie and analytics usage is stored locally in your browser and can be changed at any time. You can review your preferences through the cookie banner or contact us for more information."
+        }
+      },
       "your_rights": {
-        "title": "8. Your Rights",
+        "title": "9. Your Rights",
         "content_1": "You have the following rights regarding your personal data:",
         "items": {
           "access_data": "Access and receive a copy of your personal data",
@@ -749,15 +799,15 @@
         "content_2": "To exercise any of these rights, please contact us at help@polotrip.com."
       },
       "data_retention": {
-        "title": "9. Data Retention",
+        "title": "10. Data Retention",
         "content": "We retain your personal data only for as long as necessary to provide the requested services or to comply with legal obligations. When you delete your account, your albums and photos will be removed from our servers within 30 days."
       },
       "policy_changes": {
-        "title": "10. Changes to this Policy",
+        "title": "11. Changes to this Policy",
         "content": "We may update this Privacy Policy from time to time. We will notify you of significant changes through a notice on our website or by email."
       },
       "contact": {
-        "title": "11. Contact",
+        "title": "12. Contact",
         "content": "If you have questions or concerns about this Privacy Policy or how we handle your data, please contact us at privacy@polotrip.com."
       }
     }

@@ -34,6 +34,15 @@
     "privacy_policy": "Política de Privacidade",
     "cnpj": "CNPJ: 57.996.361/0001-57"
   },
+  "CookieConsent": {
+    "title": "Usamos cookies",
+    "description": "Usamos cookies para garantir que você tenha a melhor experiência em nosso site. Para mais informações sobre como usamos cookies, consulte nossa política de cookies.",
+    "accept_button": "Aceitar",
+    "decline_button": "Recusar",
+    "learn_more": "Saiba mais",
+    "by_accepting": "Ao clicar em \"Aceitar\", você concorda com o uso de cookies.",
+    "by_accepting_short": "Ao clicar em \"Aceitar\", você concorda."
+  },
   "Home": {
     "Hero": {
       "title": "Guarde memórias que encantam",
@@ -732,12 +741,53 @@
         "items": {
           "google_login": "Login social via Google",
           "stripe_payments": "Processamento de pagamentos via Stripe",
-          "leaflet_maps": "Leaflet para mapas interativos"
+          "leaflet_maps": "Leaflet para mapas interativos",
+          "posthog_analytics": "PostHog para analytics de produto e web analytics"
         },
         "content_2": "Cada um desses serviços tem suas próprias políticas de privacidade, e recomendamos que você as consulte para entender como tratam seus dados."
       },
+      "cookies_and_analytics": {
+        "title": "8. Cookies e Analytics",
+        "content_1": "O Polotrip utiliza cookies e ferramentas de analytics para melhorar sua experiência e entender como você usa nosso serviço.",
+        "cookies_usage": {
+          "title": "Uso de Cookies",
+          "content": "Utilizamos cookies para:",
+          "items": {
+            "remember_preferences": "Lembrar suas preferências de idioma e configurações",
+            "store_consent": "Armazenar seu consentimento para uso de cookies e analytics",
+            "maintain_session": "Manter sua sessão de usuário autenticada"
+          }
+        },
+        "analytics_posthog": {
+          "title": "PostHog Analytics",
+          "content_1": "Utilizamos o PostHog, uma plataforma de product analytics, para coletar informações sobre como você interage com nosso serviço. Isso nos ajuda a:",
+          "items": {
+            "improve_ux": "Melhorar a experiência do usuário",
+            "understand_behavior": "Entender como os usuários navegam e usam nossos recursos",
+            "identify_errors": "Identificar e corrigir erros técnicos",
+            "optimize_features": "Otimizar funcionalidades e fluxos de trabalho"
+          },
+          "content_2": "O PostHog coleta informações como:",
+          "data_collected": {
+            "page_views": "Visualizações de página e navegação",
+            "user_interactions": "Interações com botões, formulários e funcionalidades",
+            "device_info": "Tipo de dispositivo, navegador e sistema operacional",
+            "error_logs": "Logs de erros técnicos para diagnóstico",
+            "performance_metrics": "Métricas de desempenho da aplicação"
+          },
+          "content_3": "Todas as informações coletadas são anonimizadas sempre que possível e não incluem dados pessoais sensíveis como senhas ou informações de pagamento.",
+          "opt_out": {
+            "title": "Opt-Out de Analytics",
+            "content": "Você pode recusar o tracking do PostHog a qualquer momento através do banner de cookies que aparece em sua primeira visita ou alterando suas preferências. Quando você opta por não participar, não coletamos dados de analytics, embora alguns cookies essenciais para o funcionamento do serviço ainda sejam necessários."
+          }
+        },
+        "consent_management": {
+          "title": "Gerenciamento de Consentimento",
+          "content": "Seu consentimento para uso de cookies e analytics é armazenado localmente em seu navegador e pode ser alterado a qualquer momento. Você pode revisar suas preferências através do banner de cookies ou entrar em contato conosco para mais informações."
+        }
+      },
       "your_rights": {
-        "title": "8. Seus Direitos",
+        "title": "9. Seus Direitos",
         "content_1": "Você tem os seguintes direitos em relação aos seus dados pessoais:",
         "items": {
           "access_data": "Acessar e receber uma cópia de seus dados pessoais",
@@ -749,15 +799,15 @@
         "content_2": "Para exercer qualquer desses direitos, entre em contato conosco através do e-mail help@polotrip.com."
       },
       "data_retention": {
-        "title": "9. Retenção de Dados",
+        "title": "10. Retenção de Dados",
         "content": "Mantemos seus dados pessoais apenas pelo tempo necessário para fornecer os serviços solicitados ou para cumprir obrigações legais. Quando você exclui sua conta, seus álbuns e fotos serão removidos de nossos servidores dentro de 30 dias."
       },
       "policy_changes": {
-        "title": "10. Alterações nesta Política",
+        "title": "11. Alterações nesta Política",
         "content": "Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos você sobre alterações significativas através de um aviso em nosso site ou por e-mail."
       },
       "contact": {
-        "title": "11. Contato",
+        "title": "12. Contato",
         "content": "Se você tiver dúvidas ou preocupações sobre esta Política de Privacidade ou sobre como tratamos seus dados, entre em contato conosco em privacy@polotrip.com."
       }
     }
