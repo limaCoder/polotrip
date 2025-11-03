@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
   "tasks": {
     "dev": {
       "cache": false,
@@ -10,15 +11,35 @@
     },
     "build": {
       "outputs": ["dist/**", "storybook-static/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "dependsOn": ["^build"]
     },
     "lint": {
       "dependsOn": ["^lint"]
     },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
     "release": {
       "dependsOn": ["build"],
       "outputs": ["dist/**"],
       "cache": false
+    },
+    "db:push": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
