@@ -40,7 +40,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "~9.4.0",
-    "@polotrip/eslint-config": "workspace:*",
     "@polotrip/ts-config": "workspace:*",
     "drizzle-kit": "~0.30.4",
     "tsup": "8.2.4"

@@ -1,16 +1,25 @@
-import { albums } from './albums';
-import { photos } from './photos';
-import { payments } from './payments';
-import { users, sessions, accounts, verifications } from './auth-schema';
+import { albums } from "./albums";
+import { accounts, sessions, users, verifications } from "./auth-schema";
+import { payments } from "./payments";
+import { photos } from "./photos";
 
 const schema = {
-  users: users,
-  albums: albums,
-  photos: photos,
-  payments: payments,
-  sessions: sessions,
-  accounts: accounts,
-  verifications: verifications,
+  users,
+  albums,
+  photos,
+  payments,
+  sessions,
+  accounts,
+  verifications,
 };
 
-export { schema, users, albums, photos, payments, sessions, accounts, verifications };
+export {
+  schema,
+  users,
+  albums,
+  photos,
+  payments,
+  sessions,
+  accounts,
+  verifications,
+};

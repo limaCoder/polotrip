@@ -1,8 +1,13 @@
-import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
-import { albums } from '../schema/albums';
-import { photos } from '../schema/photos';
-import { payments } from '../schema/payments';
-import { users, sessions, accounts, verifications } from '../schema/auth-schema';
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import type { albums } from "../schema/albums";
+import type {
+  accounts,
+  sessions,
+  users,
+  verifications,
+} from "../schema/auth-schema";
+import type { payments } from "../schema/payments";
+import type { photos } from "../schema/photos";
 
 export type User = InferSelectModel<typeof users>;
 export type Album = InferSelectModel<typeof albums>;
@@ -35,8 +40,13 @@ export interface PaymentWithUser extends Payment {
   album?: Album;
 }
 
-export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
-export type PaymentMethod = 'credit_card' | 'pix';
-export type PaymentGateway = 'stripe' | 'mercadopago';
+export type PaymentStatus =
+  | "pending"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "refunded";
+export type PaymentMethod = "credit_card" | "pix";
+export type PaymentGateway = "stripe" | "mercadopago";
 
-export type AlbumStatus = 'draft' | 'published';
+export type AlbumStatus = "draft" | "published";
