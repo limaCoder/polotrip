@@ -1,40 +1,42 @@
-'use client';
+"use client";
 
-import { CityUnscrambleGameProps } from './types';
-import { useCityUnscrambleGame } from './useCityUnscrambleGame';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import type { CityUnscrambleGameProps } from "./types";
+import { useCityUnscrambleGame } from "./useCityUnscrambleGame";
 
 export function CityUnscrambleGame({ className }: CityUnscrambleGameProps) {
-  const t = useTranslations('UploadPage.CityUnscrambleGame');
-  const { score, input, currentCity, checkAnswer, handleInputChange } = useCityUnscrambleGame();
+  const t = useTranslations("UploadPage.CityUnscrambleGame");
+  const { score, input, currentCity, checkAnswer, handleInputChange } =
+    useCityUnscrambleGame();
 
   return (
     <div className={className}>
-      <div className="text-center mb-4">
-        <h3 className="font-medium mb-1">{t('title')}</h3>
-        <p className="text-2xl font-bold mb-2">{currentCity.scrambled}</p>
-        <p className="text-sm text-gray-500">{currentCity.hint}</p>
+      <div className="mb-4 text-center">
+        <h3 className="mb-1 font-medium">{t("title")}</h3>
+        <p className="mb-2 font-bold text-2xl">{currentCity.scrambled}</p>
+        <p className="text-gray-500 text-sm">{currentCity.hint}</p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-2 mb-4">
+      <div className="mb-4 flex flex-col gap-2 lg:flex-row">
         <input
+          className="flex-1 rounded-md border px-3 py-2"
+          onChange={handleInputChange}
+          onKeyUp={(e) => e.key === "Enter" && checkAnswer()}
+          placeholder={t("placeholder")}
           type="text"
           value={input}
-          onChange={handleInputChange}
-          onKeyUp={e => e.key === 'Enter' && checkAnswer()}
-          className="flex-1 border rounded-md px-3 py-2"
-          placeholder={t('placeholder')}
         />
         <button
+          className="rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-primary/90"
           onClick={checkAnswer}
-          className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+          type="button"
         >
-          {t('check_button')}
+          {t("check_button")}
         </button>
       </div>
 
       <p className="text-center text-sm">
-        {t('score')}: <span className="font-bold">{score}</span>
+        {t("score")}: <span className="font-bold">{score}</span>
       </p>
     </div>
   );

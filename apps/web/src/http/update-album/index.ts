@@ -1,5 +1,5 @@
-import { api } from '../api';
-import { UpdateAlbumRequest, UpdateAlbumResponse } from './types';
+import { api } from "../api";
+import type { UpdateAlbumRequest, UpdateAlbumResponse } from "./types";
 
 export async function updateAlbum({
   params,
@@ -14,7 +14,6 @@ export async function updateAlbum({
 
     return response;
   } catch (error) {
-    console.error('Failed to update album:', error);
     throw new Error(`Failed to update album: ${error}`);
   }
 }

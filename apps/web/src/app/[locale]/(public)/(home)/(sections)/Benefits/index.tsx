@@ -1,27 +1,27 @@
-import { MotionSection } from '@/lib/motion/motion-components';
-import { BenefitsGrid } from './grid';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from "next-intl/server";
+import { MotionSection } from "@/lib/motion/motion-components";
+import { BenefitsGrid } from "./grid";
 
 export async function Benefits() {
-  const t = await getTranslations('Home.Benefits');
+  const t = await getTranslations("Home.Benefits");
 
   return (
     <MotionSection
-      initial={{ opacity: 0, y: 35 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-      className="py-8 lg:py-16 bg-secondary-10 lg:bg-background"
+      className="bg-secondary-10 py-8 lg:bg-background lg:py-16"
       id="benefits"
+      initial={{ opacity: 0, y: 35 }}
+      transition={{ duration: 0.7 }}
+      whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="container mx-auto px-4 lg:px-9">
-        <h2 className="font-title_two text-primary text-center font-bold mb-4 md:mb-12">
-          {t('title')}
+        <h2 className="mb-4 text-center font-bold font-title_two text-primary md:mb-12">
+          {t("title")}
         </h2>
 
         <BenefitsGrid />
 
-        <p className="md:mt-12 text-center text-sm max-w-2xl mx-auto text-gray-600 mt-8">
-          {t('description')}
+        <p className="mx-auto mt-8 max-w-2xl text-center text-gray-600 text-sm md:mt-12">
+          {t("description")}
         </p>
       </div>
     </MotionSection>

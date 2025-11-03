@@ -1,7 +1,7 @@
-interface FinishEditDialogProps {
+type FinishEditDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-}
+};
 
 export type { FinishEditDialogProps };

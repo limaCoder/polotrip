@@ -1,8 +1,8 @@
-import { type Photo } from '@polotrip/db/models';
+import type { Photo } from "@polotrip/db/models";
 
-interface PhotoMapProps {
+type PhotoMapProps = {
   photos: Photo[];
   onMarkerClick?: (photoId: string) => void;
-}
+};
 
 export type { PhotoMapProps };

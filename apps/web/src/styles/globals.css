@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-primary: #03aed2;
@@ -12,7 +12,7 @@
   --color-text-opacity-25: #08171c40;
   --color-gradient-primary: #2980b9, #2c3e50;
 
-  --background-image-home-cta: url('/pages/home/cta-section.png');
+  --background-image-home-cta: url("/pages/home/cta-section.png");
 }
 
 @layer base {
@@ -47,7 +47,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
   }
 
   .font-heading {
@@ -148,7 +147,7 @@
   }
 
   .leaflet-popup-content:has(p) {
-    margin: 15px 24px 25px 20px!important;
+    margin: 15px 24px 25px 20px !important;
   }
 
   .leaflet-popup-close-button {
@@ -158,7 +157,7 @@
   }
 
   button.active-tv-mode:active svg {
-    color: var(--color-background)!important;
+    color: var(--color-background) !important;
   }
 }
 

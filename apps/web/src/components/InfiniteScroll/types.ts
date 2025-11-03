@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-interface InfiniteScrollProps {
+type InfiniteScrollProps = {
   fetchNextPage: () => void;
   hasNextPage?: boolean;
   isFetching: boolean;
@@ -10,6 +10,6 @@ interface InfiniteScrollProps {
   loadingComponent?: ReactNode;
   loadingMessage?: string;
   hasLoadingMessage?: boolean;
-}
+};
 
 export type { InfiniteScrollProps };

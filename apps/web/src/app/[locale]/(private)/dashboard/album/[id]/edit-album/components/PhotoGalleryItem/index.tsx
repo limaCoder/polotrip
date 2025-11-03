@@ -1,8 +1,8 @@
-import { cn } from '@/lib/cn';
-import { type PhotoGalleryItemProps } from './types';
-import Image from 'next/image';
-import { Check } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Check } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { cn } from "@/lib/cn";
+import type { PhotoGalleryItemProps } from "./types";
 
 export function PhotoGalleryItem({
   photo,
@@ -10,46 +10,50 @@ export function PhotoGalleryItem({
   isModified,
   togglePhotoSelection,
 }: PhotoGalleryItemProps) {
-  const t = useTranslations('EditAlbum.PhotoGalleryItem');
+  const t = useTranslations("EditAlbum.PhotoGalleryItem");
   const isLocationsMetadataAvailable = photo?.latitude && photo?.longitude;
 
   return (
     <div
-      key={photo?.id}
       className={cn(
-        'aspect-square rounded-sm relative group overflow-hidden cursor-pointer',
-        isSelected && 'ring-4 ring-primary',
-        isModified && 'ring-2 ring-green-500',
+        "group relative aspect-square cursor-pointer overflow-hidden rounded-sm",
+        isSelected && "ring-4 ring-primary",
+        isModified && "ring-2 ring-green-500"
       )}
+      key={photo?.id}
       onClick={() => togglePhotoSelection(photo?.id)}
     >
       <Image
-        src={photo?.imageUrl}
-        alt={photo?.originalFileName || t('alt_text', { id: photo?.id })}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        placeholder="blur"
+        alt={photo?.originalFileName || t("alt_text", { id: photo?.id })}
         blurDataURL="data:image/gif;base64,R0lGODlhZABkAIEAAMbGxgAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQACAAAACwAAAAAZABkAEAIoQABCBxIsKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTqlzJsqXLlzBjypxJs6bNmzhz6tzJs6"
+        className="object-cover"
+        fill
+        placeholder="blur"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        src={photo?.imageUrl}
       />
 
       {isSelected && (
-        <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
+        <div className="absolute top-2 right-2 rounded-full bg-primary p-1 text-white">
           <Check size={16} />
         </div>
       )}
 
       {isModified && !isSelected && (
-        <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
+        <div className="absolute top-2 right-2 rounded-full bg-green-500 p-1 text-white">
           <Check size={16} />
         </div>
       )}
 
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
         {isLocationsMetadataAvailable ? (
-          <div className="text-white text-sm text-center">{t('location_data_present')}</div>
+          <div className="text-center text-sm text-white">
+            {t("location_data_present")}
+          </div>
         ) : (
-          <div className="text-white text-sm text-center">{t('location_data_absent')}</div>
+          <div className="text-center text-sm text-white">
+            {t("location_data_absent")}
+          </div>
         )}
       </div>
     </div>

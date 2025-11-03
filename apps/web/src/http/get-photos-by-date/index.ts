@@ -1,5 +1,5 @@
-import { api } from '../api';
-import { GetPhotosByDateRequest, GetPhotosByDateResponse } from './types';
+import { api } from "../api";
+import type { GetPhotosByDateRequest, GetPhotosByDateResponse } from "./types";
 
 export async function getPhotosByDate({
   params,
@@ -8,9 +8,12 @@ export async function getPhotosByDate({
   try {
     const { albumId } = params;
 
-    const data = await api.get<GetPhotosByDateResponse>(`v1/albums/${albumId}/photos-by-date`, {
-      searchParams: query,
-    });
+    const data = await api.get<GetPhotosByDateResponse>(
+      `v1/albums/${albumId}/photos-by-date`,
+      {
+        searchParams: query,
+      }
+    );
 
     return data;
   } catch (error) {

@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { usePostHog } from '@/hooks/usePostHog';
-import { FaqAccordionProps } from './types';
+} from "@/components/ui/accordion";
+import { usePostHog } from "@/hooks/usePostHog";
+import type { FaqAccordionProps } from "./types";
 
 export function FaqAccordion({ questions }: FaqAccordionProps) {
   const { capture } = usePostHog();
 
   const handleValueChange = (value: string) => {
     if (value) {
-      const index = parseInt(value.replace('item-', '')) - 1;
+      const index = Number.parseInt(value.replace("item-", ""), 10) - 1;
       const question = questions[index];
 
       if (question) {
-        capture('faq_item_clicked', {
+        capture("faq_item_clicked", {
           question_index: index + 1,
           question_text: question.question,
           total_questions: questions.length,
@@ -28,9 +28,9 @@ export function FaqAccordion({ questions }: FaqAccordionProps) {
   };
 
   return (
-    <Accordion type="single" collapsible onValueChange={handleValueChange}>
-      {questions.map((q, i) => (
-        <AccordionItem key={i} value={`item-${i + 1}`}>
+    <Accordion collapsible onValueChange={handleValueChange} type="single">
+      {questions.map((q) => (
+        <AccordionItem key={q.question} value={`item-${q.question}`}>
           <AccordionTrigger>{q.question}</AccordionTrigger>
           <AccordionContent>{q.answer}</AccordionContent>
         </AccordionItem>

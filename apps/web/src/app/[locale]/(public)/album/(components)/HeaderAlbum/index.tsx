@@ -1,19 +1,23 @@
-import { HeaderAlbumDesktop } from './Desktop';
-import { HeaderAlbumMobile } from './Mobile';
-import { HeaderAlbumProps } from './types';
+import { HeaderAlbumDesktop } from "./Desktop";
+import { HeaderAlbumMobile } from "./Mobile";
+import type { HeaderAlbumProps } from "./types";
 
-export function HeaderAlbum({ albumTitle, albumDescription, albumOwnerName }: HeaderAlbumProps) {
+export function HeaderAlbum({
+  albumTitle,
+  albumDescription,
+  albumOwnerName,
+}: HeaderAlbumProps) {
   return (
-    <header className="relative z-20 w-full max-w-7xl mx-auto px-4 lg:px-9 py-4 flex justify-between items-center">
+    <header className="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 lg:px-9">
       <HeaderAlbumDesktop
-        albumTitle={albumTitle}
         albumDescription={albumDescription}
         albumOwnerName={albumOwnerName}
+        albumTitle={albumTitle}
       />
       <HeaderAlbumMobile
-        albumTitle={albumTitle}
         albumDescription={albumDescription}
         albumOwnerName={albumOwnerName}
+        albumTitle={albumTitle}
       />
     </header>
   );

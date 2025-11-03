@@ -4,12 +4,12 @@ type UserDataState = {
   usernameInitials: string | undefined;
 };
 
-interface HomeContentProps {
+type HomeContentProps = {
   isHome?: boolean;
-}
+};
 
-interface HeaderDesktopProps {
+type HeaderDesktopProps = {
   isHome?: boolean;
-}
+};
 
 export type { HeaderDesktopProps, HomeContentProps, UserDataState };

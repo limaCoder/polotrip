@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import 'leaflet/dist/leaflet.css';
-import { type PhotoMapProps } from './types';
-import type * as LeafletTypes from 'leaflet';
-import { useTranslations } from 'next-intl';
-import { usePostHog } from '@/hooks/usePostHog';
-import { useParams } from 'next/navigation';
+import { useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
+import type * as LeafletTypes from "leaflet";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { usePostHog } from "@/hooks/usePostHog";
+import type { PhotoMapProps } from "./types";
 
 let L: typeof LeafletTypes;
-if (typeof window !== 'undefined') {
-  L = require('leaflet');
+if (typeof window !== "undefined") {
+  L = require("leaflet");
 }
 
 export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
-  const t = useTranslations('EditAlbum.PhotoMap');
+  const t = useTranslations("EditAlbum.PhotoMap");
   const { capture } = usePostHog();
   const { id: albumId } = useParams();
   const hasTrackedView = useRef(false);
@@ -24,11 +24,11 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
   const markersRef = useRef<L.Marker[]>([]);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !L) return;
+    if (typeof window === "undefined" || !L) return;
 
     const DefaultIcon = L.icon({
-      iconUrl: '/img/marker-icon.png',
-      shadowUrl: '/img/marker-shadow.png',
+      iconUrl: "/img/marker-icon.png",
+      shadowUrl: "/img/marker-shadow.png",
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
@@ -42,7 +42,7 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
     if (!mapInstanceRef.current) {
       const map = L.map(mapRef.current).setView([0, 0], 2);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
@@ -52,18 +52,22 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
 
       if (!hasTrackedView.current) {
         hasTrackedView.current = true;
-        capture('map_viewed', {
+        capture("map_viewed", {
           album_id: albumId,
-          photos_with_coordinates: photos.filter(p => p?.latitude && p?.longitude).length,
+          photos_with_coordinates: photos.filter(
+            (p) => p?.latitude && p?.longitude
+          ).length,
         });
       }
     }
 
-    markersRef.current.forEach(marker => marker?.remove());
+    markersRef.current.forEach((marker) => {
+      marker?.remove();
+    });
     markersRef.current = [];
 
     const photosWithCoordinates = photos?.filter(
-      photo => photo?.latitude !== null && photo?.longitude !== null,
+      (photo) => photo?.latitude !== null && photo?.longitude !== null
     );
 
     if (photosWithCoordinates?.length === 0) {
@@ -74,14 +78,14 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
     const markers: L.Marker[] = [];
     const bounds = L.latLngBounds([]);
 
-    photosWithCoordinates?.forEach(photo => {
+    photosWithCoordinates?.forEach((photo) => {
       if (photo?.latitude !== null && photo?.longitude !== null) {
         const marker = L.marker([photo?.latitude, photo?.longitude])
           .addTo(mapInstanceRef.current!)
-          .bindPopup(photo?.locationName || t('unnamed_location'));
+          .bindPopup(photo?.locationName || t("unnamed_location"));
 
         if (onMarkerClick) {
-          marker.on('click', () => {
+          marker.on("click", () => {
             onMarkerClick(photo?.id);
           });
         }
@@ -100,9 +104,9 @@ export function PhotoMap({ photos, onMarkerClick }: PhotoMapProps) {
 
   return (
     <div
+      className="relative z-1 h-full w-full overflow-hidden rounded-md"
       ref={mapRef}
-      className="w-full h-full rounded-md overflow-hidden relative z-1"
-      style={{ minHeight: '300px' }}
+      style={{ minHeight: "300px" }}
     />
   );
 }

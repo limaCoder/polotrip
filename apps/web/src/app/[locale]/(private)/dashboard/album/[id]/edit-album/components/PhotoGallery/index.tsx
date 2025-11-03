@@ -1,10 +1,10 @@
-import { SkeletonList } from '@/components/SkeletonList';
-import { type PhotoGalleryProps } from './types';
-import { PhotoGalleryPagination } from '../PhotoGalleryPagination';
-import { PhotoGalleryItem } from '../PhotoGalleryItem';
-import { Trash2, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { Trash2, X } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { SkeletonList } from "@/components/SkeletonList";
+import { PhotoGalleryItem } from "../PhotoGalleryItem";
+import { PhotoGalleryPagination } from "../PhotoGalleryPagination";
+import type { PhotoGalleryProps } from "./types";
 
 export function PhotoGallery({
   filteredPhotos,
@@ -19,41 +19,41 @@ export function PhotoGallery({
   onPageChange,
   onDeletePhotos,
 }: PhotoGalleryProps) {
-  const t = useTranslations('EditAlbum.PhotoGallery');
+  const t = useTranslations("EditAlbum.PhotoGallery");
   const { locale } = useParams();
 
   const formattedSelectedDate = selectedDate
     ? new Date(selectedDate)
         .toLocaleDateString(locale as string, {
-          month: 'long',
-          year: 'numeric',
+          month: "long",
+          year: "numeric",
         })
         .charAt(0)
         .toUpperCase() +
       new Date(selectedDate)
         .toLocaleDateString(locale as string, {
-          month: 'long',
-          year: 'numeric',
+          month: "long",
+          year: "numeric",
         })
         .slice(1)
-    : t('no_date_defined');
+    : t("no_date_defined");
 
   return (
-    <div className="bg-background p-8 rounded-lg shadow-md">
+    <div className="rounded-lg bg-background p-8 shadow-md">
       <div className="mb-3">
-        <h2 className="font-title_three font-bold mb-1">{t('title')}</h2>
-        <p className="font-body_two text-text/75">{t('description')}</p>
+        <h2 className="mb-1 font-bold font-title_three">{t("title")}</h2>
+        <p className="font-body_two text-text/75">{t("description")}</p>
       </div>
 
-      <div className="flex justify-between items-startmd:items-center mb-6 flex-col md:flex-row gap-4">
+      <div className="mb-6 flex flex-col items-startmd:items-center justify-between gap-4 md:flex-row">
         <p className="font-body_two">
-          <span className="text-primary font-bold">
+          <span className="font-bold text-primary">
             {(pagination?.total || filteredPhotos.length) === 1
-              ? t('photo_count_in_date_singular', {
+              ? t("photo_count_in_date_singular", {
                   count: pagination?.total || filteredPhotos.length,
                   date: formattedSelectedDate,
                 })
-              : t('photo_count_in_date_plural', {
+              : t("photo_count_in_date_plural", {
                   count: pagination?.total || filteredPhotos.length,
                   date: formattedSelectedDate,
                 })}
@@ -61,38 +61,40 @@ export function PhotoGallery({
         </p>
 
         {selectedPhotos.length > 0 && (
-          <div className="flex gap-4 flex-col md:flex-row mb-4">
+          <div className="mb-4 flex flex-col gap-4 md:flex-row">
             <button
-              className="flex items-center gap-2 text-text/50 cursor-pointer hover:text-text/75"
+              aria-label={t("clear_selection_aria")}
+              className="flex cursor-pointer items-center gap-2 text-text/50 hover:text-text/75"
               onClick={deselectAllPhotos}
-              aria-label={t('clear_selection_aria')}
+              type="button"
             >
               <X size={18} />
-              <span className="font-body_two">{t('clear_selection')}</span>
+              <span className="font-body_two">{t("clear_selection")}</span>
             </button>
             <button
-              className="flex items-center gap-2 text-red-500 cursor-pointer hover:text-red-600"
+              aria-label={t("delete_selected_aria")}
+              className="flex cursor-pointer items-center gap-2 text-red-500 hover:text-red-600"
               onClick={onDeletePhotos}
-              aria-label={t('delete_selected_aria')}
+              type="button"
             >
               <Trash2 size={18} />
-              <span className="font-body_two">{t('delete_selected')}</span>
+              <span className="font-body_two">{t("delete_selected")}</span>
             </button>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {filteredPhotos?.map(photo => {
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {filteredPhotos?.map((photo) => {
           const isModified = getModifiedStatus(photo?.id);
           const isSelected = selectedPhotos?.includes(photo?.id);
 
           return (
             <PhotoGalleryItem
+              isModified={isModified}
+              isSelected={isSelected}
               key={photo?.id}
               photo={photo}
-              isSelected={isSelected}
-              isModified={isModified}
               togglePhotoSelection={togglePhotoSelection}
             />
           );
@@ -100,22 +102,25 @@ export function PhotoGallery({
 
         {isLoading && (
           <div className="col-span-full">
-            <SkeletonList count={5} className="h-[200px] w-[200px] rounded-sm" />
+            <SkeletonList
+              className="h-[200px] w-[200px] rounded-sm"
+              count={5}
+            />
           </div>
         )}
 
         {filteredPhotos?.length === 0 && (
-          <div className="col-span-full text-center py-12 text-text/50">
-            {t('no_photos_for_date')}
+          <div className="col-span-full py-12 text-center text-text/50">
+            {t("no_photos_for_date")}
           </div>
         )}
       </div>
 
       {pagination && (
         <PhotoGalleryPagination
-          pagination={pagination}
           currentPage={currentPage}
           onPageChange={onPageChange}
+          pagination={pagination}
         />
       )}
     </div>

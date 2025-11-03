@@ -1,27 +1,26 @@
-'use client';
+"use client";
 
-import { Upload, CreditCard, Loader, AlertCircle, Check } from 'lucide-react';
-
-import { Button } from '@/components/Button';
-import { cn } from '@/lib/cn';
-import { formatCurrency } from '@/utils/formatCurrency';
-import { MonthPicker } from '@/components/MonthPicker';
-import { useAlbumForm } from './use-album-form';
-import { getPlanName, getPlanPhotoLimit } from '@/utils/getAlbumPrice';
+import { AlertCircle, Check, CreditCard, Loader, Upload } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { Button } from "@/components/Button";
+import { MonthPicker } from "@/components/MonthPicker";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useTranslations } from 'next-intl';
-import { usePostHog } from '@/hooks/usePostHog';
-import { useState } from 'react';
+} from "@/components/ui/select";
+import { usePostHog } from "@/hooks/usePostHog";
+import { cn } from "@/lib/cn";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { getPlanName, getPlanPhotoLimit } from "@/utils/getAlbumPrice";
+import { useAlbumForm } from "./use-album-form";
 
 export function AlbumForm() {
-  const t = useTranslations('CreateAlbum.form');
-  const tPlanNames = useTranslations('PlanNames');
+  const t = useTranslations("CreateAlbum.form");
+  const tPlanNames = useTranslations("PlanNames");
   const { capture } = usePostHog();
   const [hasInteractedWithText, setHasInteractedWithText] = useState(false);
 
@@ -40,192 +39,221 @@ export function AlbumForm() {
   const handleTextInputFocus = () => {
     if (!hasInteractedWithText) {
       setHasInteractedWithText(true);
-      capture('album_form_started', {
+      capture("album_form_started", {
         plan: selectedPlan,
       });
     }
   };
 
   const handleFormSubmit = (formData: FormData) => {
-    capture('album_form_submitted', {
+    capture("album_form_submitted", {
       plan: selectedPlan,
       price: albumPrice,
       has_cover_image: selectedImage !== null,
-      has_description: !!formData.get('description'),
+      has_description: !!formData.get("description"),
     });
     formAction(formData);
   };
 
   return (
-    <form action={handleFormSubmit} className="bg-background p-8 rounded-lg shadow-md">
-      <h1 className="font-title_three mb-6 font-bold">{t('title')}</h1>
+    <form
+      action={handleFormSubmit}
+      className="rounded-lg bg-background p-8 shadow-md"
+    >
+      <h1 className="mb-6 font-bold font-title_three">{t("title")}</h1>
 
       {formState?.hasError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 flex items-start gap-2">
-          <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+        <div className="mb-4 flex items-start gap-2 rounded border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+          <AlertCircle className="mt-0.5 flex-shrink-0" size={18} />
           <div>
-            <p className="font-body_two font-bold">{t('error_title')}</p>
+            <p className="font-body_two font-bold">{t("error_title")}</p>
             <p className="text-sm">{formState?.errorMessage}</p>
             {formState?.titleError && (
-              <p className="text-sm mt-1">
-                {t('error_field_title')}: {formState?.titleError?.join(', ')}
+              <p className="mt-1 text-sm">
+                {t("error_field_title")}: {formState?.titleError?.join(", ")}
               </p>
             )}
             {formState?.dateError && (
-              <p className="text-sm mt-1">
-                {t('error_field_date')}: {formState?.dateError?.join(', ')}
+              <p className="mt-1 text-sm">
+                {t("error_field_date")}: {formState?.dateError?.join(", ")}
               </p>
             )}
             {formState?.descriptionError && (
               <p className="text-sm">
-                {t('error_field_description')}: {formState?.descriptionError?.join(', ')}
+                {t("error_field_description")}:{" "}
+                {formState?.descriptionError?.join(", ")}
               </p>
             )}
             {formState?.coverImageError && (
               <p className="text-sm">
-                {t('error_field_cover_image')}: {formState?.coverImageError?.join(', ')}
+                {t("error_field_cover_image")}:{" "}
+                {formState?.coverImageError?.join(", ")}
               </p>
             )}
           </div>
         </div>
       )}
 
-      <div className="space-y-4 mb-6">
+      <div className="mb-6 space-y-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="title" className="font-body_two">
-            {t('album_title_label')}
+          <label className="font-body_two" htmlFor="title">
+            {t("album_title_label")}
           </label>
           <input
+            className="rounded border border-text/25 p-3 font-body_two text-sm"
             id="title"
             name="title"
-            type="text"
-            placeholder={t('album_title_placeholder')}
-            className="border border-text/25 rounded p-3 font-body_two text-sm"
             onFocus={handleTextInputFocus}
+            placeholder={t("album_title_placeholder")}
+            type="text"
           />
           {formState?.hasInvalidData && formState?.titleError && (
-            <p className="text-sm text-red-500">{t('album_title_error')}</p>
+            <p className="text-red-500 text-sm">{t("album_title_error")}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="date" className="font-body_two">
-            {t('trip_date_label')}
+          <label className="font-body_two" htmlFor="date">
+            {t("trip_date_label")}
           </label>
           <MonthPicker
-            className="border border-text/25 rounded p-3 font-body_two text-sm"
+            className="rounded border border-text/25 p-3 font-body_two text-sm"
             name="date"
-            placeholder={t('trip_date_placeholder')}
+            placeholder={t("trip_date_placeholder")}
           />
           {formState?.hasInvalidData && formState?.dateError && (
-            <p className="text-sm text-red-500">{t('trip_date_error')}</p>
+            <p className="text-red-500 text-sm">{t("trip_date_error")}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="font-body_two">
-            {t('description_label')}
+          <label className="font-body_two" htmlFor="description">
+            {t("description_label")}
           </label>
           <textarea
+            className="h-24 rounded border border-text/25 p-3 font-body_two text-sm"
             id="description"
             name="description"
-            placeholder={t('description_placeholder')}
-            className="border border-text/25 rounded p-3 h-24 font-body_two text-sm"
             onFocus={handleTextInputFocus}
+            placeholder={t("description_placeholder")}
           />
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="cover" className="font-body_two">
-            {t('cover_label')}
+          <label className="font-body_two" htmlFor="cover">
+            {t("cover_label")}
           </label>
           <div
             className={cn(
-              'border border-dashed rounded p-3 h-[116px] flex flex-col items-center justify-center text-center relative',
-              selectedImage ? 'border-primary' : 'border-text/25',
+              "relative flex h-[116px] flex-col items-center justify-center rounded border border-dashed p-3 text-center",
+              selectedImage ? "border-primary" : "border-text/25"
             )}
           >
             <input
-              type="file"
+              accept="image/png, image/jpeg, image/jpg"
+              className="absolute inset-0 z-10 cursor-pointer opacity-0"
               id="cover"
               name="cover"
-              accept="image/png, image/jpeg, image/jpg"
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
               onChange={handleImageChange}
+              type="file"
             />
             {selectedImage ? (
               <>
-                <Check size={24} className="text-primary mb-2" />
+                <Check className="mb-2 text-primary" size={24} />
                 <p className="font-body_two text-sm">
-                  <span className="text-primary font-bold">{t('cover_selected_success')}</span>
+                  <span className="font-bold text-primary">
+                    {t("cover_selected_success")}
+                  </span>
                   <br />
-                  {t('cover_selected_instruction')}
+                  {t("cover_selected_instruction")}
                 </p>
-                <span className="text-primary text-xs mt-1">{selectedImage?.name}</span>
+                <span className="mt-1 text-primary text-xs">
+                  {selectedImage?.name}
+                </span>
               </>
             ) : (
               <>
-                <Upload size={24} className="text-text/25 mb-2" />
+                <Upload className="mb-2 text-text/25" size={24} />
                 <p className="font-body_two text-sm">
-                  <span className="text-primary font-bold">{t('cover_upload_prompt')}</span>
+                  <span className="font-bold text-primary">
+                    {t("cover_upload_prompt")}
+                  </span>
                   <br />
-                  {t('cover_upload_instruction')}
+                  {t("cover_upload_instruction")}
                 </p>
-                <span className="text-primary text-xs mt-1">{t('cover_upload_requirements')}</span>
+                <span className="mt-1 text-primary text-xs">
+                  {t("cover_upload_requirements")}
+                </span>
               </>
             )}
           </div>
-          <div className="mt-2 p-3 bg-secondary/5 rounded-lg">
-            <p className="text-sm font-body_two mb-2">{t('cover_recommendations_title')}</p>
-            <div className="flex flex-col lg:flex-row items-center gap-3">
-              <div className="w-[120px] h-[68px] bg-secondary/20 rounded flex items-center justify-center border border-dashed border-primary/30">
+          <div className="mt-2 rounded-lg bg-secondary/5 p-3">
+            <p className="mb-2 font-body_two text-sm">
+              {t("cover_recommendations_title")}
+            </p>
+            <div className="flex flex-col items-center gap-3 lg:flex-row">
+              <div className="flex h-[68px] w-[120px] items-center justify-center rounded border border-primary/30 border-dashed bg-secondary/20">
                 <span className="text-[10px] text-primary/70">
-                  {t('cover_recommendations_size')}
+                  {t("cover_recommendations_size")}
                 </span>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-sm text-text/70">{t('cover_recommendations_format')}</p>
-                <p className="text-sm text-text/70">{t('cover_recommendations_resolution')}</p>
-                <p className="text-sm text-text/70">{t('cover_recommendations_text')}</p>
+                <p className="text-sm text-text/70">
+                  {t("cover_recommendations_format")}
+                </p>
+                <p className="text-sm text-text/70">
+                  {t("cover_recommendations_resolution")}
+                </p>
+                <p className="text-sm text-text/70">
+                  {t("cover_recommendations_text")}
+                </p>
               </div>
             </div>
           </div>
           {formState?.hasInvalidData && formState?.coverImageError && (
-            <p className="text-sm text-red-500">{formState?.coverImageError?.join(', ')}</p>
+            <p className="text-red-500 text-sm">
+              {formState?.coverImageError?.join(", ")}
+            </p>
           )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="plan" className="font-body_two">
-            {t('plan_label')}
+          <label className="font-body_two" htmlFor="plan">
+            {t("plan_label")}
           </label>
-          <Select name="plan" value={selectedPlan} onValueChange={handlePlanChange}>
-            <SelectTrigger className="border border-text/25 rounded p-3 font-body_two text-sm">
-              <SelectValue placeholder={t('plan_placeholder')} />
+          <Select
+            name="plan"
+            onValueChange={handlePlanChange}
+            value={selectedPlan}
+          >
+            <SelectTrigger className="rounded border border-text/25 p-3 font-body_two text-sm">
+              <SelectValue placeholder={t("plan_placeholder")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="basic">{t('plan_basic')}</SelectItem>
-              <SelectItem value="standard">{t('plan_standard')}</SelectItem>
-              <SelectItem value="premium">{t('plan_premium')}</SelectItem>
+              <SelectItem value="basic">{t("plan_basic")}</SelectItem>
+              <SelectItem value="standard">{t("plan_standard")}</SelectItem>
+              <SelectItem value="premium">{t("plan_premium")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      <hr className="border-text/25 my-6" />
+      <hr className="my-6 border-text/25" />
 
-      <div className="flex flex-col items-start bg-secondary/5 p-6 rounded-lg mb-6">
-        <h2 className="font-body_one font-bold text-primary mb-6">{t('order_summary_title')}</h2>
+      <div className="mb-6 flex flex-col items-start rounded-lg bg-secondary/5 p-6">
+        <h2 className="mb-6 font-body_one font-bold text-primary">
+          {t("order_summary_title")}
+        </h2>
 
-        <div className="w-full flex justify-between">
+        <div className="flex w-full justify-between">
           <div>
             <h3 className="font-body_two font-bold">
-              {t('order_summary_album_creation', {
+              {t("order_summary_album_creation", {
                 planName: getPlanName(selectedPlan, tPlanNames),
               })}
             </h3>
             <p className="text-xs">
-              {t('order_summary_description', {
+              {t("order_summary_description", {
                 photoLimit: getPlanPhotoLimit(selectedPlan),
               })}
             </p>
@@ -238,20 +266,20 @@ export function AlbumForm() {
 
       <div className="flex flex-col gap-4">
         <Button
-          type="submit"
+          aria-label={t("pay_with_card_button_aria")}
+          className="flex items-center justify-center gap-3 rounded bg-primary p-3 text-background"
           disabled={isPending}
-          className="bg-primary text-background p-3 flex items-center justify-center gap-3 rounded"
-          aria-label={t('pay_with_card_button_aria')}
+          type="submit"
         >
           {isPending ? (
             <>
-              <Loader size={20} className="animate-spin" color="#F7FCFD" />
-              <span>{t('processing_button')}</span>
+              <Loader className="animate-spin" color="#F7FCFD" size={20} />
+              <span>{t("processing_button")}</span>
             </>
           ) : (
             <>
-              <CreditCard size={20} color="#F7FCFD" />
-              <span>{t('pay_with_card_button')}</span>
+              <CreditCard color="#F7FCFD" size={20} />
+              <span>{t("pay_with_card_button")}</span>
             </>
           )}
         </Button>

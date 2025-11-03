@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useCallback } from 'react';
-import { usePostHog as usePHHook } from 'posthog-js/react';
+import { usePostHog as usePHHook } from "posthog-js/react";
+import { useCallback } from "react";
 
 /**
  * Hook to use PostHog with TypeScript safety
@@ -14,14 +14,14 @@ export const usePostHog = () => {
     (eventName: string, properties?: Record<string, unknown>) => {
       posthog?.capture(eventName, properties);
     },
-    [posthog],
+    [posthog]
   );
 
   const identify = useCallback(
     (userId: string, properties?: Record<string, unknown>) => {
       posthog?.identify(userId, properties);
     },
-    [posthog],
+    [posthog]
   );
 
   const reset = useCallback(() => {
@@ -32,20 +32,27 @@ export const usePostHog = () => {
     (properties: Record<string, unknown>) => {
       posthog?.people.set(properties);
     },
-    [posthog],
+    [posthog]
   );
 
   const captureError = useCallback(
     (error: Error, context?: Record<string, unknown>) => {
-      posthog?.capture('$exception', {
+      posthog?.capture("$exception", {
         $exception_message: error.message,
         $exception_type: error.name,
         $exception_stacktrace: error.stack,
         ...context,
       });
     },
-    [posthog],
+    [posthog]
   );
 
-  return { capture, identify, reset, setPersonProperties, captureError, posthog };
+  return {
+    capture,
+    identify,
+    reset,
+    setPersonProperties,
+    captureError,
+    posthog,
+  };
 };

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useInfiniteScroll } from './use-infinite-scroll';
-import { InfiniteScrollProps } from './types';
+import type { InfiniteScrollProps } from "./types";
+import { useInfiniteScroll } from "./use-infinite-scroll";
 
 export function InfiniteScroll({
   fetchNextPage,

@@ -1,21 +1,23 @@
-'use client';
+"use client";
 
-import { Album } from 'lucide-react';
-import { ButtonNavigation } from '@/components/ButtonNavigation';
-import { cn } from '@/lib/cn';
-import { HomeContentProps } from '../../types';
-import { useTranslations } from 'next-intl';
-import { usePostHog } from '@/hooks/usePostHog';
+import { Album } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ButtonNavigation } from "@/components/ButtonNavigation";
+import { usePostHog } from "@/hooks/usePostHog";
+import { cn } from "@/lib/cn";
+import type { HomeContentProps } from "../../types";
 
-export function HomeContent({ isHome: isHomeFromParent = false }: HomeContentProps) {
-  const t = useTranslations('Header');
+export function HomeContent({
+  isHome: isHomeFromParent = false,
+}: HomeContentProps) {
+  const t = useTranslations("Header");
   const { capture } = usePostHog();
 
   const handleCtaClick = () => {
-    capture('header_cta_clicked', {
-      button_text: t('access_account'),
-      target: '/sign-in',
-      section: 'header',
+    capture("header_cta_clicked", {
+      button_text: t("access_account"),
+      target: "/sign-in",
+      section: "header",
     });
   };
 
@@ -23,16 +25,18 @@ export function HomeContent({ isHome: isHomeFromParent = false }: HomeContentPro
 
   return (
     <>
-      <p className={cn('block', isHomeFromParent && 'text-white drop-shadow-lg')}>
-        {t('create_albums_prompt')}
+      <p
+        className={cn("block", isHomeFromParent && "text-white drop-shadow-lg")}
+      >
+        {t("create_albums_prompt")}
       </p>
       <ButtonNavigation
+        aria-label={t("access_account_aria")}
+        className="button-shadow bg-gradient-primary text-white"
         href="/sign-in"
-        className="bg-gradient-primary text-white button-shadow"
-        aria-label={t('access_account_aria')}
         onClick={handleCtaClick}
       >
-        <span className="font-bold">{t('access_account')}</span>
+        <span className="font-bold">{t("access_account")}</span>
         <Album />
       </ButtonNavigation>
     </>

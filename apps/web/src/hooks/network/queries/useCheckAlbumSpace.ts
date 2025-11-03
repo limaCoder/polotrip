@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { checkAlbumSpace } from '@/http/check-album-space';
-import { albumKeys } from '../keys/albumKeys';
+import { checkAlbumSpace } from "@/http/check-album-space";
+import { albumKeys } from "../keys/albumKeys";
 
-interface UseCheckAlbumSpaceOptions {
+type UseCheckAlbumSpaceOptions = {
   albumId: string;
   enabled?: boolean;
-}
+};
 
-export function useCheckAlbumSpace({ albumId, enabled = true }: UseCheckAlbumSpaceOptions) {
+export function useCheckAlbumSpace({
+  albumId,
+  enabled = true,
+}: UseCheckAlbumSpaceOptions) {
   return useQuery({
     queryKey: albumKeys.space(albumId),
     queryFn: () => checkAlbumSpace({ params: { albumId } }),

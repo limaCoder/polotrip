@@ -1,4 +1,4 @@
-interface LocationResult {
+type LocationResult = {
   geometry: {
     coordinates: [number, number]; // [longitude, latitude]
   };
@@ -8,16 +8,27 @@ interface LocationResult {
     state?: string;
     country?: string;
   };
-}
+};
 
-interface LocationAutocompleteProps {
+type LocationAutocompleteProps = {
   value: string;
-  onChange: (value: string, latitude?: number | null, longitude?: number | null) => void;
+  onChange: (
+    value: string,
+    latitude?: number | null,
+    longitude?: number | null
+  ) => void;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
   latitude?: number | null;
   longitude?: number | null;
-}
+};
 
-export type { LocationResult, LocationAutocompleteProps };
+type InputSuffixProps = {
+  isLoadingSearch: boolean;
+  isLoadingReverseGeocode: boolean;
+  inputValue: string;
+  onClear: () => void;
+};
+
+export type { LocationResult, LocationAutocompleteProps, InputSuffixProps };

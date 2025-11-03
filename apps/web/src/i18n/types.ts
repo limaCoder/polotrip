@@ -1,4 +1,4 @@
-import { routing } from './routing';
+import type { routing } from "./routing";
 
 type Locale = (typeof routing.locales)[number];
 

@@ -1,10 +1,9 @@
-import { ReactNode } from 'react';
-import { notFound } from 'next/navigation';
-import { eq } from 'drizzle-orm';
-
-import { albums } from '@polotrip/db/schema';
-import { db } from '@polotrip/db';
-import { getCurrentUser } from '@/lib/auth/server';
+import { db } from "@polotrip/db";
+import { albums } from "@polotrip/db/schema";
+import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+import { getCurrentUser } from "@/lib/auth/server";
 
 export default async function AlbumProtectedLayout({
   children,
@@ -21,7 +20,7 @@ export default async function AlbumProtectedLayout({
     .select()
     .from(albums)
     .where(eq(albums.id, id))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (album?.userId !== user?.id) {
     notFound();

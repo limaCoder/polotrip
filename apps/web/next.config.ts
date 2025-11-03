@@ -1,6 +1,6 @@
-import { env } from '@/lib/env';
-import createNextIntlPlugin from 'next-intl/plugin';
-import { SizeLimit } from 'next';
+import type { SizeLimit } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+import { env } from "@/lib/env";
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -8,31 +8,31 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '5mb' as SizeLimit,
+      bodySizeLimit: "5mb" as SizeLimit,
     },
   },
   images: {
     remotePatterns: [
       {
-        hostname: 'images.unsplash.com',
+        hostname: "images.unsplash.com",
       },
       {
-        hostname: '*.googleusercontent.com',
+        hostname: "*.googleusercontent.com",
       },
       {
-        hostname: '*.stripe.com',
+        hostname: "*.stripe.com",
       },
       {
-        hostname: '*.stripe.network',
+        hostname: "*.stripe.network",
       },
       {
-        hostname: '*.supabase.co',
+        hostname: "*.supabase.co",
       },
       {
-        hostname: '*.r2.cloudflarestorage.com',
+        hostname: "*.r2.cloudflarestorage.com",
       },
       {
-        hostname: 'polotrip-albums-content-bucket.work',
+        hostname: "polotrip-albums-content-bucket.work",
       },
     ],
   },
@@ -41,55 +41,55 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         destination: `${env.NEXT_PUBLIC_API_URL}/api/:path*`,
       },
       {
-        source: '/ingest/static/:path*',
-        destination: 'https://us-assets.i.posthog.com/static/:path*',
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
       },
       {
-        source: '/ingest/:path*',
-        destination: 'https://us.i.posthog.com/:path*',
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
       },
     ];
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
+            key: "X-Frame-Options",
+            value: "DENY",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
           },
           {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains',
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
           },
         ],
       },
       {
-        source: '/sw.js',
+        source: "/sw.js",
         headers: [
           {
-            key: 'Content-Type',
-            value: 'application/javascript; charset=utf-8',
+            key: "Content-Type",
+            value: "application/javascript; charset=utf-8",
           },
           {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
           },
           {
-            key: 'Content-Security-Policy',
+            key: "Content-Security-Policy",
             value: "default-src 'self'; script-src 'self'",
           },
         ],

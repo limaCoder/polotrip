@@ -1,17 +1,25 @@
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 export default function NotFound() {
-  const t = useTranslations('AlbumNotFound');
+  const t = useTranslations("AlbumNotFound");
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <Image src="/brand/logo.svg" alt={t('logo_alt')} width={400} height={200} />
-      <h1 className="text-2xl mt-4">{t('title')}</h1>
-      <p className="text-sm mt-2">{t('description')}</p>
-      <Link href="/dashboard" className="text-sm mt-4 text-primary font-bold hover:underline">
-        {t('back_to_dashboard')}
+    <main className="flex h-screen flex-col items-center justify-center">
+      <Image
+        alt={t("logo_alt")}
+        height={200}
+        src="/brand/logo.svg"
+        width={400}
+      />
+      <h1 className="mt-4 text-2xl">{t("title")}</h1>
+      <p className="mt-2 text-sm">{t("description")}</p>
+      <Link
+        className="mt-4 font-bold text-primary text-sm hover:underline"
+        href="/dashboard"
+      >
+        {t("back_to_dashboard")}
       </Link>
     </main>
   );

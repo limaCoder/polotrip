@@ -1,17 +1,17 @@
-import { api } from '../api';
-import {
+import { api } from "../api";
+import type {
   GetSignedUrlsRequest,
   GetSignedUrlsResponse,
   SaveUploadedPhotosRequest,
   SaveUploadedPhotosResponse,
-} from './types';
+} from "./types";
 
 export async function getSignedUrls({
   params,
   body,
 }: GetSignedUrlsRequest): Promise<GetSignedUrlsResponse> {
   try {
-    return await api.post<GetSignedUrlsResponse>(`v1/albums/upload-urls`, {
+    return await api.post<GetSignedUrlsResponse>("v1/albums/upload-urls", {
       searchParams: params,
       json: body,
     });
@@ -24,7 +24,7 @@ export async function saveUploadedPhotos({
   body,
 }: SaveUploadedPhotosRequest): Promise<SaveUploadedPhotosResponse> {
   try {
-    return await api.post<SaveUploadedPhotosResponse>('v1/albums/photos/save', {
+    return await api.post<SaveUploadedPhotosResponse>("v1/albums/photos/save", {
       json: body,
     });
   } catch (error) {

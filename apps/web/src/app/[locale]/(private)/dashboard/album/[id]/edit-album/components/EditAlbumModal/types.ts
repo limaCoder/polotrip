@@ -1,4 +1,6 @@
-interface EditAlbumModalProps {
+import type { useTranslations } from "next-intl";
+
+type EditAlbumModalProps = {
   isOpen: boolean;
   onClose: () => void;
   albumId: string;
@@ -7,11 +9,22 @@ interface EditAlbumModalProps {
     description?: string | null;
     coverImageUrl?: string | null;
   };
-}
+};
 
-interface EditAlbumFormValues {
+type EditAlbumFormValues = {
   title: string;
   description: string;
-}
+};
 
-export type { EditAlbumModalProps, EditAlbumFormValues };
+type UploadAreaContentProps = {
+  isLoading: boolean;
+  isPending: boolean;
+  selectedImage: File | null;
+  t: ReturnType<typeof useTranslations>;
+};
+
+export type {
+  EditAlbumModalProps,
+  EditAlbumFormValues,
+  UploadAreaContentProps,
+};

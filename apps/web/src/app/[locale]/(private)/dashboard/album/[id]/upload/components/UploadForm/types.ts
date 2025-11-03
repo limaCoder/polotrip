@@ -21,13 +21,13 @@ type Params = {
   locale: string;
 };
 
-interface UseUploadFormOptions {
+type UseUploadFormOptions = {
   onSuccess?: () => void;
   maxConcurrentUploads?: number;
   redirectPath?: string;
-}
+};
 
-interface UploadFormState {
+type UploadFormState = {
   files: PhotoFile[];
   isUploading: boolean;
   progress: number;
@@ -35,21 +35,21 @@ interface UploadFormState {
   showMetadataDialog: boolean;
   keepMetadata: boolean | null;
   willMetadataBeRemoved: boolean | null;
-}
+};
 
-interface City {
+type City = {
   name: string;
   hint: string;
-}
+};
 
-interface GameState {
+type GameState = {
   score: number;
   currentCity: {
     original: string;
     scrambled: string;
     hint: string;
   };
-}
+};
 
 export type {
   PhotoFile,

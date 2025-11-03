@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const benefitNames = [
-  'organized_memories',
-  'interactive_map',
-  'privacy_guaranteed',
-  'no_space_limitations',
-  'narrative_experience',
-  'easy_sharing',
+  "organized_memories",
+  "interactive_map",
+  "privacy_guaranteed",
+  "no_space_limitations",
+  "narrative_experience",
+  "easy_sharing",
 ] as const;
 
 type BenefitName = (typeof benefitNames)[number];

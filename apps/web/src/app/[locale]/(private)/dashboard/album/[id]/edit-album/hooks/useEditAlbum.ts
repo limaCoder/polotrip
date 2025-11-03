@@ -1,38 +1,40 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, useCallback, useReducer } from 'react';
-import { useParams } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useQueryState } from 'nuqs';
-import { formSchema } from '../components/PhotoEditForm/types';
-import type { PhotoEditFormData } from '../components/PhotoEditForm/types';
-import { dateToAPIString } from '@/utils/dates';
-
-import { useGetAlbumDates } from '@/hooks/network/queries/useGetAlbumDates';
-import { useGetPhotosByDate } from '@/hooks/network/queries/useGetPhotosByDate';
-import { useUpdatePhoto } from '@/hooks/network/mutations/useUpdatePhoto';
-import { useUpdatePhotoBatch } from '@/hooks/network/mutations/useUpdatePhotoBatch';
-import { usePublishAlbum } from '@/hooks/network/mutations/usePublishAlbum';
-import { useDeletePhotos } from '@/hooks/network/mutations/useDeletePhotos';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
+import { useQueryState } from "nuqs";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDeletePhotos } from "@/hooks/network/mutations/useDeletePhotos";
+import { usePublishAlbum } from "@/hooks/network/mutations/usePublishAlbum";
+import { useUpdatePhoto } from "@/hooks/network/mutations/useUpdatePhoto";
+import { useUpdatePhotoBatch } from "@/hooks/network/mutations/useUpdatePhotoBatch";
+import { useGetAlbumDates } from "@/hooks/network/queries/useGetAlbumDates";
+import { useGetPhotosByDate } from "@/hooks/network/queries/useGetPhotosByDate";
+import { usePostHog } from "@/hooks/usePostHog";
+import { dateToAPIString } from "@/utils/dates";
+import type { PhotoEditFormData } from "../components/PhotoEditForm/types";
+import { formSchema } from "../components/PhotoEditForm/types";
 import {
   PendingActionTypeEnum,
   UnsavedChangesActionEnum,
   unsavedChangesReducer,
-} from '../reducers/unsavedChangesReducer';
-import { Params } from './types';
-import { usePostHog } from '@/hooks/usePostHog';
+} from "../reducers/unsavedChangesReducer";
+import type { Params } from "./types";
 
 export function useEditAlbum() {
   const { id, locale } = useParams<Params>();
   const { capture } = usePostHog();
 
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
-  const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(null);
+  const [selectedDateLocal, setSelectedDateLocal] = useState<string | null>(
+    null
+  );
 
   const [isFinishDialogOpen, setIsFinishDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isUndatedPhotosDialogOpen, setIsUndatedPhotosDialogOpen] = useState(false);
+  const [isUndatedPhotosDialogOpen, setIsUndatedPhotosDialogOpen] =
+    useState(false);
 
   const [unsavedChangesState, dispatch] = useReducer(unsavedChangesReducer, {
     isDialogOpen: false,
@@ -42,15 +44,17 @@ export function useEditAlbum() {
   const initializedRef = useRef(false);
   const deselectPhotosRef = useRef<(skipCheck?: boolean) => void>(() => {});
 
-  const [dateParam, setDateParam] = useQueryState('date');
-  const [pageParam, setPageParam] = useQueryState('page', { defaultValue: '1' });
+  const [dateParam, setDateParam] = useQueryState("date");
+  const [pageParam, setPageParam] = useQueryState("page", {
+    defaultValue: "1",
+  });
 
   const form = useForm<PhotoEditFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       dateTaken: null,
-      locationName: '',
-      description: '',
+      locationName: "",
+      description: "",
       latitude: null,
       longitude: null,
     },
@@ -67,7 +71,8 @@ export function useEditAlbum() {
     date: selectedDateLocal || undefined,
     noDate: selectedDateLocal === null,
     page: currentPage,
-    enabled: !!id && (selectedDateLocal !== undefined || initializedRef.current),
+    enabled:
+      !!id && (selectedDateLocal !== undefined || initializedRef.current),
   });
 
   const updatePhotoMutation = useUpdatePhoto({
@@ -115,7 +120,7 @@ export function useEditAlbum() {
 
     const dirtyFieldsKeys = Object.keys(dirtyFields);
 
-    if (dirtyFieldsKeys.length === 1 && dirtyFieldsKeys[0] === 'locationName') {
+    if (dirtyFieldsKeys.length === 1 && dirtyFieldsKeys[0] === "locationName") {
       return false;
     }
 
@@ -145,17 +150,17 @@ export function useEditAlbum() {
 
       setSelectedPhotos([]);
     },
-    [hasUnsavedChanges, selectedPhotos.length, dispatch],
+    [hasUnsavedChanges, selectedPhotos.length]
   );
 
   const updateDateSelection = useCallback(
     async (date: string | null) => {
       setSelectedDateLocal(date);
-      await setPageParam('1');
+      await setPageParam("1");
       await setDateParam(date);
       setSelectedPhotos([]);
     },
-    [setDateParam, setPageParam],
+    [setDateParam, setPageParam]
   );
 
   const handlePhotoClick = useCallback(
@@ -172,20 +177,22 @@ export function useEditAlbum() {
         return;
       }
 
-      const photos = photosQuery.data?.photos.filter(p => p.id === photoId);
+      const photos = photosQuery.data?.photos.filter((p) => p.id === photoId);
       if (!photos || photos.length === 0) {
         return;
       }
 
-      setSelectedPhotos(photos.map(p => p.id));
+      setSelectedPhotos(photos.map((p) => p.id));
     },
-    [hasUnsavedChanges, photosQuery.data?.photos, selectedPhotos],
+    [hasUnsavedChanges, photosQuery.data?.photos, selectedPhotos]
   );
 
   const togglePhotoSelection = useCallback(
     (photoId: string) => {
       if (selectedPhotos.includes(photoId)) {
-        setSelectedPhotos(prev => prev.filter(id => id !== photoId));
+        setSelectedPhotos((prev) =>
+          prev.filter((selectedPhotoId) => selectedPhotoId !== photoId)
+        );
         return;
       }
 
@@ -197,15 +204,15 @@ export function useEditAlbum() {
         return;
       }
 
-      setSelectedPhotos(prev => [...prev, photoId]);
+      setSelectedPhotos((prev) => [...prev, photoId]);
 
-      capture('photo_selected', {
+      capture("photo_selected", {
         album_id: id,
         photo_id: photoId,
-        selection_mode: 'single',
+        selection_mode: "single",
       });
     },
-    [hasUnsavedChanges, selectedPhotos, capture, id],
+    [hasUnsavedChanges, selectedPhotos, capture, id]
   );
 
   const handleDateSelect = useCallback(
@@ -222,14 +229,14 @@ export function useEditAlbum() {
         return;
       }
 
-      capture('timeline_viewed', {
+      capture("timeline_viewed", {
         album_id: id,
         selected_date: date,
       });
 
       await updateDateSelection(date);
     },
-    [hasUnsavedChanges, selectedDateLocal, updateDateSelection, capture, id],
+    [hasUnsavedChanges, selectedDateLocal, updateDateSelection, capture, id]
   );
 
   const closeUnsavedChangesDialog = useCallback(() => {
@@ -254,16 +261,18 @@ export function useEditAlbum() {
       case PendingActionTypeEnum.SELECT_PHOTO: {
         if (!action.photoId) return;
 
-        const photos = photosQuery.data?.photos.filter(p => p.id === action.photoId);
+        const photos = photosQuery.data?.photos.filter(
+          (p) => p.id === action.photoId
+        );
         if (!photos || photos.length === 0) return;
 
-        setSelectedPhotos(photos.map(p => p.id));
+        setSelectedPhotos(photos.map((p) => p.id));
         return;
       }
       case PendingActionTypeEnum.TOGGLE_PHOTO: {
         if (!action.photoId) return;
 
-        setSelectedPhotos(prev => [...prev, action.photoId!]);
+        setSelectedPhotos((prev) => [...prev, action.photoId!]);
         return;
       }
       case PendingActionTypeEnum.SELECT_DATE: {
@@ -276,28 +285,33 @@ export function useEditAlbum() {
         setSelectedPhotos([]);
         return;
       }
+      default: {
+        return;
+      }
     }
   }, [
     form,
     unsavedChangesState.pendingAction,
     photosQuery.data?.photos,
     updateDateSelection,
-    dispatch,
   ]);
 
   const handlePageChange = useCallback(
     async (page: number) => {
       await setPageParam(page.toString());
     },
-    [setPageParam],
+    [setPageParam]
   );
 
   const getModifiedStatus = useCallback(
     (photoId: string) => {
       // As this is a real time update, we can use the mutation status to show changes in progress
-      return updatePhotoMutation.isPending && updatePhotoMutation.variables?.id === photoId;
+      return (
+        updatePhotoMutation.isPending &&
+        updatePhotoMutation.variables?.id === photoId
+      );
     },
-    [updatePhotoMutation.isPending, updatePhotoMutation.variables?.id],
+    [updatePhotoMutation.isPending, updatePhotoMutation.variables?.id]
   );
 
   const handleSavePhotoEdit = useCallback(
@@ -315,17 +329,17 @@ export function useEditAlbum() {
         keepTouched: false,
       });
 
-      const editedFields = [];
-      if (data.dateTaken) editedFields.push('date');
-      if (data.locationName) editedFields.push('location');
-      if (data.description) editedFields.push('description');
-      if (data.latitude && data.longitude) editedFields.push('coordinates');
+      const editedFields: string[] = [];
+      if (data.dateTaken) editedFields.push("date");
+      if (data.locationName) editedFields.push("location");
+      if (data.description) editedFields.push("description");
+      if (data.latitude && data.longitude) editedFields.push("coordinates");
 
-      capture('photo_edited', {
+      capture("photo_edited", {
         album_id: id,
         photo_id: selectedPhotos[0],
         edited_fields: editedFields,
-        edit_mode: 'single',
+        edit_mode: "single",
       });
 
       updatePhotoMutation.mutate({
@@ -342,10 +356,9 @@ export function useEditAlbum() {
       selectedPhotos,
       updatePhotoMutation,
       unsavedChangesState.isDialogOpen,
-      dispatch,
       capture,
       id,
-    ],
+    ]
   );
 
   const handleSaveBatchEdit = useCallback(
@@ -374,22 +387,22 @@ export function useEditAlbum() {
       const updateData = Object.entries(fieldsToCheck).reduce(
         (acc, [key, value]) => {
           if (value !== undefined) {
-            acc[key] = value === '' ? null : value;
+            acc[key] = value === "" ? null : value;
           }
           return acc;
         },
-        {} as Record<string, string | number | null>,
+        {} as Record<string, string | number | null>
       );
 
       if (Object.keys(updateData).length === 0) {
         return;
       }
 
-      capture('photo_edited', {
+      capture("photo_edited", {
         album_id: id,
         photos_count: selectedPhotos.length,
         edited_fields: Object.keys(updateData),
-        edit_mode: 'batch',
+        edit_mode: "batch",
       });
 
       updatePhotoBatchMutation.mutate({
@@ -402,10 +415,9 @@ export function useEditAlbum() {
       selectedPhotos,
       updatePhotoBatchMutation,
       unsavedChangesState.isDialogOpen,
-      dispatch,
       capture,
       id,
-    ],
+    ]
   );
 
   const handleDeletePhotos = useCallback(() => {
@@ -413,7 +425,7 @@ export function useEditAlbum() {
       return;
     }
 
-    capture('photo_deleted', {
+    capture("photo_deleted", {
       album_id: id,
       photos_count: selectedPhotos.length,
     });
@@ -427,22 +439,22 @@ export function useEditAlbum() {
     form.reset(
       {
         dateTaken: null,
-        locationName: '',
-        description: '',
+        locationName: "",
+        description: "",
         latitude: null,
         longitude: null,
       },
       {
         keepDirty: false,
         keepTouched: false,
-      },
+      }
     );
 
     setSelectedPhotos([]);
   }, [form]);
 
   const handleFinish = useCallback(() => {
-    capture('edit_completed', {
+    capture("edit_completed", {
       album_id: id,
     });
 
@@ -451,18 +463,18 @@ export function useEditAlbum() {
 
   const hasUndatedPhotos = useCallback(() => {
     const dates = albumDatesQuery.data?.dates || [];
-    const undatedPhotos = dates.find(dateCount => dateCount?.date === null);
+    const undatedPhotos = dates.find((dateCount) => dateCount?.date === null);
     return Boolean(undatedPhotos?.count);
   }, [albumDatesQuery.data?.dates]);
 
   const openFinishDialog = useCallback(() => {
-    capture('finish_edit_clicked', {
+    capture("finish_edit_clicked", {
       album_id: id,
       has_undated_photos: hasUndatedPhotos(),
     });
 
     if (hasUndatedPhotos()) {
-      capture('undated_photos_dialog_opened', {
+      capture("undated_photos_dialog_opened", {
         album_id: id,
       });
       setIsUndatedPhotosDialogOpen(true);
@@ -492,7 +504,11 @@ export function useEditAlbum() {
   const error = albumDatesQuery.error?.message || photosQuery.error?.message;
 
   useEffect(() => {
-    if (initializedRef.current || albumDatesQuery?.isLoading || !albumDatesQuery?.data?.dates) {
+    if (
+      initializedRef.current ||
+      albumDatesQuery?.isLoading ||
+      !albumDatesQuery?.data?.dates
+    ) {
       return;
     }
 
@@ -505,17 +521,17 @@ export function useEditAlbum() {
 
     let oldestDate: string | null = null;
 
-    const nonNullDates = dates?.filter(date => date?.date !== null);
+    const nonNullDates = dates?.filter((date) => date?.date !== null);
 
     if (nonNullDates?.length > 0) {
       nonNullDates?.sort((a, b) => {
-        if (!a.date || !b.date) return 0;
+        if (!(a.date && b.date)) return 0;
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
 
       oldestDate = nonNullDates[0]?.date;
     } else {
-      const nullDateEntry = dates.find(d => d.date === null);
+      const nullDateEntry = dates.find((d) => d.date === null);
       if (nullDateEntry) {
         oldestDate = null;
       }

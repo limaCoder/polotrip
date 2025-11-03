@@ -1,13 +1,13 @@
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationPrevious,
   PaginationNext,
-  PaginationEllipsis,
-} from '@/components/ui/pagination';
-import { type PhotoGalleryPaginationProps } from './types';
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import type { PhotoGalleryPaginationProps } from "./types";
 
 export function PhotoGalleryPagination({
   pagination,
@@ -19,11 +19,11 @@ export function PhotoGalleryPagination({
       <Pagination className="justify-end">
         <PaginationContent>
           {pagination.hasPrevPage && (
-            <PaginationItem className="hover:bg-primary/10 transition-colors">
+            <PaginationItem className="transition-colors hover:bg-primary/10">
               <PaginationPrevious
-                className="hover:bg-primary/10 transition-colors"
+                className="transition-colors hover:bg-primary/10"
                 href="#"
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault();
                   onPageChange(currentPage - 1);
                 }}
@@ -40,12 +40,15 @@ export function PhotoGalleryPagination({
               (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
             ) {
               return (
-                <PaginationItem key={pageNumber} className="hover:bg-primary/10 transition-colors">
+                <PaginationItem
+                  className="transition-colors hover:bg-primary/10"
+                  key={pageNumber}
+                >
                   <PaginationLink
-                    className="hover:bg-primary/10 transition-colors"
+                    className="transition-colors hover:bg-primary/10"
                     href="#"
                     isActive={pageNumber === currentPage}
-                    onClick={e => {
+                    onClick={(e) => {
                       e.preventDefault();
                       onPageChange(pageNumber);
                     }}
@@ -58,7 +61,8 @@ export function PhotoGalleryPagination({
 
             if (
               (pageNumber === 2 && currentPage > 3) ||
-              (pageNumber === pagination.totalPages - 1 && currentPage < pagination.totalPages - 2)
+              (pageNumber === pagination.totalPages - 1 &&
+                currentPage < pagination.totalPages - 2)
             ) {
               return <PaginationEllipsis key={pageNumber} />;
             }
@@ -67,11 +71,11 @@ export function PhotoGalleryPagination({
           })}
 
           {pagination.hasNextPage && (
-            <PaginationItem className="hover:bg-primary/10 transition-colors">
+            <PaginationItem className="transition-colors hover:bg-primary/10">
               <PaginationNext
-                className="hover:bg-primary/10 transition-colors"
+                className="transition-colors hover:bg-primary/10"
                 href="#"
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault();
                   onPageChange(currentPage + 1);
                 }}

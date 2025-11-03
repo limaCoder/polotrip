@@ -1,15 +1,17 @@
-import { auth } from '@polotrip/auth';
-import { redirect } from '@/i18n/routing';
+import { auth } from "@polotrip/auth";
+import { redirect } from "@/i18n/routing";
 
-export async function loginWithEmailPassword(locale: string, formData: FormData) {
-  'use server';
+export async function loginWithEmailPassword(
+  locale: string,
+  formData: FormData
+) {
+  "use server";
 
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-  if (!email || !password) {
-    console.error('Email and password are required');
-    return;
+  if (!(email && password)) {
+    throw new Error("Email and password are required");
   }
 
   try {
@@ -20,8 +22,12 @@ export async function loginWithEmailPassword(locale: string, formData: FormData)
       },
     });
   } catch (error) {
-    console.error('Error when logging in:', error);
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("Error when logging in");
   }
 
-  redirect({ href: '/dashboard', locale });
+  redirect({ href: "/dashboard", locale });
 }

@@ -1,7 +1,7 @@
-export interface DateCount {
+export type DateCount = {
   date: string | null;
   count: number;
-}
+};
 
 export type GetAlbumDatesRequest = {
   params: {

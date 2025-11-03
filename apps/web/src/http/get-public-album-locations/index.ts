@@ -1,5 +1,8 @@
-import { api } from '../api';
-import { GetPublicAlbumLocationsRequest, GetPublicAlbumLocationsResponse } from './types';
+import { api } from "../api";
+import type {
+  GetPublicAlbumLocationsRequest,
+  GetPublicAlbumLocationsResponse,
+} from "./types";
 
 export async function getPublicAlbumLocations({
   albumId,
@@ -10,7 +13,7 @@ export async function getPublicAlbumLocations({
       `v1/public/albums/${albumId}/locations`,
       {
         signal,
-      },
+      }
     );
 
     return data;

@@ -1,20 +1,27 @@
-'use client';
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+/** biome-ignore-all lint/a11y/useSemanticElements: <explanation> */
+"use client";
 
-import { useState } from 'react';
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/cn';
-import { OnboardingModalProps } from './types';
-import { useTranslations } from 'next-intl';
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/cn";
+import type { OnboardingModalProps } from "./types";
 
-export function OnboardingModal({ steps, isOpen, onClose, onStepChange }: OnboardingModalProps) {
-  const t = useTranslations('Dashboard.onboarding');
+export function OnboardingModal({
+  steps,
+  isOpen,
+  onClose,
+  onStepChange,
+}: OnboardingModalProps) {
+  const t = useTranslations("Dashboard.onboarding");
   const [currentStep, setCurrentStep] = useState(0);
 
   const isFirstStep = currentStep === 0;
@@ -39,27 +46,31 @@ export function OnboardingModal({ steps, isOpen, onClose, onStepChange }: Onboar
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden">
+    <Dialog onOpenChange={onClose} open={isOpen}>
+      <DialogContent className="overflow-hidden sm:max-w-md md:max-w-lg lg:max-w-xl">
         <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center p-6">
-          <h2 className="text-xl font-semibold mb-2">{steps[currentStep].title}</h2>
-          <p className="text-center text-muted-foreground mb-6">{steps[currentStep].description}</p>
+          <h2 className="mb-2 font-semibold text-xl">
+            {steps[currentStep].title}
+          </h2>
+          <p className="mb-6 text-center text-muted-foreground">
+            {steps[currentStep].description}
+          </p>
 
-          <div className="flex space-x-2 mb-6">
+          <div className="mb-6 flex space-x-2">
             {steps.map((_, index) => (
               <div
-                key={index}
+                aria-label={t("go_to_step_aria", { step: index + 1 })}
                 className={cn(
-                  'h-2 w-2 rounded-full border-secondary border cursor-pointer transition-all duration-300 hover:scale-125',
-                  index === currentStep ? 'bg-primary' : 'bg-muted',
+                  "h-2 w-2 cursor-pointer rounded-full border border-secondary transition-all duration-300 hover:scale-125",
+                  index === currentStep ? "bg-primary" : "bg-muted"
                 )}
+                key={index}
                 onClick={() => handleStepChange(index)}
                 role="button"
                 tabIndex={0}
-                aria-label={t('go_to_step_aria', { step: index + 1 })}
               />
             ))}
           </div>
@@ -67,21 +78,21 @@ export function OnboardingModal({ steps, isOpen, onClose, onStepChange }: Onboar
         <DialogFooter>
           <div className="flex w-full justify-between">
             <Button
-              className="hover:bg-secondary hover:text-white transition-all duration-700"
-              variant="outline"
-              onClick={handlePrevious}
+              aria-label={t("back_button")}
+              className="transition-all duration-700 hover:bg-secondary hover:text-white"
               disabled={isFirstStep}
-              aria-label={t('back_button')}
+              onClick={handlePrevious}
+              variant="outline"
             >
-              {t('back_button')}
+              {t("back_button")}
             </Button>
 
             <Button
+              aria-label={isLastStep ? t("start_button") : t("next_button")}
               className="text-white"
               onClick={handleNext}
-              aria-label={isLastStep ? t('start_button') : t('next_button')}
             >
-              {isLastStep ? t('start_button') : t('next_button')}
+              {isLastStep ? t("start_button") : t("next_button")}
             </Button>
           </div>
         </DialogFooter>

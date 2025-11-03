@@ -1,6 +1,8 @@
-import exifr from 'exifr';
-import imageCompression from 'browser-image-compression';
-import { heicTo, isHeic } from 'heic-to';
+import imageCompression from "browser-image-compression";
+import exifr from "exifr";
+import { heicTo, isHeic } from "heic-to";
+
+const HEIC_EXTENSIONS_REGEX = /(heic|HEIC)$/i;
 
 /**
  * Extract EXIF metadata from an image
@@ -12,7 +14,7 @@ export async function extractExifData(file: File): Promise<{
   width: number | null;
   height: number | null;
 }> {
-  if (!file || !file.type.startsWith('image/')) {
+  if (!file?.type.startsWith("image/")) {
     return {
       dateTaken: null,
       latitude: null,
@@ -39,20 +41,22 @@ export async function extractExifData(file: File): Promise<{
       };
     }
 
-    let dateTaken = null;
+    let dateTaken: string | null = null;
     if (exif.DateTimeOriginal) {
       try {
         dateTaken = new Date(exif.DateTimeOriginal).toISOString();
-      } catch (err) {
-        console.error('Error converting date:', err);
+      } catch (error) {
+        // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+        console.error("Error converting date:", error);
       }
     }
 
-    const latitude = typeof exif.latitude === 'number' ? exif.latitude : null;
-    const longitude = typeof exif.longitude === 'number' ? exif.longitude : null;
+    const latitude = typeof exif.latitude === "number" ? exif.latitude : null;
+    const longitude =
+      typeof exif.longitude === "number" ? exif.longitude : null;
 
-    let width = null;
-    let height = null;
+    let width: number | null = null;
+    let height: number | null = null;
 
     const orientation = exif?.Orientation || null;
 
@@ -63,18 +67,18 @@ export async function extractExifData(file: File): Promise<{
       if (orientation) {
         let orientationValue: number;
 
-        if (typeof orientation === 'number') {
+        if (typeof orientation === "number") {
           orientationValue = orientation;
-        } else if (typeof orientation === 'string') {
+        } else if (typeof orientation === "string") {
           const orientationMap: Record<string, number> = {
-            'Horizontal (normal)': 1,
-            'Mirror horizontal': 2,
-            'Rotate 180': 3,
-            'Mirror vertical': 4,
-            'Mirror horizontal and rotate 270 CW': 5,
-            'Rotate 90 CW': 6,
-            'Mirror horizontal and rotate 90 CW': 7,
-            'Rotate 270 CW': 8,
+            "Horizontal (normal)": 1,
+            "Mirror horizontal": 2,
+            "Rotate 180": 3,
+            "Mirror vertical": 4,
+            "Mirror horizontal and rotate 270 CW": 5,
+            "Rotate 90 CW": 6,
+            "Mirror horizontal and rotate 90 CW": 7,
+            "Rotate 270 CW": 8,
           };
           orientationValue = orientationMap[orientation] || 1;
         } else {
@@ -90,8 +94,9 @@ export async function extractExifData(file: File): Promise<{
         const imageBitmap = await createImageBitmap(file);
         width = imageBitmap.width;
         height = imageBitmap.height;
-      } catch (e) {
-        console.error('Error getting image dimensions:', e);
+      } catch (error) {
+        // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+        console.error("Error getting image dimensions:", error);
       }
     }
 
@@ -103,7 +108,8 @@ export async function extractExifData(file: File): Promise<{
       height,
     };
   } catch (error) {
-    console.error('Error extracting EXIF metadata:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error extracting EXIF metadata:", error);
     return {
       dateTaken: null,
       latitude: null,
@@ -123,7 +129,7 @@ export async function compressImage(
     maxSizeMB?: number;
     maxWidthOrHeight?: number;
     quality?: number;
-  },
+  }
 ): Promise<File> {
   try {
     const heicFile = await isHeic(file);
@@ -132,16 +138,16 @@ export async function compressImage(
       const heicQuality = options?.quality ?? 0.6;
       const heicFileConverted = await heicTo({
         blob: file,
-        type: 'image/jpeg',
+        type: "image/jpeg",
         quality: heicQuality,
       });
 
-      const newFileName = file.name.replace(/\.(heic|HEIC)$/, '.jpg');
+      const newFileName = file.name.replace(HEIC_EXTENSIONS_REGEX, ".jpg");
 
-      file = new File([heicFileConverted], newFileName, {
-        type: 'image/jpeg',
+      return new File([heicFileConverted], newFileName, {
+        type: "image/jpeg",
         lastModified: file.lastModified,
-      });
+      }) as File;
     }
 
     const compressionOptions = {
@@ -161,12 +167,13 @@ export async function compressImage(
     const compressedImage = await imageCompression(file, compressionOptions);
     const fixedCompressedFile = new File([compressedImage], fileName, {
       type: compressedImage.type,
-      lastModified: lastModified,
+      lastModified,
     });
 
     return fixedCompressedFile;
   } catch (error) {
-    console.error('Error compressing image:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error compressing image:", error);
     throw error;
   }
 }
@@ -175,11 +182,16 @@ export async function compressImage(
  * Format the file size for display
  */
 export function formatFileSize(bytes?: number): string {
-  if (bytes === undefined || bytes === null || isNaN(bytes) || bytes < 0) {
-    return '0.0 MB';
+  if (
+    bytes === undefined ||
+    bytes === null ||
+    Number.isNaN(bytes) ||
+    bytes < 0
+  ) {
+    return "0.0 MB";
   }
 
-  if (bytes === 0) return '0.0 MB';
+  if (bytes === 0) return "0.0 MB";
 
   if (bytes < 1024 * 1024) {
     return `${(bytes / 1024).toFixed(1)} KB`;
@@ -195,9 +207,11 @@ export function generateUniqueId(): string {
   try {
     return crypto.randomUUID();
   } catch (error) {
-    console.error('Error generating unique ID. Applying fallback:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error generating unique ID. Applying fallback:", error);
     return (
-      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
     );
   }
 }
@@ -209,9 +223,9 @@ export function isHeicFile(file?: File): boolean {
   if (!file) return false;
 
   return (
-    file.type === 'image/heic' ||
-    file.type === 'image/heif' ||
-    file.name.toLowerCase().endsWith('.heic')
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    file.name.toLowerCase().endsWith(".heic")
   );
 }
 
@@ -229,7 +243,7 @@ export async function createPreviewUrlAsync(file?: File): Promise<string> {
     if (heicFile) {
       const heicFileConverted = await heicTo({
         blob: file,
-        type: 'image/jpeg',
+        type: "image/jpeg",
         quality: 0.5,
       });
 
@@ -238,7 +252,8 @@ export async function createPreviewUrlAsync(file?: File): Promise<string> {
 
     return URL.createObjectURL(file);
   } catch (error) {
-    console.error('Error creating preview:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error creating preview:", error);
     return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24px" fill="%23555">Erro</text></svg>';
   }
 }
@@ -252,13 +267,14 @@ export function createPreviewUrl(file?: File): string {
   }
 
   if (isHeicFile(file)) {
-    return '/pages/upload/album-card-fallback.png';
+    return "/pages/upload/album-card-fallback.png";
   }
 
   try {
     return URL.createObjectURL(file);
   } catch (error) {
-    console.error('Error creating preview:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error creating preview:", error);
     return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24px" fill="%23555">Erro</text></svg>';
   }
 }
@@ -267,11 +283,12 @@ export function createPreviewUrl(file?: File): string {
  * Revoke a preview URL to free memory
  */
 export function revokePreviewUrl(previewUrl?: string): void {
-  if (!previewUrl || previewUrl.startsWith('data:')) return;
+  if (!previewUrl || previewUrl.startsWith("data:")) return;
 
   try {
     URL.revokeObjectURL(previewUrl);
   } catch (error) {
-    console.error('Error revoking preview URL:', error);
+    // biome-ignore lint/suspicious/noConsole: we need to use console.error for logging
+    console.error("Error revoking preview URL:", error);
   }
 }

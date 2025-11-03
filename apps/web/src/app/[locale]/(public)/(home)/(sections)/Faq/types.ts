@@ -10,11 +10,11 @@ type FaqData = {
   answerKey: AnswerKey;
 };
 
-interface FaqAccordionProps {
+type FaqAccordionProps = {
   questions: Array<{
     question: string;
     answer: string;
   }>;
-}
+};
 
 export type { FaqData, FaqAccordionProps };

@@ -1,26 +1,24 @@
-'use client';
+"use client";
 
-import { MapPin } from 'lucide-react';
-import { cn } from '@/lib/cn';
-
-import { Button } from '@/components/ui/button';
-import { PhotoTimeline } from './PhotoTimeline';
-import { PhotoMap } from './PhotoMap';
-import { PhotoEditForm } from './PhotoEditForm';
-import { PhotoGallery } from './PhotoGallery';
-import { FinishEditDialog } from './FinishEditDialog';
-import { DeletePhotosDialog } from './DeletePhotosDialog';
-import { UnsavedChangesDialog } from './UnsavedChangesDialog';
-import { AddMorePhotosCard } from './AddMorePhotosCard';
-import { UndatedPhotosDialog } from './UndatedPhotosDialog';
-
-import { useEditAlbum } from '../hooks/useEditAlbum';
-import { FormProvider } from 'react-hook-form';
-import { AlbumDetailsCard } from './AlbumDetailsCard';
-import { useTranslations } from 'next-intl';
+import { MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { FormProvider } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
+import { useEditAlbum } from "../hooks/useEditAlbum";
+import { AddMorePhotosCard } from "./AddMorePhotosCard";
+import { AlbumDetailsCard } from "./AlbumDetailsCard";
+import { DeletePhotosDialog } from "./DeletePhotosDialog";
+import { FinishEditDialog } from "./FinishEditDialog";
+import { PhotoEditForm } from "./PhotoEditForm";
+import { PhotoGallery } from "./PhotoGallery";
+import { PhotoMap } from "./PhotoMap";
+import { PhotoTimeline } from "./PhotoTimeline";
+import { UndatedPhotosDialog } from "./UndatedPhotosDialog";
+import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 
 export function EditAlbumContent() {
-  const t = useTranslations('EditAlbum');
+  const t = useTranslations("EditAlbum");
 
   const {
     albumDates,
@@ -63,19 +61,23 @@ export function EditAlbumContent() {
   } = useEditAlbum();
 
   const isGlobalLoading =
-    isLoading || isUpdatingPhoto || isUpdatingPhotoBatch || isDeletingPhotos || isPublishingAlbum;
+    isLoading ||
+    isUpdatingPhoto ||
+    isUpdatingPhotoBatch ||
+    isDeletingPhotos ||
+    isPublishingAlbum;
 
   if (isLoading) {
     return (
-      <div className="flex justify-center my-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="my-12 flex justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-primary border-b-2" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 rounded-md p-3 mb-4">
+      <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-red-700">
         {error}
       </div>
     );
@@ -85,27 +87,32 @@ export function EditAlbumContent() {
     <FormProvider {...form}>
       {isGlobalLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary"></div>
+          <div className="h-16 w-16 animate-spin rounded-full border-primary border-b-4" />
         </div>
       )}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_3fr] gap-9">
+      <div className="grid grid-cols-1 gap-9 lg:grid-cols-[1fr_3fr]">
         <div className="flex flex-col gap-9">
           <PhotoTimeline
             dates={albumDates}
-            selectedDate={selectedDate}
             onSelectDate={handleDateSelect}
+            selectedDate={selectedDate}
           />
 
-          <div className="bg-background p-8 rounded-lg shadow-md">
-            <div className="flex items-center gap-3 mb-3">
-              <MapPin size={24} className="text-primary" />
-              <h2 className="font-title_three font-bold">{t('map_title')}</h2>
+          <div className="rounded-lg bg-background p-8 shadow-md">
+            <div className="mb-3 flex items-center gap-3">
+              <MapPin className="text-primary" size={24} />
+              <h2 className="font-bold font-title_three">{t("map_title")}</h2>
             </div>
 
-            <p className="font-body_two text-text/75 mb-6">{t('map_description')}</p>
+            <p className="mb-6 font-body_two text-text/75">
+              {t("map_description")}
+            </p>
 
-            <div className="w-full h-[300px] overflow-hidden rounded-md">
-              <PhotoMap photos={filteredPhotos} onMarkerClick={handlePhotoClick} />
+            <div className="h-[300px] w-full overflow-hidden rounded-md">
+              <PhotoMap
+                onMarkerClick={handlePhotoClick}
+                photos={filteredPhotos}
+              />
             </div>
           </div>
 
@@ -116,44 +123,50 @@ export function EditAlbumContent() {
 
         <div className="flex flex-col gap-9">
           <PhotoEditForm
-            selectedPhotos={filteredPhotos?.filter(photo => selectedPhotos?.includes(photo?.id))}
-            onSave={selectedPhotos?.length > 1 ? handleSaveBatchEdit : handleSavePhotoEdit}
-            onCancel={handleCancelEdit}
-            isDisabled={selectedPhotos?.length === 0}
             deselectAllPhotos={deselectAllPhotos}
+            isDisabled={selectedPhotos?.length === 0}
+            onCancel={handleCancelEdit}
+            onSave={
+              selectedPhotos?.length > 1
+                ? handleSaveBatchEdit
+                : handleSavePhotoEdit
+            }
+            selectedPhotos={filteredPhotos?.filter((photo) =>
+              selectedPhotos?.includes(photo?.id)
+            )}
           />
 
           <PhotoGallery
+            currentPage={currentPage}
+            deselectAllPhotos={deselectAllPhotos}
             filteredPhotos={filteredPhotos}
+            getModifiedStatus={getModifiedStatus}
             isLoading={isPhotosLoading}
+            onDeletePhotos={openDeleteDialog}
+            onPageChange={handlePageChange}
+            pagination={photoPagination}
             selectedDate={selectedDate}
             selectedPhotos={selectedPhotos}
-            pagination={photoPagination}
-            currentPage={currentPage}
-            getModifiedStatus={getModifiedStatus}
             togglePhotoSelection={togglePhotoSelection}
-            deselectAllPhotos={deselectAllPhotos}
-            onPageChange={handlePageChange}
-            onDeletePhotos={openDeleteDialog}
           />
 
           <div className="flex justify-end">
             <Button
-              onClick={openFinishDialog}
-              disabled={isLoading}
+              aria-label={t("publish_album_button_aria")}
               className={cn(
-                'bg-primary text-background rounded px-8 py-3 hover:bg-primary/90 font-body_two flex items-center gap-2',
-                isLoading && 'opacity-50 cursor-not-allowed',
+                "flex items-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-background hover:bg-primary/90",
+                isLoading && "cursor-not-allowed opacity-50"
               )}
-              aria-label={t('publish_album_button_aria')}
+              disabled={isLoading}
+              onClick={openFinishDialog}
             >
               {isLoading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>{t('publishing_album_button')}</span>
+                  <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
+                  <span>{t("publishing_album_button")}</span>
                 </>
               ) : (
-                <span>{t('publish_album_button')}</span>
+                <span>{t("publish_album_button")}</span>
               )}
             </Button>
           </div>
@@ -166,11 +179,11 @@ export function EditAlbumContent() {
         />
 
         <DeletePhotosDialog
+          isDeleting={isDeletingPhotos}
           isOpen={isDeleteDialogOpen}
           onClose={closeDeleteDialog}
           onConfirm={handleDeletePhotos}
           photoCount={selectedPhotos.length}
-          isDeleting={isDeletingPhotos}
         />
 
         <UnsavedChangesDialog

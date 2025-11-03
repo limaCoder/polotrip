@@ -1,5 +1,8 @@
-'use client';
+"use client";
 
+import { ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,42 +10,47 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { InstallPwaModalProps } from './types';
-import { ExternalLink } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+} from "@/components/ui/dialog";
+import type { InstallPwaModalProps } from "./types";
 
-export function InstallPwaModal({ isOpen, onClose, onInstall }: InstallPwaModalProps) {
-  const t = useTranslations('Dashboard.install_pwa');
+export function InstallPwaModal({
+  isOpen,
+  onClose,
+  onInstall,
+}: InstallPwaModalProps) {
+  const t = useTranslations("Dashboard.install_pwa");
 
   const handleOpenInstallGuide = () => {
-    window.open('https://www.installpwa.com/from/polotrip.com', '_blank');
+    window.open("https://www.installpwa.com/from/polotrip.com", "_blank");
     onInstall?.();
     onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="px-2 w-[90%] overflow-hidden">
+    <Dialog onOpenChange={onClose} open={isOpen}>
+      <DialogContent className="w-[90%] overflow-hidden px-2">
         <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-center text-muted-foreground">
-          {t('description')}
+          {t("description")}
         </DialogDescription>
         <DialogFooter>
           <div className="flex w-full justify-evenly">
-            <Button variant="outline" onClick={onClose} aria-label={t('later_button_aria')}>
-              {t('later_button')}
+            <Button
+              aria-label={t("later_button_aria")}
+              onClick={onClose}
+              variant="outline"
+            >
+              {t("later_button")}
             </Button>
 
             <Button
-              className="text-white flex items-center gap-2"
+              aria-label={t("install_button_aria")}
+              className="flex items-center gap-2 text-white"
               onClick={handleOpenInstallGuide}
-              aria-label={t('install_button_aria')}
             >
-              {t('install_button')}
+              {t("install_button")}
               <ExternalLink size={16} />
             </Button>
           </div>

@@ -1,5 +1,8 @@
-import { api } from '../api';
-import { GetPublicAlbumPhotosRequest, GetPublicAlbumPhotosResponse } from './types';
+import { api } from "../api";
+import type {
+  GetPublicAlbumPhotosRequest,
+  GetPublicAlbumPhotosResponse,
+} from "./types";
 
 export async function getPublicAlbumPhotos({
   albumId,
@@ -18,10 +21,13 @@ export async function getPublicAlbumPhotos({
       searchParams.limit = limit;
     }
 
-    const data = await api.get<GetPublicAlbumPhotosResponse>(`v1/public/albums/${albumId}/photos`, {
-      searchParams,
-      signal,
-    });
+    const data = await api.get<GetPublicAlbumPhotosResponse>(
+      `v1/public/albums/${albumId}/photos`,
+      {
+        searchParams,
+        signal,
+      }
+    );
 
     return data;
   } catch (error) {

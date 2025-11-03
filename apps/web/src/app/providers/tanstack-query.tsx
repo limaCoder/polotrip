@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { PropsWithChildren } from 'react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   defaultShouldDehydrateQuery,
   isServer,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query';
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { PropsWithChildren } from "react";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -20,8 +20,9 @@ function makeQueryClient() {
         staleTime: 1000 * 60 * 3, // 3 min
       },
       dehydrate: {
-        shouldDehydrateQuery: query =>
-          defaultShouldDehydrateQuery(query) || query.state.status === 'pending',
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) ||
+          query.state.status === "pending",
         shouldRedactErrors: () => {
           return false;
         },
@@ -30,17 +31,16 @@ function makeQueryClient() {
   });
 }
 
-let browserQueryClient: QueryClient | undefined = undefined;
+let browserQueryClient: QueryClient | undefined;
 
 function getQueryClient() {
   if (isServer) {
     return makeQueryClient();
-  } else {
-    if (!browserQueryClient) {
-      browserQueryClient = makeQueryClient();
-    }
-    return browserQueryClient;
   }
+  if (!browserQueryClient) {
+    browserQueryClient = makeQueryClient();
+  }
+  return browserQueryClient;
 }
 
 export const TanstackQueryProvider = ({ children }: PropsWithChildren) => {

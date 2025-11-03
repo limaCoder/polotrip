@@ -1,9 +1,11 @@
-import { api } from '../api';
-import { CreateAlbumRequest, CreateAlbumResponse } from './types';
+import { api } from "../api";
+import type { CreateAlbumRequest, CreateAlbumResponse } from "./types";
 
-export async function createAlbum({ body }: CreateAlbumRequest): Promise<CreateAlbumResponse> {
+export async function createAlbum({
+  body,
+}: CreateAlbumRequest): Promise<CreateAlbumResponse> {
   try {
-    const data = await api.post<CreateAlbumResponse>('v1/albums', {
+    const data = await api.post<CreateAlbumResponse>("v1/albums", {
       json: body,
     });
 

@@ -1,9 +1,9 @@
-import { type Pagination as PaginationType } from '@/types/pagination';
+import type { Pagination as PaginationType } from "@/types/pagination";
 
-interface PhotoGalleryPaginationProps {
+type PhotoGalleryPaginationProps = {
   pagination: PaginationType;
   currentPage: number;
   onPageChange: (page: number) => void;
-}
+};
 
 export type { PhotoGalleryPaginationProps };

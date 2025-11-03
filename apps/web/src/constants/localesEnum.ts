@@ -1,13 +1,13 @@
-import { ptBR, enUS } from 'date-fns/locale';
+import { enUS, ptBR } from "date-fns/locale";
 
 const LocaleTypesEnum = {
-  PT: 'pt',
-  EN: 'en',
+  PT: "pt",
+  EN: "en",
 } as const;
 
 const LocaleFormatsEnum = {
-  [LocaleTypesEnum.PT]: 'pt-BR',
-  [LocaleTypesEnum.EN]: 'en-US',
+  [LocaleTypesEnum.PT]: "pt-BR",
+  [LocaleTypesEnum.EN]: "en-US",
 } as const;
 
 const LocaleDateFnsEnum = {
@@ -16,8 +16,13 @@ const LocaleDateFnsEnum = {
 } as const;
 
 const LocaleCurrencyEnum = {
-  [LocaleTypesEnum.PT]: 'BRL',
-  [LocaleTypesEnum.EN]: 'USD',
+  [LocaleTypesEnum.PT]: "BRL",
+  [LocaleTypesEnum.EN]: "USD",
 } as const;
 
-export { LocaleTypesEnum, LocaleFormatsEnum, LocaleCurrencyEnum, LocaleDateFnsEnum };
+export {
+  LocaleTypesEnum,
+  LocaleFormatsEnum,
+  LocaleCurrencyEnum,
+  LocaleDateFnsEnum,
+};

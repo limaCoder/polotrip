@@ -1,30 +1,34 @@
-'use client';
+"use client";
 
-import { AlbumCard } from '@/components/AlbumCard';
-import { InfiniteScroll } from '@/components/InfiniteScroll';
-import useGetInfiniteAlbums from '@/hooks/network/queries/useGetInfiniteAlbums';
-import { SkeletonList } from '@/components/SkeletonList';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { AlbumCard } from "@/components/AlbumCard";
+import { InfiniteScroll } from "@/components/InfiniteScroll";
+import { SkeletonList } from "@/components/SkeletonList";
+import useGetInfiniteAlbums from "@/hooks/network/queries/useGetInfiniteAlbums";
 
 export function AlbumsList() {
-  const t = useTranslations('AlbumsList');
+  const t = useTranslations("AlbumsList");
   const albums = useGetInfiniteAlbums();
 
   if (albums?.items?.length === 0) {
-    return <p className="w-full text-center md:text-left text-gray-500">{t('no_albums_found')}</p>;
+    return (
+      <p className="w-full text-center text-gray-500 md:text-left">
+        {t("no_albums_found")}
+      </p>
+    );
   }
 
   return (
     <>
-      {albums?.items?.map(album => (
+      {albums?.items?.map((album) => (
         <AlbumCard
-          key={album?.id}
-          id={album?.id}
-          title={album?.title}
           date={album?.date}
+          id={album?.id}
+          imageUrl={album?.coverImageUrl ?? ""}
+          key={album?.id}
           photosCount={album?.photoCount}
-          imageUrl={album?.coverImageUrl ?? ''}
-          stepAfterPayment={album?.currentStepAfterPayment ?? ''}
+          stepAfterPayment={album?.currentStepAfterPayment ?? ""}
+          title={album?.title}
         />
       ))}
       <InfiniteScroll
@@ -32,7 +36,10 @@ export function AlbumsList() {
         hasNextPage={albums?.hasNextPage}
         isFetching={albums?.isFetching}
         loadingComponent={
-          <SkeletonList count={3} className="w-[100%] h-[256px] rounded-2xl shadow-md" />
+          <SkeletonList
+            className="h-[256px] w-[100%] rounded-2xl shadow-md"
+            count={3}
+          />
         }
         rootMargin="100px"
       />

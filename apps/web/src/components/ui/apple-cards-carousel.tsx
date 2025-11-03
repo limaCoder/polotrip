@@ -1,25 +1,27 @@
-'use client';
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
+/** biome-ignore-all lint/nursery/noShadow: <explanation> */
+"use client";
 
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
+import Image, { type ImageProps } from "next/image";
+import { useTranslations } from "next-intl";
 import React, {
+  createContext,
+  type JSX,
+  useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
-  createContext,
-  useContext,
-  JSX,
-  useCallback,
-} from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/cn';
-import { motion } from 'motion/react';
-import Image, { ImageProps } from 'next/image';
-import { useOutsideClick } from '@/hooks/use-outside-click';
-import { useTranslations } from 'next-intl';
+} from "react";
+import { useOutsideClick } from "@/hooks/use-outside-click";
+import { cn } from "@/lib/cn";
 
-interface CarouselProps {
+type CarouselProps = {
   items: JSX.Element[];
   initialScroll?: number;
-}
+};
 
 type Card = {
   src: string;
@@ -40,7 +42,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const t = useTranslations('AppleCardsCarousel');
+  const t = useTranslations("AppleCardsCarousel");
 
   const checkScrollability = () => {
     if (carouselRef.current) {
@@ -59,13 +61,13 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
   const scrollLeft = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: -300, behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
 
@@ -80,70 +82,74 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
       const scrollPosition = (cardWidth + gap) * (index + 1);
       carouselRef.current.scrollTo({
         left: scrollPosition,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
       setCurrentIndex(index);
     }
   };
 
   return (
-    <CarouselContext.Provider value={{ onCardClose: handleCardClose, currentIndex }}>
+    <CarouselContext.Provider
+      value={{ onCardClose: handleCardClose, currentIndex }}
+    >
       <div className="relative w-full">
         <div
-          className="flex w-full overflow-x-scroll overscroll-x-auto pb-10 md:pb-20 scroll-smooth [scrollbar-width:none]"
-          ref={carouselRef}
+          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth pb-10 [scrollbar-width:none] md:pb-20"
           onScroll={checkScrollability}
+          ref={carouselRef}
         >
           <div
             className={cn(
-              'absolute right-0  z-[1000] h-auto  w-[5%] overflow-hidden bg-gradient-to-l',
+              "absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l"
             )}
-          ></div>
+          />
 
           <div
             className={cn(
-              'flex flex-row justify-start gap-4 pl-4',
-              'max-w-7xl mx-auto', // remove max-w-4xl if you want the carousel to span the full width of its container
+              "flex flex-row justify-start gap-4 pl-4",
+              "mx-auto max-w-7xl" // remove max-w-4xl if you want the carousel to span the full width of its container
             )}
           >
             {items.map((item, index) => (
               <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
                 animate={{
                   opacity: 1,
                   y: 0,
                   transition: {
                     duration: 0.5,
                     delay: 0.2 * index,
-                    ease: 'easeOut',
+                    ease: "easeOut",
                     once: true,
                   },
                 }}
-                key={'card' + index}
-                className=" rounded-3xl"
+                className="rounded-3xl"
+                initial={{
+                  opacity: 0,
+                  y: 20,
+                }}
+                key={`card-${index + 1}`}
               >
                 {item}
               </motion.div>
             ))}
           </div>
         </div>
-        <div className="flex justify-end gap-2 mr-10">
+        <div className="mr-10 flex justify-end gap-2">
           <button
-            className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
-            onClick={scrollLeft}
+            aria-label={t("back_aria")}
+            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
             disabled={!canScrollLeft}
-            aria-label={t('back_aria')}
+            onClick={scrollLeft}
+            type="button"
           >
             <ArrowLeft className="h-6 w-6 text-gray-500" />
           </button>
           <button
-            className="relative z-40 h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center disabled:opacity-50"
-            onClick={scrollRight}
+            aria-label={t("forward_aria")}
+            className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
             disabled={!canScrollRight}
-            aria-label={t('forward_aria')}
+            onClick={scrollRight}
+            type="button"
           >
             <ArrowRight className="h-6 w-6 text-gray-500" />
           </button>
@@ -153,20 +159,31 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   );
 };
 
-export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
+export const BlurImage = ({
+  height,
+  width,
+  src,
+  className,
+  alt,
+  ...rest
+}: ImageProps) => {
   const [isLoading, setLoading] = useState(true);
-  const t = useTranslations('AppleCardsCarousel');
+  const t = useTranslations("AppleCardsCarousel");
   return (
     <Image
-      className={cn('transition duration-300', isLoading ? 'blur-sm' : 'blur-0', className)}
+      alt={alt ? alt : t("background_alt")}
+      blurDataURL={typeof src === "string" ? src : undefined}
+      className={cn(
+        "transition duration-300",
+        isLoading ? "blur-sm" : "blur-0",
+        className
+      )}
+      decoding="async"
+      height={height}
+      loading="lazy"
       onLoad={() => setLoading(false)}
       src={src}
       width={width}
-      height={height}
-      loading="lazy"
-      decoding="async"
-      blurDataURL={typeof src === 'string' ? src : undefined}
-      alt={alt ? alt : t('background_alt')}
       {...rest}
     />
   );
@@ -192,52 +209,52 @@ export const Card = ({
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         handleClose();
       }
     }
 
     if (open) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
 
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, handleClose]);
 
-  useOutsideClick(containerRef as React.RefObject<HTMLDivElement>, () => handleClose());
+  useOutsideClick(containerRef as React.RefObject<HTMLDivElement>, () =>
+    handleClose()
+  );
 
   return (
-    <>
-      <motion.div
-        layoutId={layout ? `card-${card.title}` : undefined}
-        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 h-[400px] w-[300px] md:h-[30rem] md:w-96 overflow-hidden flex flex-col items-start justify-start relative z-10"
-      >
-        <div className="absolute h-full top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
-        <div className="relative z-40 p-8">
-          <motion.p
-            layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-yellow body_one font-bold text-left"
-          >
-            {card.category}
-          </motion.p>
-          <motion.p
-            layoutId={layout ? `title-${card.title}` : undefined}
-            className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left [text-wrap:balance] font-sans mt-2"
-          >
-            {card.title}
-          </motion.p>
-        </div>
-        <BlurImage
-          src={card.src}
-          alt={card.title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover absolute z-10 inset-0"
-        />
-      </motion.div>
-    </>
+    <motion.div
+      className="relative z-10 flex h-[400px] w-[300px] flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[30rem] md:w-96 dark:bg-neutral-900"
+      layoutId={layout ? `card-${card.title}` : undefined}
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+      <div className="relative z-40 p-8">
+        <motion.p
+          className="body_one text-left font-bold text-yellow"
+          layoutId={layout ? `category-${card.category}` : undefined}
+        >
+          {card.category}
+        </motion.p>
+        <motion.p
+          className="mt-2 max-w-xs text-left font-sans font-semibold text-white text-xl [text-wrap:balance] md:text-3xl"
+          layoutId={layout ? `title-${card.title}` : undefined}
+        >
+          {card.title}
+        </motion.p>
+      </div>
+      <BlurImage
+        alt={card.title}
+        className="absolute inset-0 z-10 object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        src={card.src}
+      />
+    </motion.div>
   );
 };

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { CookieConsent } from './cookie-consent';
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
+import { CookieConsent } from "./cookie-consent";
 
 export function CookieConsentWrapper() {
   const { locale } = useParams();
   const privacyPolicyHref = `/${locale}/privacy-policy`;
 
-  return <CookieConsent variant="mini" learnMoreHref={privacyPolicyHref} />;
+  return <CookieConsent learnMoreHref={privacyPolicyHref} variant="mini" />;
 }

@@ -1,15 +1,15 @@
-import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@supabase/supabase-js';
-import { env } from '@/lib/env';
-import sharp from 'sharp';
+import { createClient } from "@supabase/supabase-js";
+import sharp from "sharp";
+import { v4 as uuidv4 } from "uuid";
+import { env } from "@/lib/env";
 
 export async function uploadImage(file: File): Promise<string> {
   if (!file) {
-    return '';
+    return "";
   }
 
   try {
-    const fileExtension = file.name?.split('.').pop()?.toLowerCase() || 'jpg';
+    const fileExtension = file.name?.split(".").pop()?.toLowerCase() || "jpg";
     const fileName = `cover_${uuidv4()}.${fileExtension}`;
     const mimeType = file.type || `image/${fileExtension}`;
 
@@ -19,14 +19,14 @@ export async function uploadImage(file: File): Promise<string> {
     const inputBuffer = Buffer.from(arrayBuffer);
 
     const compressedBuffer = await sharp(inputBuffer)
-      .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+      .resize(1200, 1200, { fit: "inside", withoutEnlargement: true })
       .toBuffer();
 
     const { error } = await supabase.storage
-      .from('polotrip-albums-covers')
+      .from("polotrip-albums-covers")
       .upload(fileName, compressedBuffer, {
         contentType: mimeType,
-        cacheControl: '3600',
+        cacheControl: "3600",
       });
 
     if (error) {
@@ -35,11 +35,14 @@ export async function uploadImage(file: File): Promise<string> {
 
     const {
       data: { publicUrl },
-    } = supabase.storage.from('polotrip-albums-covers').getPublicUrl(fileName);
+    } = supabase.storage.from("polotrip-albums-covers").getPublicUrl(fileName);
 
     return publicUrl;
   } catch (error) {
-    console.error('Error uploading image:', error);
-    throw new Error('Failed to process image upload');
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("Failed to process image upload");
   }
 }

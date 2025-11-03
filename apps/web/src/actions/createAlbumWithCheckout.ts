@@ -1,32 +1,31 @@
-'use server';
+"use server";
 
-import { Stripe } from '@stripe/stripe-js';
-
-import { createAlbum } from '@/http/create-album';
-import { getAlbumFormSchema } from './schema/album-schema';
-import { uploadImage } from './utils/upload-image';
-import { env } from '@/lib/env';
-import { createCheckout } from '@/http/create-checkout';
-import { getCurrency } from '@/utils/getCurrency';
-import { AlbumPlan } from '@/constants/pricingEnum';
-import { getTranslations } from 'next-intl/server';
+import type { Stripe } from "@stripe/stripe-js";
+import { getTranslations } from "next-intl/server";
+import type { AlbumPlan } from "@/constants/pricingEnum";
+import { createAlbum } from "@/http/create-album";
+import { createCheckout } from "@/http/create-checkout";
+import { env } from "@/lib/env";
+import { getCurrency } from "@/utils/getCurrency";
+import { getAlbumFormSchema } from "./schema/album-schema";
+import { uploadImage } from "./utils/upload-image";
 
 export async function createAlbumWithCheckout(
   extra: { locale: string; stripePromise: Stripe | null; plan: AlbumPlan },
-  prevState: unknown,
-  formData: FormData,
+  _prevState: unknown,
+  formData: FormData
 ) {
   try {
     const t = await getTranslations({
       locale: extra.locale,
-      namespace: 'ServerActions.CreateAlbumWithCheckout',
+      namespace: "ServerActions.CreateAlbumWithCheckout",
     });
     const albumFormSchema = await getAlbumFormSchema(extra.locale);
 
-    const title = formData.get('title') as string;
-    const dateString = formData.get('date') as string;
-    const description = formData.get('description') as string;
-    const coverImageFile = formData.get('cover') as File;
+    const title = formData.get("title") as string;
+    const dateString = formData.get("date") as string;
+    const description = formData.get("description") as string;
+    const coverImageFile = formData.get("cover") as File;
 
     const dateWithDay = `${dateString}-15`;
 
@@ -39,14 +38,15 @@ export async function createAlbumWithCheckout(
 
     if (!validationResult.success) {
       return {
-        status: 'invalidData',
+        status: "invalidData",
         error: {
-          message: t('invalid_data'),
+          message: t("invalid_data"),
           errors: validationResult.error.flatten().fieldErrors,
         },
       };
     }
 
+    // biome-ignore lint/suspicious/noEvolvingTypes: coverImageUrl can be null
     let coverImageUrl = null;
     if (coverImageFile && coverImageFile.size > 0) {
       coverImageUrl = await uploadImage(coverImageFile);
@@ -73,7 +73,7 @@ export async function createAlbumWithCheckout(
         albumId: album?.id as string,
         successUrl,
         cancelUrl,
-        paymentMethod: 'credit_card',
+        paymentMethod: "credit_card",
         currency,
         isAdditionalPhotos: false,
       },
@@ -81,29 +81,30 @@ export async function createAlbumWithCheckout(
 
     if (checkoutSession?.id) {
       return {
-        status: 'success',
+        status: "success",
         sessionId: checkoutSession.id,
-        message: t('redirecting_to_checkout'),
-      };
-    } else {
-      return {
-        status: 'error',
-        error: {
-          message: t('checkout_session_error'),
-        },
+        message: t("redirecting_to_checkout"),
       };
     }
+    return {
+      status: "error",
+      error: {
+        message: t("checkout_session_error"),
+      },
+    };
   } catch (error) {
-    console.error('Error creating album and checkout:', error);
+    if (error instanceof Error) {
+      throw error;
+    }
 
     const t = await getTranslations({
       locale: extra.locale,
-      namespace: 'ServerActions.CreateAlbumWithCheckout',
+      namespace: "ServerActions.CreateAlbumWithCheckout",
     });
     return {
-      status: 'error',
+      status: "error",
       error: {
-        message: t('order_processing_error'),
+        message: t("order_processing_error"),
       },
     };
   }

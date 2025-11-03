@@ -1,13 +1,19 @@
-'use client';
+/** biome-ignore-all lint/nursery/noReactForwardRef: biome does not support forwardRef */
+/** biome-ignore-all lint/suspicious/noConsole: console.error is used for debugging */
+"use client";
 
-import { useState, useEffect, useRef, forwardRef, useCallback } from 'react';
-import { MapPin, Loader2, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/cn';
-import { LocationAutocompleteProps, LocationResult } from './types';
-import { useTranslations } from 'next-intl';
+import { MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/cn";
+import { InputSuffix } from "./input-suffix";
+import type { LocationAutocompleteProps, LocationResult } from "./types";
 
-export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocompleteProps>(
+export const LocationAutocomplete = forwardRef<
+  HTMLInputElement,
+  LocationAutocompleteProps
+>(
   (
     {
       value,
@@ -18,14 +24,15 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       latitude,
       longitude,
     },
-    ref,
+    ref
   ) => {
-    const t = useTranslations('LocationAutocomplete');
-    const placeholder = initialPlaceholder || t('placeholder');
+    const t = useTranslations("LocationAutocomplete");
+    const placeholder = initialPlaceholder || t("placeholder");
 
-    const [inputValue, setInputValue] = useState(value || '');
+    const [inputValue, setInputValue] = useState(value || "");
     const [results, setResults] = useState<LocationResult[]>([]);
-    const [isLoadingReverseGeocode, setIsLoadingReverseGeocode] = useState(false);
+    const [isLoadingReverseGeocode, setIsLoadingReverseGeocode] =
+      useState(false);
     const [isLoadingSearch, setIsLoadingSearch] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [preventDropdown, setPreventDropdown] = useState(false);
@@ -37,7 +44,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
     const formatAddress = (location: LocationResult) => {
       const { name, city, state, country } = location.properties;
       const parts = [name, city, state, country].filter(Boolean);
-      return parts.join(', ');
+      return parts.join(", ");
     };
 
     const fetchLocations = useCallback(
@@ -47,11 +54,11 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
         setIsLoadingSearch(true);
         try {
           const response = await fetch(
-            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en`,
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=en`
           );
 
           if (!response.ok) {
-            throw new Error('Falha ao buscar localizações');
+            throw new Error("Falha ao buscar localizações");
           }
 
           const data = await response.json();
@@ -61,20 +68,20 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
             setShowResults(true);
           }
         } catch (error) {
-          console.error('Erro ao buscar localizações:', error);
+          console.error("Erro ao buscar localizações:", error);
         } finally {
           setIsLoadingSearch(false);
         }
       },
-      [preventDropdown, isUserTyping],
+      [preventDropdown, isUserTyping]
     );
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setIsUserTyping(true);
       setInputValue(e.target.value);
 
-      if (e.target.value === '') {
-        onChange('', null, null);
+      if (e.target.value === "") {
+        onChange("", null, null);
       }
 
       if (preventDropdown) {
@@ -85,7 +92,12 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
     const handleInputFocus = () => {
       setIsUserTyping(true);
 
-      if (inputValue.length >= 3 && isUserTyping && !preventDropdown && results.length > 0) {
+      if (
+        inputValue.length >= 3 &&
+        isUserTyping &&
+        !preventDropdown &&
+        results.length > 0
+      ) {
         setShowResults(true);
       }
     };
@@ -102,12 +114,12 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       const displayName = formatAddress(location);
       setInputValue(displayName);
 
-      const longitude = location.geometry.coordinates[0];
-      const latitude = location.geometry.coordinates[1];
+      const selectedLongitude = location.geometry.coordinates[0];
+      const selectedLatitude = location.geometry.coordinates[1];
 
       setIsUserTyping(false);
 
-      onChange(displayName, latitude, longitude);
+      onChange(displayName, selectedLatitude, selectedLongitude);
       setShowResults(false);
 
       setPreventDropdown(true);
@@ -117,8 +129,8 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
     };
 
     const handleClearInput = () => {
-      setInputValue('');
-      onChange('', null, null);
+      setInputValue("");
+      onChange("", null, null);
       setIsUserTyping(false);
 
       if (inputRef.current) {
@@ -126,7 +138,9 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       }
     };
 
-    const inputValueMessage = isLoadingReverseGeocode ? t('loading_reverse_geocode') : inputValue;
+    const inputValueMessage = isLoadingReverseGeocode
+      ? t("loading_reverse_geocode")
+      : inputValue;
 
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -140,16 +154,16 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
         }
       }
 
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
 
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }, []);
 
     useEffect(() => {
       if (value !== inputValue && !isUserTyping) {
-        setInputValue(value || '');
+        setInputValue(value || "");
       }
     }, [value, inputValue, isUserTyping]);
 
@@ -170,17 +184,18 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
       return () => clearTimeout(timer);
     }, [inputValue, fetchLocations, isUserTyping]);
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: we need to fetch the reverse geocoding when the latitude and longitude are provided
     useEffect(() => {
       if (latitude && longitude && !inputValue && !disabled) {
         const fetchReverseGeocoding = async () => {
           setIsLoadingReverseGeocode(true);
           try {
             const response = await fetch(
-              `https://photon.komoot.io/reverse?lon=${longitude}&lat=${latitude}`,
+              `https://photon.komoot.io/reverse?lon=${longitude}&lat=${latitude}`
             );
 
             if (!response.ok) {
-              throw new Error('Failed to fetch location');
+              throw new Error("Failed to fetch location");
             }
 
             const data = await response.json();
@@ -194,7 +209,7 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
               onChange(displayName, latitude, longitude);
             }
           } catch (error) {
-            console.error('Error fetching reverse geocoding:', error);
+            console.error("Error fetching reverse geocoding:", error);
           } finally {
             setIsLoadingReverseGeocode(false);
           }
@@ -213,52 +228,51 @@ export const LocationAutocomplete = forwardRef<HTMLInputElement, LocationAutocom
 
     return (
       <div className="relative">
-        <div className="border border-text/25 rounded px-3 flex items-center gap-2">
-          <MapPin size={20} className="text-text/50 shrink-0" />
+        <div className="flex items-center gap-2 rounded border border-text/25 px-3">
+          <MapPin className="shrink-0 text-text/50" size={20} />
           <Input
-            ref={ref || inputRef}
-            type="text"
-            disabled={disabled}
             className={cn(
-              'font-body_two text-text/75 bg-transparent w-full outline-none border-0 p-0 focus-visible:ring-0 shadow-none',
-              className,
+              "w-full border-0 bg-transparent p-0 font-body_two text-text/75 shadow-none outline-none focus-visible:ring-0",
+              className
             )}
-            placeholder={placeholder}
-            value={inputValueMessage}
+            disabled={disabled}
+            onBlur={handleInputBlur}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
+            placeholder={placeholder}
+            ref={ref || inputRef}
+            type="text"
+            value={inputValueMessage}
           />
-          {isLoadingSearch || isLoadingReverseGeocode ? (
-            <Loader2 size={16} className="animate-spin text-text/50 shrink-0" />
-          ) : inputValue ? (
-            <X
-              size={16}
-              className="text-text/50 cursor-pointer shrink-0 hover:text-text/75"
-              onClick={handleClearInput}
-            />
-          ) : null}
+          <InputSuffix
+            inputValue={inputValue}
+            isLoadingReverseGeocode={isLoadingReverseGeocode}
+            isLoadingSearch={isLoadingSearch}
+            onClear={handleClearInput}
+          />
         </div>
 
         {showResults && results.length > 0 && (
           <div
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-text/10 bg-white shadow-lg"
             ref={resultsRef}
-            className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md border border-text/10 max-h-60 overflow-y-auto"
           >
-            {results.map((result, index) => (
+            {results.map((result) => (
               <div
-                key={index}
-                className="px-3 py-2 hover:bg-secondary/5 cursor-pointer"
+                className="cursor-pointer px-3 py-2 hover:bg-secondary/5"
+                key={result.properties.name}
                 onClick={() => handleLocationSelect(result)}
               >
-                <div className="font-body_two text-text/90">{formatAddress(result)}</div>
+                <div className="font-body_two text-text/90">
+                  {formatAddress(result)}
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
     );
-  },
+  }
 );
 
-LocationAutocomplete.displayName = 'LocationAutocomplete';
+LocationAutocomplete.displayName = "LocationAutocomplete";

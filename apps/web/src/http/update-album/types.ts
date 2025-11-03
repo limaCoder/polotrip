@@ -1,4 +1,4 @@
-import { Album } from '@polotrip/db/models';
+import type { Album } from "@polotrip/db/models";
 
 export type PhotoUpdate = {
   id: string;

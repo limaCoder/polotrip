@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { Loader2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/Button";
+import { usePostHog } from "@/hooks/usePostHog";
+import { signIn } from "@/lib/auth/client";
+import { env } from "@/lib/env";
+import type { OAuthButtonProps } from "./types";
 
-import { Button } from '@/components/Button';
-import { Loader2 } from 'lucide-react';
-
-import { signIn } from '@/lib/auth/client';
-import { env } from '@/lib/env';
-import { OAuthButtonProps } from './types';
-import { useParams } from 'next/navigation';
-import { usePostHog } from '@/hooks/usePostHog';
-
-export function OAuthButton({ provider, children, ...props }: OAuthButtonProps) {
+export function OAuthButton({
+  provider,
+  children,
+  ...props
+}: OAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams();
@@ -20,12 +22,11 @@ export function OAuthButton({ provider, children, ...props }: OAuthButtonProps) 
 
   return (
     <Button
-      type="button"
-      className="border border-text-opacity-25 rounded-lg py-2 px-6 w-full font-normal justify-center items-center hover:bg-gray-50"
+      className="w-full items-center justify-center rounded-lg border border-text-opacity-25 px-6 py-2 font-normal hover:bg-gray-50"
       onClick={async () => {
         setIsLoading(true);
 
-        capture('sign_in_started', {
+        capture("sign_in_started", {
           provider,
           locale,
         });
@@ -36,19 +37,21 @@ export function OAuthButton({ provider, children, ...props }: OAuthButtonProps) 
             callbackURL: `${env.NEXT_PUBLIC_WEB_URL}/${locale}/dashboard`,
           });
 
-          capture('sign_in_completed', {
+          capture("sign_in_completed", {
             provider,
             locale,
           });
         } catch (error) {
-          capture('sign_in_failed', {
+          capture("sign_in_failed", {
             provider,
             locale,
-            error_message: error instanceof Error ? error.message : 'Unknown error',
+            error_message:
+              error instanceof Error ? error.message : "Unknown error",
           });
           setIsLoading(false);
         }
       }}
+      type="button"
       {...props}
     >
       {children}

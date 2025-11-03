@@ -1,7 +1,7 @@
-import { type Photo } from '@polotrip/db/models';
-import { type Pagination as PaginationType } from '@/types/pagination';
+import type { Photo } from "@polotrip/db/models";
+import type { Pagination as PaginationType } from "@/types/pagination";
 
-interface PhotoGalleryProps {
+type PhotoGalleryProps = {
   filteredPhotos: Photo[];
   isLoading: boolean;
   selectedDate: string | null;
@@ -13,6 +13,6 @@ interface PhotoGalleryProps {
   deselectAllPhotos: () => void;
   onPageChange: (page: number) => void;
   onDeletePhotos: () => void;
-}
+};
 
 export type { PhotoGalleryProps };

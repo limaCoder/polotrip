@@ -1,31 +1,37 @@
-import { MotionSection } from '@/lib/motion/motion-components';
-import { Card, Carousel } from '@/components/ui/apple-cards-carousel';
-import { getTranslations } from 'next-intl/server';
-import { howItWorksData } from './data';
+import { getTranslations } from "next-intl/server";
+import { Card, Carousel } from "@/components/ui/apple-cards-carousel";
+import { MotionSection } from "@/lib/motion/motion-components";
+import { howItWorksData } from "./data";
 
 export async function HowItWorks() {
-  const t = await getTranslations('Home.HowItWorks');
-  const tSteps = await getTranslations('Home.HowItWorks.steps');
+  const t = await getTranslations("Home.HowItWorks");
+  const tSteps = await getTranslations("Home.HowItWorks.steps");
 
-  const steps = howItWorksData.map(step => ({
+  const steps = howItWorksData.map((step) => ({
     ...step,
     category: tSteps(step.categoryKey),
     title: tSteps(step.titleKey),
   }));
 
-  const cards = steps.map((card, index) => <Card key={card.src} card={card} index={index} />);
+  const cards = steps.map((card, index) => (
+    <Card card={card} index={index} key={card.src} />
+  ));
 
   return (
     <MotionSection
-      initial={{ opacity: 0, y: 35 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
       className="py-10"
       id="how-it-works"
+      initial={{ opacity: 0, y: 35 }}
+      transition={{ duration: 0.7 }}
+      whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="container mx-auto px-4 lg:px-9">
-        <h2 className="font-title_two text-primary text-center font-bold mb-4">{t('title')}</h2>
-        <p className="font-body_one mx-auto text-center mb-8">{t('description')}</p>
+        <h2 className="mb-4 text-center font-bold font-title_two text-primary">
+          {t("title")}
+        </h2>
+        <p className="mx-auto mb-8 text-center font-body_one">
+          {t("description")}
+        </p>
 
         <Carousel items={cards} />
       </div>

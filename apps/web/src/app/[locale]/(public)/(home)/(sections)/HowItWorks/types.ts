@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stepNumbers = [1, 2, 3, 4, 5] as const;
 type StepNumber = (typeof stepNumbers)[number];
 

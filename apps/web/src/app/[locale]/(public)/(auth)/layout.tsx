@@ -1,6 +1,6 @@
-import { getTranslations } from 'next-intl/server';
-import { ReactNode } from 'react';
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 
 export async function generateMetadata({
   params,
@@ -8,27 +8,31 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'AuthLayout.metadata' });
+  const t = await getTranslations({ locale, namespace: "AuthLayout.metadata" });
 
   return {
-    title: t('title'),
-    description: t('description'),
-    keywords: t('keywords'),
+    title: t("title"),
+    description: t("description"),
+    keywords: t("keywords"),
     openGraph: {
-      title: t('title'),
-      description: t('description'),
+      title: t("title"),
+      description: t("description"),
       images: [
         {
-          url: 'https://polotrip.com/opengraph-image',
+          url: "https://polotrip.com/opengraph-image",
           width: 1200,
           height: 630,
-          alt: t('og_alt'),
+          alt: t("og_alt"),
         },
       ],
     },
   };
 }
 
-export default async function AuthLayout({ children }: { children: ReactNode }) {
+export default async function AuthLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return <>{children}</>;
 }

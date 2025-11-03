@@ -1,5 +1,5 @@
-import { getPublicAlbum } from '@/http/get-public-album';
-import { Metadata } from 'next';
+import type { Metadata } from "next";
+import { getPublicAlbum } from "@/http/get-public-album";
 
 export async function generateAlbumMetadata({
   params,
@@ -11,7 +11,7 @@ export async function generateAlbumMetadata({
 
   if (!albumData) {
     return {
-      title: 'Álbum não encontrado | Polotrip',
+      title: "Álbum não encontrado | Polotrip",
     };
   }
 
@@ -19,16 +19,18 @@ export async function generateAlbumMetadata({
     title: `${albumData?.album?.title} | Polotrip`,
     description:
       albumData?.album?.description ||
-      'Confira as fotos e memórias deste álbum especial no Polotrip',
+      "Confira as fotos e memórias deste álbum especial no Polotrip",
     openGraph: {
       title: `${albumData?.album?.title} | Polotrip`,
       description:
         albumData?.album?.description ||
-        'Confira as fotos e memórias deste álbum especial no Polotrip',
-      type: 'article',
+        "Confira as fotos e memórias deste álbum especial no Polotrip",
+      type: "article",
       images: [
         {
-          url: albumData?.album?.coverImageUrl || 'https://polotrip.com/openGraph/og-image.jpg',
+          url:
+            albumData?.album?.coverImageUrl ||
+            "https://polotrip.com/openGraph/og-image.jpg",
           width: 1200,
           height: 630,
         },

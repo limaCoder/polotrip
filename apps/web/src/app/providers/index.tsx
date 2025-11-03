@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-import { TanstackQueryProvider } from './tanstack-query';
-import { PostHogProvider } from './PostHogProvider';
+import type { ReactNode } from "react";
+import { PostHogProvider } from "./PostHogProvider";
+import { TanstackQueryProvider } from "./tanstack-query";
 
 type ProvidersProps = {
   children: ReactNode;

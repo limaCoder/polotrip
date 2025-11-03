@@ -1,19 +1,19 @@
-interface Photo {
+type Photo = {
   id: string;
   src: string;
   alt: string;
   width: number;
   height: number;
   description: string;
-}
+};
 
-interface TimelineEvent {
+type TimelineEvent = {
   date: string;
   photos: Photo[];
-}
+};
 
-interface PhotoTimelineProps {
+type PhotoTimelineProps = {
   albumId: string;
-}
+};
 
 export type { Photo, TimelineEvent, PhotoTimelineProps };

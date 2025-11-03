@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { PhotoEditFormData, UsePhotoEditFormProps } from './types';
-import { apiStringToDate } from '@/utils/dates';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { apiStringToDate } from "@/utils/dates";
+import type { PhotoEditFormData, UsePhotoEditFormProps } from "./types";
 
 export function usePhotoEditForm({
   selectedPhotos,
   onSave,
   deselectAllPhotos,
 }: UsePhotoEditFormProps) {
-  const t = useTranslations('PhotoEditFormHook');
+  const t = useTranslations("PhotoEditFormHook");
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [preserveFields, setPreserveFields] = useState({
@@ -32,7 +32,7 @@ export function usePhotoEditForm({
         keepTouched: false,
       });
     },
-    [form],
+    [form]
   );
 
   const showSuccessFeedback = useCallback(() => {
@@ -98,19 +98,19 @@ export function usePhotoEditForm({
       resetForm,
       showSuccessFeedback,
       deselectAllPhotos,
-    ],
+    ]
   );
 
   const getSelectionText = useCallback(() => {
     if (isMultipleSelection) {
-      return t('edit_multiple_photos', { count: selectedPhotos.length });
+      return t("edit_multiple_photos", { count: selectedPhotos.length });
     }
 
     if (selectedPhotos.length === 1) {
-      return t('edit_single_photo');
+      return t("edit_single_photo");
     }
 
-    return t('no_photo_selected');
+    return t("no_photo_selected");
   }, [isMultipleSelection, selectedPhotos.length, t]);
 
   const selectionText = getSelectionText();
@@ -122,23 +122,23 @@ export function usePhotoEditForm({
 
     const currentSelectionIds =
       selectedPhotos
-        ?.map(p => p?.id)
+        ?.map((p) => p?.id)
         .sort()
-        .join(',') || '';
+        .join(",") || "";
 
-    const previousSelectionIds = previousSelectionRef.current.sort().join(',');
+    const previousSelectionIds = previousSelectionRef.current.sort().join(",");
 
     if (currentSelectionIds === previousSelectionIds) {
       return;
     }
 
-    previousSelectionRef.current = selectedPhotos?.map(p => p?.id) || [];
+    previousSelectionRef.current = selectedPhotos?.map((p) => p?.id) || [];
 
     if (selectedPhotos.length === 0) {
       resetForm({
         dateTaken: null,
-        locationName: '',
-        description: '',
+        locationName: "",
+        description: "",
         latitude: null,
         longitude: null,
       });
@@ -149,8 +149,8 @@ export function usePhotoEditForm({
       const photo = selectedPhotos[0];
       resetForm({
         dateTaken: apiStringToDate(photo.dateTaken),
-        locationName: photo.locationName || '',
-        description: photo.description || '',
+        locationName: photo.locationName || "",
+        description: photo.description || "",
         latitude: photo.latitude,
         longitude: photo.longitude,
       });
@@ -160,8 +160,8 @@ export function usePhotoEditForm({
     const firstPhoto = selectedPhotos[0];
     resetForm({
       dateTaken: apiStringToDate(firstPhoto.dateTaken),
-      locationName: '',
-      description: '',
+      locationName: "",
+      description: "",
       latitude: null,
       longitude: null,
     });

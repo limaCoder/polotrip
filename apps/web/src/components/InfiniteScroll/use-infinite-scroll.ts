@@ -1,5 +1,5 @@
-import { InfiniteScrollProps } from '@/components/InfiniteScroll/types';
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from "react";
+import type { InfiniteScrollProps } from "@/components/InfiniteScroll/types";
 
 export function useInfiniteScroll({
   fetchNextPage,
@@ -19,7 +19,7 @@ export function useInfiniteScroll({
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage, isFetching],
+    [fetchNextPage, hasNextPage, isFetching]
   );
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export function useInfiniteScroll({
     return () => {
       intersectionObserver.disconnect();
     };
-  }, [infiniteScrollRef, root, rootMargin, threshold, observerCallback]);
+  }, [root, rootMargin, threshold, observerCallback]);
 
   return infiniteScrollRef;
 }

@@ -1,40 +1,49 @@
-import { Link } from '@/i18n/routing';
-import { getTranslations } from 'next-intl/server';
-import Image from 'next/image';
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 
 export async function Footer() {
-  const t = await getTranslations('Footer');
+  const t = await getTranslations("Footer");
 
   return (
     <footer className="py-8">
-      <div className="container mx-auto lg:px-9 px-4 flex flex-col lg:flex-row gap-4 justify-between text-center lg:text-left">
-        <div className="flex flex-col justify-center items-center lg:items-start">
-          <Image src="/brand/logo.svg" alt={t('logo_alt')} width={150} height={150} />
-          <p className="font-body_two mt-1">{t('copyright')}</p>
-          <p className="font-body_two mt-1">
-            {t('made_by')}
+      <div className="container mx-auto flex flex-col justify-between gap-4 px-4 text-center lg:flex-row lg:px-9 lg:text-left">
+        <div className="flex flex-col items-center justify-center lg:items-start">
+          <Image
+            alt={t("logo_alt")}
+            height={150}
+            src="/brand/logo.svg"
+            width={150}
+          />
+          <p className="mt-1 font-body_two">{t("copyright")}</p>
+          <p className="mt-1 font-body_two">
+            {t("made_by")}
             <a
+              className="ml-1"
               href="https://marioaugustolima.com.br/"
+              rel="noreferrer"
               target="_blank"
               title="Mario Lima"
-              className="ml-1"
-              rel="noreferrer"
             >
               Mario Lima
             </a>
           </p>
         </div>
         <div className="flex flex-col">
-          <p className="font-body_one font-bold">{t('legal')}</p>
-          <Link href="/terms-of-use" className="font-body_one text-primary mt-2">
-            {t('terms_of_use')}
+          <p className="font-body_one font-bold">{t("legal")}</p>
+          <Link
+            className="mt-2 font-body_one text-primary"
+            href="/terms-of-use"
+          >
+            {t("terms_of_use")}
           </Link>
-          <Link href="/privacy-policy" className="font-body_one text-primary mt-1">
-            {t('privacy_policy')}
+          <Link
+            className="mt-1 font-body_one text-primary"
+            href="/privacy-policy"
+          >
+            {t("privacy_policy")}
           </Link>
-          <a href="" className="font-body_one text-primary mt-1">
-            {t('cnpj')}
-          </a>
+          <span className="mt-1 font-body_one text-primary">{t("cnpj")}</span>
         </div>
       </div>
     </footer>

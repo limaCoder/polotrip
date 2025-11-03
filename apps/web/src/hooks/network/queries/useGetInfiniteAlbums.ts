@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-
-import { getAlbums } from '@/http/get-albums';
-import { GetAlbumsResponse } from '@/http/get-albums/types';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import { albumKeys } from "@/hooks/network/keys/albumKeys";
+import { getAlbums } from "@/http/get-albums";
+import type { GetAlbumsResponse } from "@/http/get-albums/types";
 
 const useGetInfiniteAlbums = () => {
   const {
@@ -28,9 +27,9 @@ const useGetInfiniteAlbums = () => {
         signal,
       });
     },
-    getNextPageParam: lastPage => {
-      if (!lastPage || !lastPage.pagination) {
-        return undefined;
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.pagination) {
+        return;
       }
 
       const hasMore = lastPage.pagination.page < lastPage.pagination.totalPages;
@@ -39,7 +38,7 @@ const useGetInfiniteAlbums = () => {
     },
   });
 
-  const flatItems = data?.pages?.flatMap(page => page?.albums || []) || [];
+  const flatItems = data?.pages?.flatMap((page) => page?.albums || []) || [];
 
   const infiniteItems = {
     items: flatItems,

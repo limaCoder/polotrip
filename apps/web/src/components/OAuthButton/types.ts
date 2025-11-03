@@ -1,7 +1,7 @@
-import { ButtonProps } from '../Button/types';
+import type { ButtonProps } from "../Button/types";
 
 type OAuthButtonProps = ButtonProps & {
-  provider: 'google';
+  provider: "google";
 };
 
 export type { OAuthButtonProps };

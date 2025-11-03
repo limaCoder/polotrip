@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { HeaderDesktop } from './components/Desktop';
-import { HeaderMobile } from './components/Mobile';
-import { usePathname } from '@/i18n/routing';
-import { cn } from '@/lib/cn';
+import { usePathname } from "@/i18n/routing";
+import { cn } from "@/lib/cn";
+import { HeaderDesktop } from "./components/Desktop";
+import { HeaderMobile } from "./components/Mobile";
 
 export function Header() {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const isHome = pathname === "/";
 
   return (
     <header
       className={cn(
-        'w-full z-50',
+        "z-50 w-full",
         isHome
-          ? 'fixed bg-transparent shadow-none lg:absolute'
-          : 'fixed lg:relative bg-background shadow-md',
+          ? "fixed bg-transparent shadow-none lg:absolute"
+          : "fixed bg-background shadow-md lg:relative"
       )}
     >
       <HeaderDesktop isHome={isHome} />

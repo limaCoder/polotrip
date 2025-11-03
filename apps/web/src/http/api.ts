@@ -1,14 +1,14 @@
-import { env } from '@/lib/env';
-import ky, { Options } from 'ky';
+import ky, { type Options } from "ky";
+import { env } from "@/lib/env";
 
-const isClient = typeof window !== 'undefined';
+const isClient = typeof window !== "undefined";
 
 const baseConfig = {
   prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-  credentials: 'include' as RequestCredentials,
+  credentials: "include" as RequestCredentials,
 };
 
 const clientApi = ky.create(baseConfig);
@@ -16,19 +16,21 @@ const clientApi = ky.create(baseConfig);
 const serverApi = ky.create(baseConfig).extend({
   hooks: {
     beforeRequest: [
-      async request => {
+      async (request) => {
         try {
-          const { headers } = await import('next/headers');
+          const { headers } = await import("next/headers");
 
           const header = await headers();
 
-          const cookies = header.get('cookie');
+          const cookies = header.get("cookie");
 
-          const sessionCookie = cookies?.split('; ').find(cookie => cookie.startsWith('polotrip'));
+          const sessionCookie = cookies
+            ?.split("; ")
+            .find((cookie) => cookie.startsWith("polotrip"));
 
-          request.headers.set('cookie', sessionCookie ?? '');
+          request.headers.set("cookie", sessionCookie ?? "");
         } catch (error) {
-          console.error('Error setting cookies:', error);
+          throw new Error(`Error setting cookies: ${error}`);
         }
       },
     ],
@@ -38,13 +40,18 @@ const serverApi = ky.create(baseConfig).extend({
 const apiInstance = isClient ? clientApi : serverApi;
 
 export const api = {
-  get: <T>(url: string, options?: Options) => apiInstance.get(url, options).json<T>(),
+  get: <T>(url: string, options?: Options) =>
+    apiInstance.get(url, options).json<T>(),
 
-  post: <T>(url: string, options?: Options) => apiInstance.post(url, options).json<T>(),
+  post: <T>(url: string, options?: Options) =>
+    apiInstance.post(url, options).json<T>(),
 
-  put: <T>(url: string, options?: Options) => apiInstance.put(url, options).json<T>(),
+  put: <T>(url: string, options?: Options) =>
+    apiInstance.put(url, options).json<T>(),
 
-  patch: <T>(url: string, options?: Options) => apiInstance.patch(url, options).json<T>(),
+  patch: <T>(url: string, options?: Options) =>
+    apiInstance.patch(url, options).json<T>(),
 
-  delete: <T>(url: string, options?: Options) => apiInstance.delete(url, options).json<T>(),
+  delete: <T>(url: string, options?: Options) =>
+    apiInstance.delete(url, options).json<T>(),
 };

@@ -1,20 +1,22 @@
-'use client';
+"use client";
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { updateAlbum } from "@/http/update-album";
+import { albumKeys } from "../keys/albumKeys";
 
-import { updateAlbum } from '@/http/update-album';
-import { albumKeys } from '../keys/albumKeys';
-import { useTranslations } from 'next-intl';
-
-interface UsePublishAlbumProps {
+type UsePublishAlbumProps = {
   albumId: string;
   onSuccess?: () => void;
-}
+};
 
-export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) => {
+export const usePublishAlbum = ({
+  albumId,
+  onSuccess,
+}: UsePublishAlbumProps) => {
   const queryClient = useQueryClient();
-  const t = useTranslations('PublishAlbumHook');
+  const t = useTranslations("PublishAlbumHook");
 
   return useMutation({
     mutationFn: async () => {
@@ -22,13 +24,13 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
         params: { id: albumId },
         body: {
           isPublished: true,
-          currentStepAfterPayment: 'published',
+          currentStepAfterPayment: "published",
         },
       });
     },
     onSuccess: () => {
-      toast.success(t('success_title'), {
-        description: t('success_description'),
+      toast.success(t("success_title"), {
+        description: t("success_description"),
       });
 
       if (onSuccess) {
@@ -40,8 +42,8 @@ export const usePublishAlbum = ({ albumId, onSuccess }: UsePublishAlbumProps) =>
       });
     },
     onError: () => {
-      toast.error(t('error_title'), {
-        description: t('error_description'),
+      toast.error(t("error_title"), {
+        description: t("error_description"),
       });
     },
   });

@@ -1,30 +1,37 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { useParams } from 'next/navigation';
-import pLimit from 'p-limit';
-import { toast } from 'sonner';
-import { useQuery } from '@tanstack/react-query';
-
-import { getSignedUrls, saveUploadedPhotos } from '@/http/upload-photos';
-import { PhotoMetadata } from '@/http/upload-photos/types';
+/** biome-ignore-all lint/suspicious/noEvolvingTypes: we need to use any type here */
+/** biome-ignore-all lint/suspicious/noImplicitAnyLet: we need to use any type here */
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import pLimit from "p-limit";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
-  extractExifData,
   compressImage,
   createPreviewUrl,
+  createPreviewUrlAsync,
+  extractExifData,
   generateUniqueId,
   revokePreviewUrl,
-  createPreviewUrlAsync,
-} from '@/helpers/uploadHelpers';
-import { PhotoFile, UseUploadFormOptions, UploadFormState, Params } from './types';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { QueryClient } from '@tanstack/react-query';
-import { getAlbum } from '@/http/get-album';
-import { useTranslations } from 'next-intl';
-import { usePostHog } from '@/hooks/usePostHog';
+} from "@/helpers/uploadHelpers";
+import { albumKeys } from "@/hooks/network/keys/albumKeys";
+import { usePostHog } from "@/hooks/usePostHog";
+import { getAlbum } from "@/http/get-album";
+import { getSignedUrls, saveUploadedPhotos } from "@/http/upload-photos";
+import type { PhotoMetadata } from "@/http/upload-photos/types";
+import type {
+  Params,
+  PhotoFile,
+  UploadFormState,
+  UseUploadFormOptions,
+} from "./types";
+
+const LIMIT_EXCEEDED_REGEX = /Limit of (\d+) photos/;
 
 export function useUploadForm(options?: UseUploadFormOptions) {
   const { id: albumId, locale } = useParams<Params>();
   const queryClient = useMemo(() => new QueryClient(), []);
-  const t = useTranslations('UploadFormHook');
+  const t = useTranslations("UploadFormHook");
   const { capture } = usePostHog();
   const uploadStartTimeRef = useRef<number>(0);
 
@@ -48,39 +55,49 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
   const redirectPath = `/${locale}/dashboard/album/${albumId}/edit-album`;
 
-  const getTotalSize = () => uploadFormState?.files?.reduce((total, file) => total + file?.size, 0);
+  const getTotalSize = () =>
+    uploadFormState?.files?.reduce((total, file) => total + file?.size, 0);
 
   const uploadButtonDisabled =
     uploadFormState?.files?.length === 0 ||
-    uploadFormState?.files?.some(photo => photo?.loading) ||
+    uploadFormState?.files?.some((photo) => photo?.loading) ||
     uploadFormState?.isUploading ||
-    uploadFormState?.files?.every(photo => photo?.error);
+    uploadFormState?.files?.every((photo) => photo?.error);
 
   const clearAllButtonDisabled =
     uploadFormState?.files?.length === 0 || uploadFormState?.isUploading;
 
-  const updateUploadFormState = useCallback((newState: Partial<UploadFormState>) => {
-    setUploadFormState(prev => ({ ...prev, ...newState }));
-  }, []);
+  const updateUploadFormState = useCallback(
+    (newState: Partial<UploadFormState>) => {
+      setUploadFormState((prev) => ({ ...prev, ...newState }));
+    },
+    []
+  );
 
-  const updateFiles = useCallback((filesUpdater: (prevFiles: PhotoFile[]) => PhotoFile[]) => {
-    setUploadFormState(prev => ({
-      ...prev,
-      files: filesUpdater(prev.files),
-    }));
-  }, []);
+  const updateFiles = useCallback(
+    (filesUpdater: (prevFiles: PhotoFile[]) => PhotoFile[]) => {
+      setUploadFormState((prev) => ({
+        ...prev,
+        files: filesUpdater(prev.files),
+      }));
+    },
+    []
+  );
 
   const handleFiles = useCallback(
     async (newFiles: FileList | null) => {
-      if (!newFiles?.length || !albumData?.album?.photoLimit) return;
+      if (!(newFiles?.length && albumData?.album?.photoLimit)) return;
 
-      const imageFiles = Array.from(newFiles).filter(file => file?.type?.startsWith('image/'));
+      const imageFiles = Array.from(newFiles).filter((file) =>
+        file?.type?.startsWith("image/")
+      );
 
-      const remainingSlots = albumData?.album?.photoLimit - uploadFormState?.files?.length;
+      const remainingSlots =
+        albumData?.album?.photoLimit - uploadFormState?.files?.length;
 
       if (remainingSlots <= 0) {
-        toast.error(t('limit_exceeded_title'), {
-          description: t('limit_exceeded_description', {
+        toast.error(t("limit_exceeded_title"), {
+          description: t("limit_exceeded_description", {
             photoLimit: albumData?.album?.photoLimit,
           }),
           duration: 5000,
@@ -94,22 +111,22 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       if (imageFiles.length > remainingSlots) {
         const description =
           remainingSlots === 1
-            ? t('files_ignored_warning_description_singular', {
+            ? t("files_ignored_warning_description_singular", {
                 remainingSlots,
                 photoLimit: albumData?.album?.photoLimit,
               })
-            : t('files_ignored_warning_description_plural', {
+            : t("files_ignored_warning_description_plural", {
                 remainingSlots,
                 photoLimit: albumData?.album?.photoLimit,
               });
-        toast.warning(t('files_ignored_warning_title'), {
+        toast.warning(t("files_ignored_warning_title"), {
           description,
           duration: 5000,
           richColors: true,
         });
       }
 
-      const newPhotos: PhotoFile[] = filesToAdd?.map(file => ({
+      const newPhotos: PhotoFile[] = filesToAdd?.map((file) => ({
         id: generateUniqueId(),
         file,
         preview: createPreviewUrl(file),
@@ -124,32 +141,36 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         error: null,
       });
 
-      capture('photos_selected', {
+      capture("photos_selected", {
         album_id: albumId,
         photos_count: filesToAdd.length,
-        total_size_mb: (filesToAdd.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
+        total_size_mb: (
+          filesToAdd.reduce((acc, f) => acc + f.size, 0) /
+          1024 /
+          1024
+        ).toFixed(2),
       });
 
       for (const photo of newPhotos) {
         try {
           const preview = await createPreviewUrlAsync(photo.file);
 
-          updateFiles(prev =>
-            prev.map(p =>
+          updateFiles((prev) =>
+            prev.map((p) =>
               p?.id === photo?.id
                 ? {
                     ...p,
                     preview,
                   }
-                : p,
-            ),
+                : p
+            )
           );
 
           const compressedFile = await compressImage(photo?.file);
           const metadata = await extractExifData(photo?.file);
 
-          updateFiles(prev =>
-            prev.map(p =>
+          updateFiles((prev) =>
+            prev.map((p) =>
               p?.id === photo?.id
                 ? {
                     ...p,
@@ -158,18 +179,21 @@ export function useUploadForm(options?: UseUploadFormOptions) {
                     loading: false,
                     metadata,
                   }
-                : p,
-            ),
+                : p
+            )
           );
         } catch (error) {
-          if (error instanceof Error && error.message.includes('photos per album exceeded')) {
-            const limitMatch = error.message.match(/Limit of (\d+) photos/);
+          if (
+            error instanceof Error &&
+            error.message.includes("photos per album exceeded")
+          ) {
+            const limitMatch = error.message.match(LIMIT_EXCEEDED_REGEX);
             const photoLimit = limitMatch
               ? limitMatch[1]
-              : albumData.album.photoLimit?.toString() || '100';
+              : albumData.album.photoLimit?.toString() || "100";
 
-            toast.error(t('limit_exceeded_title'), {
-              description: t('limit_exceeded_description', { photoLimit }),
+            toast.error(t("limit_exceeded_title"), {
+              description: t("limit_exceeded_description", { photoLimit }),
               duration: 5000,
               richColors: true,
             });
@@ -181,60 +205,69 @@ export function useUploadForm(options?: UseUploadFormOptions) {
             return;
           }
 
-          console.error('Error processing image:', error);
-          toast.error(t('image_processing_error_title'), {
-            description: t('image_processing_error_description'),
+          toast.error(t("image_processing_error_title"), {
+            description: t("image_processing_error_description"),
             duration: 5000,
             richColors: true,
           });
 
-          updateFiles(prev =>
-            prev.map(p =>
+          updateFiles((prev) =>
+            prev.map((p) =>
               p?.id === photo?.id
-                ? { ...p, loading: false, error: t('image_processing_error') }
-                : p,
-            ),
+                ? { ...p, loading: false, error: t("image_processing_error") }
+                : p
+            )
           );
         }
       }
     },
-    [uploadFormState?.files, updateFiles, updateUploadFormState, albumData, t, capture, albumId],
+    [
+      uploadFormState?.files,
+      updateFiles,
+      updateUploadFormState,
+      albumData,
+      t,
+      capture,
+      albumId,
+    ]
   );
 
   const removeFile = useCallback(
     (fileId: string) => {
-      updateFiles(prev => {
-        const fileToRemove = prev.find(f => f.id === fileId);
+      updateFiles((prev) => {
+        const fileToRemove = prev.find((f) => f.id === fileId);
         if (fileToRemove) {
           revokePreviewUrl(fileToRemove.preview);
         }
 
-        return prev.filter(f => f.id !== fileId);
+        return prev.filter((f) => f.id !== fileId);
       });
     },
-    [updateFiles],
+    [updateFiles]
   );
 
   const clearAll = useCallback(() => {
-    uploadFormState?.files?.forEach(file => {
+    uploadFormState?.files?.forEach((file) => {
       revokePreviewUrl(file?.preview);
     });
 
     updateUploadFormState({ files: [] });
 
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   }, [uploadFormState?.files, updateUploadFormState]);
 
   const checkForMetadata = useCallback(() => {
     const { files } = uploadFormState;
 
-    const hasMetadataFiles = files.some(file => {
+    const hasMetadataFiles = files.some((file) => {
       const metadata = file?.metadata;
 
       return (
-        metadata?.dateTaken !== null || metadata?.latitude !== null || metadata?.longitude !== null
+        metadata?.dateTaken !== null ||
+        metadata?.latitude !== null ||
+        metadata?.longitude !== null
       );
     });
 
@@ -246,11 +279,11 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
     if (!files || files?.length === 0 || isUploading) return;
 
-    const validFiles = files?.filter(file => !file?.error && !file?.loading);
+    const validFiles = files?.filter((file) => !(file?.error || file?.loading));
 
     if (!validFiles?.length) {
       updateUploadFormState({
-        error: t('no_valid_files_error'),
+        error: t("no_valid_files_error"),
       });
       return;
     }
@@ -262,10 +295,14 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     });
 
     uploadStartTimeRef.current = Date.now();
-    capture('upload_started', {
+    capture("upload_started", {
       album_id: albumId,
       photos_count: validFiles.length,
-      total_size_mb: (validFiles.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
+      total_size_mb: (
+        validFiles.reduce((acc, f) => acc + f.size, 0) /
+        1024 /
+        1024
+      ).toFixed(2),
     });
 
     try {
@@ -274,24 +311,30 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       const totalFiles = validFiles?.length;
       const photoMetadata: PhotoMetadata[] = [];
 
-      for (let batchStart = 0; batchStart < validFiles?.length; batchStart += BATCH_SIZE) {
+      for (
+        let batchStart = 0;
+        batchStart < validFiles?.length;
+        batchStart += BATCH_SIZE
+      ) {
         const batchEnd = Math.min(batchStart + BATCH_SIZE, validFiles.length);
         const batchFiles = validFiles.slice(batchStart, batchEnd);
 
-        const fileNames = batchFiles?.map(file => file?.file?.name || '');
-        const fileTypes = batchFiles?.map(file => file?.file?.type || 'image/jpeg');
+        const fileNames = batchFiles?.map((file) => file?.file?.name || "");
+        const fileTypes = batchFiles?.map(
+          (file) => file?.file?.type || "image/jpeg"
+        );
 
         const validFileNames = fileNames?.filter(
-          name => name && typeof name === 'string' && name.trim() !== '',
+          (name) => name && typeof name === "string" && name.trim() !== ""
         );
 
         const validFileTypes = fileTypes?.filter(
           (type, index) =>
             fileNames[index] &&
-            typeof fileNames[index] === 'string' &&
-            fileNames[index]?.trim() !== '' &&
+            typeof fileNames[index] === "string" &&
+            fileNames[index]?.trim() !== "" &&
             type &&
-            typeof type === 'string',
+            typeof type === "string"
         );
 
         if (!validFileNames?.length) continue;
@@ -310,12 +353,15 @@ export function useUploadForm(options?: UseUploadFormOptions) {
           });
           urls = response.urls;
         } catch (error) {
-          if (error instanceof Error && error.message.includes('photos per album exceeded')) {
-            const limitMatch = error.message.match(/Limit of (\d+) photos/);
-            const photoLimit = limitMatch ? limitMatch[1] : '100';
+          if (
+            error instanceof Error &&
+            error.message.includes("photos per album exceeded")
+          ) {
+            const limitMatch = error.message.match(LIMIT_EXCEEDED_REGEX);
+            const photoLimit = limitMatch ? limitMatch[1] : "100";
 
-            toast.error(t('limit_exceeded_title'), {
-              description: t('limit_exceeded_description', { photoLimit }),
+            toast.error(t("limit_exceeded_title"), {
+              description: t("limit_exceeded_description", { photoLimit }),
               duration: 5000,
               richColors: true,
             });
@@ -334,7 +380,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
         for (let i = 0; i < batchFiles?.length; i++) {
           const file = batchFiles[i];
-          if (!file || !file?.file) continue;
+          if (!file?.file) continue;
 
           const urlData = urls[i];
           if (!urlData) continue;
@@ -343,24 +389,38 @@ export function useUploadForm(options?: UseUploadFormOptions) {
             filePath: urlData.filePath,
             originalFileName: file?.file?.name || `photo-${i}.jpg`,
             dateTaken: file?.metadata?.dateTaken || null,
-            latitude: file?.metadata?.latitude !== undefined ? file?.metadata?.latitude : null,
-            longitude: file?.metadata?.longitude !== undefined ? file?.metadata?.longitude : null,
-            width: file?.metadata?.width !== undefined ? file?.metadata?.width : null,
-            height: file?.metadata?.height !== undefined ? file?.metadata?.height : null,
+            latitude:
+              file?.metadata?.latitude !== undefined
+                ? file?.metadata?.latitude
+                : null,
+            longitude:
+              file?.metadata?.longitude !== undefined
+                ? file?.metadata?.longitude
+                : null,
+            width:
+              file?.metadata?.width !== undefined
+                ? file?.metadata?.width
+                : null,
+            height:
+              file?.metadata?.height !== undefined
+                ? file?.metadata?.height
+                : null,
           });
 
           const uploadTask = limit(async () => {
             try {
               const uploadResponse = await fetch(urlData?.signedUrl, {
-                method: 'PUT',
+                method: "PUT",
                 headers: {
-                  'Content-Type': file?.file?.type || 'image/jpeg',
+                  "Content-Type": file?.file?.type || "image/jpeg",
                 },
                 body: file?.file,
               });
 
               if (!uploadResponse.ok) {
-                throw new Error(`Failed to upload ${file?.file?.name || 'file'}`);
+                throw new Error(
+                  `Failed to upload ${file?.file?.name || "file"}`
+                );
               }
 
               completedUploads++;
@@ -370,7 +430,11 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
               return true;
             } catch (error) {
-              console.error(`Error uploading ${file?.file?.name || 'file'}:`, error);
+              toast.error(t("image_processing_error_title"), {
+                description: t("image_processing_error_description"),
+                duration: 5000,
+                richColors: true,
+              });
               throw error;
             }
           });
@@ -382,15 +446,15 @@ export function useUploadForm(options?: UseUploadFormOptions) {
       }
 
       const validPhotos = photoMetadata?.filter(
-        photo =>
+        (photo) =>
           photo &&
-          typeof photo === 'object' &&
-          typeof photo.filePath === 'string' &&
-          photo.filePath.trim() !== '',
+          typeof photo === "object" &&
+          typeof photo.filePath === "string" &&
+          photo.filePath.trim() !== ""
       );
 
       if (!validPhotos.length) {
-        throw new Error('No valid photos to save');
+        throw new Error("No valid photos to save");
       }
 
       await saveUploadedPhotos({
@@ -412,12 +476,19 @@ export function useUploadForm(options?: UseUploadFormOptions) {
         progress: 100,
       });
 
-      const uploadDuration = ((Date.now() - uploadStartTimeRef.current) / 1000).toFixed(2);
-      capture('upload_completed', {
+      const uploadDuration = (
+        (Date.now() - uploadStartTimeRef.current) /
+        1000
+      ).toFixed(2);
+      capture("upload_completed", {
         album_id: albumId,
         photos_count: validFiles.length,
         upload_duration_seconds: uploadDuration,
-        total_size_mb: (validFiles.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2),
+        total_size_mb: (
+          validFiles.reduce((acc, f) => acc + f.size, 0) /
+          1024 /
+          1024
+        ).toFixed(2),
       });
 
       await queryClient.refetchQueries({
@@ -428,29 +499,32 @@ export function useUploadForm(options?: UseUploadFormOptions) {
           albumKeys.photosByDate(albumId),
           albumKeys.space(albumId),
         ],
-        type: 'all',
+        type: "all",
       });
 
-      toast.success(t('upload_success_title'), {
-        description: t('upload_success_description'),
+      toast.success(t("upload_success_title"), {
+        description: t("upload_success_description"),
         duration: 5000,
         richColors: true,
       });
     } catch (error) {
-      capture('upload_failed', {
+      capture("upload_failed", {
         album_id: albumId,
         photos_count: validFiles.length,
-        error_message: error instanceof Error ? error.message : 'Unknown error',
+        error_message: error instanceof Error ? error.message : "Unknown error",
       });
 
-      if (error instanceof Error && !error.message.includes('photos per album exceeded')) {
-        const limitMatch = error.message.match(/Limit of (\d+) photos/);
+      if (
+        error instanceof Error &&
+        !error.message.includes("photos per album exceeded")
+      ) {
+        const limitMatch = error.message.match(LIMIT_EXCEEDED_REGEX);
         const photoLimit = limitMatch
           ? limitMatch[1]
-          : albumData?.album.photoLimit?.toString() || '100';
+          : albumData?.album.photoLimit?.toString() || "100";
 
-        toast.error(t('limit_exceeded_title'), {
-          description: t('limit_exceeded_description', { photoLimit }),
+        toast.error(t("limit_exceeded_title"), {
+          description: t("limit_exceeded_description", { photoLimit }),
           duration: 5000,
           richColors: true,
         });
@@ -481,7 +555,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     if (keepMetadata === null && checkForMetadata()) {
       updateUploadFormState({ showMetadataDialog: true });
 
-      capture('metadata_dialog_opened', {
+      capture("metadata_dialog_opened", {
         album_id: albumId,
         photos_count: files.length,
       });
@@ -489,7 +563,14 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     }
 
     startUpload();
-  }, [uploadFormState, checkForMetadata, updateUploadFormState, startUpload, capture, albumId]);
+  }, [
+    uploadFormState,
+    checkForMetadata,
+    updateUploadFormState,
+    startUpload,
+    capture,
+    albumId,
+  ]);
 
   const handleKeepMetadata = useCallback(() => {
     updateUploadFormState({
@@ -501,7 +582,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
   }, [startUpload, updateUploadFormState]);
 
   const handleRemoveMetadata = useCallback(() => {
-    const filesWithoutMetadata = uploadFormState?.files?.map(file => ({
+    const filesWithoutMetadata = uploadFormState?.files?.map((file) => ({
       ...file,
       metadata: {
         latitude: null,
@@ -534,7 +615,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
 
   useEffect(() => {
     return () => {
-      uploadFormState?.files?.forEach(file => {
+      uploadFormState?.files?.forEach((file) => {
         revokePreviewUrl(file?.preview);
       });
     };
@@ -544,7 +625,7 @@ export function useUploadForm(options?: UseUploadFormOptions) {
     if (uploadFormState?.willMetadataBeRemoved) {
       startUpload();
     }
-  }, [uploadFormState?.willMetadataBeRemoved, startUpload, updateUploadFormState]);
+  }, [uploadFormState?.willMetadataBeRemoved, startUpload]);
 
   return {
     uploadFormState,

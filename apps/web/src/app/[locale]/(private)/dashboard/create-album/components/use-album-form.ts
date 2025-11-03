@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useActionState, useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Stripe } from '@stripe/stripe-js';
-import { createAlbumWithCheckout } from '@/actions/createAlbumWithCheckout';
-import { AlbumPlan } from '@/constants/pricingEnum';
-import getStripe from '@/lib/stripe/get-stripejs';
-import { getAlbumPrice } from '@/utils/getAlbumPrice';
-import { usePostHog } from '@/hooks/usePostHog';
+import type { Stripe } from "@stripe/stripe-js";
+import { useParams } from "next/navigation";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { createAlbumWithCheckout } from "@/actions/createAlbumWithCheckout";
+import type { AlbumPlan } from "@/constants/pricingEnum";
+import { usePostHog } from "@/hooks/usePostHog";
+import getStripe from "@/lib/stripe/get-stripejs";
+import { getAlbumPrice } from "@/utils/getAlbumPrice";
 
 export function useAlbumForm() {
   const { locale } = useParams();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<AlbumPlan>('standard');
+  const [selectedPlan, setSelectedPlan] = useState<AlbumPlan>("standard");
   const [hasInteracted, setHasInteracted] = useState(false);
   const stripeClientRef = useRef<Stripe | null>(null);
   const { capture } = usePostHog();
@@ -23,12 +23,15 @@ export function useAlbumForm() {
     plan: selectedPlan,
   });
 
-  const [state, formAction, isPending] = useActionState(createAlbumWithCheckoutAction, null);
+  const [state, formAction, isPending] = useActionState(
+    createAlbumWithCheckoutAction,
+    null
+  );
 
   const formState = {
-    hasError: state?.status === 'error',
-    hasInvalidData: state?.status === 'invalidData',
-    hasSuccess: state?.status === 'success',
+    hasError: state?.status === "error",
+    hasInvalidData: state?.status === "invalidData",
+    hasSuccess: state?.status === "success",
     errorMessage: state?.error?.message,
     sessionId: state?.sessionId,
     titleError: state?.error?.errors?.title,
@@ -44,7 +47,7 @@ export function useAlbumForm() {
     setSelectedImage(file);
 
     if (file) {
-      capture('album_cover_uploaded', {
+      capture("album_cover_uploaded", {
         file_size_mb: (file.size / 1024 / 1024).toFixed(2),
         file_type: file.type,
       });
@@ -52,7 +55,7 @@ export function useAlbumForm() {
 
     if (!hasInteracted) {
       setHasInteracted(true);
-      capture('album_form_started', {
+      capture("album_form_started", {
         plan: selectedPlan,
       });
     }
@@ -61,14 +64,14 @@ export function useAlbumForm() {
   const handlePlanChange = (value: string) => {
     setSelectedPlan(value as AlbumPlan);
 
-    capture('album_plan_selected', {
+    capture("album_plan_selected", {
       plan: value,
       price: getAlbumPrice(value as AlbumPlan, locale as string),
     });
 
     if (!hasInteracted) {
       setHasInteracted(true);
-      capture('album_form_started', {
+      capture("album_form_started", {
         plan: value,
       });
     }
@@ -78,7 +81,7 @@ export function useAlbumForm() {
     async function loadStripeClient() {
       const stripe = await getStripe();
 
-      if (!stripe) throw new Error('Stripe failed to initialize.');
+      if (!stripe) throw new Error("Stripe failed to initialize.");
 
       stripeClientRef.current = stripe;
     }
@@ -88,13 +91,15 @@ export function useAlbumForm() {
 
   useEffect(() => {
     if (formState?.hasSuccess && formState?.sessionId) {
-      capture('album_payment_initiated', {
+      capture("album_payment_initiated", {
         plan: selectedPlan,
         price: albumPrice,
         has_cover_image: selectedImage !== null,
       });
 
-      stripeClientRef?.current?.redirectToCheckout({ sessionId: formState?.sessionId });
+      stripeClientRef?.current?.redirectToCheckout({
+        sessionId: formState?.sessionId,
+      });
     }
   }, [
     formState?.hasSuccess,
@@ -107,15 +112,15 @@ export function useAlbumForm() {
 
   useEffect(() => {
     if (formState?.hasError) {
-      capture('album_creation_failed', {
-        error_type: formState.hasInvalidData ? 'validation' : 'server',
+      capture("album_creation_failed", {
+        error_type: formState.hasInvalidData ? "validation" : "server",
         error_message: formState.errorMessage,
         plan: selectedPlan,
         has_cover_image: selectedImage !== null,
       });
 
       setSelectedImage(null);
-      setSelectedPlan('standard');
+      setSelectedPlan("standard");
     }
   }, [
     formState?.hasError,

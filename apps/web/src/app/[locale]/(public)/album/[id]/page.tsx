@@ -1,36 +1,40 @@
-import { Suspense } from 'react';
-import Image from 'next/image';
-import { notFound } from 'next/navigation';
-import { MapPin } from 'lucide-react';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-
-import { PhotoTimeline } from '@/components/PhotoTimeline';
-import { Footer } from '@/components/Footer';
-import { HeaderAlbum } from '../(components)/HeaderAlbum';
-import { PublicPhotoMap } from '../(components)/PublicPhotoMap';
-import { AlbumOwnerTopBar } from '../(components)/AlbumOwnerTopBar';
-import { AlbumSharedTopBar } from '../(components)/AlbumSharedTopBar';
-
-import { getPublicAlbum } from '@/http/get-public-album';
-import { getPublicAlbumLocations } from '@/http/get-public-album-locations';
-import { getPublicAlbumPhotos } from '@/http/get-public-album-photos';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { PageProps } from '@/types/next';
-
-import { getCurrentUser } from '@/lib/auth/server';
-import { albums } from '@polotrip/db/schema';
-import { db } from '@polotrip/db';
-import { eq } from 'drizzle-orm';
-import { generateAlbumMetadata } from './metadata';
-import { getTranslations } from 'next-intl/server';
+import { db } from "@polotrip/db";
+import { albums } from "@polotrip/db/schema";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { eq } from "drizzle-orm";
+import { MapPin } from "lucide-react";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
+import { Footer } from "@/components/Footer";
+import { PhotoTimeline } from "@/components/PhotoTimeline";
+import { albumKeys } from "@/hooks/network/keys/albumKeys";
+import { getPublicAlbum } from "@/http/get-public-album";
+import { getPublicAlbumLocations } from "@/http/get-public-album-locations";
+import { getPublicAlbumPhotos } from "@/http/get-public-album-photos";
+import { getCurrentUser } from "@/lib/auth/server";
+import type { PageProps } from "@/types/next";
+import { AlbumOwnerTopBar } from "../(components)/AlbumOwnerTopBar";
+import { AlbumSharedTopBar } from "../(components)/AlbumSharedTopBar";
+import { HeaderAlbum } from "../(components)/HeaderAlbum";
+import { PublicPhotoMap } from "../(components)/PublicPhotoMap";
+import { generateAlbumMetadata } from "./metadata";
 
 export const generateMetadata = generateAlbumMetadata;
 
-export default async function AlbumViewPage({ params, searchParams }: PageProps) {
+export default async function AlbumViewPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { id: albumId, locale } = await params;
   const { share } = (await searchParams) || {};
 
-  const t = await getTranslations({ locale, namespace: 'PublicAlbum' });
+  const t = await getTranslations({ locale, namespace: "PublicAlbum" });
 
   const user = await getCurrentUser();
 
@@ -38,21 +42,21 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
     notFound();
   }
 
   const isOwner = user?.id === album.userId;
-  const isShared = share === 'true' && !isOwner;
+  const isShared = share === "true" && !isOwner;
 
   const albumData = await getPublicAlbum({ albumId });
   const locationsDataPromise = getPublicAlbumLocations({ albumId });
 
   const hasLocations = await locationsDataPromise.then(
-    data => data.locations.length > 0,
-    () => false,
+    (data) => data.locations.length > 0,
+    () => false
   );
 
   const queryClient = new QueryClient();
@@ -69,41 +73,41 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
 
   const coverImageUrl = albumData?.album?.coverImageUrl
     ? albumData?.album?.coverImageUrl
-    : '/pages/album/album-cover-placeholder.jpg';
+    : "/pages/album/album-cover-placeholder.jpg";
 
-  const albumOwnerName = albumData?.user?.name?.split(' ')[0];
+  const albumOwnerName = albumData?.user?.name?.split(" ")[0];
 
   return (
     <div data-is-owner={isOwner} data-is-shared={isShared}>
       {isOwner && <AlbumOwnerTopBar />}
       {isShared && <AlbumSharedTopBar />}
-      <main className="min-h-screen bg-secondary-10 flex flex-col">
-        <div className="relative w-full h-[430px] md:h-[510px] flex flex-col justify-between">
+      <main className="flex min-h-screen flex-col bg-secondary-10">
+        <div className="relative flex h-[430px] w-full flex-col justify-between md:h-[510px]">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-text/70 via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 z-10 bg-text/70 via-transparent to-transparent" />
             <Image
-              src={coverImageUrl}
-              alt={t('cover_alt')}
-              fill
-              sizes="100vw"
+              alt={t("cover_alt")}
               className="object-cover"
+              fill
               priority
+              sizes="100vw"
+              src={coverImageUrl}
             />
           </div>
 
           <HeaderAlbum
-            albumTitle={albumData?.album?.title}
-            albumDescription={albumData?.album?.description || ''}
+            albumDescription={albumData?.album?.description || ""}
             albumOwnerName={albumOwnerName}
+            albumTitle={albumData?.album?.title}
           />
 
-          <div className="relative z-20 w-full flex flex-col items-start p-4 sm:p-8 md:pl-12 md:pb-10">
-            <h1 className="font-title_one font-bold text-4xl md:text-5xl lg:text-6xl text-secondary">
+          <div className="relative z-20 flex w-full flex-col items-start p-4 sm:p-8 md:pb-10 md:pl-12">
+            <h1 className="font-bold font-title_one text-4xl text-secondary md:text-5xl lg:text-6xl">
               {albumData?.album?.title}
             </h1>
 
             {albumData?.album?.description && (
-              <p className="font-title_three text-lg md:text-2xl text-background font-bold pt-2">
+              <p className="pt-2 font-bold font-title_three text-background text-lg md:text-2xl">
                 {albumData?.album?.description}
               </p>
             )}
@@ -112,17 +116,17 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
 
         {hasLocations && (
           <section className="container px-4 py-8">
-            <div className="flex items-center gap-2 mb-4">
-              <MapPin className="text-primary hidden md:block" size={24} />
+            <div className="mb-4 flex items-center gap-2">
+              <MapPin className="hidden text-primary md:block" size={24} />
               <h2 className="font-title_two text-2xl text-primary">
-                {t('moments_title', { ownerName: albumOwnerName })}
+                {t("moments_title", { ownerName: albumOwnerName })}
               </h2>
             </div>
-            <div className="w-full h-[400px] rounded-lg overflow-hidden">
+            <div className="h-[400px] w-full overflow-hidden rounded-lg">
               <Suspense
                 fallback={
-                  <div className="w-full h-full bg-muted flex items-center justify-center">
-                    {t('loading_map')}
+                  <div className="flex h-full w-full items-center justify-center bg-muted">
+                    {t("loading_map")}
                   </div>
                 }
               >
@@ -135,8 +139,8 @@ export default async function AlbumViewPage({ params, searchParams }: PageProps)
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense
             fallback={
-              <div className="w-full py-20 flex items-center justify-center">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex w-full items-center justify-center py-20">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               </div>
             }
           >

@@ -1,44 +1,44 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Album, X, Menu } from 'lucide-react';
-import { ButtonNavigation } from '@/components/ButtonNavigation';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import { cn } from '@/lib/cn';
-import Image from 'next/image';
-import { Link, usePathname } from '@/i18n/routing';
-import { DashboardContent } from '../../dashboard-content';
-import { useTranslations } from 'next-intl';
+import { Album, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { ButtonNavigation } from "@/components/ButtonNavigation";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { Link, usePathname } from "@/i18n/routing";
+import { cn } from "@/lib/cn";
+import { DashboardContent } from "../../dashboard-content";
 
 const IS_INTERNATIONALIZATION_ENABLED = true;
 
 export function HeaderMobile() {
-  const t = useTranslations('Header');
+  const t = useTranslations("Header");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pathname = usePathname();
 
-  const isHomePage = pathname === '/';
-  const isDashboardPage = pathname === '/dashboard';
-  const isDashboardDirectory = pathname.startsWith('/dashboard');
+  const isHomePage = pathname === "/";
+  const isDashboardPage = pathname === "/dashboard";
+  const isDashboardDirectory = pathname.startsWith("/dashboard");
 
-  const logoHref = isDashboardDirectory ? `/dashboard` : `/`;
+  const logoHref = isDashboardDirectory ? "/dashboard" : "/";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <div className="lg:hidden bg-background py-4 container relative flex justify-between items-center px-4">
+    <div className="container relative flex items-center justify-between bg-background px-4 py-4 lg:hidden">
       <Link href={logoHref}>
         <Image
-          src="/brand/logo.svg"
-          alt={t('logo_alt')}
-          width={180}
-          height={40}
+          alt={t("logo_alt")}
           className="w-[150px] md:w-[180px]"
-          sizes="(max-width: 768px) 150px, 180px"
+          height={40}
           priority
+          sizes="(max-width: 768px) 150px, 180px"
+          src="/brand/logo.svg"
+          width={180}
         />
       </Link>
 
@@ -49,46 +49,58 @@ export function HeaderMobile() {
       </div>
 
       {isHomePage && (
-        <button className="text-primary z-20" onClick={toggleMenu} aria-label={t('open_menu_aria')}>
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <button
+          aria-label={t("open_menu_aria")}
+          className="z-20 text-primary"
+          onClick={toggleMenu}
+          type="button"
+        >
+          {isMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       )}
 
       <div
         className={cn(
-          'absolute top-0 left-0 w-full bg-background p-6 flex flex-col gap-4 items-start justify-center transition-transform duration-700 z-10 shadow-lg',
-          isMenuOpen ? 'translate-y-16' : '-translate-y-full',
+          "absolute top-0 left-0 z-10 flex w-full flex-col items-start justify-center gap-4 bg-background p-6 shadow-lg transition-transform duration-700",
+          isMenuOpen ? "translate-y-16" : "-translate-y-full"
         )}
       >
-        <>
-          <a
-            href="#benefits"
-            className="text-black"
-            onClick={toggleMenu}
-            aria-label={t('advantages_aria')}
-          >
-            {t('advantages')}
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-black"
-            onClick={toggleMenu}
-            aria-label={t('how_it_works_aria')}
-          >
-            {t('how_it_works')}
-          </a>
-          <a href="#faq" className="text-black" onClick={toggleMenu} aria-label={t('faq_aria')}>
-            {t('faq')}
-          </a>
-          <ButtonNavigation
-            href="/sign-in"
-            className="bg-gradient-primary text-white w-full justify-center mt-3"
-            aria-label={t('access_account_aria')}
-          >
-            <span className="font-semibold">{t('access_account')}</span>
-            <Album />
-          </ButtonNavigation>
-        </>
+        <a
+          aria-label={t("advantages_aria")}
+          className="text-black"
+          href="#benefits"
+          onClick={toggleMenu}
+        >
+          {t("advantages")}
+        </a>
+        <a
+          aria-label={t("how_it_works_aria")}
+          className="text-black"
+          href="#how-it-works"
+          onClick={toggleMenu}
+        >
+          {t("how_it_works")}
+        </a>
+        <a
+          aria-label={t("faq_aria")}
+          className="text-black"
+          href="#faq"
+          onClick={toggleMenu}
+        >
+          {t("faq")}
+        </a>
+        <ButtonNavigation
+          aria-label={t("access_account_aria")}
+          className="mt-3 w-full justify-center bg-gradient-primary text-white"
+          href="/sign-in"
+        >
+          <span className="font-semibold">{t("access_account")}</span>
+          <Album />
+        </ButtonNavigation>
 
         {IS_INTERNATIONALIZATION_ENABLED && (
           <div className="flex w-full justify-center">

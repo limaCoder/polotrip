@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/cn';
-import { ButtonNavigationProps } from './types';
-import { Link } from '@/i18n/routing';
+import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/cn";
+import type { ButtonNavigationProps } from "./types";
 
 export function ButtonNavigation({
   href,
-  className = '',
+  className = "",
   children,
   ...rest
 }: ButtonNavigationProps) {
   return (
     <Link
       {...rest}
-      href={href}
       className={cn(
-        `flex items-center justify-center gap-2 px-4 py-4 text-center rounded-[10px] transition-all ease-in-out duration-300 hover:brightness-110 font-bold`,
-        className,
+        "flex items-center justify-center gap-2 rounded-[10px] px-4 py-4 text-center font-bold transition-all duration-300 ease-in-out hover:brightness-110",
+        className
       )}
+      href={href}
     >
       {children}
     </Link>

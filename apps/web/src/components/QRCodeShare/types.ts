@@ -1,6 +1,6 @@
-interface QRCodeShareProps {
+type QRCodeShareProps = {
   url: string;
   size?: number;
-}
+};
 
 export type { QRCodeShareProps };

@@ -1,93 +1,100 @@
-import Image from 'next/image';
-import { LogIn } from 'lucide-react';
-import { PageProps } from '@/types/next';
-
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import LottieAnimation from '@/components/LottieAnimation';
-
-import womanTakingSunbathOnBeach from '@/assets/lottie/woman-taking-sunbath-on-beach.json';
-import { OAuthButton } from '@/components/OAuthButton';
-
-import { loginWithEmailPassword } from '@/actions/loginWithEmailPassword';
-import { getTranslations } from 'next-intl/server';
+import { LogIn } from "lucide-react";
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+import { loginWithEmailPassword } from "@/actions/loginWithEmailPassword";
+import womanTakingSunbathOnBeach from "@/assets/lottie/woman-taking-sunbath-on-beach.json" with {
+  type: "json",
+};
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import LottieAnimation from "@/components/LottieAnimation";
+import { OAuthButton } from "@/components/OAuthButton";
+import type { PageProps } from "@/types/next";
 
 const isLoginWithEmailPasswordEnabled = false;
 
 export default async function LoginPage({ params }: PageProps) {
   const { locale } = await params;
   const signInUserWithLocale = loginWithEmailPassword.bind(null, locale);
-  const t = await getTranslations('SignIn');
+  const t = await getTranslations("SignIn");
 
   return (
     <>
       <Header />
-      <main className="lg:min-h-[calc(100vh-200px)] bg-background flex flex-col">
+      <main className="flex flex-col bg-background lg:min-h-[calc(100vh-200px)]">
         <section className="flex flex-grow bg-secondary/5 pt-28 lg:pt-16">
-          <div className="container mx-auto px-4 lg:px-9 flex justify-center items-center flex-col">
-            <div className="flex flex-col items-center max-w-md w-full gap-6">
-              <div className="bg-secondary/50 rounded-full p-2.5 w-[50px] h-[50px] flex items-center justify-center">
-                <LogIn size={24} color="#03AED2" strokeWidth={2} />
+          <div className="container mx-auto flex flex-col items-center justify-center px-4 lg:px-9">
+            <div className="flex w-full max-w-md flex-col items-center gap-6">
+              <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-secondary/50 p-2.5">
+                <LogIn color="#03AED2" size={24} strokeWidth={2} />
               </div>
 
-              <div className="text-center space-y-2">
-                <h1 className="font-title_three font-bold">{t('title')}</h1>
-                <p className="font-body_two">{t('subtitle')}</p>
+              <div className="space-y-2 text-center">
+                <h1 className="font-bold font-title_three">{t("title")}</h1>
+                <p className="font-body_two">{t("subtitle")}</p>
               </div>
 
-              <div className="flex flex-col gap-4 w-full">
+              <div className="flex w-full flex-col gap-4">
                 {isLoginWithEmailPasswordEnabled && (
-                  <form action={signInUserWithLocale} className="w-full space-y-4 mb-4">
+                  <form
+                    action={signInUserWithLocale}
+                    className="mb-4 w-full space-y-4"
+                  >
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="email" className="font-body_two">
-                        {t('email_label')}
+                      <label className="font-body_two" htmlFor="email">
+                        {t("email_label")}
                       </label>
                       <input
-                        type="email"
+                        className="w-full rounded-lg border border-gray-300 p-3"
                         id="email"
                         name="email"
-                        placeholder={t('email_placeholder')}
-                        className="w-full p-3 border border-gray-300 rounded-lg"
+                        placeholder={t("email_placeholder")}
                         required
+                        type="email"
                       />
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="password" className="font-body_two">
-                        {t('password_label')}
+                      <label className="font-body_two" htmlFor="password">
+                        {t("password_label")}
                       </label>
                       <input
-                        type="password"
+                        className="w-full rounded-lg border border-gray-300 p-3"
                         id="password"
                         name="password"
-                        placeholder={t('password_placeholder')}
-                        className="w-full p-3 border border-gray-300 rounded-lg"
+                        placeholder={t("password_placeholder")}
                         required
+                        type="password"
                       />
                     </div>
 
                     <button
+                      className="w-full rounded-lg bg-primary p-3 font-body_two text-white hover:bg-primary/90"
                       type="submit"
-                      className="w-full bg-primary text-white font-body_two p-3 rounded-lg hover:bg-primary/90"
                     >
-                      {t('submit_button')}
+                      {t("submit_button")}
                     </button>
                   </form>
                 )}
 
-                <OAuthButton provider="google" aria-label={t('google_oauth_aria')}>
+                <OAuthButton
+                  aria-label={t("google_oauth_aria")}
+                  provider="google"
+                >
                   <Image
-                    src="/icons/google.png"
-                    alt={t('google_icon_alt')}
-                    width={24}
+                    alt={t("google_icon_alt")}
                     height={24}
+                    src="/icons/google.png"
+                    width={24}
                   />
-                  <span className="font-body_two">{t('google_oauth_text')}</span>
+                  <span className="font-body_two">
+                    {t("google_oauth_text")}
+                  </span>
                 </OAuthButton>
               </div>
             </div>
 
-            <div className="w-full h-[250px]  lg:h-[320px] lg:mt-4 rounded-lg overflow-hidden">
+            <div className="h-[250px] w-full overflow-hidden rounded-lg lg:mt-4 lg:h-[320px]">
               <LottieAnimation animationData={womanTakingSunbathOnBeach} />
             </div>
           </div>

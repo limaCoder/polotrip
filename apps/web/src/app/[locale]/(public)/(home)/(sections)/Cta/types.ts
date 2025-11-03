@@ -1,12 +1,12 @@
-interface CtaProps {
+type CtaProps = {
   locale: string;
-}
+};
 
-interface CtaButtonProps {
+type CtaButtonProps = {
   buttonText: string;
   buttonAria: string;
   locale: string;
   price: number;
-}
+};
 
 export type { CtaProps, CtaButtonProps };

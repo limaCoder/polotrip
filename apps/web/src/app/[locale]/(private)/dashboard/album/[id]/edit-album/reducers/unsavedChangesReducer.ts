@@ -1,28 +1,32 @@
-type PendingActionType = 'SELECT_PHOTO' | 'TOGGLE_PHOTO' | 'SELECT_DATE' | 'DESELECT_ALL';
+type PendingActionType =
+  | "SELECT_PHOTO"
+  | "TOGGLE_PHOTO"
+  | "SELECT_DATE"
+  | "DESELECT_ALL";
 
 enum PendingActionTypeEnum {
-  SELECT_PHOTO = 'SELECT_PHOTO',
-  TOGGLE_PHOTO = 'TOGGLE_PHOTO',
-  SELECT_DATE = 'SELECT_DATE',
-  DESELECT_ALL = 'DESELECT_ALL',
+  SELECT_PHOTO = "SELECT_PHOTO",
+  TOGGLE_PHOTO = "TOGGLE_PHOTO",
+  SELECT_DATE = "SELECT_DATE",
+  DESELECT_ALL = "DESELECT_ALL",
 }
 
 enum UnsavedChangesActionEnum {
-  SHOW_DIALOG = 'SHOW_DIALOG',
-  CLOSE_DIALOG = 'CLOSE_DIALOG',
-  CONFIRM_ACTION = 'CONFIRM_ACTION',
+  SHOW_DIALOG = "SHOW_DIALOG",
+  CLOSE_DIALOG = "CLOSE_DIALOG",
+  CONFIRM_ACTION = "CONFIRM_ACTION",
 }
 
-interface PendingAction {
+type PendingAction = {
   type: PendingActionType;
   photoId?: string;
   date?: string | null;
-}
+};
 
-interface UnsavedChangesState {
+type UnsavedChangesState = {
   isDialogOpen: boolean;
   pendingAction: PendingAction | null;
-}
+};
 
 type UnsavedChangesAction =
   | { type: UnsavedChangesActionEnum.SHOW_DIALOG; action: PendingAction }
@@ -31,7 +35,7 @@ type UnsavedChangesAction =
 
 function unsavedChangesReducer(
   state: UnsavedChangesState,
-  action: UnsavedChangesAction,
+  action: UnsavedChangesAction
 ): UnsavedChangesState {
   switch (action.type) {
     case UnsavedChangesActionEnum.SHOW_DIALOG:
@@ -54,4 +58,8 @@ function unsavedChangesReducer(
   }
 }
 
-export { unsavedChangesReducer, UnsavedChangesActionEnum, PendingActionTypeEnum };
+export {
+  unsavedChangesReducer,
+  UnsavedChangesActionEnum,
+  PendingActionTypeEnum,
+};

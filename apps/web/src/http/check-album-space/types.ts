@@ -1,14 +1,14 @@
-interface CheckAlbumSpaceRequest {
+type CheckAlbumSpaceRequest = {
   params: {
     albumId: string;
   };
-}
+};
 
-interface CheckAlbumSpaceResponse {
+type CheckAlbumSpaceResponse = {
   availableSpace: number;
   totalSpace: number;
   usedSpace: number;
   canUpload: boolean;
-}
+};
 
 export type { CheckAlbumSpaceResponse, CheckAlbumSpaceRequest };

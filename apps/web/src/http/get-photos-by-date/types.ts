@@ -1,10 +1,10 @@
-import { Pagination } from '@/types/pagination';
-import type { Photo } from '@polotrip/db/models';
+import type { Photo } from "@polotrip/db/models";
+import type { Pagination } from "@/types/pagination";
 
-export interface DateCount {
+export type DateCount = {
   date: string | null;
   count: number;
-}
+};
 
 export type GetPhotosByDateRequest = {
   params: {

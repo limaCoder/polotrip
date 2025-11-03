@@ -1,18 +1,17 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
+import { albumKeys } from "@/hooks/network/keys/albumKeys";
+import { getPhotosByDate } from "@/http/get-photos-by-date";
 
-import { getPhotosByDate } from '@/http/get-photos-by-date';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
-
-interface UseGetPhotosByDateProps {
+type UseGetPhotosByDateProps = {
   albumId: string;
   date?: string | null;
   noDate?: boolean;
   page?: number;
   limit?: number;
   enabled?: boolean;
-}
+};
 
 export const useGetPhotosByDate = ({
   albumId,

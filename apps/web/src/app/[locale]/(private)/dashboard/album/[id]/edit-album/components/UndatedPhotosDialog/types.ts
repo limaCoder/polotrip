@@ -1,6 +1,6 @@
-interface UndatedPhotosDialogProps {
+type UndatedPhotosDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 export type { UndatedPhotosDialogProps };

@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Tv, Share2 } from 'lucide-react';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import Image from 'next/image';
-import { useDesktopAlbumInTvMode } from '@/hooks/use-desktop-album-in-tv-mode';
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
-import { ShareAlbumModal } from '@/components/ShareAlbumModal';
-import { useAlbumOwnership } from '@/hooks/use-album-ownership';
-import { HeaderAlbumProps } from '../types';
-import { useTranslations } from 'next-intl';
+import { Share2, Tv } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { ShareAlbumModal } from "@/components/ShareAlbumModal";
+import { useAlbumOwnership } from "@/hooks/use-album-ownership";
+import { useDesktopAlbumInTvMode } from "@/hooks/use-desktop-album-in-tv-mode";
+import type { HeaderAlbumProps } from "../types";
 
 const IS_INTERNATIONALIZATION_ENABLED = true;
 
@@ -19,36 +19,43 @@ export function HeaderAlbumDesktop({
   albumDescription,
   albumOwnerName,
 }: HeaderAlbumProps) {
-  const t = useTranslations('PublicAlbum.HeaderAlbum');
+  const t = useTranslations("PublicAlbum.HeaderAlbum");
   const { handleTvMode } = useDesktopAlbumInTvMode();
   const { id: albumId } = useParams();
   const { isOwner } = useAlbumOwnership();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   return (
-    <div className="hidden md:flex w-full justify-between items-center">
-      <Link href="/" className="cursor-pointer">
-        <Image src="/brand/logo-white.svg" alt={t('logo_alt')} width={150} height={150} />
+    <div className="hidden w-full items-center justify-between md:flex">
+      <Link className="cursor-pointer" href="/">
+        <Image
+          alt={t("logo_alt")}
+          height={150}
+          src="/brand/logo-white.svg"
+          width={150}
+        />
       </Link>
 
       <div className="flex items-center gap-6">
         <button
-          className="flex items-center gap-2 text-background hover:text-primary transition-colors"
-          aria-label={t('tv_mode_aria')}
+          aria-label={t("tv_mode_aria")}
+          className="flex items-center gap-2 text-background transition-colors hover:text-primary"
           onClick={handleTvMode}
+          type="button"
         >
-          <Tv size={20} className="text-primary relative top-[-3px]" />
-          <span className="font-body_one w-max">{t('tv_mode')}</span>
+          <Tv className="relative top-[-3px] text-primary" size={20} />
+          <span className="w-max font-body_one">{t("tv_mode")}</span>
         </button>
 
         {isOwner && (
           <button
-            className="flex items-center gap-2 text-background hover:text-primary transition-colors"
-            aria-label={t('share_aria')}
+            aria-label={t("share_aria")}
+            className="flex items-center gap-2 text-background transition-colors hover:text-primary"
             onClick={() => setIsShareModalOpen(true)}
+            type="button"
           >
-            <Share2 size={20} className="text-primary relative top-[-2px]" />
-            <span className="font-body_one w-max">{t('share')}</span>
+            <Share2 className="relative top-[-2px] text-primary" size={20} />
+            <span className="w-max font-body_one">{t("share")}</span>
           </button>
         )}
 
@@ -57,10 +64,10 @@ export function HeaderAlbumDesktop({
 
       {isOwner && (
         <ShareAlbumModal
-          albumId={albumId as string}
-          albumTitle={albumTitle}
           albumDescription={albumDescription}
+          albumId={albumId as string}
           albumOwnerName={albumOwnerName}
+          albumTitle={albumTitle}
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
         />

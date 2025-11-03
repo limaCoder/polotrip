@@ -1,13 +1,12 @@
-'use client';
+"use client";
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { albumKeys } from "@/hooks/network/keys/albumKeys";
+import { updateAlbum } from "@/http/update-album";
 
-import { updateAlbum } from '@/http/update-album';
-import { albumKeys } from '@/hooks/network/keys/albumKeys';
-import { useTranslations } from 'next-intl';
-
-interface PhotoBatchUpdate {
+type PhotoBatchUpdate = {
   ids: string[];
   data: {
     dateTaken?: string | null;
@@ -16,19 +15,19 @@ interface PhotoBatchUpdate {
     latitude?: number | null;
     longitude?: number | null;
   };
-}
+};
 
-interface UseUpdatePhotoBatchProps {
+type UseUpdatePhotoBatchProps = {
   albumId: string;
-}
+};
 
 export const useUpdatePhotoBatch = ({ albumId }: UseUpdatePhotoBatchProps) => {
   const queryClient = useQueryClient();
-  const t = useTranslations('UpdatePhotoBatchHook');
+  const t = useTranslations("UpdatePhotoBatchHook");
 
   return useMutation({
     mutationFn: async ({ ids, data }: PhotoBatchUpdate) => {
-      const photoUpdates = ids.map(id => ({
+      const photoUpdates = ids.map((id) => ({
         id,
         ...data,
       }));
@@ -41,14 +40,14 @@ export const useUpdatePhotoBatch = ({ albumId }: UseUpdatePhotoBatchProps) => {
       });
     },
     onSuccess: () => {
-      toast.success(t('success'));
+      toast.success(t("success"));
 
       queryClient.invalidateQueries({ queryKey: albumKeys.photos(albumId) });
       queryClient.invalidateQueries({ queryKey: albumKeys.dates(albumId) });
     },
     onError: () => {
-      toast.error(t('error_title'), {
-        description: t('error_description'),
+      toast.error(t("error_title"), {
+        description: t("error_description"),
       });
     },
   });

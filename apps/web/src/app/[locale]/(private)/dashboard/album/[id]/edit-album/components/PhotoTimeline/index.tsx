@@ -1,15 +1,19 @@
-'use client';
+"use client";
 
-import { Calendar } from 'lucide-react';
-import { cn } from '@/lib/cn';
-import { formatDateToDisplay } from '@/utils/dates';
-import { PhotoTimelineProps } from './types';
-import { useLocale, useTranslations } from 'next-intl';
+import { Calendar } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { cn } from "@/lib/cn";
+import { formatDateToDisplay } from "@/utils/dates";
+import type { PhotoTimelineProps } from "./types";
 
-export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimelineProps) {
-  const t = useTranslations('EditAlbum.PhotoTimeline');
-  const tDates = useTranslations('DatesUtils');
-  const locale = useLocale() as 'pt' | 'en';
+export function PhotoTimeline({
+  dates,
+  selectedDate,
+  onSelectDate,
+}: PhotoTimelineProps) {
+  const t = useTranslations("EditAlbum.PhotoTimeline");
+  const tDates = useTranslations("DatesUtils");
+  const locale = useLocale() as "pt" | "en";
 
   const sortedDates = [...dates].sort((a, b) => {
     if (a.date === null) return 1;
@@ -18,46 +22,52 @@ export function PhotoTimeline({ dates, selectedDate, onSelectDate }: PhotoTimeli
   });
 
   return (
-    <div className="bg-background p-8 rounded-lg shadow-md">
-      <div className="flex items-center gap-3 mb-6">
-        <Calendar size={24} className="text-primary" />
-        <h2 className="font-title_three font-bold">{t('title')}</h2>
+    <div className="rounded-lg bg-background p-8 shadow-md">
+      <div className="mb-6 flex items-center gap-3">
+        <Calendar className="text-primary" size={24} />
+        <h2 className="font-bold font-title_three">{t("title")}</h2>
       </div>
 
       <div className="flex flex-col gap-4">
-        {sortedDates.map(dateCount => (
+        {sortedDates.map((dateCount) => (
           <button
-            key={dateCount?.date || 'no-date'}
-            className={cn(
-              'p-2 rounded-lg flex flex-col items-start transition-colors',
-              selectedDate === dateCount?.date ? 'bg-primary' : 'hover:bg-secondary/10',
-            )}
-            onClick={() => onSelectDate(dateCount?.date)}
-            aria-label={t('select_date_aria', {
+            aria-label={t("select_date_aria", {
               date: formatDateToDisplay(dateCount?.date, locale, tDates),
             })}
+            className={cn(
+              "flex flex-col items-start rounded-lg p-2 transition-colors",
+              selectedDate === dateCount?.date
+                ? "bg-primary"
+                : "hover:bg-secondary/10"
+            )}
+            key={dateCount?.date || "no-date"}
+            onClick={() => onSelectDate(dateCount?.date)}
+            type="button"
           >
             <p
               className={cn(
-                'font-body_two font-bold text-left',
-                selectedDate === dateCount?.date ? 'text-background' : '',
+                "text-left font-body_two font-bold",
+                selectedDate === dateCount?.date ? "text-background" : ""
               )}
             >
               {formatDateToDisplay(dateCount?.date, locale, tDates)}
             </p>
             <p
               className={cn(
-                'font-body_two text-sm',
-                selectedDate === dateCount?.date ? 'text-background' : '',
+                "font-body_two text-sm",
+                selectedDate === dateCount?.date ? "text-background" : ""
               )}
             >
-              {dateCount?.count} {dateCount?.count === 1 ? t('photo_singular') : t('photo_plural')}
+              {dateCount?.count}{" "}
+              {dateCount?.count === 1 ? t("photo_singular") : t("photo_plural")}
             </p>
           </button>
         ))}
 
         {dates?.length === 0 && (
-          <p className="text-center text-text/50 italic">{t('no_photos_found')}</p>
+          <p className="text-center text-text/50 italic">
+            {t("no_photos_found")}
+          </p>
         )}
       </div>
     </div>

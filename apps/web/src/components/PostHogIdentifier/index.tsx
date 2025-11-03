@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { usePostHog } from 'posthog-js/react';
+import { usePostHog } from "posthog-js/react";
+import { useEffect } from "react";
 
-interface User {
+type User = {
   id: string;
   email: string;
   name: string;
@@ -12,11 +12,11 @@ interface User {
   createdAt: Date;
   updatedAt: Date;
   welcomeEmailSent?: boolean;
-}
+};
 
-interface PostHogIdentifierProps {
+type PostHogIdentifierProps = {
   user: User | null | undefined;
-}
+};
 
 /**
  * PostHog user identification component (official Next.js App Router integration)

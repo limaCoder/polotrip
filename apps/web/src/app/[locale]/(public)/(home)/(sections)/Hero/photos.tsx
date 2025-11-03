@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { MotionDiv } from '@/lib/motion/motion-components';
+import Image from "next/image";
+import { MotionDiv } from "@/lib/motion/motion-components";
 
 export function HeroPhotos() {
   return (
-    <div className="flex justify-center lg:justify-end items-center w-full h-full mt-12 lg:mt-8 relative">
+    <div className="relative mt-12 flex h-full w-full items-center justify-center lg:mt-8 lg:justify-end">
       <MotionDiv
-        initial={{ y: 0 }}
         animate={{ y: [0, -10, 0] }}
+        initial={{ y: 0 }}
         transition={{
           duration: 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
         }}
       >
         <Image
-          src="/pages/home/hero/hero-photos.png"
           alt="Polaroid de viagem"
-          width={480}
+          className="max-h-[600px] object-contain lg:max-h-[500px] xl:max-h-[600px]"
           height={700}
-          sizes="(max-width: 768px) 80vw"
           priority
-          className="object-contain max-h-[600px] lg:max-h-[500px] xl:max-h-[600px]"
+          sizes="(max-width: 768px) 80vw"
+          src="/pages/home/hero/hero-photos.png"
+          width={480}
         />
       </MotionDiv>
     </div>

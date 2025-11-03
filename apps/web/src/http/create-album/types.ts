@@ -1,5 +1,5 @@
-import type { NewAlbum } from '@polotrip/db/models';
-import { AlbumPlan } from '@/constants/pricingEnum';
+import type { NewAlbum } from "@polotrip/db/models";
+import type { AlbumPlan } from "@/constants/pricingEnum";
 
 type CreateAlbumRequest = {
   body: {

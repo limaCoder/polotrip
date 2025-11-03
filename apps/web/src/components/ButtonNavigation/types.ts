@@ -1,6 +1,6 @@
-import { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from "react";
 
-interface ButtonNavigationProps extends ComponentProps<'a'> {
+interface ButtonNavigationProps extends ComponentProps<"a"> {
   href: string;
   children: ReactNode;
   className?: string;

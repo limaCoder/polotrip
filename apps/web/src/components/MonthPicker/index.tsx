@@ -1,17 +1,26 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import { format, addYears, subYears, setMonth, isAfter, startOfMonth } from 'date-fns';
-import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-
-import { cn } from '@/lib/cn';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-
-import { MonthPickerProps } from './types';
-import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { LocaleDateFnsEnum, LocaleTypesEnum } from '@/constants/localesEnum';
+import {
+  addYears,
+  format,
+  isAfter,
+  setMonth,
+  startOfMonth,
+  subYears,
+} from "date-fns";
+import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { LocaleDateFnsEnum, LocaleTypesEnum } from "@/constants/localesEnum";
+import { cn } from "@/lib/cn";
+import type { MonthPickerProps } from "./types";
 
 export function MonthPicker({
   value,
@@ -21,7 +30,7 @@ export function MonthPicker({
   placeholder,
   name,
 }: MonthPickerProps) {
-  const t = useTranslations('MonthPicker');
+  const t = useTranslations("MonthPicker");
   const { locale } = useParams();
 
   const dateLocale =
@@ -39,7 +48,7 @@ export function MonthPicker({
   }, [value]);
 
   const months = Array.from({ length: 12 }, (_, i) =>
-    format(new Date(2024, i, 1), 'MMMM', { locale: dateLocale }),
+    format(new Date(2024, i, 1), "MMMM", { locale: dateLocale })
   );
 
   const handleMonthSelect = (monthIndex: number) => {
@@ -67,76 +76,91 @@ export function MonthPicker({
     setDate(newDate);
   };
 
-  const displayPlaceholder = placeholder || t('placeholder');
+  const displayPlaceholder = placeholder || t("placeholder");
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          aria-label={t("select_month_aria")}
           className={cn(
-            'w-full justify-start text-left font-normal hover:bg-secondary-10 capitalize',
-            !date && 'text-text/55',
-            className,
+            "w-full justify-start text-left font-normal capitalize hover:bg-secondary-10",
+            !date && "text-text/55",
+            className
           )}
           disabled={disabled}
-          aria-label={t('select_month_aria')}
+          variant="outline"
         >
-          <CalendarIcon color="#08171C40" className="mr-2 h-4 w-4" />
-          {date ? format(date, 'MMMM yyyy', { locale: dateLocale }) : displayPlaceholder}
+          <CalendarIcon className="mr-2 h-4 w-4" color="#08171C40" />
+          {date
+            ? format(date, "MMMM yyyy", { locale: dateLocale })
+            : displayPlaceholder}
           {name && (
             <input
-              type="hidden"
               name={name}
-              value={date ? format(date, 'yyyy-MM', { locale: dateLocale }) : ''}
+              type="hidden"
+              value={
+                date ? format(date, "yyyy-MM", { locale: dateLocale }) : ""
+              }
             />
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-secondary" align="start">
-        <div className="p-2 flex items-center justify-between">
+      <PopoverContent align="start" className="w-auto bg-secondary p-0">
+        <div className="flex items-center justify-between p-2">
           <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7 hover:bg-primary transition-colors duration-300"
+            aria-label={t("previous_year_aria")}
+            className="h-7 w-7 transition-colors duration-300 hover:bg-primary"
             onClick={handlePreviousYear}
-            aria-label={t('previous_year_aria')}
+            size="icon"
+            variant="outline"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">{t('previous_year_sr')}</span>
+            <span className="sr-only">{t("previous_year_sr")}</span>
           </Button>
-          <div className="font-medium">{format(date, 'yyyy', { locale: dateLocale })}</div>
+          <div className="font-medium">
+            {format(date, "yyyy", { locale: dateLocale })}
+          </div>
           <Button
-            variant="outline"
-            size="icon"
-            className="h-7 w-7 hover:bg-primary transition-colors duration-300"
-            onClick={handleNextYear}
+            aria-label={t("next_year_aria")}
+            className="h-7 w-7 transition-colors duration-300 hover:bg-primary"
             disabled={date.getFullYear() >= currentDate.getFullYear()}
-            aria-label={t('next_year_aria')}
+            onClick={handleNextYear}
+            size="icon"
+            variant="outline"
           >
             <ChevronRight className="h-4 w-4" />
-            <span className="sr-only">{t('next_year_sr')}</span>
+            <span className="sr-only">{t("next_year_sr")}</span>
           </Button>
         </div>
         <div className="grid grid-cols-3 gap-2 p-2">
           {months.map((month, index) => {
             const isCurrentMonth =
-              date && date.getMonth() === index && date.getFullYear() === date.getFullYear();
+              date &&
+              date.getMonth() === index &&
+              date.getFullYear() === currentDate.getFullYear();
 
             const monthDate = setMonth(date, index);
-            const isFutureMonth = isAfter(startOfMonth(monthDate), startOfMonth(currentDate));
+            const isFutureMonth = isAfter(
+              startOfMonth(monthDate),
+              startOfMonth(currentDate)
+            );
 
             return (
               <Button
-                key={month}
-                variant={isCurrentMonth ? 'default' : 'outline'}
+                aria-label={t("select_month_button_aria", {
+                  month: month.substring(0, 3),
+                })}
                 className={cn(
-                  'h-9 transition-colors duration-300 capitalize',
-                  isFutureMonth ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary',
+                  "h-9 capitalize transition-colors duration-300",
+                  isFutureMonth
+                    ? "cursor-not-allowed opacity-50"
+                    : "hover:bg-primary"
                 )}
-                onClick={() => handleMonthSelect(index)}
                 disabled={isFutureMonth}
-                aria-label={t('select_month_button_aria', { month: month.substring(0, 3) })}
+                key={month}
+                onClick={() => handleMonthSelect(index)}
+                variant={isCurrentMonth ? "default" : "outline"}
               >
                 {month.substring(0, 3)}
               </Button>

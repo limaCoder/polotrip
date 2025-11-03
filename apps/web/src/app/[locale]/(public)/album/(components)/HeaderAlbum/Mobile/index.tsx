@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Menu, Share2, Tv } from 'lucide-react';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useMobileAlbumInTvMode } from '@/hooks/use-mobile-album-in-tv-mode';
-import { cn } from '@/lib/cn';
-import { useParams } from 'next/navigation';
-import { ShareAlbumModal } from '@/components/ShareAlbumModal';
-import { useAlbumOwnership } from '@/hooks/use-album-ownership';
-import { HeaderAlbumProps } from '../types';
-import { useTranslations } from 'next-intl';
+import { Menu, Share2, Tv } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { ShareAlbumModal } from "@/components/ShareAlbumModal";
+import { useAlbumOwnership } from "@/hooks/use-album-ownership";
+import { useMobileAlbumInTvMode } from "@/hooks/use-mobile-album-in-tv-mode";
+import { cn } from "@/lib/cn";
+import type { HeaderAlbumProps } from "../types";
 
 const IS_INTERNATIONALIZATION_ENABLED = true;
 
@@ -20,8 +20,8 @@ export function HeaderAlbumMobile({
   albumDescription,
   albumOwnerName,
 }: HeaderAlbumProps) {
-  const t = useTranslations('PublicAlbum.HeaderAlbum');
-  const tTvMode = useTranslations('MobileAlbumInTvMode');
+  const t = useTranslations("PublicAlbum.HeaderAlbum");
+  const tTvMode = useTranslations("MobileAlbumInTvMode");
   const [isOpen, setIsOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id: albumId } = useParams();
@@ -30,47 +30,57 @@ export function HeaderAlbumMobile({
   const { handleTvMode } = useMobileAlbumInTvMode({ t: tTvMode });
 
   return (
-    <div className="flex md:hidden w-full justify-between items-center">
-      <Link href="/" className="cursor-pointer">
-        <Image src="/brand/logo-white.svg" alt={t('logo_alt')} width={120} height={120} />
+    <div className="flex w-full items-center justify-between md:hidden">
+      <Link className="cursor-pointer" href="/">
+        <Image
+          alt={t("logo_alt")}
+          height={120}
+          src="/brand/logo-white.svg"
+          width={120}
+        />
       </Link>
 
       <div className="relative">
         <button
-          onClick={() => setIsOpen(prev => !prev)}
-          className="p-3 rounded-full bg-white/75 hover:bg-gray-300 transition"
-          aria-label={t('open_menu_aria')}
+          aria-label={t("open_menu_aria")}
+          className="rounded-full bg-white/75 p-3 transition hover:bg-gray-300"
+          onClick={() => setIsOpen((prev) => !prev)}
+          type="button"
         >
           <Menu className="h-6 w-6 text-primary" />
         </button>
 
         <div
           className={cn(
-            'absolute right-0 mt-2 flex flex-col items-center gap-2 transition-all duration-300 origin-top',
-            isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none',
+            "absolute right-0 mt-2 flex origin-top flex-col items-center gap-2 transition-all duration-300",
+            isOpen
+              ? "scale-100 opacity-100"
+              : "pointer-events-none scale-0 opacity-0"
           )}
         >
           {isOwner && (
             <button
-              className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center"
-              aria-label={t('share_aria')}
+              aria-label={t("share_aria")}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/75 transition hover:bg-primary hover:text-white"
               onClick={() => {
                 setIsShareModalOpen(true);
                 setIsOpen(false);
               }}
+              type="button"
             >
-              <Share2 className="h-6 w-6 text-primary relative -left-0.5" />
+              <Share2 className="-left-0.5 relative h-6 w-6 text-primary" />
             </button>
           )}
           <button
-            className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary active:bg-primary transition flex items-center justify-center active-tv-mode"
-            aria-label={t('tv_mode_aria')}
+            aria-label={t("tv_mode_aria")}
+            className="active-tv-mode flex h-12 w-12 items-center justify-center rounded-full bg-white/75 transition hover:bg-primary active:bg-primary"
             onClick={handleTvMode}
+            type="button"
           >
             <Tv className="h-6 w-6 text-primary" />
           </button>
           {IS_INTERNATIONALIZATION_ENABLED && (
-            <div className="w-12 h-12 rounded-full bg-white/75 hover:bg-primary hover:text-white transition flex items-center justify-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/75 transition hover:bg-primary hover:text-white">
               <LocaleSwitcher hideChevron />
             </div>
           )}
@@ -79,10 +89,10 @@ export function HeaderAlbumMobile({
 
       {isOwner && (
         <ShareAlbumModal
-          albumId={albumId as string}
-          albumTitle={albumTitle}
           albumDescription={albumDescription}
+          albumId={albumId as string}
           albumOwnerName={albumOwnerName}
+          albumTitle={albumTitle}
           isOpen={isShareModalOpen}
           onClose={() => setIsShareModalOpen(false)}
         />

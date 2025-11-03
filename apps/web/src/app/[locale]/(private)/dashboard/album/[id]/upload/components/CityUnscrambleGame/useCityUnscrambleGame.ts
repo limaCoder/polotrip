@@ -1,37 +1,33 @@
-import { useCallback, useEffect } from 'react';
-
-import { useMemo } from 'react';
-
-import { useState } from 'react';
-import { cities as cityNames } from './data';
-import { toast } from 'sonner';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { cities as cityNames } from "./data";
 
 const useCityUnscrambleGame = () => {
-  const t = useTranslations('CityUnscrambleGameHook');
-  const tHints = useTranslations('CityHints');
+  const t = useTranslations("CityUnscrambleGameHook");
+  const tHints = useTranslations("CityHints");
   const [score, setScore] = useState(0);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [currentCity, setCurrentCity] = useState<{
     original: string;
     scrambled: string;
     hint: string;
   }>({
-    original: '',
-    scrambled: '',
-    hint: '',
+    original: "",
+    scrambled: "",
+    hint: "",
   });
 
   const cities = useMemo(
-    () => cityNames.map(city => ({ name: city, hint: tHints(city) })),
-    [tHints],
+    () => cityNames.map((city) => ({ name: city, hint: tHints(city) })),
+    [tHints]
   );
 
   const scrambleWord = useCallback((word: string) => {
     return word
-      .split('')
+      .split("")
       .sort(() => Math.random() - 0.5)
-      .join('');
+      .join("");
   }, []);
 
   const getNewCity = useCallback(() => {
@@ -41,26 +37,29 @@ const useCityUnscrambleGame = () => {
       scrambled: scrambleWord(city.name),
       hint: city.hint,
     });
-    setInput('');
+    setInput("");
   }, [scrambleWord, cities]);
 
   const checkAnswer = useCallback(() => {
     if (input.toUpperCase() === currentCity.original) {
-      setScore(prev => prev + 10);
+      setScore((prev) => prev + 10);
       getNewCity();
-      toast.success(t('success_title'), {
-        description: t('success_description'),
+      toast.success(t("success_title"), {
+        description: t("success_description"),
       });
     } else {
-      toast.error(t('error_title'), {
-        description: t('error_description'),
+      toast.error(t("error_title"), {
+        description: t("error_description"),
       });
     }
   }, [input, currentCity, getNewCity, t]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  }, []);
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInput(e.target.value);
+    },
+    []
+  );
 
   useEffect(() => {
     getNewCity();

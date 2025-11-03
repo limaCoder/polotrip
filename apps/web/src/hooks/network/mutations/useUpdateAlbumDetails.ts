@@ -1,22 +1,21 @@
-'use client';
+"use client";
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { updateAlbum } from "@/http/update-album";
+import { albumKeys } from "../keys/albumKeys";
 
-import { updateAlbum } from '@/http/update-album';
-import { albumKeys } from '../keys/albumKeys';
-import { useTranslations } from 'next-intl';
-
-interface UpdateAlbumDetailsData {
+type UpdateAlbumDetailsData = {
   albumId: string;
   title?: string;
   description?: string | null;
   coverImageUrl?: string | null;
-}
+};
 
 export function useUpdateAlbumDetails() {
   const queryClient = useQueryClient();
-  const t = useTranslations('UpdateAlbumDetailsHook');
+  const t = useTranslations("UpdateAlbumDetailsHook");
 
   return useMutation({
     mutationFn: async ({ albumId, ...data }: UpdateAlbumDetailsData) => {
@@ -28,7 +27,7 @@ export function useUpdateAlbumDetails() {
       return response;
     },
     onSuccess: (_, variables) => {
-      toast.success(t('success'));
+      toast.success(t("success"));
 
       queryClient.invalidateQueries({
         queryKey: [albumKeys.all],
@@ -38,7 +37,7 @@ export function useUpdateAlbumDetails() {
       });
     },
     onError: () => {
-      toast.error(t('error'));
+      toast.error(t("error"));
     },
   });
 }

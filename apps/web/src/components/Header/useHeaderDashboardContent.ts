@@ -1,7 +1,7 @@
-import { usePathname, useRouter } from '@/i18n/routing';
-import { getSession, signOut } from '@/lib/auth/client';
-import { useCallback, useEffect, useState } from 'react';
-import { UserDataState } from './types';
+import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter } from "@/i18n/routing";
+import { getSession, signOut } from "@/lib/auth/client";
+import type { UserDataState } from "./types";
 
 export function useHeaderDashboardContent() {
   const [userData, setUserData] = useState<UserDataState>({
@@ -12,7 +12,7 @@ export function useHeaderDashboardContent() {
 
   const router = useRouter();
   const pathname = usePathname();
-  const isDashboard = pathname === `/dashboard`;
+  const isDashboard = pathname === "/dashboard";
 
   const getUserData = useCallback(async () => {
     const session = await getSession();
@@ -21,9 +21,9 @@ export function useHeaderDashboardContent() {
     const userName = session?.data?.user?.name ?? undefined;
 
     const usernameInitials = userName
-      ?.split(' ')
-      .map(name => name[0])
-      .join('');
+      ?.split(" ")
+      .map((name) => name[0])
+      .join("");
 
     setUserData({ userAvatar, userName, usernameInitials });
   }, []);
@@ -31,7 +31,7 @@ export function useHeaderDashboardContent() {
   async function handleLogout() {
     await signOut({});
 
-    router.push('/sign-in');
+    router.push("/sign-in");
   }
 
   useEffect(() => {

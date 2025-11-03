@@ -1,16 +1,16 @@
-import Image from 'next/image';
-import { Link } from '@/i18n/routing';
-import { AlbumCardProps } from './types';
+import { EllipsisVertical } from "lucide-react";
+import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import {
   AlbumStatusColorEnum,
-  AlbumStatusLabelEnum,
+  type AlbumStatusLabelEnum,
   AlbumStatusTextColorEnum,
   generateAlbumLink,
-} from '@/constants/albumsEnum';
-import { cn } from '@/lib/cn';
-import { EllipsisVertical } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { useTranslations, useLocale } from 'next-intl';
+} from "@/constants/albumsEnum";
+import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/cn";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import type { AlbumCardProps } from "./types";
 
 export function AlbumCard({
   id,
@@ -20,56 +20,65 @@ export function AlbumCard({
   imageUrl,
   stepAfterPayment,
 }: AlbumCardProps) {
-  const t = useTranslations('AlbumCard');
+  const t = useTranslations("AlbumCard");
   const locale = useLocale();
 
-  const photosCountLabel = photosCount === 1 ? t('photo_singular') : t('photo_plural');
-  const albumImage = imageUrl || '/pages/dashboard/album-card-fallback.png';
+  const photosCountLabel =
+    photosCount === 1 ? t("photo_singular") : t("photo_plural");
+  const albumImage = imageUrl || "/pages/dashboard/album-card-fallback.png";
 
   const albumLink = generateAlbumLink(id, stepAfterPayment);
 
-  const albumStatusLabel = t(`status.${stepAfterPayment as keyof typeof AlbumStatusLabelEnum}`);
+  const albumStatusLabel = t(
+    `status.${stepAfterPayment as keyof typeof AlbumStatusLabelEnum}`
+  );
   const albumStatusColor =
     AlbumStatusColorEnum[stepAfterPayment as keyof typeof AlbumStatusColorEnum];
   const albumStatusTextColor =
-    AlbumStatusTextColorEnum[stepAfterPayment as keyof typeof AlbumStatusTextColorEnum];
+    AlbumStatusTextColorEnum[
+      stepAfterPayment as keyof typeof AlbumStatusTextColorEnum
+    ];
 
-  const isAlbumPublished = stepAfterPayment === 'published';
+  const isAlbumPublished = stepAfterPayment === "published";
 
   return (
-    <div className="relative rounded-2xl shadow-md overflow-hidden">
+    <div className="relative overflow-hidden rounded-2xl shadow-md">
       <Link
+        className="h-[256px] rounded-2xl transition-all duration-300 hover:brightness-130"
         href={albumLink}
-        className="h-[256px] rounded-2xl hover:brightness-130 transition-all duration-300"
       >
-        <div className="w-full h-[192px] rounded-t-xl relative flex flex-col justify-end">
+        <div className="relative flex h-[192px] w-full flex-col justify-end rounded-t-xl">
           <Image
-            src={albumImage}
             alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover brightness-60"
+            fill
             priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            src={albumImage}
           />
           <span
             className={cn(
-              'absolute top-2 right-2 font-bold px-2 py-1 rounded-full text-sm',
+              "absolute top-2 right-2 rounded-full px-2 py-1 font-bold text-sm",
               albumStatusTextColor,
-              albumStatusColor,
+              albumStatusColor
             )}
           >
             {albumStatusLabel}
           </span>
-          <div className="flex flex-col items-start p-3 pb-2 z-10 bg-gradient-to-t from-black/70 to-transparent">
-            <h3 className="font-title_three text-background font-bold">{title}</h3>
-            <div className="flex justify-between w-full">
+          <div className="z-10 flex flex-col items-start bg-gradient-to-t from-black/70 to-transparent p-3 pb-2">
+            <h3 className="font-bold font-title_three text-background">
+              {title}
+            </h3>
+            <div className="flex w-full justify-between">
               <span className="font-body_two text-background">
                 {(() => {
                   const dateString = new Date(date).toLocaleDateString(locale, {
-                    month: 'long',
-                    year: 'numeric',
+                    month: "long",
+                    year: "numeric",
                   });
-                  return dateString.charAt(0).toUpperCase() + dateString.slice(1);
+                  return (
+                    dateString.charAt(0).toUpperCase() + dateString.slice(1)
+                  );
                 })()}
               </span>
               <span className="font-body_two text-accent">
@@ -78,24 +87,29 @@ export function AlbumCard({
             </div>
           </div>
         </div>
-        <div className="h-16 flex items-center justify-between px-3 border-t border-black/10 shadow-xl">
-          <p className="font-body_one text-primary hover:underline">{t('view_album')}</p>
+        <div className="flex h-16 items-center justify-between border-black/10 border-t px-3 shadow-xl">
+          <p className="font-body_one text-primary hover:underline">
+            {t("view_album")}
+          </p>
         </div>
       </Link>
       {isAlbumPublished && (
-        <div className="absolute bottom-4 right-3 z-10">
+        <div className="absolute right-3 bottom-4 z-10">
           <Popover>
             <PopoverTrigger asChild>
-              <button className="p-2 rounded-full hover:bg-black/10 transition-all duration-300">
+              <button
+                className="rounded-full p-2 transition-all duration-300 hover:bg-black/10"
+                type="button"
+              >
                 <EllipsisVertical size={16} />
               </button>
             </PopoverTrigger>
             <PopoverContent className="bg-background">
               <Link
-                className="text-primary w-full flex flex-grow hover:brightness-130 transition-all duration-300"
+                className="flex w-full flex-grow text-primary transition-all duration-300 hover:brightness-130"
                 href={`/dashboard/album/${id}/edit-album`}
               >
-                {t('edit_album')}
+                {t("edit_album")}
               </Link>
             </PopoverContent>
           </Popover>

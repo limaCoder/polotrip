@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import { LoadingGameWrapperProps } from './types';
+import { useTranslations } from "next-intl";
+import type { LoadingGameWrapperProps } from "./types";
 
 export function LoadingGameWrapper({
   isCompressing,
@@ -9,20 +9,23 @@ export function LoadingGameWrapper({
   children,
   className,
 }: LoadingGameWrapperProps) {
-  const t = useTranslations('LoadingGameWrapper');
-  if (!isCompressing && !isUploading) return null;
+  const t = useTranslations("LoadingGameWrapper");
+  if (!(isCompressing || isUploading)) return null;
 
   return (
-    <div className={`${className} bg-secondary/5 rounded-xl p-2 mt-8`} id="waiting-game">
+    <div
+      className={`${className} mt-8 rounded-xl bg-secondary/5 p-2`}
+      id="waiting-game"
+    >
       <div className="mx-auto">
-        <div className="text-center space-y-3 mb-6">
-          <h4 className="font-title_three text-primary">{t('title')}</h4>
+        <div className="mb-6 space-y-3 text-center">
+          <h4 className="font-title_three text-primary">{t("title")}</h4>
           <p className="text-sm text-text/70">
-            {isCompressing ? t('optimizing_tip') : t('uploading_tip')}
+            {isCompressing ? t("optimizing_tip") : t("uploading_tip")}
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-4">{children}</div>
+        <div className="rounded-lg bg-white p-4 shadow-sm">{children}</div>
       </div>
     </div>
   );

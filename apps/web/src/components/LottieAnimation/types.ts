@@ -1,8 +1,8 @@
-interface LottieAnimationProps {
+type LottieAnimationProps = {
   animationData: LottieAnimationData;
-}
+};
 
-interface LottieAnimationData {
+type LottieAnimationData = {
   v: string;
   fr: number;
   ip: number;
@@ -14,6 +14,6 @@ interface LottieAnimationData {
   assets: unknown[];
   layers: unknown[];
   [key: string]: unknown;
-}
+};
 
 export type { LottieAnimationProps, LottieAnimationData };

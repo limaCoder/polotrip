@@ -1,35 +1,40 @@
-'use client';
+"use client";
 
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ShareButtonsProps } from './types';
-import { useTranslations } from 'next-intl';
-import { usePostHog } from '@/hooks/usePostHog';
-import { useParams } from 'next/navigation';
+import { Share2 } from "lucide-react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { usePostHog } from "@/hooks/usePostHog";
+import type { ShareButtonsProps } from "./types";
 
-export function ShareButtons({ url, title, description, ownerName }: ShareButtonsProps) {
-  const t = useTranslations('PublicAlbum.ShareModal');
+export function ShareButtons({
+  url,
+  title,
+  description,
+  ownerName,
+}: ShareButtonsProps) {
+  const t = useTranslations("PublicAlbum.ShareModal");
   const { capture } = usePostHog();
   const { id: albumId } = useParams();
   const urlWithShareFlag = `${url}?share=true`;
 
   const shareText = description
-    ? t('share_text_with_description', { title, description, ownerName })
-    : t('share_text_without_description', { title, ownerName });
+    ? t("share_text_with_description", { title, description, ownerName })
+    : t("share_text_without_description", { title, ownerName });
 
   const shareLinks = {
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + urlWithShareFlag)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText}\n\n${urlWithShareFlag}`)}`,
   };
 
   const handleWhatsAppShare = () => {
-    capture('album_shared', {
+    capture("album_shared", {
       album_id: albumId,
-      share_method: 'whatsapp',
+      share_method: "whatsapp",
       album_title: title,
     });
-    window.open(shareLinks.whatsapp, '_blank');
+    window.open(shareLinks.whatsapp, "_blank");
   };
 
   const handleShare = async () => {
@@ -41,25 +46,25 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
           url: urlWithShareFlag,
         });
 
-        capture('album_shared', {
+        capture("album_shared", {
           album_id: albumId,
-          share_method: 'native_share',
+          share_method: "native_share",
           album_title: title,
         });
       } catch (error) {
-        if ((error as Error).name === 'AbortError') {
+        if ((error as Error).name === "AbortError") {
           return;
         }
 
-        toast.error(t('share_error'));
+        toast.error(t("share_error"));
       }
     } else {
       navigator.clipboard.writeText(url);
-      toast.success(t('link_copied_toast'));
+      toast.success(t("link_copied_toast"));
 
-      capture('album_shared', {
+      capture("album_shared", {
         album_id: albumId,
-        share_method: 'copy_link_fallback',
+        share_method: "copy_link_fallback",
         album_title: title,
       });
     }
@@ -67,11 +72,11 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(urlWithShareFlag);
-    toast.success(t('link_copied_toast'));
+    toast.success(t("link_copied_toast"));
 
-    capture('album_shared', {
+    capture("album_shared", {
       album_id: albumId,
-      share_method: 'copy_link',
+      share_method: "copy_link",
       album_title: title,
     });
   };
@@ -80,19 +85,24 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
     <div className="flex flex-col gap-4 py-2">
       <div className="flex items-center justify-center gap-4">
         <Button
-          variant="outline"
-          size="icon"
-          onClick={handleWhatsAppShare}
           className="h-12 w-12 hover:bg-secondary/50"
+          onClick={handleWhatsAppShare}
+          size="icon"
+          variant="outline"
         >
-          <Image src="/icons/whatsapp.svg" alt={t('whatsapp_icon_alt')} width={24} height={24} />
+          <Image
+            alt={t("whatsapp_icon_alt")}
+            height={24}
+            src="/icons/whatsapp.svg"
+            width={24}
+          />
         </Button>
 
         <Button
-          variant="outline"
-          size="icon"
-          onClick={handleShare}
           className="h-12 w-12 hover:bg-secondary/50"
+          onClick={handleShare}
+          size="icon"
+          variant="outline"
         >
           <Share2 className="h-6 w-6" />
         </Button>
@@ -100,13 +110,13 @@ export function ShareButtons({ url, title, description, ownerName }: ShareButton
 
       <div className="flex items-center gap-2">
         <input
+          className="flex-1 rounded-md border bg-background px-3 py-2"
+          readOnly
           type="text"
           value={urlWithShareFlag}
-          readOnly
-          className="flex-1 px-3 py-2 border rounded-md bg-background"
         />
-        <Button variant="secondary" onClick={handleCopyLink}>
-          {t('copy_button')}
+        <Button onClick={handleCopyLink} variant="secondary">
+          {t("copy_button")}
         </Button>
       </div>
     </div>

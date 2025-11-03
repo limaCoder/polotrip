@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { motion, MotionProps } from 'motion/react';
-import { cn } from '@/lib/cn';
+import { type MotionProps, motion } from "motion/react";
+import { cn } from "@/lib/cn";
 
 export const MotionDiv = ({
   children,
@@ -20,7 +20,11 @@ export const MotionSection = ({
   className,
   id,
   ...props
-}: { children: React.ReactNode; className?: string; id?: string } & MotionProps) => {
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+} & MotionProps) => {
   return (
     <motion.section {...props} className={cn(className)} id={id}>
       {children}
