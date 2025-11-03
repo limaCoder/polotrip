@@ -1,14 +1,15 @@
-import { type BetterAuthOptions, betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { db } from "@polotrip/db";
+import { schema } from "@polotrip/db/schema";
+import { type BetterAuthOptions, betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-import { db } from '@polotrip/db';
-import { schema } from '@polotrip/db/schema';
+import env from "./env";
 
-import env from './env';
+const DAYS_EXPIRATION_SESSION = 7;
 
 export const config: BetterAuthOptions = {
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
     schema: {
       ...schema,
       user: schema.users,
@@ -24,10 +25,10 @@ export const config: BetterAuthOptions = {
           google: {
             clientId: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
-            mapProfileToUser: profile => {
+            mapProfileToUser: (profile) => {
               return {
                 ...profile,
-                image: profile.picture?.replace('=s96-c', '=s256-c'),
+                image: profile.picture?.replace("=s96-c", "=s256-c"),
               };
             },
           },
@@ -35,27 +36,27 @@ export const config: BetterAuthOptions = {
       : {}),
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresIn: 60 * 60 * 24 * DAYS_EXPIRATION_SESSION,
     updateAge: 60 * 60 * 24, // 1 day
   },
   trustedOrigins: [env.AUTH_WEB_URL],
   advanced: {
-    cookiePrefix: 'polotrip',
+    cookiePrefix: "polotrip",
     cookies: {
       session_token: {
-        name: 'polotrip.session',
+        name: "polotrip.session",
         attributes: {
           // in local environment, comment the lines between path and domain properties
-          path: '/',
+          /* path: '/',
           sameSite: 'None',
           secure: process.env.NODE_ENV === 'production',
-          domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined,
+          domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined, */
           httpOnly: true,
         },
       },
     },
   },
-  basePath: '/api/v1/auth',
+  basePath: "/api/v1/auth",
 };
 
 const auth = betterAuth(config);
