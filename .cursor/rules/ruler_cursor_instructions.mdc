@@ -1,0 +1,67 @@
+---
+alwaysApply: true
+---
+
+<!-- Source: .ruler/bts.md -->
+
+## Project Structure
+
+This is a monorepo with the following structure:
+
+- **`apps/web/`** - Frontend application (React with React Router)
+
+- **`apps/server/`** - Backend server (Fastify)
+
+- **`packages/api/`** - Shared API logic and types
+- **`packages/auth/`** - Authentication logic and utilities
+- **`packages/db/`** - Database schema and utilities
+
+## Available Scripts
+
+- `pnpm run dev` - Start all apps in development mode
+- `pnpm run dev:web` - Start only the web app
+- `pnpm run dev:server` - Start only the server
+
+## Database Commands
+
+All database operations should be run from the server workspace:
+
+- `pnpm run db:push` - Push schema changes to database
+- `pnpm run db:studio` - Open database studio
+- `pnpm run db:generate` - Generate Drizzle files
+- `pnpm run db:migrate` - Run database migrations
+
+Database schema files are located in `apps/server/src/db/schema/`
+
+## Code Quality Rules
+
+- **Avoid unnecessary comments**: Only add comments for TODOs, complex business logic, or non-obvious code behavior
+- **Self-documenting code**: Write clear, descriptive variable and function names instead of relying on comments
+- **Remove obvious comments**: Don't comment what the code already clearly shows
+- **Focus on readability**: Code should be readable without extensive commenting
+
+## Mock Data Organization
+
+- **Always create mock data in `src/data/` directory**: Never place mock data directly in components or hooks
+- **Organize by feature**: Create subdirectories for each feature (e.g., `src/data/dashboard/`, `src/data/auth/`)
+- **Use descriptive file names**: Name files based on the data type (e.g., `bookings.ts`, `users.ts`)
+- **Export from index.ts**: Always create an `index.ts` file in each data subdirectory for clean imports
+- **Import types from original modules**: Don't duplicate type definitions in data files
+- **Example structure**:
+  ```
+  src/data/
+  ├── dashboard/
+  │   ├── bookings.ts
+  │   └── index.ts
+  └── auth/
+      ├── users.ts
+      └── index.ts
+  ```
+
+## Key Points
+
+- This is a Turborepo monorepo using pnpm workspaces
+- Each app has its own `package.json` and dependencies
+- Run commands from the root to execute across all workspaces
+- Run workspace-specific commands with `pnpm run command-name`
+- Turborepo handles build caching and parallel execution

@@ -1,9 +1,9 @@
 module.exports = {
   "apps/**/*.{js,ts,jsx,tsx}": [
-    "eslint --fix"
+    "pnpm dlx ultracite fix"
   ],
-  "packages/!(eslint-config|ts-config)/**/*.{js,ts,jsx,tsx}": [
-    "eslint --fix"
+  "packages/!(ts-config)/**/*.{js,ts,jsx,tsx}": [
+    "pnpm dlx ultracite fix"
   ],
   "*.json": [
     "prettier --write"
