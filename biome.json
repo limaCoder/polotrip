@@ -1,0 +1,68 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/dist",
+      "!**/.turbo",
+      "!**/dev-dist",
+      "!**/.zed",
+      "!**/.vscode",
+      "!**/routeTree.gen.ts",
+      "!**/src-tauri",
+      "!**/.nuxt",
+      "!bts.jsonc",
+      "!**/.expo",
+      "!**/.wrangler",
+      "!**/.alchemy",
+      "!**/.svelte-kit",
+      "!**/wrangler.jsonc",
+      "!**/.source"
+    ]
+  },
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noNoninteractiveElementInteractions": "off",
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "warn",
+        "useValidAnchor": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off",
+        "noNamespaceImport": "warn"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off",
+        "useAwait": "off",
+        "noEmptyBlockStatements": "off"
+      },
+      "style": {
+        "noUselessElse": "error",
+        "noMagicNumbers": "off",
+        "noNonNullAssertion": "off",
+        "useBlockStatements": "off",
+        "useForOf": "off",
+        "noExportedImports": "off",
+        "noEnum": "off",
+        "useFilenamingConvention": "off"
+      },
+      "nursery": {
+        "useConsistentArrowReturn": "off",
+        "noUselessUndefined": "warn"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off",
+        "noThisInStatic": "off",
+        "noExcessiveCognitiveComplexity": "off",
+        "noForEach": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn"
+      }
+    }
+  }
+}
