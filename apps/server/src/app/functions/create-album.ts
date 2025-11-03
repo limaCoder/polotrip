@@ -1,17 +1,17 @@
-import { db } from '@polotrip/db';
-import { albums } from '@polotrip/db/schema';
-import { createId } from '@paralleldrive/cuid2';
+import { createId } from "@paralleldrive/cuid2";
+import { db } from "@polotrip/db";
+import { albums } from "@polotrip/db/schema";
 
-import { type AlbumPlan, PHOTO_LIMITS } from '@/app/constants/pricingEnum';
+import { type AlbumPlan, PHOTO_LIMITS } from "@/app/constants/pricingEnum";
 
-interface CreateAlbumRequest {
+type CreateAlbumRequest = {
   userId: string;
   title: string;
   date: string;
   description?: string | null;
   coverImageUrl?: string | null;
   plan: AlbumPlan;
-}
+};
 
 async function createAlbum({
   userId,

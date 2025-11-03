@@ -1,10 +1,10 @@
-import z from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { getPublicAlbumLocations } from '@/app/functions/get-public-album-locations';
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
+import { getPublicAlbumLocations } from "@/app/functions/get-public-album-locations";
 
-const getPublicAlbumLocationsRoute: FastifyPluginAsyncZod = async app => {
+const getPublicAlbumLocationsRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/public/albums/:id/locations',
+    "/public/albums/:id/locations",
     {
       schema: {
         params: z.object({
@@ -20,7 +20,7 @@ const getPublicAlbumLocationsRoute: FastifyPluginAsyncZod = async app => {
                 locationName: z.string().nullable(),
                 dateTaken: z.string().nullable(),
                 imageUrl: z.string().nullable(),
-              }),
+              })
             ),
           }),
         },
@@ -34,19 +34,24 @@ const getPublicAlbumLocationsRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error when fetching public album locations:', error);
+        app.log.error("Error when fetching public album locations:", error);
 
-        if (error instanceof Error && error.message === 'Album not found') {
-          return reply.status(404).send({ error: 'Album not found' });
+        if (error instanceof Error && error.message === "Album not found") {
+          return reply.status(404).send({ error: "Album not found" });
         }
 
-        if (error instanceof Error && error.message === 'Album is not published') {
-          return reply.status(403).send({ error: 'Album is not published' });
+        if (
+          error instanceof Error &&
+          error.message === "Album is not published"
+        ) {
+          return reply.status(403).send({ error: "Album is not published" });
         }
 
-        return reply.status(500).send({ error: 'Failed to process the request.' });
+        return reply
+          .status(500)
+          .send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

@@ -1,28 +1,27 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
-import DOMPurify from 'isomorphic-dompurify';
-
-import { createAlbum } from '@/app/functions/create-album';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
+import { createAlbum } from "@/app/functions/create-album";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const bodySchema = z.object({
   title: z.string().min(3).max(255),
   date: z.string(),
   description: z.string().max(1000).nullable().optional(),
   coverImageUrl: z.string().url().nullable().optional(),
-  plan: z.enum(['basic', 'standard', 'premium']).default('standard'),
+  plan: z.enum(["basic", "standard", "premium"]).default("standard"),
 });
 
 type CreateAlbumBody = z.infer<typeof bodySchema>;
 
-export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
+export const createAlbumRoute: FastifyPluginAsyncZod = async (app) => {
   app.post<{
     Body: CreateAlbumBody;
   }>(
-    '/albums',
+    "/albums",
     {
       onRequest: [authenticate],
       schema: {
@@ -41,7 +40,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
               shareableLink: z.string(),
               photoCount: z.number(),
               photoLimit: z.number(),
-              plan: z.enum(['basic', 'standard', 'premium']),
+              plan: z.enum(["basic", "standard", "premium"]),
               createdAt: z.date(),
               updatedAt: z.date(),
             }),
@@ -65,8 +64,8 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         const sanitizedInput = {
           title: DOMPurify.sanitize(title),
-          description: DOMPurify.sanitize(description ?? ''),
-          coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ''),
+          description: DOMPurify.sanitize(description ?? ""),
+          coverImageUrl: DOMPurify.sanitize(coverImageUrl ?? ""),
         };
 
         const { album } = await createAlbum({
@@ -80,10 +79,10 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         return reply.status(201).send({ album });
       } catch (error) {
-        app.log.error('Error when creating album:', error);
+        app.log.error("Error when creating album:", error);
 
-        reply.status(500).send({ error: 'Failed to process the request.' });
+        reply.status(500).send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };

@@ -1,12 +1,14 @@
-import { env } from '@/env';
-import Stripe from 'stripe';
+import Stripe from "stripe";
+import { env } from "@/env";
 
 if (!env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is missing. Please set the environment variable.');
+  throw new Error(
+    "STRIPE_SECRET_KEY is missing. Please set the environment variable."
+  );
 }
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-02-24.acacia',
+  apiVersion: "2025-02-24.acacia",
 });
 
 export default stripe;

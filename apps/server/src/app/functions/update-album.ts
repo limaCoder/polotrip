@@ -1,14 +1,15 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
+/** biome-ignore-all lint/nursery/noShadow: this is a shadowed necessary variable */
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { eq } from "drizzle-orm";
 import {
   groupPhotoUpdates,
-  PhotoUpdate,
+  type PhotoUpdate,
   updateMultiplePhotos,
   updateSinglePhoto,
-} from '../helpers/update-album';
+} from "../helpers/update-album";
 
-interface UpdateAlbumRequest {
+type UpdateAlbumRequest = {
   albumId: string;
   userId: string;
   title?: string;
@@ -19,11 +20,11 @@ interface UpdateAlbumRequest {
   isPublished?: boolean;
   photoUpdates?: PhotoUpdate[];
   currentStepAfterPayment?: string;
-}
+};
 
-type AlbumStep = 'upload' | 'organize' | 'published';
+type AlbumStep = "upload" | "organize" | "published";
 
-interface AlbumUpdateData {
+type AlbumUpdateData = {
   title?: string;
   description?: string | null;
   coverImageUrl?: string | null;
@@ -32,7 +33,7 @@ interface AlbumUpdateData {
   isPublished?: boolean;
   currentStepAfterPayment?: AlbumStep;
   updatedAt: Date;
-}
+};
 
 async function updateAlbum({
   albumId,
@@ -50,17 +51,17 @@ async function updateAlbum({
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error("Album not found");
   }
 
   if (album.userId !== userId) {
-    throw new Error('Album does not belong to the user');
+    throw new Error("Album does not belong to the user");
   }
 
-  return await db.transaction(async tx => {
+  return await db.transaction(async (tx) => {
     const albumUpdateData: AlbumUpdateData = {
       updatedAt: new Date(),
     };
@@ -77,21 +78,22 @@ async function updateAlbum({
     const fieldsToUpdate = Object.entries(optionalFields).reduce(
       (acc, [key, value]) => {
         const typedKey = key as keyof typeof optionalFields;
-        if (typedKey === 'title' ? value : value !== undefined) {
+        if (typedKey === "title" ? value : value !== undefined) {
           acc[typedKey] = value;
         }
         return acc;
       },
-      {} as Record<string, string | boolean | null | undefined>,
+      {} as Record<string, string | boolean | null | undefined>
     );
 
     Object.assign(albumUpdateData, fieldsToUpdate);
 
     if (
       currentStepAfterPayment &&
-      ['upload', 'organize', 'published'].includes(currentStepAfterPayment)
+      ["upload", "organize", "published"].includes(currentStepAfterPayment)
     ) {
-      albumUpdateData.currentStepAfterPayment = currentStepAfterPayment as AlbumStep;
+      albumUpdateData.currentStepAfterPayment =
+        currentStepAfterPayment as AlbumStep;
     }
 
     const [updatedAlbum] = await tx
@@ -123,7 +125,7 @@ async function updateAlbum({
     return {
       success: true,
       album,
-      message: 'Album updated successfully',
+      message: "Album updated successfully",
     };
   });
 }

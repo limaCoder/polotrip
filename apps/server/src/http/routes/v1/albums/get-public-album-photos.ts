@@ -1,10 +1,12 @@
-import z from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { getPublicAlbumPhotos } from '@/app/functions/get-public-album-photos';
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
+import { getPublicAlbumPhotos } from "@/app/functions/get-public-album-photos";
 
-const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
+const REGEX_NUMBER = /^\d+$/;
+
+const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/public/albums/:id/photos',
+    "/public/albums/:id/photos",
     {
       schema: {
         params: z.object({
@@ -13,7 +15,10 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
         querystring: z.object({
           cursor: z.string().optional(),
           limit: z
-            .union([z.string().regex(/^\d+$/).transform(Number), z.number()])
+            .union([
+              z.string().regex(REGEX_NUMBER).transform(Number),
+              z.number(),
+            ])
             .pipe(z.number().min(1).max(100))
             .default(20)
             .optional(),
@@ -33,9 +38,9 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
                     order: z.string().nullable(),
                     width: z.number().nullable(),
                     height: z.number().nullable(),
-                  }),
+                  })
                 ),
-              }),
+              })
             ),
             pagination: z.object({
               hasMore: z.boolean(),
@@ -61,19 +66,24 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error when fetching public album photos:', error);
+        app.log.error("Error when fetching public album photos:", error);
 
-        if (error instanceof Error && error.message === 'Album not found') {
-          return reply.status(404).send({ error: 'Album not found' });
+        if (error instanceof Error && error.message === "Album not found") {
+          return reply.status(404).send({ error: "Album not found" });
         }
 
-        if (error instanceof Error && error.message === 'Album is not published') {
-          return reply.status(403).send({ error: 'Album is not published' });
+        if (
+          error instanceof Error &&
+          error.message === "Album is not published"
+        ) {
+          return reply.status(403).send({ error: "Album is not published" });
         }
 
-        return reply.status(500).send({ error: 'Failed to process the request.' });
+        return reply
+          .status(500)
+          .send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

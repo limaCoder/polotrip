@@ -1,13 +1,12 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
-import DOMPurify from 'isomorphic-dompurify';
-
-import { updateAlbum } from '@/app/functions/update-album';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
-import { sanitizeNonNullable, sanitizeNullable } from '@/app/utils/sanitize';
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
+import { updateAlbum } from "@/app/functions/update-album";
+import { sanitizeNonNullable, sanitizeNullable } from "@/app/utils/sanitize";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   id: z.string(),
@@ -16,7 +15,9 @@ const paramsSchema = z.object({
 const bodySchema = z.object({
   title: z.string().min(3).max(255).optional(),
   description: z.string().max(1000).nullable().optional(),
-  coverImageUrl: z.union([z.string().url(), z.string().length(0), z.null()]).optional(),
+  coverImageUrl: z
+    .union([z.string().url(), z.string().length(0), z.null()])
+    .optional(),
   spotifyTrackId: z.string().nullable().optional(),
   spotifyPlaylistId: z.string().nullable().optional(),
   isPublished: z.boolean().optional(),
@@ -30,7 +31,7 @@ const bodySchema = z.object({
         longitude: z.number().nullable().optional(),
         description: z.string().nullable().optional(),
         order: z.string().nullable().optional(),
-      }),
+      })
     )
     .optional(),
   currentStepAfterPayment: z.string().nullable().optional(),
@@ -39,12 +40,12 @@ const bodySchema = z.object({
 type UpdateAlbumParams = z.infer<typeof paramsSchema>;
 type UpdateAlbumBody = z.infer<typeof bodySchema>;
 
-export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
+export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
   app.patch<{
     Params: UpdateAlbumParams;
     Body: UpdateAlbumBody;
   }>(
-    '/albums/:id',
+    "/albums/:id",
     {
       onRequest: [authenticate],
       schema: {
@@ -127,7 +128,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
           isPublished,
           photoUpdates: photoUpdates ?? [],
           currentStepAfterPayment: sanitizeNonNullable(
-            currentStepAfterPayment as string | undefined,
+            currentStepAfterPayment as string | undefined
           ),
         };
 
@@ -146,13 +147,13 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error updating album:', error);
+        app.log.error("Error updating album:", error);
 
         return reply.status(500).send({
           success: false,
-          message: 'Failed to process the request.',
+          message: "Failed to process the request.",
         });
       }
-    },
+    }
   );
 };

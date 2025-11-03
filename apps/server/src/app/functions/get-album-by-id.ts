@@ -1,11 +1,12 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, users } from '@polotrip/db/schema';
-import { Album } from '@polotrip/db/models';
+import { db } from "@polotrip/db";
+import type { Album } from "@polotrip/db/models";
+import { albums, users } from "@polotrip/db/schema";
+import { eq } from "drizzle-orm";
+import { InternalServerError } from "@/http/errors/api-error";
 
-interface GetAlbumByIdRequest {
+type GetAlbumByIdRequest = {
   id: string;
-}
+};
 
 async function getAlbumById({ id }: GetAlbumByIdRequest) {
   try {
@@ -22,20 +23,20 @@ async function getAlbumById({ id }: GetAlbumByIdRequest) {
       })
       .from(albums)
       .where(eq(albums.id, id))
-      .then(rows => rows[0]);
+      .then((rows) => rows[0]);
 
     if (!album) {
-      throw new Error('Album not found');
+      throw new Error("Album not found");
     }
 
     const user = await db
       .select({ name: users.name })
       .from(users)
       .where(eq(users.id, album.userId))
-      .then(rows => rows[0]);
+      .then((rows) => rows[0]);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     const sanitizedData = album as Album;
@@ -44,8 +45,13 @@ async function getAlbumById({ id }: GetAlbumByIdRequest) {
 
     return { album: rest, user };
   } catch (error) {
-    console.error('Error fetching album by id:', error);
-    throw error;
+    throw new InternalServerError(
+      "Failed to process the request.",
+      "INTERNAL_SERVER_ERROR",
+      {
+        originalError: error,
+      }
+    );
   }
 }
 

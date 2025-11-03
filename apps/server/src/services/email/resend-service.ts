@@ -1,12 +1,12 @@
-import React from 'react';
-import { render } from '@react-email/render';
-
-import { Resend } from 'resend';
-import WelcomeEmail from '@polotrip/transactional/welcome';
-import { env } from '@/env';
+import WelcomeEmail from "@polotrip/transactional/welcome";
+import { render } from "@react-email/render";
+import React from "react";
+import { Resend } from "resend";
+import { env } from "@/env";
+import { InternalServerError } from "@/http/errors";
 
 class EmailService {
-  private resend: Resend;
+  private readonly resend: Resend;
 
   constructor() {
     this.resend = new Resend(env.RESEND_API_KEY);
@@ -14,16 +14,24 @@ class EmailService {
 
   async sendWelcomeEmail(name: string, email: string): Promise<void> {
     try {
-      const emailContent = await render(React.createElement(WelcomeEmail, { name }));
+      const emailContent = await render(
+        React.createElement(WelcomeEmail, { name })
+      );
 
       await this.resend.emails.send({
-        from: 'Acme <onboarding@resend.dev>',
+        from: "Acme <onboarding@resend.dev>",
         to: [email],
-        subject: 'Bem-vindo ao Polotrip!',
+        subject: "Bem-vindo ao Polotrip!",
         html: emailContent,
       });
     } catch (error) {
-      console.error('Error when sending welcome email:', error);
+      throw new InternalServerError(
+        "Error when sending welcome email",
+        "INTERNAL_ERROR",
+        {
+          originalError: error,
+        }
+      );
     }
   }
 }

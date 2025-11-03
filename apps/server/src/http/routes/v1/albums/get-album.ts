@@ -1,13 +1,13 @@
-import z from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { getAlbumById } from '@/app/functions/get-album-by-id';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
+import { getAlbumById } from "@/app/functions/get-album-by-id";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
-const getAlbumRoute: FastifyPluginAsyncZod = async app => {
+const getAlbumRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/albums/:id',
+    "/albums/:id",
     {
       onRequest: [authenticate],
       schema: {
@@ -48,15 +48,17 @@ const getAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error when fetching album:', error);
+        app.log.error("Error when fetching album:", error);
 
-        if (error instanceof Error && error.message === 'Album not found') {
-          return reply.status(404).send({ error: 'Album not found' });
+        if (error instanceof Error && error.message === "Album not found") {
+          return reply.status(404).send({ error: "Album not found" });
         }
 
-        return reply.status(500).send({ error: 'Failed to process the request.' });
+        return reply
+          .status(500)
+          .send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

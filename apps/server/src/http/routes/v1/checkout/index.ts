@@ -1,7 +1,7 @@
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import createCheckoutRoute from './create-checkout';
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import createCheckoutRoute from "./create-checkout";
 
-const checkoutController: FastifyPluginAsyncZod = async app => {
+const checkoutController: FastifyPluginAsyncZod = async (app) => {
   app.register(createCheckoutRoute);
 };
 

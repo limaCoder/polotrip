@@ -1,16 +1,17 @@
-import { and, eq, isNull, sql } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
-import { PaginationQuery } from '@/app/helpers/pagination/types';
-import { paginate } from '@/app/helpers/pagination';
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { and, eq, isNull, sql } from "drizzle-orm";
+import { paginate } from "@/app/helpers/pagination";
+import type { PaginationQuery } from "@/app/helpers/pagination/types";
+import { InternalServerError } from "@/http/errors/api-error";
 
-interface GetPhotosByDateRequest {
+type GetPhotosByDateRequest = {
   albumId: string;
   userId: string;
   date?: string;
   noDate?: boolean;
   pagination?: PaginationQuery;
-}
+};
 
 async function getPhotosByDate({
   albumId,
@@ -24,23 +25,28 @@ async function getPhotosByDate({
       .select()
       .from(albums)
       .where(eq(albums.id, albumId))
-      .then(rows => rows[0]);
+      .then((rows) => rows[0]);
 
     if (!album) {
-      throw new Error('Album not found');
+      throw new Error("Album not found");
     }
 
     if (album.userId !== userId) {
-      throw new Error('Album does not belong to user');
+      throw new Error("Album does not belong to user");
     }
 
+    // biome-ignore lint/suspicious/noEvolvingTypes: we need to use any type here
+    // biome-ignore lint/suspicious/noImplicitAnyLet: we need to use any type here
     let baseQueryFilter;
     if (noDate) {
-      baseQueryFilter = and(eq(photos.albumId, albumId), isNull(photos.dateTaken));
+      baseQueryFilter = and(
+        eq(photos.albumId, albumId),
+        isNull(photos.dateTaken)
+      );
     } else if (date) {
       baseQueryFilter = and(
         eq(photos.albumId, albumId),
-        sql`${photos.dateTaken} IS NOT NULL AND TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') = TO_CHAR(${date}::timestamp, 'YYYY-MM-DD')`,
+        sql`${photos.dateTaken} IS NOT NULL AND TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') = TO_CHAR(${date}::timestamp, 'YYYY-MM-DD')`
       );
     } else {
       baseQueryFilter = eq(photos.albumId, albumId);
@@ -69,8 +75,13 @@ async function getPhotosByDate({
       pagination: result.pagination,
     };
   } catch (error) {
-    console.error('Error fetching photos by date:', error);
-    throw error;
+    throw new InternalServerError(
+      "Failed to process the request.",
+      "INTERNAL_SERVER_ERROR",
+      {
+        originalError: error,
+      }
+    );
   }
 }
 

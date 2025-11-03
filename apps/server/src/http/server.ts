@@ -1,34 +1,40 @@
-import http, { IncomingMessage, ServerResponse } from 'http';
+import http, { type IncomingMessage, type ServerResponse } from "node:http";
+import fastifyCookie from "@fastify/cookie";
+import { fastifyCors } from "@fastify/cors";
+import { type FastifyServerFactory, fastify } from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 
-import { fastify, FastifyServerFactory } from 'fastify';
-import { fastifyCors } from '@fastify/cors';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import fastifyCookie from '@fastify/cookie';
-
-import { env } from '@/env';
-import { setupErrorHandler } from './errors';
-import authPlugin from './plugins/auth.js';
-import dbPlugin from './plugins/db.js';
-import rateLimitPlugin from './plugins/rate-limit.js';
-import swaggerPlugin from './plugins/swagger.js';
-
-import healthRoute from './routes/v1/health.js';
-import authRoute from './routes/v1/auth/index.js';
-import albumsController from './routes/v1/albums/index.js';
-import checkoutController from './routes/v1/checkout/index.js';
+import { env } from "@/env";
+import { setupErrorHandler } from "./errors";
+import authPlugin from "./plugins/auth.js";
+import dbPlugin from "./plugins/db.js";
+import rateLimitPlugin from "./plugins/rate-limit.js";
+import swaggerPlugin from "./plugins/swagger.js";
+import albumsController from "./routes/v1/albums/index.js";
+import authRoute from "./routes/v1/auth/index.js";
+import checkoutController from "./routes/v1/checkout/index.js";
+import healthRoute from "./routes/v1/health.js";
 
 const app = fastify({
   logger: false,
-  connectionTimeout: 120000,
-  keepAliveTimeout: 120000,
+  connectionTimeout: 120_000,
+  keepAliveTimeout: 120_000,
   maxRequestsPerSocket: 0,
-  serverFactory: (handler => {
-    const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-      handler(req, res);
-    });
+  serverFactory: ((handler) => {
+    const server = http.createServer(
+      (req: IncomingMessage, res: ServerResponse) => {
+        handler(req, res);
+      }
+    );
 
-    server.keepAliveTimeout = 120000;
-    server.headersTimeout = 125000;
+    const keepAliveTimeout = 120_000;
+    const headersTimeout = 125_000;
+
+    server.keepAliveTimeout = keepAliveTimeout;
+    server.headersTimeout = headersTimeout;
 
     return server;
   }) as FastifyServerFactory,
@@ -42,11 +48,16 @@ app.setValidatorCompiler(validatorCompiler);
 app.register(fastifyCors, {
   origin: env.WEB_URL,
   credentials: true,
-  allowedHeaders: ['Authorization', 'cookie', 'content-type', 'stripe-signature'],
+  allowedHeaders: [
+    "Authorization",
+    "cookie",
+    "content-type",
+    "stripe-signature",
+  ],
 });
 
 app.register(fastifyCookie, {
-  prefix: 'polotrip',
+  prefix: "polotrip",
 });
 
 app.register(dbPlugin);
@@ -54,24 +65,24 @@ app.register(authPlugin);
 app.register(rateLimitPlugin);
 app.register(swaggerPlugin);
 
-app.register(healthRoute, { prefix: '/api/v1' });
-app.register(authRoute, { prefix: '/api/v1' });
-app.register(albumsController, { prefix: '/api/v1' });
-app.register(checkoutController, { prefix: '/api/v1' });
+app.register(healthRoute, { prefix: "/api/v1" });
+app.register(authRoute, { prefix: "/api/v1" });
+app.register(albumsController, { prefix: "/api/v1" });
+app.register(checkoutController, { prefix: "/api/v1" });
 
-app.get('/', (_, reply) => {
-  reply.status(200).send('OK');
+app.get("/", (_, reply) => {
+  reply.status(200).send("OK");
 });
 
 app
   .listen({
     port: env.PORT,
-    host: '0.0.0.0',
+    host: "0.0.0.0",
   })
   .then(() => {
-    console.log(`HTTP server running on port ${env.PORT}`);
+    app.log.info(`HTTP server running on port ${env.PORT}`);
   })
-  .catch(err => {
-    console.error('Error starting server:', err);
+  .catch((err) => {
+    app.log.error("Error starting server:", err);
     process.exit(1);
   });

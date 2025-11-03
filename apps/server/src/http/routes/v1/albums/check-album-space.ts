@@ -1,10 +1,9 @@
-import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
-
-import { checkAlbumSpace } from '@/app/functions/check-album-space';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyInstance } from "fastify";
+import { z } from "zod";
+import { checkAlbumSpace } from "@/app/functions/check-album-space";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   albumId: z.string(),
@@ -16,7 +15,7 @@ export async function checkAlbumSpaceRoutes(app: FastifyInstance) {
   app.get<{
     Params: CheckAlbumSpaceParams;
   }>(
-    '/albums/:albumId/check-space',
+    "/albums/:albumId/check-space",
     {
       onRequest: [authenticate],
       schema: {
@@ -56,11 +55,11 @@ export async function checkAlbumSpaceRoutes(app: FastifyInstance) {
           return reply.status(200).send(result);
         } catch (error) {
           if (error instanceof Error) {
-            if (error.message === 'Album not found') {
+            if (error.message === "Album not found") {
               return reply.status(404).send({ message: error.message });
             }
 
-            if (error.message === 'Album does not belong to user') {
+            if (error.message === "Album does not belong to user") {
               return reply.status(403).send({ message: error.message });
             }
           }
@@ -71,8 +70,8 @@ export async function checkAlbumSpaceRoutes(app: FastifyInstance) {
         if (error instanceof Error) {
           return reply.status(400).send({ error: error.message });
         }
-        return reply.status(500).send({ error: 'Internal server error' });
+        return reply.status(500).send({ error: "Internal server error" });
       }
-    },
+    }
   );
 }

@@ -1,11 +1,10 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-
-import { getPhotosByDate } from '@/app/functions/get-photos-by-date';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
-import { paginationQuerySchema } from '@/app/helpers/pagination/schema';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { getPhotosByDate } from "@/app/functions/get-photos-by-date";
+import { paginationQuerySchema } from "@/app/helpers/pagination/schema";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   albumId: z.string(),
@@ -14,19 +13,19 @@ const paramsSchema = z.object({
 const querySchema = z
   .object({
     date: z.string().optional(),
-    noDate: z.string().optional().default('false'),
+    noDate: z.string().optional().default("false"),
   })
   .merge(paginationQuerySchema);
 
 type GetPhotosByDateParams = z.infer<typeof paramsSchema>;
 type GetPhotosByDateQuery = z.infer<typeof querySchema>;
 
-export const getPhotosByDateRoute: FastifyPluginAsyncZod = async app => {
+export const getPhotosByDateRoute: FastifyPluginAsyncZod = async (app) => {
   app.get<{
     Params: GetPhotosByDateParams;
     Querystring: GetPhotosByDateQuery;
   }>(
-    '/albums/:albumId/photos-by-date',
+    "/albums/:albumId/photos-by-date",
     {
       onRequest: [authenticate],
       schema: {
@@ -51,7 +50,7 @@ export const getPhotosByDateRoute: FastifyPluginAsyncZod = async app => {
                 order: z.string().nullable(),
                 createdAt: z.date(),
                 updatedAt: z.date(),
-              }),
+              })
             ),
             pagination: z.object({
               total: z.number(),
@@ -87,26 +86,26 @@ export const getPhotosByDateRoute: FastifyPluginAsyncZod = async app => {
             albumId,
             userId,
             date,
-            noDate: noDate === 'true',
+            noDate: noDate === "true",
             pagination: { page, limit },
           });
 
           return result;
         } catch (error) {
           if (error instanceof Error) {
-            if (error.message === 'Album not found') {
+            if (error.message === "Album not found") {
               return reply.status(404).send({ message: error.message });
             }
-            if (error.message === 'Album does not belong to user') {
+            if (error.message === "Album does not belong to user") {
               return reply.status(403).send({ message: error.message });
             }
           }
           throw error;
         }
       } catch (error) {
-        app.log.error('Error fetching photos by date:', error);
-        reply.status(500).send({ error: 'Failed to fetch photos' });
+        app.log.error("Error fetching photos by date:", error);
+        reply.status(500).send({ error: "Failed to fetch photos" });
       }
-    },
+    }
   );
 };

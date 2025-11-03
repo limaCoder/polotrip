@@ -1,11 +1,10 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { fromNodeHeaders } from 'better-auth/node';
-
-import { authenticate } from '@/http/middlewares/authenticate';
-import { UnauthorizedError } from '@/http/errors';
-import { getUploadUrls } from '@/app/functions/get-upload-urls';
-import DOMPurify from 'isomorphic-dompurify';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
+import { getUploadUrls } from "@/app/functions/get-upload-urls";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const querySchema = z.object({
   albumId: z.string(),
@@ -20,12 +19,12 @@ const bodySchema = z.object({
 type GetUploadUrlsQuery = z.infer<typeof querySchema>;
 type GetUploadUrlsBody = z.infer<typeof bodySchema>;
 
-export const getUploadUrlsRoute: FastifyPluginAsyncZod = async app => {
+export const getUploadUrlsRoute: FastifyPluginAsyncZod = async (app) => {
   app.post<{
     Querystring: GetUploadUrlsQuery;
     Body: GetUploadUrlsBody;
   }>(
-    '/albums/upload-urls',
+    "/albums/upload-urls",
     {
       onRequest: [authenticate],
       schema: {
@@ -38,7 +37,7 @@ export const getUploadUrlsRoute: FastifyPluginAsyncZod = async app => {
                 signedUrl: z.string(),
                 filePath: z.string(),
                 fileName: z.string(),
-              }),
+              })
             ),
           }),
         },
@@ -60,7 +59,7 @@ export const getUploadUrlsRoute: FastifyPluginAsyncZod = async app => {
 
         if (fileNames.length !== fileTypes.length) {
           return reply.status(400).send({
-            message: 'Name and file type quantity does not match',
+            message: "Name and file type quantity does not match",
           });
         }
 
@@ -77,22 +76,22 @@ export const getUploadUrlsRoute: FastifyPluginAsyncZod = async app => {
           return { urls };
         } catch (error) {
           if (error instanceof Error) {
-            if (error.message === 'Album not found') {
+            if (error.message === "Album not found") {
               return reply.status(404).send({ message: error.message });
             }
-            if (error.message === 'Album does not belong to user') {
+            if (error.message === "Album does not belong to user") {
               return reply.status(403).send({ message: error.message });
             }
-            if (error.message.includes('photos per album exceeded')) {
+            if (error.message.includes("photos per album exceeded")) {
               return reply.status(400).send({ message: error.message });
             }
           }
           throw error;
         }
       } catch (error) {
-        app.log.error('Error creating signed URLs:', error);
-        reply.status(500).send({ error: 'Failed to generate signed URLs' });
+        app.log.error("Error creating signed URLs:", error);
+        reply.status(500).send({ error: "Failed to generate signed URLs" });
       }
-    },
+    }
   );
 };

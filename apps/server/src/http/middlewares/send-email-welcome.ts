@@ -1,15 +1,17 @@
-import { FastifyRequest } from 'fastify';
-import { UnauthorizedError } from '@/http/errors';
-import { eq } from 'drizzle-orm';
-import { sessions, users } from '@polotrip/db/schema';
-import { emailService } from '@/services/email/resend-service';
-import { fromNodeHeaders } from 'better-auth/node';
+import { sessions, users } from "@polotrip/db/schema";
+import { fromNodeHeaders } from "better-auth/node";
+import { eq } from "drizzle-orm";
+import type { FastifyRequest } from "fastify";
+import { UnauthorizedError } from "@/http/errors";
+import { emailService } from "@/services/email/resend-service";
 
 async function sendEmailWelcome(request: FastifyRequest) {
   try {
     const cookies = request.cookies;
 
-    const sessionCookie = cookies['polotrip.session_token']?.trim().split('.')[0];
+    const sessionCookie = cookies["polotrip.session_token"]
+      ?.trim()
+      .split(".")[0];
 
     if (sessionCookie) {
       const [session] = await request.server.db
@@ -34,8 +36,8 @@ async function sendEmailWelcome(request: FastifyRequest) {
 
           if (authUser) {
             await emailService.sendWelcomeEmail(
-              authUser?.user?.name || 'User',
-              authUser?.user?.email,
+              authUser?.user?.name || "User",
+              authUser?.user?.email
             );
 
             await request.server.db
@@ -47,7 +49,8 @@ async function sendEmailWelcome(request: FastifyRequest) {
       }
     }
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
 
     request.log.error(
       {
@@ -60,12 +63,16 @@ async function sendEmailWelcome(request: FastifyRequest) {
             : error,
         path: request.url,
       },
-      'Error in send email welcome',
+      "Error in send email welcome"
     );
 
-    throw new UnauthorizedError('Invalid or expired session', 'INVALID_SESSION', {
-      originalError: errorMessage,
-    });
+    throw new UnauthorizedError(
+      "Invalid or expired session",
+      "INVALID_SESSION",
+      {
+        originalError: errorMessage,
+      }
+    );
   }
 }
 

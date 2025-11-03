@@ -1,28 +1,32 @@
-import { eq, inArray } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
-import { createClient } from '@supabase/supabase-js';
-import { env } from '@/env';
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { createClient } from "@supabase/supabase-js";
+import { eq, inArray } from "drizzle-orm";
+import { env } from "@/env";
 
-interface DeletePhotosRequest {
+type DeletePhotosRequest = {
   photoIds: string[];
   albumId: string;
   userId: string;
-}
+};
 
-async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) {
+async function deletePhotos({
+  photoIds,
+  albumId,
+  userId,
+}: DeletePhotosRequest) {
   const album = await db
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error("Album not found");
   }
 
   if (album.userId !== userId) {
-    throw new Error('Album does not belong to the user');
+    throw new Error("Album does not belong to the user");
   }
 
   const photosToDelete = await db
@@ -31,8 +35,8 @@ async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) 
     .where(
       inArray(
         photos.id,
-        photoIds.map(id => id),
-      ),
+        photoIds.map((id) => id)
+      )
     );
 
   if (!photosToDelete.length) {
@@ -41,14 +45,14 @@ async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) 
 
   const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
 
-  return await db.transaction(async tx => {
+  return await db.transaction(async (tx) => {
     const deletedPhotos = await tx
       .delete(photos)
       .where(
         inArray(
           photos.id,
-          photoIds.map(id => id),
-        ),
+          photoIds.map((id) => id)
+        )
       )
       .returning();
 
@@ -62,23 +66,24 @@ async function deletePhotos({ photoIds, albumId, userId }: DeletePhotosRequest) 
       .returning();
 
     const filePaths = photosToDelete
-      .map(photo => {
+      .map((photo) => {
         const url = new URL(photo.imageUrl);
-        const pathParts = url.pathname.split('/');
+        const pathParts = url.pathname.split("/");
 
-        const bucketTypeIndex = pathParts.findIndex(part => part === 'public' || part === 'sign');
+        const bucketTypeIndex = pathParts.findIndex(
+          (part) => part === "public" || part === "sign"
+        );
 
         if (bucketTypeIndex > -1 && bucketTypeIndex + 1 < pathParts.length) {
-          return pathParts.slice(bucketTypeIndex + 2).join('/');
+          return pathParts.slice(bucketTypeIndex + 2).join("/");
         }
 
-        console.warn('It was not possible to extract the image path:', url.pathname);
         return null;
       })
       .filter(Boolean) as string[];
 
     if (filePaths.length > 0) {
-      await supabase.storage.from('polotrip-albums-content').remove(filePaths);
+      await supabase.storage.from("polotrip-albums-content").remove(filePaths);
     }
 
     return {

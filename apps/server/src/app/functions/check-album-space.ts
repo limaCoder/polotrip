@@ -1,18 +1,18 @@
-import { eq, sql } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { eq, sql } from "drizzle-orm";
 
-interface CheckAlbumSpaceRequest {
+type CheckAlbumSpaceRequest = {
   albumId: string;
   userId: string;
-}
+};
 
-interface CheckAlbumSpaceResponse {
+type CheckAlbumSpaceResponse = {
   availableSpace: number;
   totalSpace: number;
   usedSpace: number;
   canUpload: boolean;
-}
+};
 
 async function checkAlbumSpace({
   albumId,
@@ -22,21 +22,21 @@ async function checkAlbumSpace({
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error("Album not found");
   }
 
   if (album.userId !== userId) {
-    throw new Error('Album does not belong to user');
+    throw new Error("Album does not belong to user");
   }
 
   const currentPhotos = await db
     .select({ count: sql`count(*)` })
     .from(photos)
     .where(eq(photos.albumId, albumId))
-    .then(rows => Number(rows[0]?.count || 0));
+    .then((rows) => Number(rows[0]?.count || 0));
 
   const totalSpace = album.photoLimit;
   const usedSpace = currentPhotos;

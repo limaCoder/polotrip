@@ -1,19 +1,19 @@
-import { eq } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, payments } from '@polotrip/db/schema';
-import stripe from '@/app/lib/stripe';
-import { getAlbumStripePrice } from '@/app/utils/getAlbumPrice';
+import { db } from "@polotrip/db";
+import { albums, payments } from "@polotrip/db/schema";
+import { eq } from "drizzle-orm";
+import stripe from "@/app/lib/stripe";
+import { getAlbumStripePrice } from "@/app/utils/getAlbumPrice";
 
-interface CreateCheckoutSessionRequest {
+type CreateCheckoutSessionRequest = {
   userId: string;
   albumId: string;
   successUrl: string;
   cancelUrl: string;
-  paymentMethod: 'credit_card' | 'pix';
-  currency: 'brl' | 'usd';
+  paymentMethod: "credit_card" | "pix";
+  currency: "brl" | "usd";
   isAdditionalPhotos?: boolean;
   additionalPhotosCount?: number;
-}
+};
 
 async function createCheckoutSession({
   userId,
@@ -29,33 +29,38 @@ async function createCheckoutSession({
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error("Album not found");
   }
 
   if (album.userId !== userId) {
-    throw new Error('Album does not belong to the user');
+    throw new Error("Album does not belong to the user");
   }
 
   let description = `Photos album: ${album.title}`;
 
   let amount = getAlbumStripePrice(album.plan, currency);
 
+  const ADDITIONAL_PHOTOS_PRICE = 990;
+  const ADDITIONAL_PHOTOS_LIMIT = 100;
+
   if (isAdditionalPhotos && additionalPhotosCount > 0) {
     // R$9,90 or USD 9,90 for each 100 additional photos
-    amount = 990 * Math.ceil(additionalPhotosCount / 100);
+    amount =
+      ADDITIONAL_PHOTOS_PRICE *
+      Math.ceil(additionalPhotosCount / ADDITIONAL_PHOTOS_LIMIT);
     description = `${additionalPhotosCount} additional photos to the album: ${album.title}`;
   }
 
-  if (paymentMethod === 'credit_card') {
+  if (paymentMethod === "credit_card") {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
-            currency: currency,
+            currency,
             product_data: {
               name: description,
             },
@@ -65,13 +70,13 @@ async function createCheckoutSession({
         },
       ],
       allow_promotion_codes: true,
-      mode: 'payment',
+      mode: "payment",
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {
         albumId,
         userId,
-        isAdditionalPhotos: isAdditionalPhotos ? 'true' : 'false',
+        isAdditionalPhotos: isAdditionalPhotos ? "true" : "false",
         additionalPhotosCount: additionalPhotosCount.toString(),
       },
     });
@@ -83,9 +88,9 @@ async function createCheckoutSession({
         albumId,
         amount,
         currency,
-        status: 'pending',
-        paymentMethod: 'credit_card',
-        paymentGateway: 'stripe',
+        status: "pending",
+        paymentMethod: "credit_card",
+        paymentGateway: "stripe",
         gatewayPaymentId: session.id,
         gatewayCheckoutUrl: session.url!,
         isAdditionalPhotos,
@@ -97,9 +102,8 @@ async function createCheckoutSession({
       payment,
       checkoutSession: session,
     };
-  } else {
-    throw new Error('Método de pagamento PIX não implementado ainda');
   }
+  throw new Error("Método de pagamento PIX não implementado ainda");
 }
 
 export { createCheckoutSession };

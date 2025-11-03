@@ -1,10 +1,9 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { fromNodeHeaders } from 'better-auth/node';
-
-import { authenticate } from '@/http/middlewares/authenticate';
-import { UnauthorizedError } from '@/http/errors';
-import { deletePhotos } from '@/app/functions/delete-photos';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { deletePhotos } from "@/app/functions/delete-photos";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   albumId: z.string(),
@@ -17,12 +16,12 @@ const bodySchema = z.object({
 type DeletePhotosParams = z.infer<typeof paramsSchema>;
 type DeletePhotosBody = z.infer<typeof bodySchema>;
 
-export const deletePhotosRoute: FastifyPluginAsyncZod = async app => {
+export const deletePhotosRoute: FastifyPluginAsyncZod = async (app) => {
   app.delete<{
     Params: DeletePhotosParams;
     Body: DeletePhotosBody;
   }>(
-    '/albums/:albumId/photos',
+    "/albums/:albumId/photos",
     {
       onRequest: [authenticate],
       schema: {
@@ -56,7 +55,7 @@ export const deletePhotosRoute: FastifyPluginAsyncZod = async app => {
 
         if (!photoIds.length) {
           return reply.status(400).send({
-            message: 'No photos specified for deletion',
+            message: "No photos specified for deletion",
           });
         }
 
@@ -70,19 +69,19 @@ export const deletePhotosRoute: FastifyPluginAsyncZod = async app => {
           return result;
         } catch (error) {
           if (error instanceof Error) {
-            if (error.message === 'Album not found') {
+            if (error.message === "Album not found") {
               return reply.status(404).send({ message: error.message });
             }
-            if (error.message === 'Album does not belong to the user') {
+            if (error.message === "Album does not belong to the user") {
               return reply.status(403).send({ message: error.message });
             }
           }
           throw error;
         }
       } catch (error) {
-        app.log.error('Error deleting photos:', error);
-        reply.status(500).send({ error: 'Failed to delete photos' });
+        app.log.error("Error deleting photos:", error);
+        reply.status(500).send({ error: "Failed to delete photos" });
       }
-    },
+    }
   );
 };

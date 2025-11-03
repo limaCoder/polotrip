@@ -1,16 +1,17 @@
-import { eq, sql } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { eq, sql } from "drizzle-orm";
+import { InternalServerError } from "@/http/errors/api-error";
 
-interface GetAlbumDatesRequest {
+type GetAlbumDatesRequest = {
   albumId: string;
   userId: string;
-}
+};
 
-interface DateCount {
+type DateCount = {
   date: string | null;
   count: number;
-}
+};
 
 async function getAlbumDates({ albumId, userId }: GetAlbumDatesRequest) {
   try {
@@ -18,33 +19,33 @@ async function getAlbumDates({ albumId, userId }: GetAlbumDatesRequest) {
       .select()
       .from(albums)
       .where(eq(albums.id, albumId))
-      .then(rows => rows[0]);
+      .then((rows) => rows[0]);
 
     if (!album) {
-      throw new Error('Album not found');
+      throw new Error("Album not found");
     }
 
     if (album.userId !== userId) {
-      throw new Error('Album does not belong to user');
+      throw new Error("Album does not belong to user");
     }
 
     const dateCountsResult = await db
       .select({
         date: sql`CASE WHEN ${photos.dateTaken} IS NULL THEN NULL ELSE TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') END`
           .mapWith((val): string | null => (val === null ? null : String(val)))
-          .as('dateOnly'),
+          .as("dateOnly"),
         count: sql`count(*)`.mapWith(Number),
       })
       .from(photos)
       .where(eq(photos.albumId, albumId))
       .groupBy(
-        sql`CASE WHEN ${photos.dateTaken} IS NULL THEN NULL ELSE TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') END`,
+        sql`CASE WHEN ${photos.dateTaken} IS NULL THEN NULL ELSE TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') END`
       )
       .orderBy(
-        sql`CASE WHEN ${photos.dateTaken} IS NULL THEN NULL ELSE TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') END DESC`,
+        sql`CASE WHEN ${photos.dateTaken} IS NULL THEN NULL ELSE TO_CHAR(${photos.dateTaken}::timestamp, 'YYYY-MM-DD') END DESC`
       );
 
-    const dates: DateCount[] = dateCountsResult.map(row => ({
+    const dates: DateCount[] = dateCountsResult.map((row) => ({
       date: row.date,
       count: row.count,
     }));
@@ -53,8 +54,13 @@ async function getAlbumDates({ albumId, userId }: GetAlbumDatesRequest) {
       dates,
     };
   } catch (error) {
-    console.error('Error fetching album dates:', error);
-    throw error;
+    throw new InternalServerError(
+      "Failed to process the request.",
+      "INTERNAL_SERVER_ERROR",
+      {
+        originalError: error,
+      }
+    );
   }
 }
 

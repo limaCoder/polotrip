@@ -1,10 +1,9 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-
-import { getAlbumDates } from '@/app/functions/get-album-dates';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { getAlbumDates } from "@/app/functions/get-album-dates";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   albumId: z.string(),
@@ -12,11 +11,11 @@ const paramsSchema = z.object({
 
 type GetAlbumDatesParams = z.infer<typeof paramsSchema>;
 
-export const getAlbumDatesRoute: FastifyPluginAsyncZod = async app => {
+export const getAlbumDatesRoute: FastifyPluginAsyncZod = async (app) => {
   app.get<{
     Params: GetAlbumDatesParams;
   }>(
-    '/albums/:albumId/dates',
+    "/albums/:albumId/dates",
     {
       onRequest: [authenticate],
       schema: {
@@ -27,7 +26,7 @@ export const getAlbumDatesRoute: FastifyPluginAsyncZod = async app => {
               z.object({
                 date: z.string().nullable(),
                 count: z.number(),
-              }),
+              })
             ),
           }),
           404: z.object({
@@ -58,19 +57,19 @@ export const getAlbumDatesRoute: FastifyPluginAsyncZod = async app => {
           return result;
         } catch (error) {
           if (error instanceof Error) {
-            if (error.message === 'Album not found') {
+            if (error.message === "Album not found") {
               return reply.status(404).send({ message: error.message });
             }
-            if (error.message === 'Album does not belong to user') {
+            if (error.message === "Album does not belong to user") {
               return reply.status(403).send({ message: error.message });
             }
           }
           throw error;
         }
       } catch (error) {
-        app.log.error('Error fetching album dates:', error);
-        reply.status(500).send({ error: 'Failed to fetch album dates' });
+        app.log.error("Error fetching album dates:", error);
+        reply.status(500).send({ error: "Failed to fetch album dates" });
       }
-    },
+    }
   );
 };

@@ -1,10 +1,10 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { sql } from 'drizzle-orm';
+import { sql } from "drizzle-orm";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
 
-const healthRoute: FastifyPluginAsyncZod = async app => {
+const healthRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/health',
+    "/health",
     {
       schema: {
         response: {
@@ -21,30 +21,30 @@ const healthRoute: FastifyPluginAsyncZod = async app => {
         },
       },
     },
-    async request => {
+    async (request) => {
       const startTime = performance.now();
-      let dbStatus = 'ok';
+      let dbStatus = "ok";
       let dbLatency = 0;
 
       try {
         await request.server.db.execute(sql`SELECT 1`);
         dbLatency = Math.round(performance.now() - startTime);
       } catch (error) {
-        dbStatus = 'error';
-        app.log.error('Database check failed:', error);
+        dbStatus = "error";
+        app.log.error("Database check failed:", error);
       }
 
       return {
-        status: 'ok',
+        status: "ok",
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
         database: {
           status: dbStatus,
           latency: dbLatency,
         },
-        version: process.env.npm_package_version || '0.1.0',
+        version: process.env.npm_package_version || "0.1.0",
       };
-    },
+    }
   );
 };
 

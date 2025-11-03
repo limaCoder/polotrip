@@ -1,4 +1,4 @@
-import { env } from '@/env';
+import { env } from "@/env";
 
 export async function getRandomUnsplashImage(query: string) {
   try {
@@ -8,7 +8,7 @@ export async function getRandomUnsplashImage(query: string) {
         headers: {
           Authorization: `Client-ID ${env.UNSPLASH_ACCESS_KEY}`,
         },
-      },
+      }
     );
 
     if (!response.ok) {
@@ -23,6 +23,6 @@ export async function getRandomUnsplashImage(query: string) {
       profileUrl: data?.user?.links?.html,
     };
   } catch (error) {
-    console.error('Error fetching from Unsplash:', error);
+    throw new Error(`Error fetching from Unsplash: ${error}`);
   }
 }

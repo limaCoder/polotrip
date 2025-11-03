@@ -1,32 +1,31 @@
-import { z } from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
+import { createCheckoutSession } from "@/app/functions/create-checkout-session";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
-import { createCheckoutSession } from '@/app/functions/create-checkout-session';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
-
-type Currency = 'brl' | 'usd';
+type Currency = "brl" | "usd";
 
 const bodySchema = z.object({
   albumId: z.string(),
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
-  paymentMethod: z.enum(['credit_card', 'pix']),
-  currency: z.enum(['brl', 'usd']),
+  paymentMethod: z.enum(["credit_card", "pix"]),
+  currency: z.enum(["brl", "usd"]),
   isAdditionalPhotos: z.boolean().optional().default(false),
   additionalPhotosCount: z.number().int().min(1).optional(),
 });
 
 type CreateCheckoutBody = z.infer<typeof bodySchema>;
 
-const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
+const createCheckoutRoute: FastifyPluginAsyncZod = async (app) => {
   app.post<{
     Body: CreateCheckoutBody;
   }>(
-    '/checkout',
+    "/checkout",
     {
       onRequest: [authenticate],
       schema: {
@@ -94,7 +93,7 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
           albumId: sanitizedInput.albumId,
           successUrl: sanitizedInput.successUrl,
           cancelUrl: sanitizedInput.cancelUrl,
-          paymentMethod: paymentMethod,
+          paymentMethod,
           currency: sanitizedInput.currency as Currency,
           isAdditionalPhotos: isAdditionalPhotos ?? false,
           additionalPhotosCount: additionalPhotosCount ?? 0,
@@ -102,11 +101,11 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async app => {
 
         return { payment, checkoutSession };
       } catch (error) {
-        app.log.error('Error when creating checkout session:', error);
+        app.log.error("Error when creating checkout session:", error);
 
-        reply.status(500).send({ error: 'Failed to process the request.' });
+        reply.status(500).send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

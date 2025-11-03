@@ -1,10 +1,10 @@
-import z from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { getPublicAlbumById } from '@/app/functions/get-public-album-by-id';
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
+import { getPublicAlbumById } from "@/app/functions/get-public-album-by-id";
 
-const getPublicAlbumRoute: FastifyPluginAsyncZod = async app => {
+const getPublicAlbumRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/public/albums/:id',
+    "/public/albums/:id",
     {
       schema: {
         params: z.object({
@@ -34,19 +34,24 @@ const getPublicAlbumRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error when fetching public album:', error);
+        app.log.error("Error when fetching public album:", error);
 
-        if (error instanceof Error && error.message === 'Album not found') {
-          return reply.status(404).send({ error: 'Album not found' });
+        if (error instanceof Error && error.message === "Album not found") {
+          return reply.status(404).send({ error: "Album not found" });
         }
 
-        if (error instanceof Error && error.message === 'Album is not published') {
-          return reply.status(403).send({ error: 'Album is not published' });
+        if (
+          error instanceof Error &&
+          error.message === "Album is not published"
+        ) {
+          return reply.status(403).send({ error: "Album is not published" });
         }
 
-        return reply.status(500).send({ error: 'Failed to process the request.' });
+        return reply
+          .status(500)
+          .send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

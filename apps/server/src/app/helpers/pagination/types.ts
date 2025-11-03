@@ -1,13 +1,13 @@
-import { z } from 'zod';
-import { paginationQuerySchema } from './schema';
-import { SQL } from 'drizzle-orm';
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { schema } from '@polotrip/db/schema';
-import postgres from 'postgres';
+import type { schema } from "@polotrip/db/schema";
+import type { SQL } from "drizzle-orm";
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import type postgres from "postgres";
+import type { z } from "zod";
+import type { paginationQuerySchema } from "./schema";
 
 type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 
-interface PaginatedResult<T> {
+type PaginatedResult<T> = {
   data: T[];
   pagination: {
     total: number;
@@ -17,15 +17,15 @@ interface PaginatedResult<T> {
     hasNextPage: boolean;
     hasPrevPage: boolean;
   };
-}
+};
 
-interface PaginateFunction {
+type PaginateFunction = {
   query: PaginationQuery;
   baseQuery: SQL;
   countQuery: SQL;
   db: PostgresJsDatabase<typeof schema> & {
-    $client: postgres.Sql<{}>;
+    $client: postgres.Sql<Record<string, unknown>>;
   };
-}
+};
 
 export type { PaginationQuery, PaginatedResult, PaginateFunction };

@@ -1,6 +1,5 @@
-import fp from 'fastify-plugin';
-
-import { auth } from '@polotrip/auth';
+import { auth } from "@polotrip/auth";
+import fp from "fastify-plugin";
 
 export default fp(
   async function fastifyAuth(fastify) {
@@ -9,19 +8,19 @@ export default fp(
     }
 
     try {
-      if (!auth || !auth.handler) {
-        throw new Error('Auth handler is not available');
+      if (!auth?.handler) {
+        throw new Error("Auth handler is not available");
       }
 
-      fastify.decorate('auth', auth);
-      fastify.log.info('Auth plugin registered successfully');
+      fastify.decorate("auth", auth);
+      fastify.log.info("Auth plugin registered successfully");
     } catch (error) {
       fastify.log.error(`Auth Plugin Error: ${error}`);
       throw error;
     }
   },
   {
-    name: 'auth',
-    dependencies: ['db'],
-  },
+    name: "auth",
+    dependencies: ["db"],
+  }
 );

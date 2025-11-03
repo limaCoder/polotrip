@@ -1,6 +1,6 @@
-import { eq, sql } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums, photos } from '@polotrip/db/schema';
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { eq, sql } from "drizzle-orm";
 
 type PhotoData = {
   filePath: string;
@@ -12,11 +12,11 @@ type PhotoData = {
   height: number | null;
 };
 
-interface SaveUploadedPhotosRequest {
+type SaveUploadedPhotosRequest = {
   albumId: string;
   userId: string;
   photos: PhotoData[];
-}
+};
 
 async function saveUploadedPhotos({
   albumId,
@@ -27,29 +27,29 @@ async function saveUploadedPhotos({
     .select()
     .from(albums)
     .where(eq(albums.id, albumId))
-    .then(rows => rows[0]);
+    .then((rows) => rows[0]);
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error("Album not found");
   }
 
   if (album.userId !== userId) {
-    throw new Error('Album does not belong to user');
+    throw new Error("Album does not belong to user");
   }
 
   const currentPhotos = await db
     .select({ count: sql`count(*)` })
     .from(photos)
     .where(eq(photos.albumId, albumId))
-    .then(rows => Number(rows[0]?.count || 0));
+    .then((rows) => Number(rows[0]?.count || 0));
 
   if (currentPhotos + uploadedPhotosData?.length > album.photoLimit) {
     throw new Error(`Limit of ${album.photoLimit} photos per album exceeded`);
   }
 
-  const BUCKET_NAME = 'polotrip-albums-content-bucket.work';
+  const BUCKET_NAME = "polotrip-albums-content-bucket.work";
 
-  const photosToInsert = uploadedPhotosData?.map(photo => {
+  const photosToInsert = uploadedPhotosData?.map((photo) => {
     const publicUrl = `https://${BUCKET_NAME}/${photo.filePath}`;
 
     return {
@@ -64,21 +64,24 @@ async function saveUploadedPhotos({
     };
   });
 
-  const savedPhotos = await db.insert(photos).values(photosToInsert).returning();
+  const savedPhotos = await db
+    .insert(photos)
+    .values(photosToInsert)
+    .returning();
 
   await db
     .update(albums)
     .set({
       photoCount: album.photoCount + savedPhotos.length,
       updatedAt: new Date(),
-      currentStepAfterPayment: 'organize',
+      currentStepAfterPayment: "organize",
     })
     .where(eq(albums.id, albumId));
 
   return {
     success: true,
     photosCount: savedPhotos?.length,
-    message: 'Photos saved successfully',
+    message: "Photos saved successfully",
   };
 }
 

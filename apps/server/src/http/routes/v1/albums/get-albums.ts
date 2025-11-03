@@ -1,16 +1,19 @@
-import z from 'zod';
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { getAlbumsByUserId } from '@/app/functions/get-albums-by-user-id';
-import { authenticate } from '@/http/middlewares/authenticate';
-import { sendEmailWelcome } from '@/http/middlewares/send-email-welcome';
-import { fromNodeHeaders } from 'better-auth/node';
-import { UnauthorizedError } from '@/http/errors';
-import { paginationQuerySchema, paginationResponseSchema } from '@/app/helpers/pagination/schema';
-import { PaginationQuery } from '@/app/helpers/pagination/types';
+import { fromNodeHeaders } from "better-auth/node";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import z from "zod";
+import { getAlbumsByUserId } from "@/app/functions/get-albums-by-user-id";
+import {
+  paginationQuerySchema,
+  paginationResponseSchema,
+} from "@/app/helpers/pagination/schema";
+import type { PaginationQuery } from "@/app/helpers/pagination/types";
+import { UnauthorizedError } from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
+import { sendEmailWelcome } from "@/http/middlewares/send-email-welcome";
 
-const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
+const getAlbumsRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    '/albums',
+    "/albums",
     {
       onRequest: [authenticate, sendEmailWelcome],
       schema: {
@@ -33,7 +36,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
                 photoCount: z.number(),
                 createdAt: z.date(),
                 updatedAt: z.date(),
-              }),
+              })
             ),
             pagination: paginationResponseSchema.optional(),
           }),
@@ -59,11 +62,11 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async app => {
 
         return result;
       } catch (error) {
-        app.log.error('Error when searching for albums:', error);
+        app.log.error("Error when searching for albums:", error);
 
-        reply.status(500).send({ error: 'Failed to process the request.' });
+        reply.status(500).send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };
 

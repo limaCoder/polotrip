@@ -1,15 +1,14 @@
-import { eq, sql, and } from 'drizzle-orm';
-import { db } from '@polotrip/db';
-import { albums } from '@polotrip/db/schema';
-import { Album } from '@polotrip/db/models';
+import { db } from "@polotrip/db";
+import type { Album } from "@polotrip/db/models";
+import { albums } from "@polotrip/db/schema";
+import { and, eq, sql } from "drizzle-orm";
+import { paginate } from "@/app/helpers/pagination";
+import type { PaginationQuery } from "@/app/helpers/pagination/types";
 
-import { PaginationQuery } from '@/app/helpers/pagination/types';
-import { paginate } from '@/app/helpers/pagination';
-
-interface GetAlbumsByUserIdRequest {
+type GetAlbumsByUserIdRequest = {
   userId: string;
   pagination?: PaginationQuery;
-}
+};
 
 async function getAlbumsByUserId({
   userId,
@@ -34,10 +33,10 @@ async function getAlbumsByUserId({
       db,
     });
 
-    const sanitizedData = result?.data?.map(album => {
+    const sanitizedData = result?.data?.map((album) => {
       const albumData = album as Album;
 
-      const { userId, ...rest } = albumData;
+      const { userId: removedUserId, ...rest } = albumData;
 
       return rest;
     });

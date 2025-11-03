@@ -1,7 +1,7 @@
-interface StorageProvider {
+type StorageProvider = {
   createSignedUploadUrl(
     bucket: string,
-    path: string,
+    path: string
   ): Promise<{
     signedUrl: string;
     path: string;
@@ -10,11 +10,11 @@ interface StorageProvider {
   createSignedDownloadUrl(
     bucket: string,
     path: string,
-    expiresIn: number,
+    expiresIn: number
   ): Promise<{
     signedUrl: string;
     path: string;
   }>;
-}
+};
 
 export type { StorageProvider };
