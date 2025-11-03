@@ -18,7 +18,6 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@polotrip/eslint-config": "workspace:*",
     "@polotrip/ts-config": "workspace:*",
     "@types/react": "^19",
     "@types/react-dom": "^19",

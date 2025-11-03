@@ -1,4 +1,4 @@
-import { Button, Html, Tailwind, Body, Head } from '@react-email/components';
+import { Body, Button, Head, Html, Tailwind } from "@react-email/components";
 
 export const MyEmail = () => {
   return (
@@ -9,8 +9,8 @@ export const MyEmail = () => {
           theme: {
             extend: {
               colors: {
-                primary: '#000',
-                secondary: '#fff',
+                primary: "#000",
+                secondary: "#fff",
               },
             },
           },
@@ -18,8 +18,8 @@ export const MyEmail = () => {
       >
         <Body className="font-sans antialiased">
           <Button
+            className="bg-blue-500 px-3 py-2 font-medium text-white leading-4"
             href="https://example.com"
-            className="bg-blue-500 px-3 py-2 font-medium leading-4 text-white"
           >
             Click me
           </Button>

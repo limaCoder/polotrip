@@ -1,23 +1,23 @@
-import * as React from 'react';
 import {
-  Html,
   Body,
+  Container,
   Head,
   Heading,
-  Text,
-  Container,
-  Section,
   Hr,
-  Link,
-  Tailwind,
+  Html,
   Img,
-} from '@react-email/components';
+  Link,
+  Section,
+  Tailwind,
+  Text,
+} from "@react-email/components";
+import type * as React from "react";
 
-interface WelcomeEmailProps {
+type WelcomeEmailProps = {
   name: string;
-}
+};
 
-const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = 'Fulano' }) => {
+const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = "Fulano" }) => {
   const fullYear = new Date().getFullYear();
 
   return (
@@ -28,74 +28,80 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = 'Fulano' }) => {
           theme: {
             extend: {
               colors: {
-                primary: '#03aed2',
-                secondary: '#68d2e8',
-                secondary_10: '#EFF9FC',
-                secondary_50: '#afe7f2',
-                yellow: '#feefad',
-                accent: '#fdde55',
-                background: '#f7fcfd',
-                text: '#08171c',
-                text_opacity_25: '#08171C40',
-                gradient_primary: '#2980b9, #2c3e50',
+                primary: "#03aed2",
+                secondary: "#68d2e8",
+                secondary_10: "#EFF9FC",
+                secondary_50: "#afe7f2",
+                yellow: "#feefad",
+                accent: "#fdde55",
+                background: "#f7fcfd",
+                text: "#08171c",
+                text_opacity_25: "#08171C40",
+                gradient_primary: "#2980b9, #2c3e50",
               },
             },
           },
         }}
       >
         <Body className="bg-gray-100 font-sans">
-          <Container className="max-w-2xl mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+          <Container className="mx-auto max-w-2xl overflow-hidden rounded-lg bg-white shadow-lg">
             <Section className="bg-primary p-8 text-center">
-              <Heading className="text-white text-2xl font-bold m-0">
+              <Heading className="m-0 font-bold text-2xl text-white">
                 Bem-vindo ao Polotrip!
               </Heading>
             </Section>
 
             <Section className="p-5">
-              <Img src="logo.png" alt="Polotrip" className="mx-auto mb-4" />
-              <Text className="text-lg text-gray-800 mb-4">
+              <Img alt="Polotrip" className="mx-auto mb-4" src="logo.png" />
+              <Text className="mb-4 text-gray-800 text-lg">
                 Olá, <span className="font-bold">{name}</span>!
               </Text>
 
-              <Text className="text-base text-gray-800 mb-4">
-                Estamos muito felizes em ter você conosco no Polotrip! Nossa plataforma foi criada
-                para tornar suas viagens mais organizadas e memoráveis.
+              <Text className="mb-4 text-base text-gray-800">
+                Estamos muito felizes em ter você conosco no Polotrip! Nossa
+                plataforma foi criada para tornar suas viagens mais organizadas
+                e memoráveis.
               </Text>
 
-              <Text className="text-base text-gray-800 mb-2">
+              <Text className="mb-2 text-base text-gray-800">
                 Aqui estão algumas coisas que você pode fazer:
               </Text>
 
-              <Text className="text-base text-gray-800 ml-4 mb-1">
+              <Text className="mb-1 ml-4 text-base text-gray-800">
                 • Criar álbuns de fotos para suas viagens
               </Text>
-              <Text className="text-base text-gray-800 ml-4 mb-1">
+              <Text className="mb-1 ml-4 text-base text-gray-800">
                 • Organizar suas memórias de viagem
               </Text>
-              <Text className="text-base text-gray-800 ml-4 mb-4">
+              <Text className="mb-4 ml-4 text-base text-gray-800">
                 • Compartilhar suas experiências com amigos e familiares
               </Text>
 
-              <Section className="bg-gray-100 p-4 rounded-lg mb-4">
-                <Text className="text-base text-gray-800 m-0">
-                  Se precisar de ajuda ou tiver dúvidas, não hesite em nos contatar.
+              <Section className="mb-4 rounded-lg bg-gray-100 p-4">
+                <Text className="m-0 text-base text-gray-800">
+                  Se precisar de ajuda ou tiver dúvidas, não hesite em nos
+                  contatar.
                 </Text>
               </Section>
 
-              <Hr className="border-t border-gray-200 my-2" />
+              <Hr className="my-2 border-gray-200 border-t" />
 
               <Section className="text-center">
-                <Text className="text-base text-gray-800 mb-2">Boas viagens!</Text>
+                <Text className="mb-2 text-base text-gray-800">
+                  Boas viagens!
+                </Text>
 
-                <Text className="text-base text-gray-800 font-semibold">Equipe Polotrip</Text>
+                <Text className="font-semibold text-base text-gray-800">
+                  Equipe Polotrip
+                </Text>
               </Section>
             </Section>
 
-            <Section className="bg-yellow text-black font-bold p-4 text-center">
-              <Text className="text-sm m-0">
+            <Section className="bg-yellow p-4 text-center font-bold text-black">
+              <Text className="m-0 text-sm">
                 © {fullYear} Polotrip. Todos os direitos reservados.
               </Text>
-              <Link href="#" className="text-sm underline mt-2">
+              <Link className="mt-2 text-sm underline" href="#">
                 Política de Privacidade
               </Link>
             </Section>
