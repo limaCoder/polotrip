@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "dev": "email dev",
+    "dev": "email dev -p 3001",
     "build": "tsup"
   },
   "devDependencies": {
