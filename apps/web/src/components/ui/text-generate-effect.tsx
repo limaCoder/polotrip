@@ -1,6 +1,6 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: biome does not support indexOf */
 "use client";
 
-import { indexOf } from "lodash";
 import { motion, stagger, useAnimate } from "motion/react";
 import { useEffect } from "react";
 import { cn } from "@/lib/cn";
@@ -38,12 +38,12 @@ export const TextGenerateEffect = ({
   const renderWords = () => {
     return (
       <motion.div ref={scope}>
-        {wordsArray.map((word) => {
+        {wordsArray.map((word, idx) => {
           if (tag === "h1") {
             return (
               <motion.h1
                 className="inline font-heading opacity-0"
-                key={`${word}-${indexOf(wordsArray, word)}`}
+                key={word + idx}
                 style={{
                   filter: filter ? "blur(10px)" : "none",
                 }}
@@ -57,7 +57,7 @@ export const TextGenerateEffect = ({
             return (
               <motion.p
                 className="mt-6 inline font-title_three opacity-0"
-                key={`${word}-${indexOf(wordsArray, word)}`}
+                key={word + idx}
                 style={{
                   filter: filter ? "blur(10px)" : "none",
                 }}
@@ -70,7 +70,7 @@ export const TextGenerateEffect = ({
           return (
             <motion.span
               className="inline font-heading text-gradient-primary opacity-0"
-              key={`${word}-${indexOf(wordsArray, word)}`}
+              key={word + idx}
             >
               {word}{" "}
             </motion.span>

@@ -67,8 +67,11 @@ export function AlbumDetailsCard() {
               </h3>
               <Image
                 alt={t("cover_image_alt")}
-                className="mt-2 h-32 w-32 rounded-lg object-cover"
+                className="mt-2 aspect-square rounded-lg object-cover"
+                height={320}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={album?.coverImageUrl}
+                width={320}
               />
             </div>
           )}

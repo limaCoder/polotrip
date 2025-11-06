@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: biome does not support indexOf */
 "use client";
 
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -81,8 +82,8 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
 
   return (
     <div className="flex w-full gap-4">
-      {columns?.map((column) => (
-        <div className="flex flex-1 flex-col gap-4" key={column?.[0]?.id}>
+      {columns?.map((column, columnIndex) => (
+        <div className="flex flex-1 flex-col gap-4" key={columnIndex}>
           {column?.map((columnPhoto) => (
             <MorphingDialog
               key={columnPhoto?.id}
