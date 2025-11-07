@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { ShareAlbumModal } from "@/components/ShareAlbumModal";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useAlbumOwnership } from "@/hooks/use-album-ownership";
 import { useDesktopAlbumInTvMode } from "@/hooks/use-desktop-album-in-tv-mode";
 import type { HeaderAlbumProps } from "../types";
@@ -39,7 +40,7 @@ export function HeaderAlbumDesktop({
       <div className="flex items-center gap-6">
         <button
           aria-label={t("tv_mode_aria")}
-          className="flex items-center gap-2 text-background transition-colors hover:text-primary"
+          className="flex items-center gap-2 text-white transition-colors hover:text-primary"
           onClick={handleTvMode}
           type="button"
         >
@@ -50,7 +51,7 @@ export function HeaderAlbumDesktop({
         {isOwner && (
           <button
             aria-label={t("share_aria")}
-            className="flex items-center gap-2 text-background transition-colors hover:text-primary"
+            className="flex items-center gap-2 text-white transition-colors hover:text-primary"
             onClick={() => setIsShareModalOpen(true)}
             type="button"
           >
@@ -60,6 +61,7 @@ export function HeaderAlbumDesktop({
         )}
 
         {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher whiteTrigger />}
+        <ThemeSwitcher whiteIcon />
       </div>
 
       {isOwner && (

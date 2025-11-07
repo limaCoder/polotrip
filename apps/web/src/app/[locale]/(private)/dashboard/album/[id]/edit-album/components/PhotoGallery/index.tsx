@@ -39,7 +39,7 @@ export function PhotoGallery({
     : t("no_date_defined");
 
   return (
-    <div className="rounded-lg bg-background p-8 shadow-md">
+    <div className="rounded-lg bg-card p-8 shadow">
       <div className="mb-3">
         <h2 className="mb-1 font-bold font-title_three">{t("title")}</h2>
         <p className="font-body_two text-text/75">{t("description")}</p>

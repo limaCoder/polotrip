@@ -4,9 +4,12 @@ import { Share2 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { usePostHog } from "@/hooks/usePostHog";
+import { cn } from "@/lib/cn";
 import type { ShareButtonsProps } from "./types";
 
 export function ShareButtons({
@@ -18,7 +21,15 @@ export function ShareButtons({
   const t = useTranslations("PublicAlbum.ShareModal");
   const { capture } = usePostHog();
   const { id: albumId } = useParams();
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const urlWithShareFlag = `${url}?share=true`;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDarkMode = mounted && (resolvedTheme === "dark" || theme === "dark");
 
   const shareText = description
     ? t("share_text_with_description", { title, description, ownerName })
@@ -90,12 +101,28 @@ export function ShareButtons({
           size="icon"
           variant="outline"
         >
-          <Image
-            alt={t("whatsapp_icon_alt")}
-            height={24}
-            src="/icons/whatsapp.svg"
-            width={24}
-          />
+          <div className="relative h-6 w-6">
+            <Image
+              alt={t("whatsapp_icon_alt")}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-200",
+                isDarkMode ? "opacity-0" : "opacity-100"
+              )}
+              height={24}
+              src="/icons/whatsapp.svg"
+              width={24}
+            />
+            <Image
+              alt={t("whatsapp_icon_alt")}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-200",
+                isDarkMode ? "opacity-100" : "opacity-0"
+              )}
+              height={24}
+              src="/icons/whatsapp-white.svg"
+              width={24}
+            />
+          </div>
         </Button>
 
         <Button

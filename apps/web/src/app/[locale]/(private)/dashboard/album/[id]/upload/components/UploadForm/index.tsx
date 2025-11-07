@@ -37,7 +37,7 @@ export function UploadForm() {
       : t("selected_plural", { count: uploadFormState?.files?.length });
 
   return (
-    <div className="rounded-lg bg-background p-8 shadow-md">
+    <div className="rounded-lg bg-card p-8 shadow">
       <h1 className="mb-2 font-bold font-title_three">{t("title")}</h1>
       <h2 className="mb-6 font-body_two text-text/75">{t("tip")}</h2>
 
@@ -153,7 +153,7 @@ export function UploadForm() {
       <div className="flex w-full justify-end gap-4">
         <Button
           aria-label={t("clear_all_button_aria")}
-          className="rounded border border-text-opacity-25 px-4 font-bold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded border border-text-opacity-25 px-4 font-bold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-transparent dark:hover:bg-transparent dark:hover:brightness-75"
           disabled={clearAllButtonDisabled}
           onClick={clearAll}
           type="button"

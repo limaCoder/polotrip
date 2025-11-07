@@ -11,6 +11,7 @@ import {
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +33,7 @@ export function MonthPicker({
 }: MonthPickerProps) {
   const t = useTranslations("MonthPicker");
   const { locale } = useParams();
+  const { resolvedTheme } = useTheme();
 
   const dateLocale =
     LocaleDateFnsEnum[locale as keyof typeof LocaleDateFnsEnum] ||
@@ -78,20 +80,22 @@ export function MonthPicker({
 
   const displayPlaceholder = placeholder || t("placeholder");
 
+  const iconColor = resolvedTheme === "dark" ? "#FFFFFF40" : "#08171C40";
+
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
           aria-label={t("select_month_aria")}
           className={cn(
-            "w-full justify-start text-left font-normal capitalize hover:bg-secondary-10",
+            "w-full justify-start text-left font-normal capitalize hover:bg-secondary-10 hover:text-text dark:hover:bg-transparent dark:hover:brightness-75",
             !date && "text-text/55",
             className
           )}
           disabled={disabled}
           variant="outline"
         >
-          <CalendarIcon className="mr-2 h-4 w-4" color="#08171C40" />
+          <CalendarIcon className="mr-2 h-4 w-4" color={iconColor} />
           {date
             ? format(date, "MMMM yyyy", { locale: dateLocale })
             : displayPlaceholder}

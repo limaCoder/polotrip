@@ -62,7 +62,7 @@ export default async function DashboardPage({
                 </div>
                 <ButtonNavigation
                   aria-label={t("create_album_button_aria")}
-                  className="flex items-center gap-2 bg-primary px-8 py-4 text-background shadow-lg hover:brightness-105"
+                  className="flex items-center gap-2 bg-primary px-8 py-4 text-background shadow-lg hover:brightness-105 dark:text-white"
                   href="/dashboard/create-album"
                 >
                   <Plus color="#F7FCFD" size={24} />

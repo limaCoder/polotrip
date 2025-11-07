@@ -56,10 +56,7 @@ export function AlbumForm() {
   };
 
   return (
-    <form
-      action={handleFormSubmit}
-      className="rounded-lg bg-background p-8 shadow-md"
-    >
+    <form action={handleFormSubmit} className="rounded-lg bg-card p-8 shadow">
       <h1 className="mb-6 font-bold font-title_three">{t("title")}</h1>
 
       {formState?.hasError && (
@@ -100,7 +97,7 @@ export function AlbumForm() {
             {t("album_title_label")}
           </label>
           <input
-            className="rounded border border-text/25 p-3 font-body_two text-sm"
+            className="rounded border border-border p-3 font-body_two text-sm dark:shadow-sm"
             id="title"
             name="title"
             onFocus={handleTextInputFocus}
@@ -117,7 +114,7 @@ export function AlbumForm() {
             {t("trip_date_label")}
           </label>
           <MonthPicker
-            className="rounded border border-text/25 p-3 font-body_two text-sm"
+            className="rounded border border-border p-3 font-body_two text-sm dark:shadow-sm"
             name="date"
             placeholder={t("trip_date_placeholder")}
           />
@@ -131,7 +128,7 @@ export function AlbumForm() {
             {t("description_label")}
           </label>
           <textarea
-            className="h-24 rounded border border-text/25 p-3 font-body_two text-sm"
+            className="h-24 rounded border border-border p-3 font-body_two text-sm dark:shadow-sm"
             id="description"
             name="description"
             onFocus={handleTextInputFocus}
@@ -146,7 +143,7 @@ export function AlbumForm() {
           <div
             className={cn(
               "relative flex h-[116px] flex-col items-center justify-center rounded border border-dashed p-3 text-center",
-              selectedImage ? "border-primary" : "border-text/25"
+              selectedImage ? "border-primary" : "border-border dark:shadow-sm"
             )}
           >
             <input
@@ -226,7 +223,7 @@ export function AlbumForm() {
             onValueChange={handlePlanChange}
             value={selectedPlan}
           >
-            <SelectTrigger className="rounded border border-text/25 p-3 font-body_two text-sm">
+            <SelectTrigger className="rounded border border-border p-3 font-body_two text-sm dark:shadow-sm">
               <SelectValue placeholder={t("plan_placeholder")} />
             </SelectTrigger>
             <SelectContent>
@@ -238,7 +235,7 @@ export function AlbumForm() {
         </div>
       </div>
 
-      <hr className="my-6 border-text/25" />
+      <hr className="my-6 border-border dark:shadow-sm" />
 
       <div className="mb-6 flex flex-col items-start rounded-lg bg-secondary/5 p-6">
         <h2 className="mb-6 font-body_one font-bold text-primary">
@@ -267,7 +264,7 @@ export function AlbumForm() {
       <div className="flex flex-col gap-4">
         <Button
           aria-label={t("pay_with_card_button_aria")}
-          className="flex items-center justify-center gap-3 rounded bg-primary p-3 text-background"
+          className="flex items-center justify-center gap-3 rounded bg-primary p-3 text-background dark:text-white"
           disabled={isPending}
           type="submit"
         >

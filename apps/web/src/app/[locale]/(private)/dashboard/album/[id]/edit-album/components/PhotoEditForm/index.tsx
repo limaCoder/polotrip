@@ -59,7 +59,7 @@ export function PhotoEditForm({
   return (
     <div
       className={cn(
-        "rounded-lg bg-background p-8 shadow-md",
+        "rounded-lg bg-card p-8 shadow",
         isDisabled && "opacity-40"
       )}
     >

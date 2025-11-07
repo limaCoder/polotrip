@@ -1,11 +1,12 @@
 "use client";
 
 import { Album, Menu, X } from "lucide-react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ButtonNavigation } from "@/components/ButtonNavigation";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { Logo } from "@/components/Logo";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/cn";
 import { DashboardContent } from "../../dashboard-content";
@@ -31,18 +32,18 @@ export function HeaderMobile() {
   return (
     <div className="container relative flex items-center justify-between bg-background px-4 py-4 lg:hidden">
       <Link href={logoHref}>
-        <Image
+        <Logo
           alt={t("logo_alt")}
           className="w-[150px] md:w-[180px]"
           height={40}
           priority
           sizes="(max-width: 768px) 150px, 180px"
-          src="/brand/logo.svg"
           width={180}
         />
       </Link>
 
       <div className="flex items-center gap-2">
+        <ThemeSwitcher />
         {!isHomePage && IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
 
         {isDashboardPage && <DashboardContent />}

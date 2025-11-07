@@ -82,15 +82,16 @@ export default async function AlbumViewPage({
     <div data-is-owner={isOwner} data-is-shared={isShared}>
       {isOwner && <AlbumOwnerTopBar />}
       {isShared && <AlbumSharedTopBar />}
-      <main className="flex min-h-screen flex-col bg-secondary-10">
+      <main className="flex min-h-screen flex-col bg-background">
         <div className="relative flex h-[430px] w-full flex-col justify-between md:h-[510px]">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 z-10 bg-text/70 via-transparent to-transparent" />
+            <div className="absolute inset-0 z-10 bg-black/75 via-transparent to-transparent" />
             <Image
               alt={t("cover_alt")}
               className="object-cover"
               fill
               priority
+              quality={100}
               sizes="100vw"
               src={coverImageUrl}
             />
@@ -108,7 +109,7 @@ export default async function AlbumViewPage({
             </h1>
 
             {albumData?.album?.description && (
-              <p className="pt-2 font-bold font-title_three text-background text-lg md:text-2xl">
+              <p className="pt-2 font-bold font-title_three text-lg text-white md:text-2xl">
                 {albumData?.album?.description}
               </p>
             )}

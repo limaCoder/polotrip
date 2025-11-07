@@ -16,13 +16,13 @@ export function AlbumSharedTopBar() {
   return (
     <>
       {isOpen ? (
-        <div className="relative w-full bg-primary text-background">
+        <div className="relative w-full bg-primary text-white">
           <div className="container mx-auto flex flex-col items-center justify-between gap-2 px-4 py-3 lg:flex-row lg:px-9">
             <p className="text-center font-body_two lg:text-left">
               {t("greeting")}
             </p>
             <Link
-              className="flex items-center gap-2 font-body_two text-background underline transition-colors"
+              className="flex items-center gap-2 font-body_two text-white underline transition-colors"
               href="/sign-in"
             >
               <ArrowLeft size={16} />

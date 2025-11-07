@@ -1,25 +1,25 @@
 const StepAfterPaymentEnum = {
-  UPLOAD: 'upload',
-  ORGANIZE: 'organize',
-  PUBLISHED: 'published',
+  UPLOAD: "upload",
+  ORGANIZE: "organize",
+  PUBLISHED: "published",
 } as const;
 
 const AlbumStatusLabelEnum = {
-  [StepAfterPaymentEnum.UPLOAD]: 'Etapa de upload',
-  [StepAfterPaymentEnum.ORGANIZE]: 'Etapa de organização',
-  [StepAfterPaymentEnum.PUBLISHED]: 'Publicado',
+  [StepAfterPaymentEnum.UPLOAD]: "Etapa de upload",
+  [StepAfterPaymentEnum.ORGANIZE]: "Etapa de organização",
+  [StepAfterPaymentEnum.PUBLISHED]: "Publicado",
 } as const;
 
 const AlbumStatusColorEnum = {
-  [StepAfterPaymentEnum.UPLOAD]: 'bg-yellow',
-  [StepAfterPaymentEnum.ORGANIZE]: 'bg-yellow',
-  [StepAfterPaymentEnum.PUBLISHED]: 'bg-primary',
+  [StepAfterPaymentEnum.UPLOAD]: "bg-yellow",
+  [StepAfterPaymentEnum.ORGANIZE]: "bg-yellow",
+  [StepAfterPaymentEnum.PUBLISHED]: "bg-primary",
 } as const;
 
 const AlbumStatusTextColorEnum = {
-  [StepAfterPaymentEnum.UPLOAD]: 'text-text',
-  [StepAfterPaymentEnum.ORGANIZE]: 'text-text',
-  [StepAfterPaymentEnum.PUBLISHED]: 'text-background',
+  [StepAfterPaymentEnum.UPLOAD]: "text-text dark:text-black",
+  [StepAfterPaymentEnum.ORGANIZE]: "text-text dark:text-black",
+  [StepAfterPaymentEnum.PUBLISHED]: "text-background",
 } as const;
 
 const generateAlbumLink = (id: string, stepAfterPayment: string) => {

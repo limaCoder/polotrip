@@ -254,7 +254,7 @@ export const LocationAutocomplete = forwardRef<
 
         {showResults && results.length > 0 && (
           <div
-            className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-text/10 bg-white shadow-lg"
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-text/10 bg-white text-black shadow-lg"
             ref={resultsRef}
           >
             {results.map((result) => (

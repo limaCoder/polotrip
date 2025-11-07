@@ -20,7 +20,7 @@ export async function Benefits() {
 
         <BenefitsGrid />
 
-        <p className="mx-auto mt-8 max-w-2xl text-center text-gray-600 text-sm md:mt-12">
+        <p className="mx-auto mt-8 max-w-2xl text-center text-muted-foreground text-sm md:mt-12">
           {t("description")}
         </p>
       </div>

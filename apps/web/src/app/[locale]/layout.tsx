@@ -70,7 +70,7 @@ export default async function RootLayout({
   const user = await getCurrentUser();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <NextIntlClientProvider messages={messages}>
         <body className={cn(fontEpilogueVariable, "font-epilogue antialiased")}>
           <Providers>

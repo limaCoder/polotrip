@@ -99,7 +99,7 @@ export function EditAlbumContent() {
             selectedDate={selectedDate}
           />
 
-          <div className="rounded-lg bg-background p-8 shadow-md">
+          <div className="rounded-lg bg-card p-8 shadow">
             <div className="mb-3 flex items-center gap-3">
               <MapPin className="text-primary" size={24} />
               <h2 className="font-bold font-title_three">{t("map_title")}</h2>

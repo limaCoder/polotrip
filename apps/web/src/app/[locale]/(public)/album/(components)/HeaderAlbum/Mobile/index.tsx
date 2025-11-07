@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { ShareAlbumModal } from "@/components/ShareAlbumModal";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useAlbumOwnership } from "@/hooks/use-album-ownership";
 import { useMobileAlbumInTvMode } from "@/hooks/use-mobile-album-in-tv-mode";
 import { cn } from "@/lib/cn";
@@ -84,6 +85,7 @@ export function HeaderAlbumMobile({
               <LocaleSwitcher hideChevron />
             </div>
           )}
+          <ThemeSwitcher whiteIcon />
         </div>
       </div>
 

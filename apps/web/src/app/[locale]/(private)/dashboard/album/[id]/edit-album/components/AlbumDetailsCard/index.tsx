@@ -25,7 +25,7 @@ export function AlbumDetailsCard() {
 
   return (
     <>
-      <div className="rounded-lg bg-white p-6 shadow-sm">
+      <div className="rounded-lg bg-card p-6 shadow">
         <div className="mb-4 flex flex-col items-start justify-between">
           <div>
             <h2 className="mb-2 font-semibold text-xl">{t("title")}</h2>

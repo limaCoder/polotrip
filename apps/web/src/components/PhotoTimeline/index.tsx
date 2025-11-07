@@ -21,7 +21,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
   } = usePhotoTimeline({ albumId });
 
   return (
-    <div className="relative w-full bg-secondary-10" ref={containerRef}>
+    <div className="relative w-full" ref={containerRef}>
       <div className="container py-10">
         {timelineEvents?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
@@ -43,7 +43,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
               <div className="mb-16 md:mb-24" key={event.date}>
                 <div className="mb-6 flex items-center pl-4 md:mb-8">
                   <div className="relative flex items-center justify-center">
-                    <div className="-translate-x-1/2 absolute left-4 flex h-8 w-8 transform items-center justify-center rounded-full border-2 border-secondary bg-white md:left-8">
+                    <div className="-translate-x-1/2 absolute left-4 flex h-8 w-8 transform items-center justify-center rounded-full border-2 border-secondary md:left-8">
                       <div className="h-3 w-3 rounded-full bg-secondary" />
                     </div>
                   </div>

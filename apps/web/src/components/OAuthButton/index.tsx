@@ -22,7 +22,7 @@ export function OAuthButton({
 
   return (
     <Button
-      className="w-full items-center justify-center rounded-lg border border-text-opacity-25 px-6 py-2 font-normal hover:bg-gray-50"
+      className="w-full items-center justify-center rounded-lg border border-gray-400 px-6 py-2 font-normal hover:bg-gray-50 dark:hover:bg-transparent dark:hover:brightness-75"
       onClick={async () => {
         setIsLoading(true);
 
