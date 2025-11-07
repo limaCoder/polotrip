@@ -19,7 +19,7 @@ class EmailService {
       );
 
       await this.resend.emails.send({
-        from: "Acme <onboarding@resend.dev>",
+        from: "contato@polotrip.com.br",
         to: [email],
         subject: "Bem-vindo ao Polotrip!",
         html: emailContent,
