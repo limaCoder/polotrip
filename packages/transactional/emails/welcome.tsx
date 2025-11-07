@@ -11,7 +11,8 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import type * as React from "react";
+// biome-ignore lint/style/useImportType: we need to use the whole React library
+import React from "react";
 
 type WelcomeEmailProps = {
   name: string;

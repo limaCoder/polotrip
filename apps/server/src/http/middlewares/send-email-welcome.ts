@@ -9,9 +9,7 @@ async function sendEmailWelcome(request: FastifyRequest) {
   try {
     const cookies = request.cookies;
 
-    const sessionCookie = cookies["polotrip.session_token"]
-      ?.trim()
-      .split(".")[0];
+    const sessionCookie = cookies["polotrip.state"]?.trim().split(".")[0];
 
     if (sessionCookie) {
       const [session] = await request.server.db

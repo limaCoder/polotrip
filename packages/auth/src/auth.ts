@@ -44,7 +44,7 @@ export const config: BetterAuthOptions = {
     cookiePrefix: "polotrip",
     cookies: {
       session_token: {
-        name: "polotrip.session",
+        name: "polotrip.state",
         attributes: {
           // in local environment, comment the lines between path and domain properties
           path: "/",
