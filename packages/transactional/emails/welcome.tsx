@@ -53,7 +53,11 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = "Fulano" }) => {
             </Section>
 
             <Section className="p-5">
-              <Img alt="Polotrip" className="mx-auto mb-4" src="logo.png" />
+              <Img
+                alt="Polotrip"
+                className="mx-auto mb-4"
+                src="https://polotrip.com/brand/logo.svg"
+              />
               <Text className="mb-4 text-gray-800 text-lg">
                 Olá, <span className="font-bold">{name}</span>!
               </Text>
@@ -102,7 +106,10 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = "Fulano" }) => {
               <Text className="m-0 text-sm">
                 © {fullYear} Polotrip. Todos os direitos reservados.
               </Text>
-              <Link className="mt-2 text-sm underline" href="#">
+              <Link
+                className="mt-2 text-sm underline"
+                href="https://polotrip.com/pt/privacy-policy"
+              >
                 Política de Privacidade
               </Link>
             </Section>
