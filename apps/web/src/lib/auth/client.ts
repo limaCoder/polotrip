@@ -9,10 +9,10 @@ const authClient = createAuthClient({
   credentials: "include",
   cookieOptions: {
     // in local environment, comment the lines between path and domain properties
-    /* path: '/',
-    sameSite: 'None',
-    secure: process.env.NODE_ENV === 'production',
-    domain: process.env.NODE_ENV === 'production' ? '.polotrip.com' : undefined, */
+    path: "/",
+    sameSite: "None",
+    secure: process.env.NODE_ENV === "production",
+    domain: process.env.NODE_ENV === "production" ? ".polotrip.com" : undefined,
     httpOnly: true,
   },
   advanced: {
