@@ -10,6 +10,7 @@ import { AddMorePhotosCard } from "./AddMorePhotosCard";
 import { AlbumDetailsCard } from "./AlbumDetailsCard";
 import { DeletePhotosDialog } from "./DeletePhotosDialog";
 import { FinishEditDialog } from "./FinishEditDialog";
+import { MusicCard } from "./MusicCard";
 import { PhotoEditForm } from "./PhotoEditForm";
 import { PhotoGallery } from "./PhotoGallery";
 import { PhotoMap } from "./PhotoMap";
@@ -117,6 +118,8 @@ export function EditAlbumContent() {
           </div>
 
           <AlbumDetailsCard />
+
+          <MusicCard />
 
           <AddMorePhotosCard />
         </div>

@@ -16,6 +16,7 @@ async function getPublicAlbumById({ id }: GetPublicAlbumByIdRequest) {
         title: albums.title,
         description: albums.description,
         coverImageUrl: albums.coverImageUrl,
+        musicUrl: albums.musicUrl,
         date: albums.date,
         isPublished: albums.isPublished,
         userId: albums.userId,

@@ -17,6 +17,7 @@ async function getAlbumById({ id }: GetAlbumByIdRequest) {
         description: albums.description,
         coverImageUrl: albums.coverImageUrl,
         date: albums.date,
+        musicUrl: albums.musicUrl,
         photoLimit: albums.photoLimit,
         plan: albums.plan,
         userId: albums.userId,

@@ -34,8 +34,7 @@ const albums = pgTable("albums", {
   date: date("date").notNull(),
   description: text("description"),
   coverImageUrl: text("cover_image_url"),
-  spotifyTrackId: text("spotify_track_id"),
-  spotifyPlaylistId: text("spotify_playlist_id"),
+  musicUrl: text("music_url"),
   isPublished: boolean("is_published").notNull().default(false),
   isPaid: boolean("is_paid").notNull().default(false),
   currentStepAfterPayment: currentStepAfterPaymentEnum(

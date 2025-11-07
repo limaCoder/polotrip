@@ -15,8 +15,7 @@ type UpdateAlbumRequest = {
   title?: string;
   description?: string | null;
   coverImageUrl?: string | null;
-  spotifyTrackId?: string | null;
-  spotifyPlaylistId?: string | null;
+  musicUrl?: string | null;
   isPublished?: boolean;
   photoUpdates?: PhotoUpdate[];
   currentStepAfterPayment?: string;
@@ -28,8 +27,7 @@ type AlbumUpdateData = {
   title?: string;
   description?: string | null;
   coverImageUrl?: string | null;
-  spotifyTrackId?: string | null;
-  spotifyPlaylistId?: string | null;
+  musicUrl?: string | null;
   isPublished?: boolean;
   currentStepAfterPayment?: AlbumStep;
   updatedAt: Date;
@@ -41,8 +39,7 @@ async function updateAlbum({
   title,
   description,
   coverImageUrl,
-  spotifyTrackId,
-  spotifyPlaylistId,
+  musicUrl,
   isPublished,
   photoUpdates,
   currentStepAfterPayment,
@@ -70,8 +67,7 @@ async function updateAlbum({
       title,
       description,
       coverImageUrl,
-      spotifyTrackId,
-      spotifyPlaylistId,
+      musicUrl,
       isPublished,
     };
 

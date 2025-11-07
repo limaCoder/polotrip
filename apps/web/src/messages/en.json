@@ -245,6 +245,22 @@
     },
     "PhotoTimeline": {
       "no_photos_found": "No photos found in this album."
+    },
+    "MusicConsentModal": {
+      "title": "Soundtrack of this trip",
+      "description": "The creator of this album chose a special song to accompany these memories. Would you like to listen?",
+      "play_button": "▶ Play music",
+      "skip_button": "Continue without music",
+      "close_aria": "Close modal"
+    },
+    "MusicPlayer": {
+      "play_label": "Play",
+      "playing_label": "Playing",
+      "play_aria": "Play music",
+      "pause_aria": "Pause music",
+      "volume_aria": "Volume control",
+      "collapse_aria": "Hide volume control",
+      "expand_aria": "Show volume control"
     }
   },
   "AlbumCard": {
@@ -393,6 +409,25 @@
       "field_description": "Description",
       "field_cover_image": "Cover Image",
       "cover_image_alt": "Album cover"
+    },
+    "MusicCard": {
+      "title": "Soundtrack",
+      "description": "Add a YouTube music to play on your album's public page",
+      "input_label": "YouTube Link",
+      "input_placeholder": "Paste the YouTube link here",
+      "input_error_invalid": "Please enter a valid URL",
+      "input_error_youtube_only": "Only YouTube links are accepted",
+      "save_button_aria": "Save music",
+      "save_button": "Add music",
+      "saving": "Saving...",
+      "save_success": "Music added successfully!",
+      "save_error": "Error saving music. Try again.",
+      "remove_button_aria": "Remove music",
+      "remove_button": "Remove music",
+      "removing": "Removing...",
+      "remove_success": "Music removed successfully!",
+      "remove_error": "Error removing music. Try again.",
+      "music_added_feedback": "✓ Music saved and ready to play on public album!"
     },
     "EditAlbumModal": {
       "file_too_large_error": "The file must be at most 5MB",

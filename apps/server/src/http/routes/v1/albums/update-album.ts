@@ -18,8 +18,20 @@ const bodySchema = z.object({
   coverImageUrl: z
     .union([z.string().url(), z.string().length(0), z.null()])
     .optional(),
-  spotifyTrackId: z.string().nullable().optional(),
-  spotifyPlaylistId: z.string().nullable().optional(),
+  musicUrl: z
+    .string()
+    .url()
+    .refine(
+      (url) =>
+        url.includes("youtube.com") ||
+        url.includes("youtu.be") ||
+        url.includes(""),
+      {
+        message: "URL must be from YouTube",
+      }
+    )
+    .nullable()
+    .optional(),
   isPublished: z.boolean().optional(),
   photoUpdates: z
     .array(
@@ -59,8 +71,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
               title: z.string(),
               description: z.string().nullable(),
               coverImageUrl: z.string().nullable(),
-              spotifyTrackId: z.string().nullable(),
-              spotifyPlaylistId: z.string().nullable(),
+              musicUrl: z.string().nullable(),
               isPublished: z.boolean(),
               isPaid: z.boolean(),
               currentStepAfterPayment: z.string(),
@@ -111,8 +122,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
           title,
           description,
           coverImageUrl,
-          spotifyTrackId,
-          spotifyPlaylistId,
+          musicUrl,
           isPublished,
           photoUpdates,
           currentStepAfterPayment,
@@ -123,8 +133,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
           title: sanitizeNonNullable(title),
           description: sanitizeNullable(description),
           coverImageUrl: sanitizeNullable(coverImageUrl),
-          spotifyTrackId: sanitizeNullable(spotifyTrackId),
-          spotifyPlaylistId: sanitizeNullable(spotifyPlaylistId),
+          musicUrl: sanitizeNullable(musicUrl),
           isPublished,
           photoUpdates: photoUpdates ?? [],
           currentStepAfterPayment: sanitizeNonNullable(
@@ -138,8 +147,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
           title: sanitizedInput.title,
           description: sanitizedInput.description,
           coverImageUrl: sanitizedInput.coverImageUrl,
-          spotifyTrackId: sanitizedInput.spotifyTrackId,
-          spotifyPlaylistId: sanitizedInput.spotifyPlaylistId,
+          musicUrl: sanitizedInput.musicUrl,
           isPublished: sanitizedInput.isPublished,
           photoUpdates: sanitizedInput.photoUpdates,
           currentStepAfterPayment: sanitizedInput.currentStepAfterPayment,

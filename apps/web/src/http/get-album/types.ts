@@ -10,6 +10,7 @@ type GetAlbumResponse = {
     description: string | null;
     coverImageUrl: string | null;
     date: string;
+    musicUrl: string | null;
     photoLimit: number;
     plan: string;
   };

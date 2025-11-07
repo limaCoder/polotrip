@@ -17,6 +17,7 @@ const getPublicAlbumRoute: FastifyPluginAsyncZod = async (app) => {
               title: z.string(),
               description: z.string().nullable(),
               coverImageUrl: z.string().nullable(),
+              musicUrl: z.string().nullable(),
               date: z.string(),
             }),
             user: z.object({

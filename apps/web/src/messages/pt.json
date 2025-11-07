@@ -245,6 +245,22 @@
     },
     "PhotoTimeline": {
       "no_photos_found": "Nenhuma foto encontrada neste álbum."
+    },
+    "MusicConsentModal": {
+      "title": "Trilha sonora desta viagem",
+      "description": "O criador deste álbum escolheu uma música especial para acompanhar estas memórias. Deseja ouvir?",
+      "play_button": "▶ Tocar música",
+      "skip_button": "Continuar sem música",
+      "close_aria": "Fechar modal"
+    },
+    "MusicPlayer": {
+      "play_label": "Tocar",
+      "playing_label": "Tocando",
+      "play_aria": "Tocar música",
+      "pause_aria": "Pausar música",
+      "volume_aria": "Controle de volume",
+      "collapse_aria": "Ocultar controle de volume",
+      "expand_aria": "Exibir controle de volume"
     }
   },
   "AlbumCard": {
@@ -402,6 +418,25 @@
       "field_description": "Descrição",
       "field_cover_image": "Imagem de Capa",
       "cover_image_alt": "Capa do álbum"
+    },
+    "MusicCard": {
+      "title": "Trilha sonora",
+      "description": "Adicione uma música do YouTube para tocar na página pública do seu álbum",
+      "input_label": "Link do YouTube",
+      "input_placeholder": "Cole o link do YouTube aqui",
+      "input_error_invalid": "Por favor, insira uma URL válida",
+      "input_error_youtube_only": "Apenas links do YouTube são aceitos",
+      "save_button_aria": "Salvar música",
+      "save_button": "Adicionar música",
+      "saving": "Salvando...",
+      "save_success": "Música adicionada com sucesso!",
+      "save_error": "Erro ao salvar música. Tente novamente.",
+      "remove_button_aria": "Remover música",
+      "remove_button": "Remover música",
+      "removing": "Removendo...",
+      "remove_success": "Música removida com sucesso!",
+      "remove_error": "Erro ao remover música. Tente novamente.",
+      "music_added_feedback": "✓ Música salva e pronta para tocar no álbum público!"
     },
     "EditAlbumModal": {
       "file_too_large_error": "O arquivo deve ter no máximo 5MB",

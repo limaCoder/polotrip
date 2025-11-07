@@ -22,6 +22,7 @@ import type { PageProps } from "@/types/next";
 import { AlbumOwnerTopBar } from "../(components)/AlbumOwnerTopBar";
 import { AlbumSharedTopBar } from "../(components)/AlbumSharedTopBar";
 import { HeaderAlbum } from "../(components)/HeaderAlbum";
+import { MusicPlayer } from "../(components)/MusicPlayer";
 import { PublicPhotoMap } from "../(components)/PublicPhotoMap";
 import { generateAlbumMetadata } from "./metadata";
 
@@ -149,6 +150,7 @@ export default async function AlbumViewPage({
         </HydrationBoundary>
       </main>
       <Footer />
+      <MusicPlayer musicUrl={albumData?.album?.musicUrl || null} />
     </div>
   );
 }

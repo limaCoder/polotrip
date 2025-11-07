@@ -24,6 +24,7 @@ const getAlbumRoute: FastifyPluginAsyncZod = async (app) => {
               date: z.string(),
               photoLimit: z.number(),
               plan: z.string(),
+              musicUrl: z.string().nullable(),
             }),
             user: z.object({
               name: z.string(),

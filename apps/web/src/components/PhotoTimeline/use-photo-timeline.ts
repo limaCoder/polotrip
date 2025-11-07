@@ -21,6 +21,7 @@ export function usePhotoTimeline({ albumId }: { albumId: string }) {
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: biome does not support exhaustive dependencies
   useEffect(() => {
     const updateHeight = () => {
       if (timelineRef.current) {
@@ -39,7 +40,7 @@ export function usePhotoTimeline({ albumId }: { albumId: string }) {
       window.removeEventListener("resize", updateHeight);
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, [timelineEvents?.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

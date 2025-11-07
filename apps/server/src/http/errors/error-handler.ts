@@ -30,8 +30,8 @@ export function setupErrorHandler(app: FastifyInstance) {
               query: request.query,
               headers: {
                 // Include only relevant headers to debug
-                "user-agent": request.headers.userAgent,
-                "content-type": request.headers.contentType,
+                "user-agent": request.headers["user-agent"],
+                "content-type": request.headers["content-type"],
                 accept: request.headers.accept,
               },
             },

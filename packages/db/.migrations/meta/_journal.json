@@ -57,6 +57,13 @@
       "when": 1746713089319,
       "tag": "0007_milky_mister_sinister",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1762461857400,
+      "tag": "0008_faulty_sally_floyd",
+      "breakpoints": true
     }
   ]
 }
