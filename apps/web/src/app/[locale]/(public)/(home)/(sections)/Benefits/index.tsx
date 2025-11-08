@@ -7,7 +7,7 @@ export async function Benefits() {
 
   return (
     <MotionSection
-      className="bg-secondary-10 py-8 lg:bg-background lg:py-16"
+      className="bg-background py-8 lg:py-16"
       id="benefits"
       initial={{ opacity: 0, y: 35 }}
       transition={{ duration: 0.7 }}

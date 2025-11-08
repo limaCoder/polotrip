@@ -29,16 +29,17 @@ export function InstallPwaModal({
   return (
     <Dialog onOpenChange={onClose} open={isOpen}>
       <DialogContent className="w-[90%] overflow-hidden px-2">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
+        <DialogHeader className="text-center">
+          <DialogTitle className="text-center">{t("title")}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-center text-muted-foreground">
           {t("description")}
         </DialogDescription>
         <DialogFooter>
-          <div className="flex w-full justify-evenly">
+          <div className="flex w-full gap-4">
             <Button
               aria-label={t("later_button_aria")}
+              className="w-full"
               onClick={onClose}
               variant="outline"
             >
@@ -47,7 +48,7 @@ export function InstallPwaModal({
 
             <Button
               aria-label={t("install_button_aria")}
-              className="flex items-center gap-2 text-white"
+              className="flex w-full items-center gap-2 text-white"
               onClick={handleOpenInstallGuide}
             >
               {t("install_button")}

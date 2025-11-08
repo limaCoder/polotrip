@@ -15,7 +15,7 @@ export async function BenefitsGrid() {
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {benefits.map((benefit, index) => (
         <MotionDiv
-          className="rounded-xl border border-secondary bg-background p-6 shadow-sm transition hover:border-primary hover:shadow-lg"
+          className="rounded-xl border border-border bg-card p-6 shadow-sm transition hover:border-primary hover:shadow-lg"
           initial={{ opacity: 0, y: 20 }}
           key={benefit.id}
           transition={{ delay: index * 0.1, duration: 0.4 }}

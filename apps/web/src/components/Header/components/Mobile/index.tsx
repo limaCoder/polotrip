@@ -43,25 +43,27 @@ export function HeaderMobile() {
       </Link>
 
       <div className="flex items-center gap-2">
-        <ThemeSwitcher />
+        {!isHomePage && <ThemeSwitcher />}
         {!isHomePage && IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
-
         {isDashboardPage && <DashboardContent />}
       </div>
 
       {isHomePage && (
-        <button
-          aria-label={t("open_menu_aria")}
-          className="z-20 text-primary"
-          onClick={toggleMenu}
-          type="button"
-        >
-          {isMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        <div className="flex items-center gap-6">
+          <ThemeSwitcher />
+          <button
+            aria-label={t("open_menu_aria")}
+            className="z-20 text-primary"
+            onClick={toggleMenu}
+            type="button"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       )}
 
       <div
@@ -72,7 +74,7 @@ export function HeaderMobile() {
       >
         <a
           aria-label={t("advantages_aria")}
-          className="text-black"
+          className="text-foreground"
           href="#benefits"
           onClick={toggleMenu}
         >
@@ -80,7 +82,7 @@ export function HeaderMobile() {
         </a>
         <a
           aria-label={t("how_it_works_aria")}
-          className="text-black"
+          className="text-foreground"
           href="#how-it-works"
           onClick={toggleMenu}
         >
@@ -88,7 +90,7 @@ export function HeaderMobile() {
         </a>
         <a
           aria-label={t("faq_aria")}
-          className="text-black"
+          className="text-foreground"
           href="#faq"
           onClick={toggleMenu}
         >

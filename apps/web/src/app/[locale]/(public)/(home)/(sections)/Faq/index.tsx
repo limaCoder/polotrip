@@ -15,7 +15,7 @@ export async function Faq() {
 
   return (
     <MotionSection
-      className="bg-secondary-10 py-12 lg:bg-background"
+      className="bg-background py-12"
       id="faq"
       initial={{ opacity: 0, y: 35 }}
       transition={{ duration: 0.7 }}
