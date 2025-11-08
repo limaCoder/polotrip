@@ -94,23 +94,6 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: "/brand/:path*",
-        headers: [
-          {
-            key: "Content-Type",
-            value: "image/svg+xml; charset=utf-8",
-          },
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-          {
-            key: "Access-Control-Allow-Origin",
-            value: "*",
-          },
-        ],
-      },
     ];
   },
 };
