@@ -5,7 +5,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Section,
   Tailwind,
@@ -53,11 +52,6 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ name = "Fulano" }) => {
             </Section>
 
             <Section className="p-5">
-              <Img
-                alt="Polotrip"
-                className="mx-auto mb-4"
-                src="https://polotrip.com/brand/logo.svg"
-              />
               <Text className="mb-4 text-gray-800 text-lg">
                 Olá, <span className="font-bold">{name}</span>!
               </Text>
