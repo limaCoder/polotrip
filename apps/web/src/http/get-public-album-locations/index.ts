@@ -13,6 +13,8 @@ export async function getPublicAlbumLocations({
       `v1/public/albums/${albumId}/locations`,
       {
         signal,
+        cache: "force-cache",
+        next: { tags: [`album-${albumId}-locations`] },
       }
     );
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { revalidateAlbumCache } from "@/app/actions/revalidate-album-cache";
 import { updateAlbum } from "@/http/update-album";
 import { albumKeys } from "../keys/albumKeys";
 
@@ -17,6 +18,7 @@ export const usePublishAlbum = ({
 }: UsePublishAlbumProps) => {
   const queryClient = useQueryClient();
   const t = useTranslations("PublishAlbumHook");
+  const locale = useLocale();
 
   return useMutation({
     mutationFn: async () => {
@@ -28,18 +30,20 @@ export const usePublishAlbum = ({
         },
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success(t("success_title"), {
         description: t("success_description"),
       });
 
-      if (onSuccess) {
-        onSuccess();
-      }
-
       queryClient.invalidateQueries({
         queryKey: [albumKeys.all],
       });
+
+      await revalidateAlbumCache(albumId, locale);
+
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onError: () => {
       toast.error(t("error_title"), {

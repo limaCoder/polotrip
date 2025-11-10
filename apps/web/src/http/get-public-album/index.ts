@@ -11,6 +11,7 @@ export async function getPublicAlbum({
       {
         signal,
         cache: "force-cache",
+        next: { tags: [`album-${albumId}`] },
       }
     );
 

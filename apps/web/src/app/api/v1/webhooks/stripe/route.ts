@@ -2,6 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, payments } from "@polotrip/db/schema";
 import { QueryClient } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { albumKeys } from "@/hooks/network/keys/albumKeys";
@@ -49,6 +50,9 @@ export async function POST(req: Request) {
           queryClient.invalidateQueries({
             queryKey: [albumKeys.all],
           });
+
+          revalidateTag("albums-list");
+          revalidatePath("/[locale]/dashboard", "page");
 
           if (userId && updatedPayment) {
             posthog.capture({
@@ -173,6 +177,9 @@ export async function POST(req: Request) {
             .set({ isPaid: true, currentStepAfterPayment: "upload" })
             .where(eq(albums.id, albumId))
             .returning();
+
+          revalidateTag("albums-list");
+          revalidatePath("/[locale]/dashboard", "page");
 
           if (userId && updatedPayment) {
             posthog.capture({

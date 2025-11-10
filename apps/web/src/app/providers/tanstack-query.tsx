@@ -14,10 +14,10 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: true,
-        refetchOnMount: false,
+        refetchOnMount: true,
         refetchOnReconnect: true,
         retry: 1,
-        staleTime: 1000 * 60 * 3, // 3 min
+        staleTime: 1000 * 30, // 30 seconds
       },
       dehydrate: {
         shouldDehydrateQuery: (query) =>

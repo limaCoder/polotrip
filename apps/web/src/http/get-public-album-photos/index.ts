@@ -26,6 +26,8 @@ export async function getPublicAlbumPhotos({
       {
         searchParams,
         signal,
+        cache: "force-cache",
+        next: { tags: [`album-${albumId}-photos`] },
       }
     );
 

@@ -9,6 +9,7 @@ export async function getAlbums({
     const data = await api.get<GetAlbumsResponse>("v1/albums", {
       searchParams: params,
       signal,
+      next: { tags: ["albums-list"], revalidate: 0 },
     });
 
     return data;
