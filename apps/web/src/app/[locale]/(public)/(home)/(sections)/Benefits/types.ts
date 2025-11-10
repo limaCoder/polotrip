@@ -1,7 +1,7 @@
 const benefitNames = [
   "organized_memories",
   "interactive_map",
-  "privacy_guaranteed",
+  "music_soundtrack",
   "no_space_limitations",
   "narrative_experience",
   "easy_sharing",
