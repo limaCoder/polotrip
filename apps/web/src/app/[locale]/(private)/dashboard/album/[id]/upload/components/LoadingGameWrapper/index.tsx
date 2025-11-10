@@ -25,7 +25,7 @@ export function LoadingGameWrapper({
           </p>
         </div>
 
-        <div className="rounded-lg bg-white p-4 shadow-sm">{children}</div>
+        <div className="rounded-lg bg-background p-4 shadow-sm">{children}</div>
       </div>
     </div>
   );

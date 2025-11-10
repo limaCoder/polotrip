@@ -147,7 +147,7 @@ export function UploadForm() {
         isCompressing={isCompressingState}
         isUploading={uploadFormState?.isUploading}
       >
-        <CityUnscrambleGame className="rounded-lg bg-white p-4 shadow-sm" />
+        <CityUnscrambleGame className="rounded-lg bg-card p-4 shadow-sm" />
       </LoadingGameWrapper>
 
       <div className="flex w-full justify-end gap-4">
