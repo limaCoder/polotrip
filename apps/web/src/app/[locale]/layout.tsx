@@ -6,16 +6,23 @@ import Providers from "@/app/providers";
 import "@/styles/globals.css";
 import { NextIntlClientProvider } from "next-intl";
 
-import { getMessages, getTranslations } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { CookieConsentWrapper } from "@/components/blocks/cookie-consent-wrapper";
 import { PostHogIdentifier } from "@/components/PostHogIdentifier";
 import { Toaster } from "@/components/ui/sooner";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/types";
-import { getCurrentUser } from "@/lib/auth/server";
 import { cn } from "@/lib/cn";
 import { fontEpilogueVariable } from "@/styles/fonts";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({
   params,
@@ -66,15 +73,16 @@ export default async function RootLayout({
     notFound();
   }
 
+  setRequestLocale(locale);
+
   const messages = await getMessages();
-  const user = await getCurrentUser();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <NextIntlClientProvider messages={messages}>
         <body className={cn(fontEpilogueVariable, "font-epilogue antialiased")}>
           <Providers>
-            <PostHogIdentifier user={user} />
+            <PostHogIdentifier />
             <NuqsAdapter>{children}</NuqsAdapter>
           </Providers>
           <Toaster />

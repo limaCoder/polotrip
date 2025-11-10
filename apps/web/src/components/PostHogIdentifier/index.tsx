@@ -1,7 +1,8 @@
 "use client";
 
 import { usePostHog } from "posthog-js/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getSession } from "@/lib/auth/client";
 
 type User = {
   id: string;
@@ -14,16 +15,22 @@ type User = {
   welcomeEmailSent?: boolean;
 };
 
-type PostHogIdentifierProps = {
-  user: User | null | undefined;
-};
-
 /**
  * PostHog user identification component (official Next.js App Router integration)
  * Ref: https://posthog.com/docs/product-analytics/identify
  */
-export function PostHogIdentifier({ user }: PostHogIdentifierProps) {
+export function PostHogIdentifier() {
   const posthog = usePostHog();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const session = await getSession();
+      const userData = session?.data?.user ?? null;
+      setUser(userData as User | null);
+    }
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     if (user && posthog) {
