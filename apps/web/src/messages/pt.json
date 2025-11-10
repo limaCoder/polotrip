@@ -213,7 +213,8 @@
       "default_description": "Confira as fotos e memórias deste álbum especial no Polotrip"
     },
     "cover_alt": "Capa do álbum",
-    "moments_title": "✨ Esses foram os momentos incríveis de {ownerName}",
+    "moments_title": "Esses foram os momentos incríveis de {ownerName}",
+    "music_title": "A vibe desta viagem é...",
     "loading_map": "Carregando mapa...",
     "HeaderAlbum": {
       "logo_alt": "Logo",

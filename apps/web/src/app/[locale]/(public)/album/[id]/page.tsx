@@ -6,7 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
-import { MapPin } from "lucide-react";
+import { MapPin, Music } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -59,6 +59,7 @@ export default async function AlbumViewPage({
     (data) => data.locations.length > 0,
     () => false
   );
+  const hasMusic = albumData?.album?.musicUrl !== null;
 
   const queryClient = new QueryClient();
 
@@ -134,6 +135,20 @@ export default async function AlbumViewPage({
               >
                 <PublicPhotoMap locationsPromise={locationsDataPromise} />
               </Suspense>
+            </div>
+          </section>
+        )}
+
+        {hasMusic && (
+          <section className="container px-4 py-8">
+            <div className="mb-4 flex items-center gap-2">
+              <Music className="hidden text-primary md:block" size={24} />
+              <h2 className="font-title_two text-2xl text-primary">
+                {t("music_title")}
+              </h2>
+            </div>
+            <div className="h-[350px] w-full overflow-hidden rounded-lg">
+              <div className="aspect-video w-full" id="youtube-player" />
             </div>
           </section>
         )}

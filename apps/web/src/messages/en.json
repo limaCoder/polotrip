@@ -213,7 +213,8 @@
       "default_description": "Check out the photos and memories of this special album on Polotrip"
     },
     "cover_alt": "Album cover",
-    "moments_title": "✨ These were the incredible moments of {ownerName}",
+    "moments_title": "These were the incredible moments of {ownerName}",
+    "music_title": "The vibe of this trip is...",
     "loading_map": "Loading map...",
     "HeaderAlbum": {
       "logo_alt": "Logo",
