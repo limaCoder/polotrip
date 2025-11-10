@@ -18,10 +18,6 @@ export default async function Image() {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
-    />,
-    {
-      width: 2780,
-      height: 1450,
-    }
+    />
   );
 }
