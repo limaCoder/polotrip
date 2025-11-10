@@ -24,5 +24,7 @@ const authClient = createAuthClient({
 type AuthClient = ReturnType<typeof createAuthClient>;
 
 export const getSession: AuthClient["getSession"] = authClient.getSession;
+export const getCurrentUser = async () =>
+  (await getSession())?.data?.user ?? null;
 export const signIn: AuthClient["signIn"] = authClient.signIn;
 export const signOut: AuthClient["signOut"] = authClient.signOut;

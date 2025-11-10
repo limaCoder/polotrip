@@ -208,6 +208,10 @@
     }
   },
   "PublicAlbum": {
+    "metadata": {
+      "not_found_title": "Álbum não encontrado | Polotrip",
+      "default_description": "Confira as fotos e memórias deste álbum especial no Polotrip"
+    },
     "cover_alt": "Capa do álbum",
     "moments_title": "✨ Esses foram os momentos incríveis de {ownerName}",
     "loading_map": "Carregando mapa...",
@@ -904,6 +908,11 @@
         "content": "Estes termos são regidos pelas leis do Brasil. Qualquer disputa relacionada a estes termos será submetida à jurisdição exclusiva dos tribunais brasileiros."
       }
     }
+  },
+  "Manifest": {
+    "name": "Polotrip",
+    "short_name": "Polotrip",
+    "description": "Transforme suas memórias de viagem em álbuns digitais interativos"
   },
   "NotFound": {
     "logo_alt": "Logo da Polotrip",
