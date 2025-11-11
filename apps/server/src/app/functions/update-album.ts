@@ -2,6 +2,7 @@
 import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq } from "drizzle-orm";
+import { redisService } from "@/services/cache/redis-service";
 import {
   groupPhotoUpdates,
   type PhotoUpdate,
@@ -116,7 +117,13 @@ async function updateAlbum({
       .where(eq(photos.albumId, albumId))
       .orderBy(photos.order || photos.dateTaken || photos.createdAt);
 
-    const { userId: removedUserId, ...album } = updatedAlbum;
+    const { userId: _removedUserId, ...album } = updatedAlbum;
+
+    await redisService.del(`polotrip:album:${albumId}`);
+    await redisService.delPattern(`polotrip:album-dates:${albumId}:*`);
+    await redisService.del(`polotrip:public-album:${albumId}`);
+    await redisService.del(`polotrip:public-album-locations:${albumId}`);
+    await redisService.delPattern(`polotrip:public-album-photos:${albumId}:*`);
 
     return {
       success: true,

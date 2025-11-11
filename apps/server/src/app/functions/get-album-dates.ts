@@ -2,6 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { InternalServerError } from "@/http/errors/api-error";
+import { redisService } from "@/services/cache/redis-service";
 
 type GetAlbumDatesRequest = {
   albumId: string;
@@ -15,6 +16,14 @@ type DateCount = {
 
 async function getAlbumDates({ albumId, userId }: GetAlbumDatesRequest) {
   try {
+    const cacheKey = `polotrip:album-dates:${albumId}:${userId}`;
+
+    const cachedData = await redisService.get<{ dates: DateCount[] }>(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
     const album = await db
       .select()
       .from(albums)
@@ -50,9 +59,11 @@ async function getAlbumDates({ albumId, userId }: GetAlbumDatesRequest) {
       count: row.count,
     }));
 
-    return {
-      dates,
-    };
+    const result = { dates };
+
+    await redisService.set(cacheKey, result);
+
+    return result;
   } catch (error) {
     throw new InternalServerError(
       "Failed to process the request.",

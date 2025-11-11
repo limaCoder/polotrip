@@ -2,6 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { and, eq, isNotNull } from "drizzle-orm";
 import { InternalServerError } from "@/http/errors/api-error";
+import { redisService } from "@/services/cache/redis-service";
 
 type GetPublicAlbumLocationsRequest = {
   albumId: string;
@@ -11,6 +12,23 @@ async function getPublicAlbumLocations({
   albumId,
 }: GetPublicAlbumLocationsRequest) {
   try {
+    const cacheKey = `polotrip:public-album-locations:${albumId}`;
+
+    const cachedData = await redisService.get<{
+      locations: {
+        id: string;
+        latitude: number | null;
+        longitude: number | null;
+        locationName: string | null;
+        dateTaken: string | null;
+        imageUrl: string;
+      }[];
+    }>(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
     const album = await db
       .select({ id: albums.id, isPublished: albums.isPublished })
       .from(albums)
@@ -43,7 +61,11 @@ async function getPublicAlbumLocations({
         )
       );
 
-    return { locations };
+    const result = { locations };
+
+    await redisService.set(cacheKey, result);
+
+    return result;
   } catch (error) {
     throw new InternalServerError(
       "Failed to process the request.",

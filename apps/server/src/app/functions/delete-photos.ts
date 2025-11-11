@@ -3,6 +3,7 @@ import { albums, photos } from "@polotrip/db/schema";
 import { createClient } from "@supabase/supabase-js";
 import { eq, inArray } from "drizzle-orm";
 import { env } from "@/env";
+import { redisService } from "@/services/cache/redis-service";
 
 type DeletePhotosRequest = {
   photoIds: string[];
@@ -85,6 +86,10 @@ async function deletePhotos({
     if (filePaths.length > 0) {
       await supabase.storage.from("polotrip-albums-content").remove(filePaths);
     }
+
+    await redisService.delPattern(`polotrip:album-dates:${albumId}:*`);
+    await redisService.del(`polotrip:public-album-locations:${albumId}`);
+    await redisService.delPattern(`polotrip:public-album-photos:${albumId}:*`);
 
     return {
       success: true,

@@ -31,6 +31,9 @@ const envSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string(),
   R2_JURISDICTION_DEFAULT_ENDPOINT: z.string().url(),
   R2_JURISDICTION_EU_ENDPOINT: z.string().url(),
+
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

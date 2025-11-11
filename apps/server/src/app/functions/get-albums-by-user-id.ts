@@ -36,7 +36,7 @@ async function getAlbumsByUserId({
     const sanitizedData = result?.data?.map((album) => {
       const albumData = album as Album;
 
-      const { userId: removedUserId, ...rest } = albumData;
+      const { userId: _removedUserId, ...rest } = albumData;
 
       return rest;
     });

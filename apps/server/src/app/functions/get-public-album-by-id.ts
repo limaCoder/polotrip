@@ -3,6 +3,7 @@ import type { Album } from "@polotrip/db/models";
 import { albums, users } from "@polotrip/db/schema";
 import { eq } from "drizzle-orm";
 import { InternalServerError } from "@/http/errors/api-error";
+import { redisService } from "@/services/cache/redis-service";
 
 type GetPublicAlbumByIdRequest = {
   id: string;
@@ -10,6 +11,17 @@ type GetPublicAlbumByIdRequest = {
 
 async function getPublicAlbumById({ id }: GetPublicAlbumByIdRequest) {
   try {
+    const cacheKey = `polotrip:public-album:${id}`;
+
+    const cachedData = await redisService.get<{
+      album: Omit<Album, "userId">;
+      user: { name: string };
+    }>(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
+
     const album = await db
       .select({
         id: albums.id,
@@ -45,9 +57,13 @@ async function getPublicAlbumById({ id }: GetPublicAlbumByIdRequest) {
 
     const sanitizedData = album as Album;
 
-    const { userId, ...rest } = sanitizedData;
+    const { userId: _userId, ...rest } = sanitizedData;
 
-    return { album: rest, user };
+    const result = { album: rest, user };
+
+    await redisService.set(cacheKey, result);
+
+    return result;
   } catch (error) {
     throw new InternalServerError(
       "Failed to process the request.",

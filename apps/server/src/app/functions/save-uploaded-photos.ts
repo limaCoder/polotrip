@@ -1,6 +1,7 @@
 import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
+import { redisService } from "@/services/cache/redis-service";
 
 type PhotoData = {
   filePath: string;
@@ -77,6 +78,10 @@ async function saveUploadedPhotos({
       currentStepAfterPayment: "organize",
     })
     .where(eq(albums.id, albumId));
+
+  await redisService.delPattern(`polotrip:album-dates:${albumId}:*`);
+  await redisService.del(`polotrip:public-album-locations:${albumId}`);
+  await redisService.delPattern(`polotrip:public-album-photos:${albumId}:*`);
 
   return {
     success: true,

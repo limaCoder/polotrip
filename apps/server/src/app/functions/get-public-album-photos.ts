@@ -2,6 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { InternalServerError } from "@/http/errors/api-error";
+import { redisService } from "@/services/cache/redis-service";
 
 type GetPublicAlbumPhotosRequest = {
   albumId: string;
@@ -15,6 +16,22 @@ async function getPublicAlbumPhotos({
   limit = 20,
 }: GetPublicAlbumPhotosRequest) {
   try {
+    const cacheKey = `polotrip:public-album-photos:${albumId}:${cursor || "start"}:${limit}`;
+
+    const cachedData = await redisService.get<{
+      timelineEvents: {
+        date: string;
+        photos: unknown[];
+      }[];
+      pagination: {
+        hasMore: boolean;
+        nextCursor: string | null;
+      };
+    }>(cacheKey);
+
+    if (cachedData) {
+      return cachedData;
+    }
     const album = await db
       .select({ id: albums.id, isPublished: albums.isPublished })
       .from(albums)
@@ -150,13 +167,17 @@ async function getPublicAlbumPhotos({
 
     const nextCursor = hasMore ? `${lastDate}_${lastPhotoId}` : null;
 
-    return {
+    const result = {
       timelineEvents,
       pagination: {
         hasMore,
         nextCursor,
       },
     };
+
+    await redisService.set(cacheKey, result);
+
+    return result;
   } catch (error) {
     throw new InternalServerError(
       "Failed to process the request.",
