@@ -215,6 +215,37 @@ export function useEditAlbum() {
     [hasUnsavedChanges, selectedPhotos, capture, id]
   );
 
+  const selectAllPhotos = useCallback(() => {
+    if (!photosQuery.data?.photos) {
+      return;
+    }
+
+    const currentPagePhotoIds = photosQuery.data.photos.map((p) => p.id);
+
+    if (currentPagePhotoIds.length === 0) {
+      return;
+    }
+
+    if (hasUnsavedChanges()) {
+      dispatch({
+        type: UnsavedChangesActionEnum.SHOW_DIALOG,
+        action: { type: PendingActionTypeEnum.SELECT_ALL },
+      });
+      return;
+    }
+
+    setSelectedPhotos((prev) => [
+      ...prev.filter((photoId) => !currentPagePhotoIds.includes(photoId)),
+      ...currentPagePhotoIds,
+    ]);
+
+    capture("photo_selected", {
+      album_id: id,
+      photos_count: currentPagePhotoIds.length,
+      selection_mode: "all",
+    });
+  }, [hasUnsavedChanges, photosQuery.data?.photos, capture, id]);
+
   const handleDateSelect = useCallback(
     async (date: string | null) => {
       if (date === selectedDateLocal) {
@@ -285,6 +316,22 @@ export function useEditAlbum() {
         setSelectedPhotos([]);
         return;
       }
+      case PendingActionTypeEnum.SELECT_ALL: {
+        const currentPagePhotoIds =
+          photosQuery.data?.photos.map((p) => p.id) || [];
+
+        if (currentPagePhotoIds.length === 0) return;
+
+        const newSelectedPhotos = [
+          ...selectedPhotos.filter(
+            (photoId) => !currentPagePhotoIds.includes(photoId)
+          ),
+          ...currentPagePhotoIds,
+        ];
+
+        setSelectedPhotos(newSelectedPhotos);
+        return;
+      }
       default: {
         return;
       }
@@ -293,6 +340,7 @@ export function useEditAlbum() {
     form,
     unsavedChangesState.pendingAction,
     photosQuery.data?.photos,
+    selectedPhotos,
     updateDateSelection,
   ]);
 
@@ -587,6 +635,7 @@ export function useEditAlbum() {
     getModifiedStatus,
     togglePhotoSelection,
     deselectAllPhotos,
+    selectAllPhotos,
     openFinishDialog,
     closeFinishDialog,
     openDeleteDialog,

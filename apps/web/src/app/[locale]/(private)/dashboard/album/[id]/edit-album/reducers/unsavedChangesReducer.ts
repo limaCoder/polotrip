@@ -2,13 +2,15 @@ type PendingActionType =
   | "SELECT_PHOTO"
   | "TOGGLE_PHOTO"
   | "SELECT_DATE"
-  | "DESELECT_ALL";
+  | "DESELECT_ALL"
+  | "SELECT_ALL";
 
 enum PendingActionTypeEnum {
   SELECT_PHOTO = "SELECT_PHOTO",
   TOGGLE_PHOTO = "TOGGLE_PHOTO",
   SELECT_DATE = "SELECT_DATE",
   DESELECT_ALL = "DESELECT_ALL",
+  SELECT_ALL = "SELECT_ALL",
 }
 
 enum UnsavedChangesActionEnum {

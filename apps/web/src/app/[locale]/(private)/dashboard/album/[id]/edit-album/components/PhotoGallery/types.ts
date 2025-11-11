@@ -11,6 +11,7 @@ type PhotoGalleryProps = {
   getModifiedStatus: (photoId: string) => boolean;
   togglePhotoSelection: (photoId: string) => void;
   deselectAllPhotos: () => void;
+  selectAllPhotos: () => void;
   onPageChange: (page: number) => void;
   onDeletePhotos: () => void;
 };

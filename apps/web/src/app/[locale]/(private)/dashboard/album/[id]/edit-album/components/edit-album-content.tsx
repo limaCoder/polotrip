@@ -53,6 +53,7 @@ export function EditAlbumContent() {
     getModifiedStatus,
     togglePhotoSelection,
     deselectAllPhotos,
+    selectAllPhotos,
     openFinishDialog,
     closeFinishDialog,
     openDeleteDialog,
@@ -148,6 +149,7 @@ export function EditAlbumContent() {
             onDeletePhotos={openDeleteDialog}
             onPageChange={handlePageChange}
             pagination={photoPagination}
+            selectAllPhotos={selectAllPhotos}
             selectedDate={selectedDate}
             selectedPhotos={selectedPhotos}
             togglePhotoSelection={togglePhotoSelection}

@@ -349,6 +349,8 @@
       "photo_count_in_date_singular": "{count} foto em {date}",
       "photo_count_in_date_plural": "{count} fotos em {date}",
       "no_date_defined": "Sem data definida",
+      "select_all_aria": "Selecionar todas as fotos da página",
+      "select_all": "Selecionar todas",
       "clear_selection_aria": "Limpar seleção",
       "clear_selection": "Limpar seleção",
       "delete_selected_aria": "Excluir selecionadas",

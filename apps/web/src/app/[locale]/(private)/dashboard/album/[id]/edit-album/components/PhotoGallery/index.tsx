@@ -1,4 +1,4 @@
-import { Trash2, X } from "lucide-react";
+import { CheckSquare, Trash2, X } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { SkeletonList } from "@/components/SkeletonList";
@@ -16,6 +16,7 @@ export function PhotoGallery({
   getModifiedStatus,
   togglePhotoSelection,
   deselectAllPhotos,
+  selectAllPhotos,
   onPageChange,
   onDeletePhotos,
 }: PhotoGalleryProps) {
@@ -60,28 +61,47 @@ export function PhotoGallery({
           </span>
         </p>
 
-        {selectedPhotos.length > 0 && (
-          <div className="mb-4 flex flex-col gap-4 md:flex-row">
+        <div className="mb-4 flex flex-col gap-4 md:flex-row">
+          {filteredPhotos.length > 0 && selectAllPhotos && (
             <button
-              aria-label={t("clear_selection_aria")}
+              aria-label={t("select_all_aria")}
               className="flex cursor-pointer items-center gap-2 text-text/50 hover:text-text/75"
-              onClick={deselectAllPhotos}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof selectAllPhotos === "function") {
+                  selectAllPhotos();
+                }
+              }}
               type="button"
             >
-              <X size={18} />
-              <span className="font-body_two">{t("clear_selection")}</span>
+              <CheckSquare size={18} />
+              <span className="font-body_two">{t("select_all")}</span>
             </button>
-            <button
-              aria-label={t("delete_selected_aria")}
-              className="flex cursor-pointer items-center gap-2 text-red-500 hover:text-red-600"
-              onClick={onDeletePhotos}
-              type="button"
-            >
-              <Trash2 size={18} />
-              <span className="font-body_two">{t("delete_selected")}</span>
-            </button>
-          </div>
-        )}
+          )}
+          {selectedPhotos.length > 0 && (
+            <>
+              <button
+                aria-label={t("clear_selection_aria")}
+                className="flex cursor-pointer items-center gap-2 text-text/50 hover:text-text/75"
+                onClick={deselectAllPhotos}
+                type="button"
+              >
+                <X size={18} />
+                <span className="font-body_two">{t("clear_selection")}</span>
+              </button>
+              <button
+                aria-label={t("delete_selected_aria")}
+                className="flex cursor-pointer items-center gap-2 text-red-500 hover:text-red-600"
+                onClick={onDeletePhotos}
+                type="button"
+              >
+                <Trash2 size={18} />
+                <span className="font-body_two">{t("delete_selected")}</span>
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
