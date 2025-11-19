@@ -15,6 +15,11 @@ import { PhotoEditForm } from "./PhotoEditForm";
 import { PhotoGallery } from "./PhotoGallery";
 import { PhotoMap } from "./PhotoMap";
 import { PhotoTimeline } from "./PhotoTimeline";
+import {
+  PhotoGallerySkeleton,
+  PhotoMapSkeleton,
+  PhotoTimelineSkeleton,
+} from "./skeletons";
 import { UndatedPhotosDialog } from "./UndatedPhotosDialog";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 
@@ -63,19 +68,10 @@ export function EditAlbumContent() {
   } = useEditAlbum();
 
   const isGlobalLoading =
-    isLoading ||
     isUpdatingPhoto ||
     isUpdatingPhotoBatch ||
     isDeletingPhotos ||
     isPublishingAlbum;
-
-  if (isLoading) {
-    return (
-      <div className="my-12 flex justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-primary border-b-2" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -94,29 +90,37 @@ export function EditAlbumContent() {
       )}
       <div className="grid grid-cols-1 gap-9 lg:grid-cols-[1fr_3fr]">
         <div className="flex flex-col gap-9">
-          <PhotoTimeline
-            dates={albumDates}
-            onSelectDate={handleDateSelect}
-            selectedDate={selectedDate}
-          />
+          {isLoading ? (
+            <PhotoTimelineSkeleton />
+          ) : (
+            <PhotoTimeline
+              dates={albumDates}
+              onSelectDate={handleDateSelect}
+              selectedDate={selectedDate}
+            />
+          )}
 
-          <div className="rounded-lg bg-card p-8 shadow">
-            <div className="mb-3 flex items-center gap-3">
-              <MapPin className="text-primary" size={24} />
-              <h2 className="font-bold font-title_three">{t("map_title")}</h2>
+          {isLoading ? (
+            <PhotoMapSkeleton />
+          ) : (
+            <div className="rounded-lg bg-card p-8 shadow">
+              <div className="mb-3 flex items-center gap-3">
+                <MapPin className="text-primary" size={24} />
+                <h2 className="font-bold font-title_three">{t("map_title")}</h2>
+              </div>
+
+              <p className="mb-6 font-body_two text-text/75">
+                {t("map_description")}
+              </p>
+
+              <div className="h-[300px] w-full overflow-hidden rounded-md">
+                <PhotoMap
+                  onMarkerClick={handlePhotoClick}
+                  photos={filteredPhotos}
+                />
+              </div>
             </div>
-
-            <p className="mb-6 font-body_two text-text/75">
-              {t("map_description")}
-            </p>
-
-            <div className="h-[300px] w-full overflow-hidden rounded-md">
-              <PhotoMap
-                onMarkerClick={handlePhotoClick}
-                photos={filteredPhotos}
-              />
-            </div>
-          </div>
+          )}
 
           <AlbumDetailsCard />
 
@@ -140,32 +144,36 @@ export function EditAlbumContent() {
             )}
           />
 
-          <PhotoGallery
-            currentPage={currentPage}
-            deselectAllPhotos={deselectAllPhotos}
-            filteredPhotos={filteredPhotos}
-            getModifiedStatus={getModifiedStatus}
-            isLoading={isPhotosLoading}
-            onDeletePhotos={openDeleteDialog}
-            onPageChange={handlePageChange}
-            pagination={photoPagination}
-            selectAllPhotos={selectAllPhotos}
-            selectedDate={selectedDate}
-            selectedPhotos={selectedPhotos}
-            togglePhotoSelection={togglePhotoSelection}
-          />
+          {isPhotosLoading ? (
+            <PhotoGallerySkeleton />
+          ) : (
+            <PhotoGallery
+              currentPage={currentPage}
+              deselectAllPhotos={deselectAllPhotos}
+              filteredPhotos={filteredPhotos}
+              getModifiedStatus={getModifiedStatus}
+              isLoading={isPhotosLoading}
+              onDeletePhotos={openDeleteDialog}
+              onPageChange={handlePageChange}
+              pagination={photoPagination}
+              selectAllPhotos={selectAllPhotos}
+              selectedDate={selectedDate}
+              selectedPhotos={selectedPhotos}
+              togglePhotoSelection={togglePhotoSelection}
+            />
+          )}
 
           <div className="flex justify-end">
             <Button
               aria-label={t("publish_album_button_aria")}
               className={cn(
                 "flex items-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-background hover:bg-primary/90",
-                isLoading && "cursor-not-allowed opacity-50"
+                isGlobalLoading && "cursor-not-allowed opacity-50"
               )}
-              disabled={isLoading}
+              disabled={isGlobalLoading}
               onClick={openFinishDialog}
             >
-              {isLoading ? (
+              {isGlobalLoading ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
                   <span>{t("publishing_album_button")}</span>

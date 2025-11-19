@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useAlbumDetails } from "@/hooks/network/queries/useAlbumDetails";
 import { EditAlbumModal } from "../EditAlbumModal";
+import { AlbumDetailsCardSkeleton } from "../skeletons";
 
 export function AlbumDetailsCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +17,7 @@ export function AlbumDetailsCard() {
   const { data: album, isLoading } = useAlbumDetails(id as string);
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return <AlbumDetailsCardSkeleton />;
   }
 
   if (!album) {

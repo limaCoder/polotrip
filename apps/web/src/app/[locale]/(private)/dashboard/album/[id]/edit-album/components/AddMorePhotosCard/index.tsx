@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useCheckAlbumSpace } from "@/hooks/network/queries/useCheckAlbumSpace";
+import { AddMorePhotosCardSkeleton } from "../skeletons";
 
 export function AddMorePhotosCard() {
   const { id: albumId, locale } = useParams<{ id: string; locale: string }>();
@@ -15,6 +16,10 @@ export function AddMorePhotosCard() {
   const { data: albumSpace, isLoading } = useCheckAlbumSpace({
     albumId,
   });
+
+  if (isLoading) {
+    return <AddMorePhotosCardSkeleton />;
+  }
 
   const handleAddMorePhotos = () => {
     if (!albumSpace?.canUpload) {

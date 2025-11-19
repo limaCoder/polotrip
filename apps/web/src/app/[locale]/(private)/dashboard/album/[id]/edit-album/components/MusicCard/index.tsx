@@ -13,6 +13,7 @@ import {
   extractYouTubeVideoId,
   isValidYouTubeUrl,
 } from "@/lib/utils/youtube-url";
+import { MusicCardSkeleton } from "../skeletons";
 
 export function MusicCard() {
   const { id: albumId } = useParams<{ id: string }>();
@@ -21,7 +22,15 @@ export function MusicCard() {
   const [isLoading, setIsLoading] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
 
-  const { data: album, refetch } = useAlbumDetails(albumId);
+  const {
+    data: album,
+    refetch,
+    isLoading: isAlbumLoading,
+  } = useAlbumDetails(albumId);
+
+  if (isAlbumLoading) {
+    return <MusicCardSkeleton />;
+  }
 
   const currentMusicUrl = album?.musicUrl || "";
 
