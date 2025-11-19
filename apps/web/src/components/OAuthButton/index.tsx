@@ -34,11 +34,6 @@ export function OAuthButton({
 
         try {
           if (isWebView()) {
-            const callbackURL = encodeURIComponent(
-              `${env.NEXT_PUBLIC_WEB_URL}/${locale}/dashboard`
-            );
-            const authUrl = `${env.NEXT_PUBLIC_WEB_URL}/api/v1/auth/social/${provider}?callbackURL=${callbackURL}`;
-
             capture("sign_in_webview_detected", {
               provider,
               locale,
@@ -48,7 +43,7 @@ export function OAuthButton({
                   : "unknown",
             });
 
-            openInExternalBrowser(authUrl);
+            openInExternalBrowser(window.location.href);
             setIsLoading(false);
             return;
           }
