@@ -122,7 +122,12 @@
     "submit_button": "Entrar",
     "google_oauth_aria": "Entrar com Google",
     "google_oauth_text": "Entrar com o Google",
-    "google_icon_alt": "Ícone do Google"
+    "google_icon_alt": "Ícone do Google",
+    "webview_dialog_title": "Abrir em navegador externo",
+    "webview_dialog_description": "Para fazer login com Google, você precisa abrir este site em um navegador externo (Safari, Chrome, etc.). O login não funciona em navegadores internos de aplicativos.",
+    "webview_dialog_copy_link": "Copiar link",
+    "webview_dialog_link_copied": "Link copiado!",
+    "webview_dialog_open_manually": "Copie o link acima e cole no seu navegador para continuar."
   },
   "CreateAlbum": {
     "metadata": {

@@ -1,9 +1,19 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Check, Copy, Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/Button";
+import { Button as UiButton } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { usePostHog } from "@/hooks/usePostHog";
 import { signIn } from "@/lib/auth/client";
 import { env } from "@/lib/env";
@@ -16,6 +26,7 @@ export function OAuthButton({
   ...props
 }: OAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [showWebViewDialog, setShowWebViewDialog] = useState(false);
 
   const params = useParams();
   const locale = params?.locale as string;
@@ -44,6 +55,9 @@ export function OAuthButton({
             });
 
             openInExternalBrowser(window.location.href);
+
+            setShowWebViewDialog(true);
+
             setIsLoading(false);
             return;
           }
@@ -73,6 +87,94 @@ export function OAuthButton({
       {children}
 
       {isLoading ? <Loader2 className="size-5 animate-spin" /> : null}
+
+      <WebViewDialog
+        currentUrl={typeof window !== "undefined" ? window.location.href : ""}
+        onOpenChange={setShowWebViewDialog}
+        open={showWebViewDialog}
+      />
     </Button>
+  );
+}
+
+function WebViewDialog({
+  open,
+  onOpenChange,
+  currentUrl,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentUrl: string;
+}) {
+  const [linkCopied, setLinkCopied] = useState(false);
+  const t = useTranslations("SignIn");
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setLinkCopied(true);
+      setTimeout(() => {
+        setLinkCopied(false);
+      }, 2000);
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = currentUrl;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        setLinkCopied(true);
+        setTimeout(() => {
+          setLinkCopied(false);
+        }, 2000);
+      } catch {
+        // Ignore
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  return (
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t("webview_dialog_title")}</DialogTitle>
+          <DialogDescription>
+            {t("webview_dialog_description")}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="rounded-lg border bg-muted p-3">
+            <p className="break-all font-mono text-sm">{currentUrl}</p>
+          </div>
+          <p className="text-muted-foreground text-sm">
+            {t("webview_dialog_open_manually")}
+          </p>
+        </div>
+        <DialogFooter>
+          <UiButton
+            className="w-full"
+            onClick={handleCopyLink}
+            type="button"
+            variant="outline"
+          >
+            {linkCopied ? (
+              <>
+                <Check className="mr-2 size-4" />
+                {t("webview_dialog_link_copied")}
+              </>
+            ) : (
+              <>
+                <Copy className="mr-2 size-4" />
+                {t("webview_dialog_copy_link")}
+              </>
+            )}
+          </UiButton>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

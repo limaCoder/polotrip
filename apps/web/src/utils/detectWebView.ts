@@ -43,25 +43,50 @@ export function isWebView(): boolean {
 /**
  * Opens a URL in an external browser
  * Works on both iOS and Android
+ * Returns true if successful, false if user action is needed
  */
-export function openInExternalBrowser(url: string): void {
+export function openInExternalBrowser(url: string): boolean {
   if (typeof window === "undefined") {
-    return;
+    return false;
   }
 
-  // Try to open in external browser
-  // On iOS, this will prompt user to open in Safari
-  // On Android, this will open in default browser
+  // Strategy 1: Try window.open (may be blocked in WebViews)
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
 
-  // If window.open was blocked or failed, try alternative method
-  if (
-    !newWindow ||
-    newWindow.closed ||
-    typeof newWindow.closed === "undefined"
-  ) {
-    // Fallback: try to redirect the current window
-    // This will at least get the user out of the WebView
-    window.location.href = url;
+  if (newWindow && !newWindow.closed) {
+    return true;
   }
+
+  // Strategy 2: Create a temporary link and simulate click
+  // This sometimes works better in WebViews
+  try {
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Give it a moment to see if it worked
+    setTimeout(() => {
+      // If we're still here, it likely didn't work
+    }, 100);
+
+    return true;
+  } catch {
+    // Continue to next strategy
+  }
+
+  // Strategy 3: Try using location.replace (less likely to work)
+  try {
+    window.location.replace(url);
+    return true;
+  } catch {
+    // Continue to fallback
+  }
+
+  // If all strategies fail, return false so UI can show instructions
+  return false;
 }

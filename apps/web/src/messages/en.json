@@ -122,7 +122,12 @@
     "submit_button": "Sign In",
     "google_oauth_aria": "Sign in with Google",
     "google_oauth_text": "Sign in with Google",
-    "google_icon_alt": "Google icon"
+    "google_icon_alt": "Google icon",
+    "webview_dialog_title": "Open in external browser",
+    "webview_dialog_description": "To sign in with Google, you need to open this site in an external browser (Safari, Chrome, etc.). Sign in does not work in in-app browsers.",
+    "webview_dialog_copy_link": "Copy link",
+    "webview_dialog_link_copied": "Link copied!",
+    "webview_dialog_open_manually": "Copy the link above and paste it in your browser to continue."
   },
   "CreateAlbum": {
     "metadata": {
