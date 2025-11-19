@@ -7,6 +7,7 @@ import { Button } from "@/components/Button";
 import { usePostHog } from "@/hooks/usePostHog";
 import { signIn } from "@/lib/auth/client";
 import { env } from "@/lib/env";
+import { isWebView, openInExternalBrowser } from "@/utils/detectWebView";
 import type { OAuthButtonProps } from "./types";
 
 export function OAuthButton({
@@ -32,6 +33,26 @@ export function OAuthButton({
         });
 
         try {
+          if (isWebView()) {
+            const callbackURL = encodeURIComponent(
+              `${env.NEXT_PUBLIC_WEB_URL}/${locale}/dashboard`
+            );
+            const authUrl = `${env.NEXT_PUBLIC_WEB_URL}/api/v1/auth/social/${provider}?callbackURL=${callbackURL}`;
+
+            capture("sign_in_webview_detected", {
+              provider,
+              locale,
+              userAgent:
+                typeof window !== "undefined"
+                  ? window.navigator.userAgent
+                  : "unknown",
+            });
+
+            openInExternalBrowser(authUrl);
+            setIsLoading(false);
+            return;
+          }
+
           await signIn.social({
             provider,
             callbackURL: `${env.NEXT_PUBLIC_WEB_URL}/${locale}/dashboard`,
