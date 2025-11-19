@@ -6,24 +6,20 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
-import { MapPin, Music } from "lucide-react";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Footer } from "@/components/Footer";
 import { PhotoTimeline } from "@/components/PhotoTimeline";
 import { albumKeys } from "@/hooks/network/keys/albumKeys";
-import { getPublicAlbum } from "@/http/get-public-album";
-import { getPublicAlbumLocations } from "@/http/get-public-album-locations";
 import { getPublicAlbumPhotos } from "@/http/get-public-album-photos";
 import { getCurrentUser } from "@/lib/auth/server";
 import type { PageProps } from "@/types/next";
+import { AlbumCoverSection } from "../(components)/AlbumCoverSection";
 import { AlbumOwnerTopBar } from "../(components)/AlbumOwnerTopBar";
 import { AlbumSharedTopBar } from "../(components)/AlbumSharedTopBar";
-import { HeaderAlbum } from "../(components)/HeaderAlbum";
-import { MusicPlayer } from "../(components)/MusicPlayer";
-import { PublicPhotoMap } from "../(components)/PublicPhotoMap";
+import { LocationsSection } from "../(components)/LocationsSection";
+import { MusicPlayerSection } from "../(components)/MusicPlayerSection";
+import { MusicSection } from "../(components)/MusicSection";
 import { generateAlbumMetadata } from "./metadata";
 
 export const generateMetadata = generateAlbumMetadata;
@@ -34,8 +30,6 @@ export default async function AlbumViewPage({
 }: PageProps) {
   const { id: albumId, locale } = await params;
   const { share } = (await searchParams) || {};
-
-  const t = await getTranslations({ locale, namespace: "PublicAlbum" });
 
   const user = await getCurrentUser();
 
@@ -52,15 +46,6 @@ export default async function AlbumViewPage({
   const isOwner = user?.id === album.userId;
   const isShared = share === "true" && !isOwner;
 
-  const albumData = await getPublicAlbum({ albumId });
-  const locationsDataPromise = getPublicAlbumLocations({ albumId });
-
-  const hasLocations = await locationsDataPromise.then(
-    (data) => data.locations.length > 0,
-    () => false
-  );
-  const hasMusic = albumData?.album?.musicUrl !== null;
-
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
@@ -73,85 +58,16 @@ export default async function AlbumViewPage({
     initialPageParam: null,
   });
 
-  const coverImageUrl = albumData?.album?.coverImageUrl
-    ? albumData?.album?.coverImageUrl
-    : "/pages/album/album-cover-placeholder.jpg";
-
-  const albumOwnerName = albumData?.user?.name?.split(" ")[0];
-
   return (
     <div data-is-owner={isOwner} data-is-shared={isShared}>
       {isOwner && <AlbumOwnerTopBar />}
       {isShared && <AlbumSharedTopBar />}
       <main className="flex min-h-screen flex-col bg-background">
-        <div className="relative flex h-[430px] w-full flex-col justify-between md:h-[510px]">
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 z-10 bg-black/75 via-transparent to-transparent" />
-            <Image
-              alt={t("cover_alt")}
-              className="object-cover"
-              fill
-              priority
-              quality={100}
-              sizes="100vw"
-              src={coverImageUrl}
-            />
-          </div>
+        <AlbumCoverSection albumId={albumId} locale={locale} />
 
-          <HeaderAlbum
-            albumDescription={albumData?.album?.description || ""}
-            albumOwnerName={albumOwnerName}
-            albumTitle={albumData?.album?.title}
-          />
+        <LocationsSection albumId={albumId} locale={locale} />
 
-          <div className="relative z-20 flex w-full flex-col items-start p-4 sm:p-8 md:pb-10 md:pl-12">
-            <h1 className="font-bold font-title_one text-4xl text-secondary md:text-5xl lg:text-6xl">
-              {albumData?.album?.title}
-            </h1>
-
-            {albumData?.album?.description && (
-              <p className="pt-2 font-bold font-title_three text-lg text-white md:text-2xl">
-                {albumData?.album?.description}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {hasLocations && (
-          <section className="container px-4 py-8">
-            <div className="mb-4 flex items-center gap-2">
-              <MapPin className="hidden text-primary md:block" size={24} />
-              <h2 className="font-title_two text-2xl text-primary">
-                {t("moments_title", { ownerName: albumOwnerName })}
-              </h2>
-            </div>
-            <div className="h-[400px] w-full overflow-hidden rounded-lg">
-              <Suspense
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center bg-muted">
-                    {t("loading_map")}
-                  </div>
-                }
-              >
-                <PublicPhotoMap locationsPromise={locationsDataPromise} />
-              </Suspense>
-            </div>
-          </section>
-        )}
-
-        {hasMusic && (
-          <section className="container px-4 py-8">
-            <div className="mb-4 flex items-center gap-2">
-              <Music className="hidden text-primary md:block" size={24} />
-              <h2 className="font-title_two text-2xl text-primary">
-                {t("music_title")}
-              </h2>
-            </div>
-            <div className="h-[350px] w-full overflow-hidden rounded-lg">
-              <div className="aspect-video w-full" id="youtube-player" />
-            </div>
-          </section>
-        )}
+        <MusicSection albumId={albumId} locale={locale} />
 
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense
@@ -166,7 +82,7 @@ export default async function AlbumViewPage({
         </HydrationBoundary>
       </main>
       <Footer />
-      <MusicPlayer musicUrl={albumData?.album?.musicUrl || null} />
+      <MusicPlayerSection albumId={albumId} />
     </div>
   );
 }
