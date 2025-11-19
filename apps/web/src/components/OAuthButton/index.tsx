@@ -17,7 +17,7 @@ import {
 import { usePostHog } from "@/hooks/usePostHog";
 import { signIn } from "@/lib/auth/client";
 import { env } from "@/lib/env";
-import { isWebView, openInExternalBrowser } from "@/utils/detectWebView";
+import { isWebView } from "@/utils/detectWebView";
 import type { OAuthButtonProps } from "./types";
 
 export function OAuthButton({
@@ -54,10 +54,7 @@ export function OAuthButton({
                   : "unknown",
             });
 
-            openInExternalBrowser(window.location.href);
-
             setShowWebViewDialog(true);
-
             setIsLoading(false);
             return;
           }
