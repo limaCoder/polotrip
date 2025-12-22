@@ -42,6 +42,6 @@
     "@faker-js/faker": "~9.4.0",
     "@polotrip/ts-config": "workspace:*",
     "drizzle-kit": "~0.30.4",
-    "tsup": "8.2.4"
+    "tsup": "8.5.1"
   }
 }

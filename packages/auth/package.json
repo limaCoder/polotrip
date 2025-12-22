@@ -17,6 +17,6 @@
     "@polotrip/ts-config": "workspace:*",
     "@types/node": "~22.13.1",
     "typescript": "~5.7.3",
-    "tsup": "8.2.4"
+    "tsup": "8.5.1"
   }
 }
