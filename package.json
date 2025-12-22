@@ -25,9 +25,9 @@
     "start:web": "pnpm --filter @polotrip/web start"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
-    "@commitlint/cz-commitlint": "^19.6.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cz-commitlint": "^19.8.1",
     "commitizen": "^4.3.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
@@ -36,7 +36,7 @@
     "ultracite": "5.6.4"
   },
   "dependencies": {
-    "@commitlint/types": "^19.5.0",
+    "@commitlint/types": "^19.8.1",
     "turbo": "^2.3.3"
   },
   "pnpm": {
