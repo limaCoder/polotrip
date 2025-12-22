@@ -41,7 +41,7 @@
   },
   "pnpm": {
     "overrides": {
-      "buffer": "^6.0.3"
+      "esbuild": "^0.25.0"
     }
   },
   "config": {
