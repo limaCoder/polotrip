@@ -119,7 +119,6 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                     duration: 0.5,
                     delay: 0.2 * index,
                     ease: "easeOut",
-                    once: true,
                   },
                 }}
                 className="rounded-3xl"
@@ -128,6 +127,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                   y: 20,
                 }}
                 key={`card-${index + 1}`}
+                viewport={{ once: true }}
               >
                 {item}
               </motion.div>
