@@ -1,3 +1,4 @@
+import { Readable } from "node:stream";
 import { fromNodeHeaders } from "better-auth/node";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -5,19 +6,55 @@ import { createChatCompletion } from "@/app/functions/create-chat-completion";
 import { BadRequestError, UnauthorizedError } from "@/http/errors";
 import { authenticate } from "@/http/middlewares/authenticate";
 
-const messageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
-  content: z
-    .string()
-    .min(1, "Message cannot be empty")
-    .max(4000, "Message too long (max 4000 characters)")
-    .transform((content) => {
-      // Sanitize content: trim whitespace and remove null bytes
-      return content.trim().replace(/\0/g, "");
-    }),
+const uiMessagePartSchema = z.union([
+  z.object({
+    type: z.literal("text"),
+    text: z.string(),
+  }),
+  z.object({
+    type: z.string().startsWith("tool-"),
+    state: z.enum(["input-available", "output-available"]),
+    input: z.unknown().optional(),
+    output: z.unknown().optional(),
+  }),
+  z.object({
+    type: z.string(),
+  }),
+]);
+
+const uiMessageSchema = z.object({
+  id: z.string(),
+  role: z.enum(["user", "assistant", "system"]),
+  parts: z.array(uiMessagePartSchema).optional(),
+  content: z.string().optional(), // Fallback for old format
 });
 
-// Regex patterns for prompt injection detection (defined at top level for performance)
+// Helper function to extract text content from UIMessage
+function extractTextFromUIMessage(
+  message: z.infer<typeof uiMessageSchema>
+): string {
+  // If content exists (old format), use it
+  if (message.content) {
+    return message.content;
+  }
+
+  // Extract text from parts (new format)
+  if (message.parts && Array.isArray(message.parts)) {
+    const textParts = message.parts.filter(
+      (part): part is { type: "text"; text: string } =>
+        part &&
+        typeof part === "object" &&
+        "type" in part &&
+        part.type === "text" &&
+        "text" in part &&
+        typeof part.text === "string"
+    );
+    return textParts.map((p) => p.text).join("");
+  }
+
+  return "";
+}
+
 const IGNORE_INSTRUCTIONS_PATTERN =
   /ignore\s+(previous|prior|all|above)\s+instructions?/i;
 const FORGET_PATTERN = /forget\s+(everything|all|previous|prior)/i;
@@ -68,7 +105,7 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
       schema: {
         body: z.object({
           messages: z
-            .array(messageSchema)
+            .array(uiMessageSchema)
             .min(1, "At least one message required")
             .max(50, "Too many messages in conversation (max 50)"),
         }),
@@ -84,10 +121,51 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
           throw new UnauthorizedError();
         }
 
-        const { messages } = request.body;
+        const body = request.body as {
+          messages: z.infer<typeof uiMessageSchema>[];
+        };
+        const { messages: uiMessages } = body;
+
+        // Convert UIMessage[] to { role, content }[] format
+        const convertedMessages = uiMessages
+          .map((uiMsg: z.infer<typeof uiMessageSchema>) => {
+            let text = extractTextFromUIMessage(uiMsg);
+
+            // Sanitize content: trim whitespace and remove null bytes
+            text = text.trim().replace(/\0/g, "");
+
+            // Validate content
+            if (!text || text.length === 0) {
+              return null;
+            }
+
+            if (text.length > 4000) {
+              throw new BadRequestError(
+                "Message too long (max 4000 characters)"
+              );
+            }
+
+            if (uiMsg.role !== "user" && uiMsg.role !== "assistant") {
+              return null;
+            }
+
+            return {
+              role: uiMsg.role as "user" | "assistant",
+              content: text,
+            };
+          })
+          .filter(
+            (
+              msg: { role: "user" | "assistant"; content: string } | null
+            ): msg is { role: "user" | "assistant"; content: string } =>
+              msg !== null
+          );
 
         // Validate message count and detect injection attempts
-        const userMessages = messages.filter((m) => m.role === "user");
+        const userMessages = convertedMessages.filter(
+          (m: { role: "user" | "assistant"; content: string }) =>
+            m.role === "user"
+        );
         if (userMessages.length === 0) {
           throw new BadRequestError("No user messages found");
         }
@@ -107,8 +185,9 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
         }
 
         // Limit total conversation length to prevent context overflow
-        const totalLength = messages.reduce(
-          (sum, m) => sum + m.content.length,
+        const totalLength = convertedMessages.reduce(
+          (sum: number, m: { role: "user" | "assistant"; content: string }) =>
+            sum + m.content.length,
           0
         );
 
@@ -120,7 +199,7 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
 
         const result = await createChatCompletion({
           userId: session.user.id,
-          messages,
+          messages: convertedMessages,
         });
 
         reply.raw.setHeader("Content-Type", "text/event-stream");
@@ -132,11 +211,28 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
         );
         reply.raw.setHeader("Access-Control-Allow-Credentials", "true");
 
-        const stream = result.toDataStreamResponse();
+        // Use toUIMessageStreamResponse for useChat hook with DefaultChatTransport
+        const response = result.toUIMessageStreamResponse();
 
-        return reply.send(stream.body);
+        // Convert Web Stream to Node.js stream for Fastify
+        if (!response.body) {
+          app.log.error("Stream body is null");
+          throw new Error("Stream body is null");
+        }
+
+        // biome-ignore lint/suspicious/noExplicitAny: ReadableStream type conversion for Node.js
+        const nodeStream = Readable.fromWeb(response.body as any);
+
+        // Handle stream errors
+        nodeStream.on("error", (error) => {
+          app.log.error({ error }, "Stream error in chat response");
+        });
+
+        return reply.send(nodeStream);
       } catch (error) {
-        app.log.error("Error in chat stream:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        app.log.error({ error: errorMessage }, "Error in chat stream");
 
         if (error instanceof UnauthorizedError) {
           throw error;
