@@ -182,6 +182,8 @@
     },
     "title": "Meus álbuns",
     "subtitle": "Gerencie e compartilhe suas memórias de viagem",
+    "my_albums": "Meus Álbuns",
+    "chat": "Assistente IA",
     "create_album_button_aria": "Criar novo álbum",
     "create_album_button": "Criar novo álbum",
     "onboarding": {
@@ -933,5 +935,13 @@
     "title": "Álbum não encontrado",
     "description": "O álbum que você está procurando não existe.",
     "back_to_dashboard": "Voltar para o dashboard"
+  },
+  "Chat": {
+    "metadata": {
+      "title": "Assistente IA | Polotrip",
+      "description": "Converse com a IA sobre seus álbuns e fotos de viagem"
+    },
+    "title": "Assistente IA",
+    "subtitle": "Pergunte-me qualquer coisa sobre seus álbuns e fotos"
   }
 }

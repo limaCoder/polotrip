@@ -13,6 +13,7 @@
     "check-types": "turbo check-types",
     "dev:web": "turbo -F web dev",
     "dev:server": "turbo -F server dev",
+    "dev:mcp": "turbo -F @polotrip/mcp dev",
     "db:push": "turbo -F @polotrip/db db:push",
     "db:studio": "turbo -F @polotrip/db db:studio",
     "db:generate": "turbo -F @polotrip/db db:generate",
@@ -22,9 +23,12 @@
     "build:server": "pnpm --filter @polotrip/db build && pnpm --filter @polotrip/auth build && pnpm --filter @polotrip/transactional build && pnpm --filter @polotrip/server build",
     "start:server": "pnpm --filter @polotrip/server start",
     "build:web": "pnpm --filter @polotrip/db build && pnpm --filter @polotrip/auth build && pnpm --filter @polotrip/web build",
-    "start:web": "pnpm --filter @polotrip/web start"
+    "start:web": "pnpm --filter @polotrip/web start",
+    "build:mcp": "pnpm --filter @polotrip/db build && pnpm --filter @polotrip/mcp build",
+    "start:mcp": "pnpm --filter @polotrip/mcp start"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.6",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
@@ -32,11 +36,12 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.1",
-    "@biomejs/biome": "2.2.6",
     "ultracite": "5.6.4"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.9",
     "@commitlint/types": "^19.8.1",
+    "ai": "^6.0.33",
     "turbo": "^2.3.3"
   },
   "pnpm": {

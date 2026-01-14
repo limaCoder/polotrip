@@ -15,6 +15,7 @@ import rateLimitPlugin from "./plugins/rate-limit.js";
 import swaggerPlugin from "./plugins/swagger.js";
 import albumsController from "./routes/v1/albums/index.js";
 import authRoute from "./routes/v1/auth/index.js";
+import chatController from "./routes/v1/chat/index.js";
 import checkoutController from "./routes/v1/checkout/index.js";
 import healthRoute from "./routes/v1/health.js";
 
@@ -68,6 +69,7 @@ app.register(swaggerPlugin);
 app.register(healthRoute, { prefix: "/api/v1" });
 app.register(authRoute, { prefix: "/api/v1" });
 app.register(albumsController, { prefix: "/api/v1" });
+app.register(chatController, { prefix: "/api/v1" });
 app.register(checkoutController, { prefix: "/api/v1" });
 
 app.get("/", (_, reply) => {
