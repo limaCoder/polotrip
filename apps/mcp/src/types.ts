@@ -1,15 +1,15 @@
 export type MCPTool = {
-  name: string
-  description: string
+  name: string;
+  description: string;
   inputSchema: {
-    type: string
-    properties: Record<string, any>
-    required?: string[]
-  }
+    type: string;
+    properties: Record<string, unknown>;
+    required?: string[];
+  };
   handler: (params: unknown) => Promise<{
     content: Array<{
-      type: string
-      text: string
-    }>
-  }>
-}
+      type: string;
+      text: string;
+    }>;
+  }>;
+};

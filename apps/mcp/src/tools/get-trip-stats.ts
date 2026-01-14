@@ -1,48 +1,46 @@
-import { db } from '@polotrip/db'
-import { albums, photos } from '@polotrip/db/schema'
-import { eq, isNotNull, sql } from 'drizzle-orm'
-import { z } from 'zod'
-import type { MCPTool } from '../types.js'
+import { db } from "@polotrip/db";
+import { albums, photos } from "@polotrip/db/schema";
+import { eq, sql } from "drizzle-orm";
+import { z } from "zod";
+import type { MCPTool } from "../types.js";
 
 const inputSchema = z.object({
   albumId: z.string(),
   userId: z.string(),
-})
+});
 
 export const getTripStatsTool: MCPTool = {
-  name: 'getTripStats',
+  name: "getTripStats",
   description:
-    'Get statistics about a trip album (total photos, locations visited, date range)',
+    "Get statistics about a trip album (total photos, locations visited, date range)",
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      albumId: { type: 'string', description: 'Album ID' },
-      userId: { type: 'string', description: 'User ID (for authorization)' },
+      albumId: { type: "string", description: "Album ID" },
+      userId: { type: "string", description: "User ID (for authorization)" },
     },
-    required: ['albumId', 'userId'],
+    required: ["albumId", "userId"],
   },
   handler: async (params: unknown) => {
-    const { albumId, userId } = inputSchema.parse(params)
+    const { albumId, userId } = inputSchema.parse(params);
 
-    // Verify album ownership
     const album = await db
       .select()
       .from(albums)
       .where(eq(albums.id, albumId))
-      .then((rows) => rows[0])
+      .then((rows) => rows[0]);
 
     if (!album || album.userId !== userId) {
       return {
         content: [
           {
-            type: 'text',
-            text: JSON.stringify({ error: 'Album not found or unauthorized' }),
+            type: "text",
+            text: JSON.stringify({ error: "Album not found or unauthorized" }),
           },
         ],
-      }
+      };
     }
 
-    // Get statistics
     const stats = await db
       .select({
         totalPhotos: sql<number>`COUNT(*)`,
@@ -53,12 +51,12 @@ export const getTripStatsTool: MCPTool = {
       })
       .from(photos)
       .where(eq(photos.albumId, albumId))
-      .then((rows) => rows[0])
+      .then((rows) => rows[0]);
 
     return {
       content: [
         {
-          type: 'text',
+          type: "text",
           text: JSON.stringify(
             {
               album: {
@@ -81,6 +79,6 @@ export const getTripStatsTool: MCPTool = {
           ),
         },
       ],
-    }
+    };
   },
-}
+};
