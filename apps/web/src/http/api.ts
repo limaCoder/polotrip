@@ -9,11 +9,18 @@ const baseConfig = {
     "Content-Type": "application/json",
   },
   credentials: "include" as RequestCredentials,
+  timeout: 30_000,
+  retry: {
+    limit: 2,
+    methods: ["get"],
+    statusCodes: [408, 413, 429, 500, 502, 503, 504],
+  },
 };
 
 const clientApi = ky.create(baseConfig);
 
 const serverApi = ky.create(baseConfig).extend({
+  timeout: 60_000,
   hooks: {
     beforeRequest: [
       async (request) => {

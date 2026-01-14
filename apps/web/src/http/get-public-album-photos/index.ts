@@ -33,6 +33,16 @@ export async function getPublicAlbumPhotos({
 
     return data;
   } catch (error) {
+    if (error instanceof Error) {
+      if (error.name === "TimeoutError" || error.message.includes("timeout")) {
+        throw new Error(
+          "Request timed out while fetching album photos. The server may be processing a large number of photos. Please try again."
+        );
+      }
+      if (error.message.includes("Failed to get album photos")) {
+        throw error;
+      }
+    }
     throw new Error(`Failed to get album photos: ${error}`);
   }
 }

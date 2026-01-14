@@ -15,8 +15,7 @@ import { getPublicAlbumPhotos } from "@/http/get-public-album-photos";
 import { getCurrentUser } from "@/lib/auth/server";
 import type { PageProps } from "@/types/next";
 import { AlbumCoverSection } from "../(components)/AlbumCoverSection";
-import { AlbumOwnerTopBar } from "../(components)/AlbumOwnerTopBar";
-import { AlbumSharedTopBar } from "../(components)/AlbumSharedTopBar";
+import { AlbumTopBars } from "../(components)/AlbumTopBars";
 import { LocationsSection } from "../(components)/LocationsSection";
 import { MusicPlayerSection } from "../(components)/MusicPlayerSection";
 import { MusicSection } from "../(components)/MusicSection";
@@ -60,8 +59,7 @@ export default async function AlbumViewPage({
 
   return (
     <div data-is-owner={isOwner} data-is-shared={isShared}>
-      {isOwner && <AlbumOwnerTopBar />}
-      {isShared && <AlbumSharedTopBar />}
+      <AlbumTopBars isOwner={isOwner} isShared={isShared} />
       <main className="flex min-h-screen flex-col bg-background">
         <AlbumCoverSection albumId={albumId} locale={locale} />
 
