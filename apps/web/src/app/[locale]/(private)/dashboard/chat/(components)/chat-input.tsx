@@ -1,16 +1,17 @@
-'use client'
+"use client";
 
-import { Send } from 'lucide-react'
-import type { ChangeEvent, FormEvent } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { Send } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { type ChangeEvent, type FormEvent, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 type ChatInputProps = {
-  input: string
-  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
-  isLoading: boolean
-}
+  input: string;
+  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  isLoading: boolean;
+};
 
 export function ChatInput({
   input,
@@ -18,29 +19,32 @@ export function ChatInput({
   handleSubmit,
   isLoading,
 }: ChatInputProps) {
+  const t = useTranslations("Chat.input");
+  const formRef = useRef<HTMLFormElement>(null);
+
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form className="flex gap-2" onSubmit={handleSubmit} ref={formRef}>
       <Textarea
-        value={input}
-        onChange={handleInputChange}
-        placeholder="Ask about your albums, photos, or trips..."
         className="min-h-[60px] resize-none"
         disabled={isLoading}
+        onChange={handleInputChange}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
-            handleSubmit(e as any)
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            formRef.current?.requestSubmit();
           }
         }}
+        placeholder={t("placeholder")}
+        value={input}
       />
       <Button
-        type="submit"
-        size="icon"
+        className="h-[60px] w-[60px] shrink-0"
         disabled={isLoading || !input.trim()}
-        className="h-[60px] w-[60px] flex-shrink-0"
+        size="icon"
+        type="submit"
       >
         <Send className="h-4 w-4" />
       </Button>
     </form>
-  )
+  );
 }

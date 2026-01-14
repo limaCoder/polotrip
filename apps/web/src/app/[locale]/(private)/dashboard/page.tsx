@@ -53,19 +53,19 @@ export default async function DashboardPage({
       <Header />
 
       <main className="flex min-h-screen flex-col bg-background">
-        <section className="flex-grow bg-secondary/5 pt-24 pb-8 lg:pt-12">
+        <section className="grow bg-secondary/5 pt-24 pb-8 lg:pt-12">
           <div className="container mx-auto px-4 lg:px-9">
             <div className="flex flex-col gap-9">
               <div className="flex items-center gap-4 border-b pb-2">
                 <Link
+                  className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
                   href="/dashboard"
-                  className="flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
                   {t("my_albums")}
                 </Link>
                 <Link
+                  className="flex items-center gap-2 rounded-md px-4 py-2 transition-colors hover:bg-muted"
                   href="/dashboard/chat"
-                  className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-muted transition-colors"
                 >
                   <MessageSquare className="h-4 w-4" />
                   {t("chat")}
@@ -92,7 +92,7 @@ export default async function DashboardPage({
                   <Suspense
                     fallback={
                       <SkeletonList
-                        className="h-[256px] w-[100%] rounded-2xl shadow-md"
+                        className="h-[256px] w-full rounded-2xl shadow-md"
                         count={3}
                       />
                     }
