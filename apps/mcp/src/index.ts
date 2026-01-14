@@ -1,15 +1,17 @@
 /** biome-ignore-all lint/suspicious/noConsole: we are using console for logging */
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { fastify } from "fastify";
 import { z } from "zod";
-import { env } from "./env.js";
-import { getAlbumByNameTool } from "./tools/get-album-by-name.js";
-import { getAlbumPhotosTool } from "./tools/get-album-photos.js";
-import { getPhotosByDateTool } from "./tools/get-photos-by-date.js";
-import { getPhotosByLocationTool } from "./tools/get-photos-by-location.js";
-import { getTripStatsTool } from "./tools/get-trip-stats.js";
-import { getUserAlbumsTool } from "./tools/get-user-albums.js";
-import { tools } from "./tools/index.js";
+import { env } from "./env";
+import { getAlbumByNameTool } from "./tools/get-album-by-name";
+import { getAlbumPhotosTool } from "./tools/get-album-photos";
+import { getPhotosByDateTool } from "./tools/get-photos-by-date";
+import { getPhotosByLocationTool } from "./tools/get-photos-by-location";
+import { getTripStatsTool } from "./tools/get-trip-stats";
+import { getUserAlbumsTool } from "./tools/get-user-albums";
+import { tools } from "./tools/index";
 
 const server = new McpServer({
   name: "polotrip-mcp",
@@ -291,27 +293,75 @@ server.registerTool(
   }
 );
 
-// Start server with stdio transport
 async function main() {
   console.error("Starting Polotrip MCP Server...");
   console.error(`Environment: ${env.NODE_ENV || "development"}`);
   console.error(`Available tools: ${tools.length}`);
+  console.error(`Port: ${env.PORT}`);
 
-  const transport = new StdioServerTransport();
+  const app = fastify({
+    logger: true,
+  });
+
+  // IMPORTANT: Streamable HTTP transport is stateful per server instance.
+  // Create ONE transport and connect it ONCE, then delegate each HTTP request via handleRequest().
+  const transport = new StreamableHTTPServerTransport({
+    // Stateful mode (server generates session id). If you want stateless, set sessionIdGenerator: undefined.
+    sessionIdGenerator: () => crypto.randomUUID(),
+  });
+
   await server.connect(transport);
 
-  console.error("MCP Server ready and listening on stdio");
-  console.error(
-    "Tools available:",
-    [
-      getUserAlbumsTool.name,
-      getAlbumPhotosTool.name,
-      getPhotosByDateTool.name,
-      getPhotosByLocationTool.name,
-      getTripStatsTool.name,
-      getAlbumByNameTool.name,
-    ].join(", ")
-  );
+  // MCP endpoint - Streamable HTTP transport (single endpoint, handles GET/POST/DELETE)
+  app.all("/mcp", async (request, reply) => {
+    reply.header("Access-Control-Allow-Origin", "*");
+    reply.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    reply.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Mcp-Session-Id"
+    );
+
+    if (request.method === "OPTIONS") {
+      reply.code(200).send();
+      return;
+    }
+
+    // Let the transport write the response
+    reply.hijack();
+
+    // Fastify may parse JSON; pass parsed body when available.
+    // For GET/DELETE, body is undefined.
+    await transport.handleRequest(
+      request.raw,
+      reply.raw,
+      (request.body as unknown) ?? undefined
+    );
+  });
+
+  app.get("/health", async () => {
+    return { status: "ok", tools: tools.length };
+  });
+
+  try {
+    await app.listen({ port: env.PORT, host: "0.0.0.0" });
+    console.error(
+      `MCP Server ready and listening on http://localhost:${env.PORT}`
+    );
+    console.error(
+      "Tools available:",
+      [
+        getUserAlbumsTool.name,
+        getAlbumPhotosTool.name,
+        getPhotosByDateTool.name,
+        getPhotosByLocationTool.name,
+        getTripStatsTool.name,
+        getAlbumByNameTool.name,
+      ].join(", ")
+    );
+  } catch (error) {
+    console.error("MCP HTTP server error:", error);
+    process.exit(1);
+  }
 }
 
 main().catch((error) => {

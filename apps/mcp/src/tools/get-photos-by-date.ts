@@ -13,7 +13,8 @@ const inputSchema = z.object({
 
 export const getPhotosByDateTool: MCPTool = {
   name: "getPhotosByDate",
-  description: "Get photos from an album by specific date",
+  description:
+    "Get photos from an album by specific date (YYYY-MM-DD format). Use this when the user asks for photos from a specific date (e.g., 'fotos de 15 de abril', 'fotos do dia X'). Requires albumId and date. Returns photos from that date with images and metadata.",
   inputSchema: {
     type: "object",
     properties: {

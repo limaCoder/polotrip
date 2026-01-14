@@ -12,7 +12,8 @@ const inputSchema = z.object({
 
 export const getAlbumPhotosTool: MCPTool = {
   name: "getAlbumPhotos",
-  description: "Get photos from a specific album",
+  description:
+    "Get photos from a specific album. Use this when the user asks to see photos from an album (e.g., 'me mostre as fotos do álbum X', 'quero ver as fotos'). Requires albumId (get it from getUserAlbums or getAlbumByName first). Returns album info and an array of photos with images, descriptions, locations, and dates.",
   inputSchema: {
     type: "object",
     properties: {

@@ -1,6 +1,6 @@
 import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
-import { and, eq, ilike } from "drizzle-orm";
+import { and, eq, ilike, or } from "drizzle-orm";
 import { z } from "zod";
 import type { MCPTool } from "../types.js";
 
@@ -13,7 +13,8 @@ const inputSchema = z.object({
 
 export const getPhotosByLocationTool: MCPTool = {
   name: "getPhotosByLocation",
-  description: "Get photos from an album by location name",
+  description:
+    "Get photos from an album by searching in location name AND description fields (case-insensitive partial match). CRITICAL: The description field is often more important than locationName as it contains detailed information about places, people, situations, and moments. Use this when the user asks for photos from a specific location, person, situation, or moment (e.g., 'Praia de Poá', 'Congonhas', 'avião', 'Vivi', 'aeroporto', etc.). Requires albumId and search term. Returns photos matching the term in either locationName or description with images, descriptions, and metadata.",
   inputSchema: {
     type: "object",
     properties: {
@@ -21,7 +22,8 @@ export const getPhotosByLocationTool: MCPTool = {
       userId: { type: "string", description: "User ID (for authorization)" },
       location: {
         type: "string",
-        description: "Location name to search for (case-insensitive)",
+        description:
+          "Search term to find in location name or description (case-insensitive). Can be a place name, person name, situation, or moment description.",
       },
       limit: {
         type: "number",
@@ -51,7 +53,8 @@ export const getPhotosByLocationTool: MCPTool = {
       };
     }
 
-    // Get photos for the specified location
+    // Get photos matching the search term in locationName OR description
+    // The description field is critical as it often contains more detailed information
     const albumPhotos = await db
       .select({
         id: photos.id,
@@ -67,7 +70,10 @@ export const getPhotosByLocationTool: MCPTool = {
       .where(
         and(
           eq(photos.albumId, albumId),
-          ilike(photos.locationName, `%${location}%`)
+          or(
+            ilike(photos.locationName, `%${location}%`),
+            ilike(photos.description, `%${location}%`)
+          )
         )
       )
       .limit(limit);

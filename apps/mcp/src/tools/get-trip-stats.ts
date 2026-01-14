@@ -12,7 +12,7 @@ const inputSchema = z.object({
 export const getTripStatsTool: MCPTool = {
   name: "getTripStats",
   description:
-    "Get statistics about a trip album (total photos, locations visited, date range)",
+    "Get statistics about a trip album (total photos, locations visited, date range). Use this when the user asks for statistics, counts, or summaries about a trip (e.g., 'quantas fotos', 'quais locais visitamos', 'estatísticas da viagem'). Requires albumId. Returns a statistics card with total photos, photos with location data, unique locations, and date range.",
   inputSchema: {
     type: "object",
     properties: {
