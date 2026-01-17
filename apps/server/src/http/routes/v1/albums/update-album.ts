@@ -155,7 +155,7 @@ export const updateAlbumRoute: FastifyPluginAsyncZod = async (app) => {
 
         return result;
       } catch (error) {
-        app.log.error("Error updating album:", error);
+        app.log.error({ err: error }, "Error updating album:");
 
         return reply.status(500).send({
           success: false,

@@ -101,7 +101,7 @@ const createCheckoutRoute: FastifyPluginAsyncZod = async (app) => {
 
         return { payment, checkoutSession };
       } catch (error) {
-        app.log.error("Error when creating checkout session:", error);
+        app.log.error({ err: error }, "Error when creating checkout session:");
 
         reply.status(500).send({ error: "Failed to process the request." });
       }

@@ -61,7 +61,7 @@ const getAlbumsRoute: FastifyPluginAsyncZod = async (app) => {
 
         return result;
       } catch (error) {
-        app.log.error("Error when searching for albums:", error);
+        app.log.error({ err: error }, "Error when searching for albums:");
 
         reply.status(500).send({ error: "Failed to process the request." });
       }

@@ -89,7 +89,7 @@ export const getUploadUrlsRoute: FastifyPluginAsyncZod = async (app) => {
           throw error;
         }
       } catch (error) {
-        app.log.error("Error creating signed URLs:", error);
+        app.log.error({ err: error }, "Error creating signed URLs:");
         reply.status(500).send({ error: "Failed to generate signed URLs" });
       }
     }
