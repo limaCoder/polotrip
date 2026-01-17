@@ -1,3 +1,5 @@
+import type { z } from "zod";
+
 export type MCPTool = {
   name: string;
   description: string;
@@ -13,3 +15,5 @@ export type MCPTool = {
     }>;
   }>;
 };
+
+export type RegisterableMcpTool = MCPTool & { zodInputSchema: z.ZodType };

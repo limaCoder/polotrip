@@ -2,16 +2,17 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { and, eq, ilike, or } from "drizzle-orm";
 import { z } from "zod";
-import type { MCPTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types.js";
 
-const inputSchema = z.object({
-  albumId: z.string(),
-  userId: z.string(),
-  location: z.string(),
-  limit: z.number().optional().default(20),
+export const zodInputSchema = z.object({
+  albumId: z.string().describe("Album ID"),
+  userId: z.string().describe("User ID (for authorization)"),
+  location: z.string().describe("Location name to filter photos"),
+  limit: z.number().optional().default(50).describe("Max photos to return"),
 });
 
-export const getPhotosByLocationTool: MCPTool = {
+export const getPhotosByLocationTool: RegisterableMcpTool = {
+  zodInputSchema,
   name: "getPhotosByLocation",
   description:
     "Get photos from an album by searching in location name AND description fields (case-insensitive partial match). CRITICAL: The description field is often more important than locationName as it contains detailed information about places, people, situations, and moments. Use this when the user asks for photos from a specific location, person, situation, or moment (e.g., 'Praia de Poá', 'Congonhas', 'avião', 'Vivi', 'aeroporto', etc.). Requires albumId and search term. Returns photos matching the term in either locationName or description with images, descriptions, and metadata.",
@@ -34,7 +35,7 @@ export const getPhotosByLocationTool: MCPTool = {
     required: ["albumId", "userId", "location"],
   },
   handler: async (params: unknown) => {
-    const { albumId, userId, location, limit } = inputSchema.parse(params);
+    const { albumId, userId, location, limit } = zodInputSchema.parse(params);
 
     const album = await db
       .select()
@@ -53,8 +54,6 @@ export const getPhotosByLocationTool: MCPTool = {
       };
     }
 
-    // Get photos matching the search term in locationName OR description
-    // The description field is critical as it often contains more detailed information
     const albumPhotos = await db
       .select({
         id: photos.id,

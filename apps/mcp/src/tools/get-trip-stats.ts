@@ -2,14 +2,15 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import type { MCPTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types.js";
 
-const inputSchema = z.object({
-  albumId: z.string(),
-  userId: z.string(),
+export const zodInputSchema = z.object({
+  albumId: z.string().describe("Album ID"),
+  userId: z.string().describe("User ID (for authorization)"),
 });
 
-export const getTripStatsTool: MCPTool = {
+export const getTripStatsTool: RegisterableMcpTool = {
+  zodInputSchema,
   name: "getTripStats",
   description:
     "Get statistics about a trip album (total photos, locations visited, date range). Use this when the user asks for statistics, counts, or summaries about a trip (e.g., 'quantas fotos', 'quais locais visitamos', 'estatísticas da viagem'). Requires albumId. Returns a statistics card with total photos, photos with location data, unique locations, and date range.",
@@ -22,7 +23,7 @@ export const getTripStatsTool: MCPTool = {
     required: ["albumId", "userId"],
   },
   handler: async (params: unknown) => {
-    const { albumId, userId } = inputSchema.parse(params);
+    const { albumId, userId } = zodInputSchema.parse(params);
 
     const album = await db
       .select()

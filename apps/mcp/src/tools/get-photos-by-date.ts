@@ -2,16 +2,17 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { and, eq, like } from "drizzle-orm";
 import { z } from "zod";
-import type { MCPTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types.js";
 
-const inputSchema = z.object({
-  albumId: z.string(),
-  userId: z.string(),
-  date: z.string(), // ISO date string (YYYY-MM-DD)
-  limit: z.number().optional().default(20),
+export const zodInputSchema = z.object({
+  albumId: z.string().describe("Album ID"),
+  userId: z.string().describe("User ID (for authorization)"),
+  date: z.string().describe("Date to filter photos (YYYY-MM-DD format)"),
+  limit: z.number().optional().default(50).describe("Max photos to return"),
 });
 
-export const getPhotosByDateTool: MCPTool = {
+export const getPhotosByDateTool: RegisterableMcpTool = {
+  zodInputSchema,
   name: "getPhotosByDate",
   description:
     "Get photos from an album by specific date (YYYY-MM-DD format). Use this when the user asks for photos from a specific date (e.g., 'fotos de 15 de abril', 'fotos do dia X'). Requires albumId and date. Returns photos from that date with images and metadata.",
@@ -33,7 +34,7 @@ export const getPhotosByDateTool: MCPTool = {
     required: ["albumId", "userId", "date"],
   },
   handler: async (params: unknown) => {
-    const { albumId, userId, date, limit } = inputSchema.parse(params);
+    const { albumId, userId, date, limit } = zodInputSchema.parse(params);
 
     const album = await db
       .select()

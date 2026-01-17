@@ -2,15 +2,16 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
-import type { MCPTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types.js";
 
-const inputSchema = z.object({
-  albumId: z.string(),
-  userId: z.string(),
-  limit: z.number().optional().default(20),
+export const zodInputSchema = z.object({
+  albumId: z.string().describe("Album ID"),
+  userId: z.string().describe("User ID (for authorization)"),
+  limit: z.number().optional().default(20).describe("Max photos to return"),
 });
 
-export const getAlbumPhotosTool: MCPTool = {
+export const getAlbumPhotosTool: RegisterableMcpTool = {
+  zodInputSchema,
   name: "getAlbumPhotos",
   description:
     "Get photos from a specific album. Use this when the user asks to see photos from an album (e.g., 'me mostre as fotos do álbum X', 'quero ver as fotos'). Requires albumId (get it from getUserAlbums or getAlbumByName first). Returns album info and an array of photos with images, descriptions, locations, and dates.",
@@ -28,7 +29,7 @@ export const getAlbumPhotosTool: MCPTool = {
     required: ["albumId", "userId"],
   },
   handler: async (params: unknown) => {
-    const { albumId, userId, limit } = inputSchema.parse(params);
+    const { albumId, userId, limit } = zodInputSchema.parse(params);
 
     const album = await db
       .select()
