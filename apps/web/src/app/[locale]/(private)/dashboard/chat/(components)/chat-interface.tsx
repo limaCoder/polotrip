@@ -7,8 +7,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { env } from "@/lib/env";
+import { useChatRateLimit } from "../(hooks)/use-chat-rate-limit";
 import { ChatInput } from "./ChatInput";
 import { ChatMessage } from "./ChatMessage";
+import { RateLimitBanner } from "./RateLimitBanner";
 
 export function ChatInterface() {
   const t = useTranslations("Chat.interface");
@@ -27,6 +29,7 @@ export function ChatInterface() {
     transport,
   });
 
+  const rateLimit = useChatRateLimit(error || null);
   const isLoading = status === "submitted" || status === "streaming";
   const [input, setInput] = useState("");
 
@@ -53,7 +56,7 @@ export function ChatInterface() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || rateLimit.isLimited) return;
     sendMessage({ text: input });
     setInput("");
   };
@@ -81,21 +84,28 @@ export function ChatInterface() {
             )}
           </div>
         )}
-        {error && (
+        {error && !rateLimit.isLimited && (
           <div className="mt-4 rounded-md bg-destructive/10 p-3 text-destructive text-sm">
             {t("error")}: {error.message}
           </div>
         )}
       </ScrollArea>
 
-      <div className="border-t p-4">
+      <div className="space-y-3 border-t p-4">
+        <RateLimitBanner
+          isLimited={rateLimit.isLimited}
+          limit={rateLimit.limit}
+          remaining={rateLimit.remaining}
+          resetAt={rateLimit.resetAt}
+          timeUntilReset={rateLimit.timeUntilReset}
+        />
         <ChatInput
           handleInputChange={(e) => {
             setInput(e.currentTarget.value);
           }}
           handleSubmit={handleSubmit}
           input={input}
-          isLoading={isLoading}
+          isLoading={isLoading || rateLimit.isLimited}
         />
       </div>
     </div>

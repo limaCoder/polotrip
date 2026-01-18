@@ -979,6 +979,17 @@
       "search_results": "Resultados da busca por \"{query}\"",
       "albums_found": "{count} álbuns encontrados",
       "no_albums_found": "Nenhum álbum encontrado correspondendo a \"{query}\""
+    },
+    "rate_limit": {
+      "title": "Limite de Prompts Diários",
+      "limit_reached": "Você atingiu o limite de 15 prompts por dia",
+      "prompts_remaining": "{count} prompts restantes hoje",
+      "prompts_remaining_one": "1 prompt restante hoje",
+      "resets_at": "Limite reseta em {time}",
+      "resets_tomorrow": "Limite reseta amanhã à meia-noite",
+      "try_again_later": "Tente novamente mais tarde",
+      "daily_limit": "Limite diário: {current}/{limit}",
+      "almost_limit": "Você está próximo do limite diário"
     }
   }
 }

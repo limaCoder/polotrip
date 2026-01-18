@@ -7,8 +7,9 @@ import {
   convertUiMessagesToApiFormat,
   validateChatRequest,
 } from "@/app/helpers/ai/message-utils";
+import { checkChatRateLimit } from "@/app/helpers/rate-limit/chat-rate-limit";
 import { uiMessageSchema } from "@/app/schemas/ai";
-import { UnauthorizedError } from "@/http/errors";
+import { ChatRateLimitExceededError, UnauthorizedError } from "@/http/errors";
 import { authenticate } from "@/http/middlewares/authenticate";
 
 const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
@@ -33,6 +34,26 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
 
         if (!session) {
           throw new UnauthorizedError();
+        }
+
+        const rateLimit = await checkChatRateLimit(session.user.id);
+
+        reply.raw.setHeader("X-RateLimit-Limit", String(rateLimit.limit));
+        reply.raw.setHeader(
+          "X-RateLimit-Remaining",
+          String(rateLimit.remaining)
+        );
+        reply.raw.setHeader(
+          "X-RateLimit-Reset",
+          String(Math.floor(rateLimit.resetAt.getTime() / 1000))
+        );
+
+        if (!rateLimit.allowed) {
+          throw new ChatRateLimitExceededError(
+            rateLimit.remaining,
+            rateLimit.limit,
+            rateLimit.resetAt
+          );
         }
 
         const body = request.body as {
@@ -77,7 +98,10 @@ const chatStreamRoute: FastifyPluginAsyncZod = async (app) => {
           error instanceof Error ? error.message : String(error);
         app.log.error({ error: errorMessage }, "Error in chat stream");
 
-        if (error instanceof UnauthorizedError) {
+        if (
+          error instanceof UnauthorizedError ||
+          error instanceof ChatRateLimitExceededError
+        ) {
           throw error;
         }
 

@@ -81,6 +81,23 @@ class RedisService {
       // Cache pattern deletion failed, fail silently
     }
   }
+
+  async increment(key: string, ttl?: number): Promise<number> {
+    if (!this.isEnabled()) return 0;
+
+    try {
+      const exists = await this.redis!.exists(key);
+      const newValue = await this.redis!.incr(key);
+
+      if (exists === 0 && ttl) {
+        await this.redis!.expire(key, ttl);
+      }
+
+      return Number(newValue);
+    } catch {
+      return 0;
+    }
+  }
 }
 
 export const redisService = new RedisService();

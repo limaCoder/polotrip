@@ -979,6 +979,17 @@
       "search_results": "Search results for \"{query}\"",
       "albums_found": "{count} albums found",
       "no_albums_found": "No albums found matching \"{query}\""
+    },
+    "rate_limit": {
+      "title": "Daily Prompt Limit",
+      "limit_reached": "You've reached the daily limit of 15 prompts",
+      "prompts_remaining": "{count} prompts remaining today",
+      "prompts_remaining_one": "1 prompt remaining today",
+      "resets_at": "Limit resets at {time}",
+      "resets_tomorrow": "Limit resets tomorrow at midnight",
+      "try_again_later": "Please try again later",
+      "daily_limit": "Daily limit: {current}/{limit}",
+      "almost_limit": "You're approaching the daily limit"
     }
   }
 }
