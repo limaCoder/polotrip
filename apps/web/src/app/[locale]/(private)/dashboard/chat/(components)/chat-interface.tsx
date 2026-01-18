@@ -7,8 +7,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { env } from "@/lib/env";
-import { ChatInput } from "./chat-input";
-import { ChatMessage } from "./chat-message";
+import { ChatInput } from "./ChatInput";
+import { ChatMessage } from "./ChatMessage";
 
 export function ChatInterface() {
   const t = useTranslations("Chat.interface");
@@ -17,15 +17,15 @@ export function ChatInterface() {
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
-      api: `${env.NEXT_PUBLIC_API_URL}/api/v1/chat`,
-      credentials: "include",
+        api: `${env.NEXT_PUBLIC_API_URL}/api/v1/chat`,
+        credentials: "include",
       }),
     []
   );
 
   const { messages, sendMessage, status, error } = useChat<UIMessage>({
     transport,
-    });
+  });
 
   const isLoading = status === "submitted" || status === "streaming";
   const [input, setInput] = useState("");
@@ -39,7 +39,7 @@ export function ChatInterface() {
       );
       if (scrollContainer) {
         requestAnimationFrame(() => {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
         });
       }
     }

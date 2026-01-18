@@ -2,16 +2,10 @@
 
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { type ChangeEvent, type FormEvent, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-
-type ChatInputProps = {
-  input: string;
-  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  isLoading: boolean;
-};
+import type { ChatInputProps } from "./types";
 
 export function ChatInput({
   input,
