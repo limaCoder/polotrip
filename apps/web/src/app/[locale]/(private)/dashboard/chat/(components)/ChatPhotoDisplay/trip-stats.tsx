@@ -42,12 +42,40 @@ export function TripStats({ data }: TripStatsProps) {
     album: { title: string };
   };
 
+  const totalPhotos =
+    typeof dataWithStatsAndAlbum?.stats?.totalPhotos === "number"
+      ? (dataWithStatsAndAlbum?.stats?.totalPhotos ?? 0)
+      : 0;
+  const photosWithLocation =
+    typeof dataWithStatsAndAlbum?.stats?.photosWithLocation === "number"
+      ? (dataWithStatsAndAlbum?.stats?.photosWithLocation ?? 0)
+      : 0;
+  const uniqueLocations =
+    typeof dataWithStatsAndAlbum?.stats?.uniqueLocations === "number"
+      ? (dataWithStatsAndAlbum?.stats?.uniqueLocations ?? 0)
+      : 0;
+  const hasDateRange =
+    dataWithStatsAndAlbum?.stats?.dateRange &&
+    isRecord(dataWithStatsAndAlbum?.stats?.dateRange);
+
+  const hasSignificantData =
+    totalPhotos > 0 ||
+    photosWithLocation > 0 ||
+    uniqueLocations > 0 ||
+    hasDateRange;
+
+  if (!hasSignificantData) {
+    return null;
+  }
+
   return (
     <Card className="max-w-md">
       <CardHeader>
         <CardTitle className="text-base">
           {String(
-            t("trip_statistics", { title: dataWithStatsAndAlbum.album.title })
+            t("trip_statistics", {
+              title: dataWithStatsAndAlbum?.album?.title ?? "",
+            })
           )}
         </CardTitle>
       </CardHeader>
@@ -57,9 +85,7 @@ export function TripStats({ data }: TripStatsProps) {
             {String(t("total_photos"))}
           </span>
           <span className="font-bold text-lg text-primary">
-            {typeof dataWithStatsAndAlbum.stats.totalPhotos === "number"
-              ? dataWithStatsAndAlbum.stats.totalPhotos
-              : 0}
+            {totalPhotos ?? 0}
           </span>
         </div>
         <div className="flex items-center justify-between border-b py-2">
@@ -67,9 +93,7 @@ export function TripStats({ data }: TripStatsProps) {
             {String(t("with_location_data"))}
           </span>
           <span className="font-bold text-lg text-primary">
-            {typeof dataWithStatsAndAlbum.stats.photosWithLocation === "number"
-              ? dataWithStatsAndAlbum.stats.photosWithLocation
-              : 0}
+            {photosWithLocation ?? 0}
           </span>
         </div>
         <div className="flex items-center justify-between border-b py-2">
@@ -77,13 +101,11 @@ export function TripStats({ data }: TripStatsProps) {
             {String(t("unique_locations"))}
           </span>
           <span className="font-bold text-lg text-primary">
-            {typeof dataWithStatsAndAlbum.stats.uniqueLocations === "number"
-              ? dataWithStatsAndAlbum.stats.uniqueLocations
-              : 0}
+            {uniqueLocations ?? 0}
           </span>
         </div>
         {(() => {
-          const dateRange = dataWithStatsAndAlbum.stats.dateRange;
+          const dateRange = dataWithStatsAndAlbum?.stats?.dateRange;
           if (!dateRange) return null;
           if (!isRecord(dateRange)) return null;
           return (

@@ -12,11 +12,11 @@ export function SearchResults({ data }: SearchResultsProps) {
   const hasAlbumsProperty =
     isValidData &&
     "albums" in data &&
-    Array.isArray((data as { albums?: unknown }).albums);
+    Array.isArray((data as { albums?: unknown })?.albums ?? []);
   const hasQuery =
     isValidData &&
     "query" in data &&
-    typeof (data as { query?: unknown }).query === "string";
+    typeof (data as { query?: unknown })?.query === "string";
 
   const isValidSearchResults = hasAlbumsProperty && hasQuery;
 
@@ -30,38 +30,42 @@ export function SearchResults({ data }: SearchResultsProps) {
     count?: number;
   };
 
-  const albums = dataWithAlbums.albums.filter(isAlbumLike);
+  const albums = dataWithAlbums?.albums?.filter(isAlbumLike) ?? [];
+
+  if (albums?.length === 0) {
+    return null;
+  }
 
   return (
     <div className="space-y-4">
       <div className="border-b pb-3">
         <h3 className="font-semibold text-lg">
-          {t("search_results", { query: dataWithAlbums.query })}
+          {t("search_results", { query: dataWithAlbums?.query ?? "" })}
         </h3>
         <p className="text-muted-foreground text-sm">
           {t("albums_found", {
             count:
-              typeof dataWithAlbums.count === "number"
-                ? dataWithAlbums.count
-                : albums.length,
+              typeof dataWithAlbums?.count === "number"
+                ? dataWithAlbums?.count
+                : albums?.length,
           })}
         </p>
       </div>
-      {albums.length > 0 ? (
+      {albums?.length > 0 ? (
         <div className="grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-2">
-          {albums.slice(0, 6).map((album) => {
+          {albums?.slice(0, 6)?.map((album) => {
             const albumDate: string = (album?.date ??
               album?.createdAt ??
               "") as string;
             return (
               <AlbumCard
                 date={albumDate}
-                id={album.id}
+                id={album?.id ?? ""}
                 imageUrl={album?.coverImageUrl || ""}
-                key={album.id}
+                key={album?.id ?? ""}
                 photosCount={album?.photoCount || 0}
                 stepAfterPayment={album?.isPublished ? "published" : "upload"}
-                title={album?.title}
+                title={album?.title ?? ""}
               />
             );
           })}
