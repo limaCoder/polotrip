@@ -1,12 +1,16 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatDateReadable } from "@/utils/dates";
 import type { TripStatsProps } from "./types";
 import { isRecord } from "./utils";
 
 export function TripStats({ data }: TripStatsProps) {
   const t = useTranslations("Chat.photo_display");
+  const params = useParams();
+  const locale = (params?.locale as "pt" | "en") || "pt";
 
   const isValidData = isRecord(data);
   const hasStatsProperty =
@@ -34,26 +38,19 @@ export function TripStats({ data }: TripStatsProps) {
 
   const dataWithStatsAndAlbum = data as {
     stats: {
-      totalPhotos?: number;
-      photosWithLocation?: number;
-      uniqueLocations?: number;
+      totalPhotos?: number | string;
+      photosWithLocation?: number | string;
+      uniqueLocations?: number | string;
       dateRange?: { start?: string; end?: string };
     };
     album: { title: string };
   };
 
-  const totalPhotos =
-    typeof dataWithStatsAndAlbum?.stats?.totalPhotos === "number"
-      ? (dataWithStatsAndAlbum?.stats?.totalPhotos ?? 0)
-      : 0;
+  const totalPhotos = Number(dataWithStatsAndAlbum?.stats?.totalPhotos) || 0;
   const photosWithLocation =
-    typeof dataWithStatsAndAlbum?.stats?.photosWithLocation === "number"
-      ? (dataWithStatsAndAlbum?.stats?.photosWithLocation ?? 0)
-      : 0;
+    Number(dataWithStatsAndAlbum?.stats?.photosWithLocation) || 0;
   const uniqueLocations =
-    typeof dataWithStatsAndAlbum?.stats?.uniqueLocations === "number"
-      ? (dataWithStatsAndAlbum?.stats?.uniqueLocations ?? 0)
-      : 0;
+    Number(dataWithStatsAndAlbum?.stats?.uniqueLocations) || 0;
   const hasDateRange =
     dataWithStatsAndAlbum?.stats?.dateRange &&
     isRecord(dataWithStatsAndAlbum?.stats?.dateRange);
@@ -104,27 +101,29 @@ export function TripStats({ data }: TripStatsProps) {
             {uniqueLocations ?? 0}
           </span>
         </div>
-        {(() => {
-          const dateRange = dataWithStatsAndAlbum?.stats?.dateRange;
-          if (!dateRange) return null;
-          if (!isRecord(dateRange)) return null;
-          return (
-            <div className="space-y-1 pt-2">
-              <p className="font-medium text-muted-foreground text-xs">
-                {String(t("date_range"))}
-              </p>
-              <p className="text-sm">
-                {typeof dateRange.start === "string"
-                  ? new Date(dateRange.start).toLocaleDateString()
-                  : "N/A"}{" "}
-                -{" "}
-                {typeof dateRange.end === "string"
-                  ? new Date(dateRange.end).toLocaleDateString()
-                  : "N/A"}
-              </p>
-            </div>
-          );
-        })()}
+        {hasDateRange &&
+          (() => {
+            const dateRange = dataWithStatsAndAlbum?.stats?.dateRange;
+
+            if (!(dateRange && isRecord(dateRange))) return null;
+
+            return (
+              <div className="space-y-1 pt-2">
+                <p className="font-medium text-muted-foreground text-xs">
+                  {String(t("date_range"))}
+                </p>
+                <p className="text-sm">
+                  {typeof dateRange.start === "string"
+                    ? formatDateReadable(dateRange.start, locale)
+                    : "N/A"}{" "}
+                  -{" "}
+                  {typeof dateRange.end === "string"
+                    ? formatDateReadable(dateRange.end, locale)
+                    : "N/A"}
+                </p>
+              </div>
+            );
+          })()}
       </CardContent>
     </Card>
   );

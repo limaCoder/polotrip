@@ -1,12 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { formatDateReadable } from "@/utils/dates";
 import type { PhotosWithContextProps } from "./types";
 import { isPhotoLike, isRecord } from "./utils";
 
 export function PhotosWithContext({ data }: PhotosWithContextProps) {
   const t = useTranslations("Chat.photo_display");
+  const params = useParams();
+  const locale = (params?.locale as "pt" | "en") || "pt";
 
   const isValidData = isRecord(data);
   const hasPhotosProperty =
@@ -52,7 +56,8 @@ export function PhotosWithContext({ data }: PhotosWithContextProps) {
   if (hasLocation && dataWithLocation) {
     context = t("photos_at_location", { location: dataWithLocation.location });
   } else if (hasDate && dataWithDate) {
-    context = t("photos_on_date", { date: dataWithDate.date });
+    const formattedDate = formatDateReadable(dataWithDate.date, locale);
+    context = t("photos_on_date", { date: formattedDate });
   }
 
   if (hasAlbumInfo && dataWithAlbum) {

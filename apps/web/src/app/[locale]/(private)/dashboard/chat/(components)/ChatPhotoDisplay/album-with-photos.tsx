@@ -78,11 +78,6 @@ export function AlbumWithPhotos({ data }: AlbumWithPhotosProps) {
           </div>
         ))}
       </div>
-      {dataWithAlbum?.photos?.length > 12 && (
-        <p className="text-center text-muted-foreground text-sm">
-          {t("more_photos", { count: dataWithAlbum?.photos?.length - 12 })}
-        </p>
-      )}
     </div>
   );
 }

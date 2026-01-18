@@ -62,3 +62,24 @@ export const formatDateShort = (
     return "";
   }
 };
+
+/**
+ * Formats a date to display in a human-readable format
+ * Example (pt): "3 de abril de 2025"
+ * Example (en): "April 3, 2025"
+ */
+export const formatDateReadable = (
+  dateString: string | null | undefined,
+  locale: "pt" | "en"
+): string => {
+  if (!dateString) return "";
+
+  try {
+    const date = parseISO(dateString);
+    const formatString =
+      locale === "pt" ? "d 'de' MMMM 'de' yyyy" : "MMMM d, yyyy";
+    return format(date, formatString, { locale: locales[locale] });
+  } catch (_error) {
+    return dateString;
+  }
+};

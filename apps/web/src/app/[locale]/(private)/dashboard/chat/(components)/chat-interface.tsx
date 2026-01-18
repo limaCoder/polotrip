@@ -69,7 +69,7 @@ export function ChatInterface() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 pb-4">
             {messages.map((message: UIMessage) => (
               <ChatMessage key={message.id} message={message} />
             ))}
