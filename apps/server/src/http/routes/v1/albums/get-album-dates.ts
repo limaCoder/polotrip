@@ -67,7 +67,7 @@ export const getAlbumDatesRoute: FastifyPluginAsyncZod = async (app) => {
           throw error;
         }
       } catch (error) {
-        app.log.error("Error fetching album dates:", error);
+        app.log.error({ err: error }, "Error fetching album dates:");
         reply.status(500).send({ error: "Failed to fetch album dates" });
       }
     }

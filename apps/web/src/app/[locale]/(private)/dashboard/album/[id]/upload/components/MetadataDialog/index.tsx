@@ -67,13 +67,13 @@ export function MetadataDialog({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              className="bg-red-500 font-bold text-background transition-colors hover:bg-red-600"
+              className="bg-red-500 font-bold transition-colors hover:bg-red-600"
               onClick={handleShowConfirmRemoveDialog}
             >
               {t("initial_dialog.remove_button")}
             </AlertDialogCancel>
             <AlertDialogAction
-              className="bg-primary font-bold text-background"
+              className="bg-primary font-bold"
               onClick={handleKeepMetadata}
             >
               {t("initial_dialog.keep_button")}
@@ -106,13 +106,13 @@ export function MetadataDialog({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              className="bg-primary font-bold text-background transition-colors hover:bg-primary/90"
+              className="bg-primary font-bold transition-colors hover:bg-primary/90"
               onClick={handleCancelRemove}
             >
               {t("confirm_remove_dialog.cancel_button")}
             </AlertDialogCancel>
             <AlertDialogAction
-              className="bg-red-500 font-bold text-background transition-colors hover:bg-red-600"
+              className="bg-red-500 font-bold transition-colors hover:bg-red-600"
               onClick={handleConfirmRemove}
             >
               {t("confirm_remove_dialog.confirm_button")}

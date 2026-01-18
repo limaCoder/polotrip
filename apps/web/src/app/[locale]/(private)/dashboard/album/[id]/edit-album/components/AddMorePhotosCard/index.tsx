@@ -63,7 +63,7 @@ export function AddMorePhotosCard() {
 
       <Button
         aria-label={t("add_more_photos_button_aria")}
-        className="flex w-full items-center justify-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-background hover:bg-primary/90"
+        className="flex w-full items-center justify-center gap-2 rounded bg-primary px-8 py-3 font-body_two hover:bg-primary/90"
         disabled={isLoading || !albumSpace?.canUpload}
         onClick={handleAddMorePhotos}
       >

@@ -83,7 +83,7 @@ export const uploadPhotosRoute: FastifyPluginAsyncZod = async (app) => {
           throw error;
         }
       } catch (error) {
-        app.log.error("Error saving uploaded photos:", error);
+        app.log.error({ err: error }, "Error saving uploaded photos:");
         reply.status(500).send({ error: "Failed to process the request." });
       }
     }

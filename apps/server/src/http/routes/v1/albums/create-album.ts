@@ -78,7 +78,7 @@ export const createAlbumRoute: FastifyPluginAsyncZod = async (app) => {
 
         return reply.status(201).send({ album });
       } catch (error) {
-        app.log.error("Error when creating album:", error);
+        app.log.error({ err: error }, "Error when creating album:");
 
         reply.status(500).send({ error: "Failed to process the request." });
       }

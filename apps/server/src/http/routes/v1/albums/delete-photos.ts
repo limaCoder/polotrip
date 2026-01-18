@@ -79,7 +79,7 @@ export const deletePhotosRoute: FastifyPluginAsyncZod = async (app) => {
           throw error;
         }
       } catch (error) {
-        app.log.error("Error deleting photos:", error);
+        app.log.error({ err: error }, "Error deleting photos:");
         reply.status(500).send({ error: "Failed to delete photos" });
       }
     }

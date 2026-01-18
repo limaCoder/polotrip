@@ -182,6 +182,8 @@
     },
     "title": "My albums",
     "subtitle": "Manage and share your travel memories",
+    "my_albums": "My Albums",
+    "chat": "AI Assistant",
     "create_album_button_aria": "Create new album",
     "create_album_button": "Create new album",
     "onboarding": {
@@ -933,5 +935,61 @@
     "title": "Album not found",
     "description": "The album you are looking for does not exist.",
     "back_to_dashboard": "Go back to dashboard"
+  },
+  "Chat": {
+    "metadata": {
+      "title": "AI Assistant | Polotrip",
+      "description": "Chat with AI about your travel albums and photos"
+    },
+    "title": "AI Assistant",
+    "subtitle": "Ask me anything about your albums and photos",
+    "interface": {
+      "start_conversation": "Start a conversation",
+      "start_conversation_description": "Ask me about your albums, photos, or trip statistics!",
+      "ai_thinking": "AI is thinking...",
+      "error_sending": "Failed to send message. Please try again.",
+      "error": "Error"
+    },
+    "input": {
+      "placeholder": "Ask about your albums, photos, or trips..."
+    },
+    "message": {
+      "fetching_albums": "Fetching your albums...",
+      "loading_photos": "Loading photos...",
+      "calculating_stats": "Calculating statistics...",
+      "searching_by_date": "Searching photos by date...",
+      "finding_by_location": "Finding photos by location...",
+      "searching_albums": "Searching albums...",
+      "working": "Working..."
+    },
+    "photo_display": {
+      "more_albums": "+{count} more albums",
+      "photos_in_album": "{count} photos in this album",
+      "no_photos_found": "No photos found in this album",
+      "photos_on_date": "Photos on {date}",
+      "photos_at_location": "Photos at {location}",
+      "photos_found": "{count} photos found",
+      "no_photos_found_context": "No photos found {context}",
+      "more_photos": "+{count} more photos",
+      "trip_statistics": "Trip Statistics: {title}",
+      "total_photos": "Total Photos",
+      "with_location_data": "With Location Data",
+      "unique_locations": "Unique Locations",
+      "date_range": "Date Range",
+      "search_results": "Search results for \"{query}\"",
+      "albums_found": "{count} albums found",
+      "no_albums_found": "No albums found matching \"{query}\""
+    },
+    "rate_limit": {
+      "title": "Daily Prompt Limit",
+      "limit_reached": "You've reached the daily limit of 15 prompts",
+      "prompts_remaining": "{count} prompts remaining today",
+      "prompts_remaining_one": "1 prompt remaining today",
+      "resets_at": "Limit resets at {time}",
+      "resets_tomorrow": "Limit resets tomorrow at midnight",
+      "try_again_later": "Please try again later",
+      "daily_limit": "Daily limit: {current}/{limit}",
+      "almost_limit": "You're approaching the daily limit"
+    }
   }
 }

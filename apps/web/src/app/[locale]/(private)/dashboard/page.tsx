@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { MessageSquare, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -14,6 +14,7 @@ import { Header } from "@/components/Header";
 import { SkeletonList } from "@/components/SkeletonList";
 import { NetworkKeys } from "@/hooks/network/keys";
 import { getAlbums } from "@/http/get-albums";
+import { Link } from "@/i18n/routing";
 import { InstallPwaModalWrapper } from "./(components)/install-pwa-modal-wrapper";
 import { OnboardingModalWrapper } from "./(components)/onboarding-modal-wrapper";
 
@@ -52,9 +53,25 @@ export default async function DashboardPage({
       <Header />
 
       <main className="flex min-h-screen flex-col bg-background">
-        <section className="flex-grow bg-secondary/5 pt-24 pb-8 lg:pt-12">
+        <section className="grow bg-secondary/5 pt-24 pb-8 lg:pt-12">
           <div className="container mx-auto px-4 lg:px-9">
             <div className="flex flex-col gap-9">
+              <div className="flex items-center gap-4 border-b pb-2">
+                <Link
+                  className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+                  href="/dashboard"
+                >
+                  {t("my_albums")}
+                </Link>
+                <Link
+                  className="flex items-center gap-2 rounded-md px-4 py-2 transition-colors hover:bg-muted"
+                  href="/dashboard/chat"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  {t("chat")}
+                </Link>
+              </div>
+
               <div className="items-left flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div>
                   <h1 className="font-title_two">{t("title")}</h1>
@@ -62,7 +79,7 @@ export default async function DashboardPage({
                 </div>
                 <ButtonNavigation
                   aria-label={t("create_album_button_aria")}
-                  className="flex items-center gap-2 bg-primary px-8 py-4 text-background shadow-lg hover:brightness-105 dark:text-white"
+                  className="flex items-center gap-2 bg-primary px-8 py-4 shadow-lg hover:brightness-105"
                   href="/dashboard/create-album"
                 >
                   <Plus color="#F7FCFD" size={24} />
@@ -75,7 +92,7 @@ export default async function DashboardPage({
                   <Suspense
                     fallback={
                       <SkeletonList
-                        className="h-[256px] w-[100%] rounded-2xl shadow-md"
+                        className="h-[256px] w-full rounded-2xl shadow-md"
                         count={3}
                       />
                     }

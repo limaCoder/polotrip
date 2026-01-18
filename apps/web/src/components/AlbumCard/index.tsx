@@ -65,12 +65,12 @@ export function AlbumCard({
           >
             {albumStatusLabel}
           </span>
-          <div className="z-10 flex flex-col items-start bg-gradient-to-t from-black/70 to-transparent p-3 pb-2">
-            <h3 className="font-bold font-title_three text-background dark:text-white">
+          <div className="z-10 flex flex-col items-start bg-linear-to-t from-black/70 to-transparent p-3 pb-2">
+            <h3 className="font-bold font-title_three text-primary-foreground">
               {title}
             </h3>
             <div className="flex w-full justify-between">
-              <span className="font-body_two text-background dark:text-white">
+              <span className="font-body_two text-primary-foreground">
                 {(() => {
                   const dateString = new Date(date).toLocaleDateString(locale, {
                     month: "long",

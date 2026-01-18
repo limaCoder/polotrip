@@ -137,6 +137,16 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 - Use `<>...</>` instead of `<Fragment>...</Fragment>`.
 - Watch out for possible "wrong" semicolons inside JSX elements.
 
+### Component Organization
+
+- **Componentes com definição de tipos**: Criar pasta com nome do componente em PascalCase
+  - `index.tsx`: Contém apenas a UI do componente
+  - `types.ts`: Concentra todos os tipos do componente
+- **Componentes apenas UI (sem tipos próprios)**: Manter como arquivo kebab-case sem pasta
+- **Sub-componentes dentro de pastas**: Sempre usar kebab-case (ex: `tool-display.tsx`, `albums-grid.tsx`)
+- **PascalCase apenas para pastas**: Usar PascalCase somente quando o componente precisar de `types.ts` ou outros arquivos além do `index.tsx`
+- **Componentes grandes com condicionais**: Separar em sub-componentes dedicados com early returns para renderizações condicionais
+
 ### Custom Hooks and Logic Separation
 
 - **ALWAYS separate complex logic from React components into custom hooks**.

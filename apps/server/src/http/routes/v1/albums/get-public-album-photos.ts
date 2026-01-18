@@ -66,7 +66,10 @@ const getPublicAlbumPhotosRoute: FastifyPluginAsyncZod = async (app) => {
 
         return result;
       } catch (error) {
-        app.log.error("Error when fetching public album photos:", error);
+        app.log.error(
+          { err: error },
+          "Error when fetching public album photos:"
+        );
 
         if (error instanceof Error && error.message === "Album not found") {
           return reply.status(404).send({ error: "Album not found" });

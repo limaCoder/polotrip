@@ -64,6 +64,13 @@
       "when": 1762461857400,
       "tag": "0008_faulty_sally_floyd",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1763327533304,
+      "tag": "0009_add_gin_indexes_for_text_search",
+      "breakpoints": true
     }
   ]
 }

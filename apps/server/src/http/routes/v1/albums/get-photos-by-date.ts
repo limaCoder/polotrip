@@ -103,7 +103,7 @@ export const getPhotosByDateRoute: FastifyPluginAsyncZod = async (app) => {
           throw error;
         }
       } catch (error) {
-        app.log.error("Error fetching photos by date:", error);
+        app.log.error({ err: error }, "Error fetching photos by date:");
         reply.status(500).send({ error: "Failed to fetch photos" });
       }
     }

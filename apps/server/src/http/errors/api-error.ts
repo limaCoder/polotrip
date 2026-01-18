@@ -70,6 +70,21 @@ export class TooManyRequestsError extends ApiError {
   }
 }
 
+export class ChatRateLimitExceededError extends TooManyRequestsError {
+  constructor(remaining: number, limit: number, resetAt: Date) {
+    super(
+      "You have reached the daily limit of prompts. Please try again tomorrow.",
+      "CHAT_RATE_LIMIT_EXCEEDED",
+      {
+        remaining,
+        limit,
+        resetAt: resetAt.toISOString(),
+      }
+    );
+    this.name = "ChatRateLimitExceededError";
+  }
+}
+
 export class InternalServerError extends ApiError {
   constructor(
     message = "Internal server error",

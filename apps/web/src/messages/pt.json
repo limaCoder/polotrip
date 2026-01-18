@@ -182,6 +182,8 @@
     },
     "title": "Meus álbuns",
     "subtitle": "Gerencie e compartilhe suas memórias de viagem",
+    "my_albums": "Meus Álbuns",
+    "chat": "Assistente IA",
     "create_album_button_aria": "Criar novo álbum",
     "create_album_button": "Criar novo álbum",
     "onboarding": {
@@ -933,5 +935,61 @@
     "title": "Álbum não encontrado",
     "description": "O álbum que você está procurando não existe.",
     "back_to_dashboard": "Voltar para o dashboard"
+  },
+  "Chat": {
+    "metadata": {
+      "title": "Assistente IA | Polotrip",
+      "description": "Converse com a IA sobre seus álbuns e fotos de viagem"
+    },
+    "title": "Assistente IA",
+    "subtitle": "Pergunte-me qualquer coisa sobre seus álbuns e fotos",
+    "interface": {
+      "start_conversation": "Inicie uma conversa",
+      "start_conversation_description": "Pergunte-me sobre seus álbuns, fotos ou estatísticas de viagem!",
+      "ai_thinking": "IA está pensando...",
+      "error_sending": "Falha ao enviar mensagem. Por favor, tente novamente.",
+      "error": "Erro"
+    },
+    "input": {
+      "placeholder": "Pergunte sobre seus álbuns, fotos ou viagens..."
+    },
+    "message": {
+      "fetching_albums": "Buscando seus álbuns...",
+      "loading_photos": "Carregando fotos...",
+      "calculating_stats": "Calculando estatísticas...",
+      "searching_by_date": "Buscando fotos por data...",
+      "finding_by_location": "Procurando fotos por localização...",
+      "searching_albums": "Buscando álbuns...",
+      "working": "Trabalhando..."
+    },
+    "photo_display": {
+      "more_albums": "+{count} mais álbuns",
+      "photos_in_album": "{count} fotos neste álbum",
+      "no_photos_found": "Nenhuma foto encontrada neste álbum",
+      "photos_on_date": "Fotos em {date}",
+      "photos_at_location": "Fotos em {location}",
+      "photos_found": "{count} fotos encontradas",
+      "no_photos_found_context": "Nenhuma foto encontrada {context}",
+      "more_photos": "+{count} mais fotos",
+      "trip_statistics": "Estatísticas da Viagem: {title}",
+      "total_photos": "Total de Fotos",
+      "with_location_data": "Com Dados de Localização",
+      "unique_locations": "Localizações Únicas",
+      "date_range": "Intervalo de Datas",
+      "search_results": "Resultados da busca por \"{query}\"",
+      "albums_found": "{count} álbuns encontrados",
+      "no_albums_found": "Nenhum álbum encontrado correspondendo a \"{query}\""
+    },
+    "rate_limit": {
+      "title": "Limite de Prompts Diários",
+      "limit_reached": "Você atingiu o limite de 15 prompts por dia",
+      "prompts_remaining": "{count} prompts restantes hoje",
+      "prompts_remaining_one": "1 prompt restante hoje",
+      "resets_at": "Limite reseta em {time}",
+      "resets_tomorrow": "Limite reseta amanhã à meia-noite",
+      "try_again_later": "Tente novamente mais tarde",
+      "daily_limit": "Limite diário: {current}/{limit}",
+      "almost_limit": "Você está próximo do limite diário"
+    }
   }
 }

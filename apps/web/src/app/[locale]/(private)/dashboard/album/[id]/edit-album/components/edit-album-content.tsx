@@ -167,7 +167,7 @@ export function EditAlbumContent() {
             <Button
               aria-label={t("publish_album_button_aria")}
               className={cn(
-                "flex items-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-background hover:bg-primary/90",
+                "flex items-center gap-2 rounded bg-primary px-8 py-3 font-body_two hover:bg-primary/90",
                 isGlobalLoading && "cursor-not-allowed opacity-50"
               )}
               disabled={isGlobalLoading}
