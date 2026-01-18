@@ -2,7 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { and, eq, ilike, or } from "drizzle-orm";
 import { z } from "zod";
-import type { RegisterableMcpTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types";
 
 export const zodInputSchema = z.object({
   albumId: z.string().describe("Album ID"),

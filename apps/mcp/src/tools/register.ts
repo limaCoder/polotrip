@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { RegisterableMcpTool } from "../types.js";
-import { tools } from "./index.js";
+import type { RegisterableMcpTool } from "../types";
+import { tools } from "./index";
 
 function createMcpToolHandler(tool: RegisterableMcpTool) {
   return async (params: unknown) => {

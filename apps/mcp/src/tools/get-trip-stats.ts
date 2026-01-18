@@ -2,7 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import type { RegisterableMcpTool } from "../types.js";
+import type { RegisterableMcpTool } from "../types";
 
 export const zodInputSchema = z.object({
   albumId: z.string().describe("Album ID"),
@@ -44,9 +44,15 @@ export const getTripStatsTool: RegisterableMcpTool = {
 
     const stats = await db
       .select({
-        totalPhotos: sql<number>`COUNT(*)`,
-        photosWithLocation: sql<number>`COUNT(*) FILTER (WHERE ${photos.latitude} IS NOT NULL AND ${photos.longitude} IS NOT NULL)`,
-        uniqueLocations: sql<number>`COUNT(DISTINCT ${photos.locationName}) FILTER (WHERE ${photos.locationName} IS NOT NULL)`,
+        totalPhotos: sql<number>`COUNT(*)`.mapWith(Number),
+        photosWithLocation:
+          sql<number>`COUNT(*) FILTER (WHERE ${photos.latitude} IS NOT NULL AND ${photos.longitude} IS NOT NULL)`.mapWith(
+            Number
+          ),
+        uniqueLocations:
+          sql<number>`COUNT(DISTINCT ${photos.locationName}) FILTER (WHERE ${photos.locationName} IS NOT NULL)`.mapWith(
+            Number
+          ),
         earliestDate: sql<string>`MIN(${photos.dateTaken})`,
         latestDate: sql<string>`MAX(${photos.dateTaken})`,
       })
@@ -66,12 +72,12 @@ export const getTripStatsTool: RegisterableMcpTool = {
                 date: album.date,
               },
               stats: {
-                totalPhotos: stats?.totalPhotos || 0,
-                photosWithLocation: stats?.photosWithLocation || 0,
-                uniqueLocations: stats?.uniqueLocations || 0,
+                totalPhotos: Number(stats?.totalPhotos) || 0,
+                photosWithLocation: Number(stats?.photosWithLocation) || 0,
+                uniqueLocations: Number(stats?.uniqueLocations) || 0,
                 dateRange: {
-                  start: stats?.earliestDate,
-                  end: stats?.latestDate,
+                  start: stats?.earliestDate || null,
+                  end: stats?.latestDate || null,
                 },
               },
             },

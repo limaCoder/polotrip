@@ -5,6 +5,7 @@ import { getPhotosByDateTool } from "./get-photos-by-date.js";
 import { getPhotosByLocationTool } from "./get-photos-by-location.js";
 import { getTripStatsTool } from "./get-trip-stats.js";
 import { getUserAlbumsTool } from "./get-user-albums.js";
+import { searchPhotosAcrossAlbumsTool } from "./search-photos-across-albums.js";
 
 export const tools: RegisterableMcpTool[] = [
   getUserAlbumsTool,
@@ -13,4 +14,5 @@ export const tools: RegisterableMcpTool[] = [
   getTripStatsTool,
   getPhotosByLocationTool,
   getAlbumByNameTool,
+  searchPhotosAcrossAlbumsTool,
 ];

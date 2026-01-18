@@ -32,7 +32,7 @@ async function createChatCompletionInternal({
 
   try {
     const result = streamText({
-      model: openai("gpt-4o-mini"),
+      model: openai("gpt-4o"),
       system: CHAT_SYSTEM_PROMPT,
       messages,
       tools,
