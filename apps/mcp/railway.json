@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "corepack enable && corepack prepare pnpm@9.14.2 --activate && cd ../.. && pnpm install --frozen-lockfile && pnpm --filter @polotrip/db build && pnpm --filter @polotrip/mcp build"
+  },
+  "deploy": {
+    "startCommand": "node dist/index.mjs",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}

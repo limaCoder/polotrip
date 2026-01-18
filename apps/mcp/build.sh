@@ -1,15 +1,8 @@
 #!/bin/bash
 set -e
 
-# Enable corepack and install pnpm
-corepack enable
-corepack prepare pnpm@9.14.2 --activate
-
-# Navigate to monorepo root
+# Navigate to monorepo root (dependencies already installed by installCommand)
 cd ../..
-
-# Install dependencies
-pnpm install --frozen-lockfile
 
 # Build dependencies
 pnpm --filter @polotrip/db build
