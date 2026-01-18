@@ -1,0 +1,6 @@
+[build]
+packageManager = "pnpm"
+buildCommand = "bash build.sh"
+
+[start]
+command = "node dist/index.mjs"
