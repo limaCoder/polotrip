@@ -1,8 +1,0 @@
-[build]
-packageManager = "pnpm"
-# Note: If Railway still tries to use npm, set RAILPACK_INSTALL_CMD env var to:
-# corepack enable && corepack prepare pnpm@9.14.2 --activate && cd ../.. && pnpm install --frozen-lockfile
-buildCommand = "corepack enable && corepack prepare pnpm@9.14.2 --activate && cd ../.. && pnpm install --frozen-lockfile && pnpm --filter @polotrip/db build && pnpm --filter @polotrip/mcp build"
-
-[start]
-command = "node dist/index.mjs"
