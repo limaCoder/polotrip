@@ -47,7 +47,9 @@ export function PhotoTimeline({
             <p
               className={cn(
                 "text-left font-body_two font-bold",
-                selectedDate === dateCount?.date ? "text-background" : ""
+                selectedDate === dateCount?.date
+                  ? "text-primary-foreground"
+                  : ""
               )}
             >
               {formatDateToDisplay(dateCount?.date, locale, tDates)}
@@ -55,7 +57,9 @@ export function PhotoTimeline({
             <p
               className={cn(
                 "font-body_two text-sm",
-                selectedDate === dateCount?.date ? "text-background" : ""
+                selectedDate === dateCount?.date
+                  ? "text-primary-foreground"
+                  : ""
               )}
             >
               {dateCount?.count}{" "}

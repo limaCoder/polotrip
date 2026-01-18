@@ -163,7 +163,7 @@ export function UploadForm() {
 
         <Button
           aria-label={t("continue_button_aria")}
-          className="rounded border border-text-opacity-25 bg-primary px-4 font-bold text-background hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded border border-text-opacity-25 bg-primary px-4 font-bold hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={uploadButtonDisabled}
           onClick={handleUploadClick}
           type="button"

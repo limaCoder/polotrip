@@ -119,7 +119,7 @@ export function MusicCard() {
           </div>
           <Button
             aria-label={t("remove_button_aria")}
-            className="flex w-full items-center justify-center gap-2 rounded bg-red-500 px-8 py-3 font-body_two text-background hover:bg-red-600"
+            className="flex w-full items-center justify-center gap-2 rounded bg-destructive px-8 py-3 font-body_two text-white hover:bg-destructive/90"
             disabled={isLoading}
             onClick={handleRemove}
             type="button"
@@ -148,7 +148,7 @@ export function MusicCard() {
           </div>
           <Button
             aria-label={t("save_button_aria")}
-            className="flex w-full items-center justify-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-background hover:bg-primary/90"
+            className="flex w-full items-center justify-center gap-2 rounded bg-primary px-8 py-3 font-body_two text-white hover:bg-primary/90"
             disabled={isLoading || !musicUrl.trim()}
             onClick={handleSave}
             type="button"

@@ -264,7 +264,7 @@ export function AlbumForm() {
       <div className="flex flex-col gap-4">
         <Button
           aria-label={t("pay_with_card_button_aria")}
-          className="flex items-center justify-center gap-3 rounded bg-primary p-3 text-background dark:text-white"
+          className="flex items-center justify-center gap-3 rounded bg-primary p-3 hover:bg-primary/90"
           disabled={isPending}
           type="submit"
         >

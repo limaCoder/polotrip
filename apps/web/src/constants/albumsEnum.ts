@@ -19,7 +19,7 @@ const AlbumStatusColorEnum = {
 const AlbumStatusTextColorEnum = {
   [StepAfterPaymentEnum.UPLOAD]: "text-text dark:text-black",
   [StepAfterPaymentEnum.ORGANIZE]: "text-text dark:text-black",
-  [StepAfterPaymentEnum.PUBLISHED]: "text-background",
+  [StepAfterPaymentEnum.PUBLISHED]: "text-primary-foreground",
 } as const;
 
 const generateAlbumLink = (id: string, stepAfterPayment: string) => {

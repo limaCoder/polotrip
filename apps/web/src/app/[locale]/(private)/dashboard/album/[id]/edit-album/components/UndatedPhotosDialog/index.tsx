@@ -27,7 +27,7 @@ export function UndatedPhotosDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button
-            className="transition-colors hover:bg-primary/90 hover:text-background"
+            className="transition-colors hover:bg-primary/90 hover:text-primary-foreground"
             onClick={onClose}
             variant="outline"
           >

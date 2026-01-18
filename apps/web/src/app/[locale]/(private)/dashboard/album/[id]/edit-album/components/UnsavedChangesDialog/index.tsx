@@ -44,7 +44,7 @@ export function UnsavedChangesDialog({
             {t("cancel_button")}
           </AlertDialogCancel>
           <AlertDialogAction
-            className="bg-primary font-medium text-background transition-colors hover:bg-primary/90"
+            className="bg-primary font-medium transition-colors hover:bg-primary/90"
             onClick={onConfirm}
           >
             {t("confirm_button")}
