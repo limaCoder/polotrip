@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-# Enable corepack and install pnpm globally
+# Enable corepack and prepare pnpm
 corepack enable
-npm install -g pnpm@9.14.2
+corepack prepare pnpm@9.14.2 --activate
 
 # Navigate to monorepo root
 cd ../..
