@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   doublePrecision,
   index,
@@ -41,6 +41,14 @@ const photos = pgTable(
     index("date_taken_idx").on(table.dateTaken),
     index("album_date_idx").on(table.albumId, table.dateTaken),
     index("geo_idx").on(table.latitude, table.longitude),
+    index("description_gin_idx").using(
+      "gin",
+      sql`${table.description} gin_trgm_ops`
+    ),
+    index("location_name_gin_idx").using(
+      "gin",
+      sql`${table.locationName} gin_trgm_ops`
+    ),
   ]
 );
 
