@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { InstallPwaModal } from "@/components/InstallPwaModal";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { ONBOARDING_COMPLETED_EVENT } from "./onboarding-modal-wrapper";
 
 const IS_MOBILE_REGEX =

@@ -280,6 +280,7 @@
     "photo_plural": "fotos",
     "view_album": "Visualizar",
     "edit_album": "Editar",
+    "generate_video": "Gerar Vídeo",
     "status": {
       "upload": "Etapa de upload",
       "organize": "Etapa de organização",
@@ -990,6 +991,46 @@
       "try_again_later": "Tente novamente mais tarde",
       "daily_limit": "Limite diário: {current}/{limit}",
       "almost_limit": "Você está próximo do limite diário"
+    }
+  },
+  "VideoGenerator": {
+    "create_video": "Criar Vídeo",
+    "watch_video": "Assistir Vídeo",
+    "your_video": "Seu Vídeo",
+    "create_narrative_video": "Criar Vídeo Narrativo",
+    "create_video_description": "Gere um vídeo narrativo com IA para \"{title}\"",
+    "video_ready_description": "Seu vídeo para \"{title}\" está pronto para assistir",
+    "select_style_description": "Escolha o estilo de narração para seu vídeo",
+    "generate_video": "Gerar Vídeo",
+    "generating": "Gerando...",
+    "try_again": "Tentar Novamente",
+    "download_video": "Baixar Vídeo",
+    "generation_failed": "Falha na Geração do Vídeo",
+    "unknown_error": "Ocorreu um erro desconhecido. Por favor, tente novamente.",
+    "album_not_paid": "O álbum precisa estar pago para gerar um vídeo",
+    "min_photos_required": "São necessárias pelo menos {count} fotos para gerar um vídeo",
+    "styles": {
+      "emotional": "Emocional",
+      "emotional_description": "Narração calorosa e nostálgica que evoca sentimentos e memórias",
+      "documentary": "Documentário",
+      "documentary_description": "Narração informativa e narrativa sobre sua jornada",
+      "fun": "Divertido",
+      "fun_description": "Narração animada e energética celebrando sua aventura"
+    },
+    "progress": {
+      "status": {
+        "pending": "Aguardando na Fila",
+        "processing": "Gerando Seu Vídeo",
+        "success": "Vídeo Pronto",
+        "failed": "Falha na Geração"
+      },
+      "description": {
+        "pending": "Seu vídeo está aguardando para ser processado",
+        "processing": "Nossa IA está criando seu vídeo personalizado. Isso pode levar alguns minutos.",
+        "success": "Seu vídeo foi gerado com sucesso",
+        "failed": "Houve um problema ao gerar seu vídeo"
+      },
+      "elapsed_time": "Tempo decorrido: {time}"
     }
   }
 }
