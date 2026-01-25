@@ -6,13 +6,6 @@ import { InternalServerError } from "@/http/errors";
 const VIDEO_GENERATION_QUEUE = "video-generation";
 const VIDEO_GENERATION_DLQ = "video-generation-dlq";
 
-type VideoGenerationJob = {
-  albumId: string;
-  videoId: string;
-  style: "emotional" | "documentary" | "fun";
-  callbackUrl: string;
-};
-
 type AmqpConnection = Awaited<ReturnType<typeof amqplib.connect>>;
 
 class RabbitMQService {
@@ -109,7 +102,10 @@ class RabbitMQService {
     }
   }
 
-  async publishVideoJob(job: VideoGenerationJob): Promise<boolean> {
+  async publish(
+    message: unknown,
+    queue: string = VIDEO_GENERATION_QUEUE
+  ): Promise<boolean> {
     if (!this.isEnabled()) {
       return false;
     }
@@ -124,22 +120,18 @@ class RabbitMQService {
         );
       }
 
-      const messageBuffer = Buffer.from(JSON.stringify(job));
+      const messageBuffer = Buffer.from(JSON.stringify(message));
 
-      const result = this.channel.sendToQueue(
-        VIDEO_GENERATION_QUEUE,
-        messageBuffer,
-        {
-          persistent: true,
-          contentType: "application/json",
-          timestamp: Date.now(),
-        }
-      );
+      const result = this.channel.sendToQueue(queue, messageBuffer, {
+        persistent: true,
+        contentType: "application/json",
+        timestamp: Date.now(),
+      });
 
       return result;
     } catch (error) {
       throw new InternalServerError(
-        "Failed to queue video generation job",
+        "Failed to publish message to RabbitMQ",
         "RABBITMQ_PUBLISH_ERROR",
         { originalError: error }
       );
@@ -148,4 +140,3 @@ class RabbitMQService {
 }
 
 export const rabbitmqService = new RabbitMQService();
-export type { VideoGenerationJob };

@@ -4,7 +4,7 @@ import { albumVideos } from "@polotrip/db/schema";
 import { eq } from "drizzle-orm";
 
 import { env } from "@/env";
-import { rabbitmqService } from "@/services/queue/rabbitmq-service";
+import { publishVideoJob } from "@/services/queue/video-job";
 
 type CreateVideoJobRequest = {
   albumId: string;
@@ -23,7 +23,7 @@ async function createVideoJob({ albumId, style }: CreateVideoJobRequest) {
 
   const callbackUrl = `${env.WEB_URL}/api/v1/albums/${albumId}/video/update-status`;
 
-  const jobPublished = await rabbitmqService.publishVideoJob({
+  const jobPublished = await publishVideoJob({
     albumId,
     videoId: video.id,
     style,

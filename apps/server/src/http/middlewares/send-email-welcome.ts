@@ -3,7 +3,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { eq } from "drizzle-orm";
 import type { FastifyRequest } from "fastify";
 import { UnauthorizedError } from "@/http/errors";
-import { emailService } from "@/services/email/resend-service";
+import { sendWelcomeEmail } from "@/services/email/email-notifications";
 
 async function sendEmailWelcome(request: FastifyRequest) {
   try {
@@ -33,7 +33,7 @@ async function sendEmailWelcome(request: FastifyRequest) {
           });
 
           if (authUser) {
-            await emailService.sendWelcomeEmail(
+            await sendWelcomeEmail(
               authUser?.user?.name || "User",
               authUser?.user?.email
             );

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { updateVideoStatus } from "@/app/functions/update-video-status";
 import { env } from "@/env";
 import { NotFoundError, UnauthorizedError } from "@/http/errors";
-import { emailService } from "@/services/email/resend-service";
+import { sendVideoReadyEmail } from "@/services/email/email-notifications";
 
 const paramsSchema = z.object({
   id: z.string(),
@@ -97,7 +97,7 @@ export const updateVideoStatusRoute: FastifyPluginAsyncZod = async (app) => {
 
           if (user?.email) {
             try {
-              await emailService.sendVideoReadyEmail(
+              await sendVideoReadyEmail(
                 user.name || "User",
                 user.email,
                 album.title,
