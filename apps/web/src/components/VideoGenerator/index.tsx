@@ -156,6 +156,12 @@ export function VideoGenerator({
             "flex w-full justify-start gap-2 border-none p-0 font-normal text-base text-primary shadow-none transition-all duration-300 hover:bg-[unset] hover:text-primary hover:brightness-130",
             isVideoReady && "border-green-500 text-green-500"
           )}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+          }}
           variant="outline"
         >
           {isVideoReady ? t("watch_video") : t("create_video")}

@@ -106,7 +106,18 @@ export function AlbumCard({
                 <EllipsisVertical size={16} />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="max-w-fit bg-background">
+            <PopoverContent
+              className="max-w-fit bg-background"
+              onInteractOutside={(e) => {
+                const target = e.target as HTMLElement;
+                if (target.closest('[role="dialog"]')) {
+                  e.preventDefault();
+                }
+              }}
+              onOpenAutoFocus={(e) => {
+                e.preventDefault();
+              }}
+            >
               <Link
                 className="flex w-full pb-2 text-primary transition-all duration-300 hover:brightness-130"
                 href={`/dashboard/album/${id}/edit-album`}
