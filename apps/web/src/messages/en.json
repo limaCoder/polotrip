@@ -280,6 +280,7 @@
     "photo_plural": "photos",
     "view_album": "View",
     "edit_album": "Edit",
+    "generate_video": "Generate Video",
     "status": {
       "upload": "Upload step",
       "organize": "Organize step",
@@ -990,6 +991,46 @@
       "try_again_later": "Please try again later",
       "daily_limit": "Daily limit: {current}/{limit}",
       "almost_limit": "You're approaching the daily limit"
+    }
+  },
+  "VideoGenerator": {
+    "create_video": "Create Video",
+    "watch_video": "Watch Video",
+    "your_video": "Your Video",
+    "create_narrative_video": "Create Narrative Video",
+    "create_video_description": "Generate an AI-powered narrative video for \"{title}\"",
+    "video_ready_description": "Your video for \"{title}\" is ready to watch",
+    "select_style_description": "Choose the style of narration for your video",
+    "generate_video": "Generate Video",
+    "generating": "Generating...",
+    "try_again": "Try Again",
+    "download_video": "Download Video",
+    "generation_failed": "Video Generation Failed",
+    "unknown_error": "An unknown error occurred. Please try again.",
+    "album_not_paid": "The album must be paid before generating a video",
+    "min_photos_required": "At least {count} photos are required to generate a video",
+    "styles": {
+      "emotional": "Emotional",
+      "emotional_description": "Warm, nostalgic narration that evokes feelings and memories",
+      "documentary": "Documentary",
+      "documentary_description": "Informative, storytelling narration about your journey",
+      "fun": "Fun",
+      "fun_description": "Upbeat, energetic narration celebrating your adventure"
+    },
+    "progress": {
+      "status": {
+        "pending": "Waiting in Queue",
+        "processing": "Generating Your Video",
+        "success": "Video Ready",
+        "failed": "Generation Failed"
+      },
+      "description": {
+        "pending": "Your video is waiting to be processed",
+        "processing": "Our AI is creating your personalized video. This may take a few minutes.",
+        "success": "Your video has been generated successfully",
+        "failed": "There was a problem generating your video"
+      },
+      "elapsed_time": "Time elapsed: {time}"
     }
   }
 }

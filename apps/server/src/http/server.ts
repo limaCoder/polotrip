@@ -18,6 +18,7 @@ import authRoute from "./routes/v1/auth/index.js";
 import chatController from "./routes/v1/chat/index.js";
 import checkoutController from "./routes/v1/checkout/index.js";
 import healthRoute from "./routes/v1/health.js";
+import videosController from "./routes/v1/videos/index.js";
 
 const app = fastify({
   logger: false,
@@ -71,6 +72,7 @@ app.register(authRoute, { prefix: "/api/v1" });
 app.register(albumsController, { prefix: "/api/v1" });
 app.register(chatController, { prefix: "/api/v1" });
 app.register(checkoutController, { prefix: "/api/v1" });
+app.register(videosController, { prefix: "/api/v1" });
 
 app.get("/", (_, reply) => {
   reply.status(200).send("OK");
