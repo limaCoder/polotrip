@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import type * as LeafletTypes from "leaflet";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import type { PhotoMapProps } from "./types";
 
 let L: typeof LeafletTypes;

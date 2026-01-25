@@ -1,13 +1,16 @@
-import { fromNodeHeaders } from "better-auth/node";
-import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { z } from "zod";
-
-import { createVideoJob } from "@/app/functions/create-video-job";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "@/http/errors";
-import { authenticate } from "@/http/middlewares/authenticate";
 import { db } from "@polotrip/db";
 import { albums } from "@polotrip/db/schema";
+import { fromNodeHeaders } from "better-auth/node";
 import { eq } from "drizzle-orm";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { createVideoJob } from "@/app/functions/create-video-job";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "@/http/errors";
+import { authenticate } from "@/http/middlewares/authenticate";
 
 const paramsSchema = z.object({
   id: z.string(),

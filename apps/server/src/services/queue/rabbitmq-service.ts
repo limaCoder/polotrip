@@ -1,15 +1,15 @@
-import amqplib from 'amqplib';
+import amqplib from "amqplib";
 
-import { env } from '@/env';
-import { InternalServerError } from '@/http/errors';
+import { env } from "@/env";
+import { InternalServerError } from "@/http/errors";
 
-const VIDEO_GENERATION_QUEUE = 'video-generation';
-const VIDEO_GENERATION_DLQ = 'video-generation-dlq';
+const VIDEO_GENERATION_QUEUE = "video-generation";
+const VIDEO_GENERATION_DLQ = "video-generation-dlq";
 
 type VideoGenerationJob = {
   albumId: string;
   videoId: string;
-  style: 'emotional' | 'documentary' | 'fun';
+  style: "emotional" | "documentary" | "fun";
   callbackUrl: string;
 };
 
@@ -36,14 +36,12 @@ class RabbitMQService {
     if (!this.connection) {
       this.connection = await amqplib.connect(this.url!);
 
-      this.connection.on('error', err => {
-        console.error('RabbitMQ connection error:', err);
+      this.connection.on("error", () => {
         this.connection = null;
         this.channel = null;
       });
 
-      this.connection.on('close', () => {
-        console.log('RabbitMQ connection closed');
+      this.connection.on("close", () => {
         this.connection = null;
         this.channel = null;
       });
@@ -67,24 +65,25 @@ class RabbitMQService {
 
       await this.channel.assertQueue(VIDEO_GENERATION_QUEUE, {
         durable: true,
-        deadLetterExchange: '',
+        deadLetterExchange: "",
         deadLetterRoutingKey: VIDEO_GENERATION_DLQ,
       });
-    } catch (error: any) {
-      // Erro 406 (PRECONDITION_FAILED) indica que a fila existe com configuração diferente
-      if (error?.code === 406 || error?.message?.includes('406') || error?.message?.includes('PRECONDITION')) {
+    } catch (error: unknown) {
+      const err = error as { code?: number; message?: string };
+      if (
+        err?.code === 406 ||
+        err?.message?.includes("406") ||
+        err?.message?.includes("PRECONDITION")
+      ) {
         const errorMessage =
           `Queue configuration mismatch. The queue '${VIDEO_GENERATION_QUEUE}' exists with different settings. ` +
           `Please delete the queue manually using: rabbitmqadmin delete queue name=${VIDEO_GENERATION_QUEUE} ` +
-          `or delete it through the RabbitMQ management UI.`;
-        
-        console.error('RabbitMQ queue setup error:', errorMessage);
-        console.error('Original error:', error);
-        
+          "or delete it through the RabbitMQ management UI.";
+
         throw new InternalServerError(
           errorMessage,
-          'RABBITMQ_QUEUE_CONFIG_MISMATCH',
-          { originalError: error },
+          "RABBITMQ_QUEUE_CONFIG_MISMATCH",
+          { originalError: err }
         );
       }
       throw error;
@@ -102,13 +101,16 @@ class RabbitMQService {
         this.connection = null;
       }
     } catch (error) {
-      console.error('Error closing RabbitMQ connection:', error);
+      throw new InternalServerError(
+        "Error closing RabbitMQ connection",
+        "RABBITMQ_CLOSE_ERROR",
+        { originalError: error }
+      );
     }
   }
 
   async publishVideoJob(job: VideoGenerationJob): Promise<boolean> {
     if (!this.isEnabled()) {
-      console.warn('RabbitMQ is not configured. Video job not published.');
       return false;
     }
 
@@ -116,24 +118,30 @@ class RabbitMQService {
       await this.ensureConnection();
 
       if (!this.channel) {
-        throw new InternalServerError('Failed to create RabbitMQ channel', 'RABBITMQ_ERROR');
+        throw new InternalServerError(
+          "Failed to create RabbitMQ channel",
+          "RABBITMQ_ERROR"
+        );
       }
 
       const messageBuffer = Buffer.from(JSON.stringify(job));
 
-      const result = this.channel.sendToQueue(VIDEO_GENERATION_QUEUE, messageBuffer, {
-        persistent: true,
-        contentType: 'application/json',
-        timestamp: Date.now(),
-      });
+      const result = this.channel.sendToQueue(
+        VIDEO_GENERATION_QUEUE,
+        messageBuffer,
+        {
+          persistent: true,
+          contentType: "application/json",
+          timestamp: Date.now(),
+        }
+      );
 
       return result;
     } catch (error) {
-      console.error('Failed to publish video job:', error);
       throw new InternalServerError(
-        'Failed to queue video generation job',
-        'RABBITMQ_PUBLISH_ERROR',
-        { originalError: error },
+        "Failed to queue video generation job",
+        "RABBITMQ_PUBLISH_ERROR",
+        { originalError: error }
       );
     }
   }

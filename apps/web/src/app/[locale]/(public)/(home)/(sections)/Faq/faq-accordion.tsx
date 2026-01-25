@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import type { FaqAccordionProps } from "./types";
 
 export function FaqAccordion({ questions }: FaqAccordionProps) {

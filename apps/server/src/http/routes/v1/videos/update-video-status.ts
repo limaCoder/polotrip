@@ -1,13 +1,12 @@
-import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { z } from 'zod';
-
-import { updateVideoStatus } from '@/app/functions/update-video-status';
-import { env } from '@/env';
-import { NotFoundError, UnauthorizedError } from '@/http/errors';
-import { emailService } from '@/services/email/resend-service';
-import { db } from '@polotrip/db';
-import { users } from '@polotrip/db/schema';
-import { eq } from 'drizzle-orm';
+import { db } from "@polotrip/db";
+import { users } from "@polotrip/db/schema";
+import { eq } from "drizzle-orm";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { updateVideoStatus } from "@/app/functions/update-video-status";
+import { env } from "@/env";
+import { NotFoundError, UnauthorizedError } from "@/http/errors";
+import { emailService } from "@/services/email/resend-service";
 
 const paramsSchema = z.object({
   id: z.string(),
@@ -15,7 +14,7 @@ const paramsSchema = z.object({
 
 const bodySchema = z.object({
   videoId: z.string(),
-  status: z.enum(['pending', 'processing', 'success', 'failed']),
+  status: z.enum(["pending", "processing", "success", "failed"]),
   videoUrl: z.string().nullable().optional(),
   thumbnailUrl: z.string().nullable().optional(),
   narrationUrl: z.string().nullable().optional(),
@@ -27,12 +26,12 @@ const bodySchema = z.object({
 type UpdateVideoStatusParams = z.infer<typeof paramsSchema>;
 type UpdateVideoStatusBody = z.infer<typeof bodySchema>;
 
-export const updateVideoStatusRoute: FastifyPluginAsyncZod = async app => {
+export const updateVideoStatusRoute: FastifyPluginAsyncZod = async (app) => {
   app.patch<{
     Params: UpdateVideoStatusParams;
     Body: UpdateVideoStatusBody;
   }>(
-    '/albums/:id/video/update-status',
+    "/albums/:id/video/update-status",
     {
       schema: {
         params: paramsSchema,
@@ -50,17 +49,17 @@ export const updateVideoStatusRoute: FastifyPluginAsyncZod = async app => {
         const expectedSecret = env.VIDEO_WORKER_SECRET;
 
         if (!expectedSecret) {
-          app.log.warn('VIDEO_WORKER_SECRET not configured');
-          throw new UnauthorizedError('Service not configured');
+          app.log.warn("VIDEO_WORKER_SECRET not configured");
+          throw new UnauthorizedError("Service not configured");
         }
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          throw new UnauthorizedError('Missing authorization header');
+        if (!authHeader?.startsWith("Bearer ")) {
+          throw new UnauthorizedError("Missing authorization header");
         }
 
-        const token = authHeader.substring(7);
+        const token = authHeader?.substring(7);
         if (token !== expectedSecret) {
-          throw new UnauthorizedError('Invalid worker secret');
+          throw new UnauthorizedError("Invalid worker secret");
         }
 
         const {
@@ -86,34 +85,44 @@ export const updateVideoStatusRoute: FastifyPluginAsyncZod = async app => {
         });
 
         if (!video) {
-          throw new NotFoundError('Video not found');
+          throw new NotFoundError("Video not found");
         }
 
-        if (status === 'success' && album) {
-          const [user] = await db.select().from(users).where(eq(users.id, album.userId)).limit(1);
+        if (status === "success" && album) {
+          const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, album.userId))
+            .limit(1);
 
           if (user?.email) {
             try {
               await emailService.sendVideoReadyEmail(
-                user.name || 'User',
+                user.name || "User",
                 user.email,
                 album.title,
-                video.videoUrl || '',
+                video.videoUrl || ""
               );
             } catch (emailError) {
-              app.log.error({ err: emailError }, 'Failed to send video ready email');
+              app.log.error(
+                { err: emailError },
+                "Failed to send video ready email"
+              );
             }
           }
         }
 
         return reply.status(200).send({ success: true });
       } catch (error) {
-        if (error instanceof UnauthorizedError || error instanceof NotFoundError) {
+        if (
+          error instanceof UnauthorizedError ||
+          error instanceof NotFoundError
+        ) {
           throw error;
         }
-        app.log.error({ err: error }, 'Error when updating video status:');
-        reply.status(500).send({ error: 'Failed to process the request.' });
+        app.log.error({ err: error }, "Error when updating video status:");
+        reply.status(500).send({ error: "Failed to process the request." });
       }
-    },
+    }
   );
 };

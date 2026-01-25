@@ -1,11 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
-
-import { albumKeys } from './network/keys/albumKeys';
-import { createVideo } from '@/http/create-video';
-import type { VideoStyle } from '@/http/create-video/types';
-import { getVideo } from '@/http/get-video';
-import type { VideoData } from '@/http/get-video/types';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
+import { createVideo } from "@/http/create-video";
+import type { VideoStyle } from "@/http/create-video/types";
+import { getVideo } from "@/http/get-video";
+import type { VideoData } from "@/http/get-video/types";
+import { albumKeys } from "../keys/albumKeys";
 
 const POLLING_INTERVAL = 5000;
 
@@ -45,7 +44,8 @@ export function useVideoGeneration({
     staleTime: POLLING_INTERVAL,
   });
 
-  const shouldPoll = videoData?.status === 'pending' || videoData?.status === 'processing';
+  const shouldPoll =
+    videoData?.status === "pending" || videoData?.status === "processing";
 
   useEffect(() => {
     if (!shouldPoll) {
@@ -81,7 +81,7 @@ export function useVideoGeneration({
     async (style: VideoStyle) => {
       await createVideoMutation.mutateAsync(style);
     },
-    [createVideoMutation],
+    [createVideoMutation]
   );
 
   return {

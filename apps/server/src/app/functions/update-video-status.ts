@@ -1,6 +1,6 @@
 import { db } from "@polotrip/db";
 import type { VideoStatus } from "@polotrip/db/models";
-import { albumVideos, albums } from "@polotrip/db/schema";
+import { albums, albumVideos } from "@polotrip/db/schema";
 import { eq } from "drizzle-orm";
 
 type UpdateVideoStatusRequest = {

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import type { QRCodeShareProps } from "./types";
 
 export function QRCodeShare({ url, size = 200 }: QRCodeShareProps) {

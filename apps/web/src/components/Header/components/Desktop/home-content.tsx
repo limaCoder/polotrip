@@ -3,7 +3,7 @@
 import { Album } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ButtonNavigation } from "@/components/ButtonNavigation";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { cn } from "@/lib/cn";
 import type { HomeContentProps } from "../../types";
 

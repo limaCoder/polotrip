@@ -10,6 +10,7 @@ export function VideoPlayer({
   videoUrl,
   thumbnailUrl,
   durationSeconds,
+  track,
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -71,7 +72,14 @@ export function VideoPlayer({
         poster={thumbnailUrl || undefined}
         ref={videoRef}
         src={videoUrl}
-      />
+      >
+        <track
+          kind="captions"
+          label="Português"
+          src={track || undefined}
+          srcLang="pt-BR"
+        />
+      </video>
 
       <div
         className={cn(
@@ -94,7 +102,7 @@ export function VideoPlayer({
 
       <div
         className={cn(
-          "absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity",
+          "absolute right-0 bottom-0 left-0 bg-linear-to-t from-black/80 to-transparent p-4 transition-opacity",
           isPlaying ? "opacity-0 group-hover:opacity-100" : "opacity-100"
         )}
       >

@@ -1,13 +1,12 @@
+import { db } from "@polotrip/db";
+import { albums } from "@polotrip/db/schema";
 import { fromNodeHeaders } from "better-auth/node";
+import { eq } from "drizzle-orm";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-
 import { getVideoByAlbumId } from "@/app/functions/get-video-by-album-id";
 import { NotFoundError, UnauthorizedError } from "@/http/errors";
 import { authenticate } from "@/http/middlewares/authenticate";
-import { db } from "@polotrip/db";
-import { albums } from "@polotrip/db/schema";
-import { eq } from "drizzle-orm";
 
 const paramsSchema = z.object({
   id: z.string(),
