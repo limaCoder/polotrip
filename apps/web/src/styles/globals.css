@@ -33,7 +33,7 @@
   --sidebar-accent-foreground: oklch(0.1938 0.023 221.5996);
   --sidebar-border: oklch(0.8932 0.0589 211.0063);
   --sidebar-ring: oklch(0.6944 0.1258 219.7195);
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
   --shadow-blur: 10px;
@@ -90,7 +90,7 @@
   --sidebar-accent-foreground: oklch(0.9876 0.0055 211.0391);
   --sidebar-border: oklch(0.2161 0.0217 222.6533);
   --sidebar-ring: oklch(0.6944 0.1258 219.7195);
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
   --shadow-blur: 10px;
@@ -157,26 +157,26 @@
   }
 
   .font-heading {
-    font-family: var(--font-epilogue);
-    font-weight: 700;
-    font-size: 64px;
-    line-height: 110%;
-    letter-spacing: -2%;
+    font-family: var(--font-fraunces);
+    font-weight: 500;
+    font-size: 80px;
+    line-height: 100%;
+    letter-spacing: -3%;
 
     @media screen and (max-width: 768px) {
-      font-size: 3rem;
+      font-size: 3.5rem;
     }
 
     @media screen and (max-width: 425px) {
-      font-size: 2.75rem;
+      font-size: 3rem;
     }
   }
 
   .font-title_one {
-    font-family: var(--font-epilogue);
-    font-weight: 600;
+    font-family: var(--font-fraunces);
+    font-weight: 500;
     font-size: 48px;
-    line-height: 120%;
+    line-height: 110%;
     letter-spacing: -2%;
 
     @media screen and (max-width: 768px) {
@@ -189,10 +189,10 @@
   }
 
   .font-title_two {
-    font-family: var(--font-epilogue);
-    font-weight: 500;
+    font-family: var(--font-fraunces);
+    font-weight: 400;
     font-size: 36px;
-    line-height: 120%;
+    line-height: 110%;
     letter-spacing: -2%;
 
     @media screen and (max-width: 768px) {
@@ -205,11 +205,11 @@
   }
 
   .font-title_three {
-    font-family: var(--font-epilogue);
+    font-family: var(--font-fraunces);
     font-weight: 400;
     font-size: 24px;
-    line-height: 130%;
-    letter-spacing: -2%;
+    line-height: 120%;
+    letter-spacing: -1%;
 
     @media screen and (max-width: 768px) {
       font-size: 1.25rem;
@@ -221,14 +221,14 @@
   }
 
   .font-body_one {
-    font-family: var(--font-epilogue);
+    font-family: var(--font-jakarta);
     font-weight: 400;
     font-size: 18px;
-    line-height: 150%;
+    line-height: 160%;
   }
 
   .font-body_two {
-    font-family: var(--font-epilogue);
+    font-family: var(--font-jakarta);
     font-weight: 400;
     font-size: 16px;
     line-height: 150%;
@@ -242,11 +242,11 @@
   }
 
   .swiper-pagination-bullet {
-    @apply !bg-secondary-50 w-2.5 h-2.5 !opacity-100 transition-all duration-300;
+    @apply bg-secondary-50! w-2.5 h-2.5 opacity-100! transition-all duration-300;
   }
 
   .swiper-pagination-bullet-active {
-    @apply !bg-primary w-4 h-2.5;
+    @apply bg-primary! w-4 h-2.5;
   }
 
   .leaflet-popup-content-wrapper .leaflet-popup-content {
