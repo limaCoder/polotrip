@@ -23,7 +23,6 @@ export async function Cta({ locale }: CtaProps) {
           <source src="/pages/home/cta/cta-section.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/60" />
-        {/* Memory noise overlay */}
         <div
           className="absolute inset-0 opacity-10 mix-blend-overlay"
           style={{

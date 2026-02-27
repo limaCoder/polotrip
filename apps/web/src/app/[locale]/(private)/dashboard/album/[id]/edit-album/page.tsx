@@ -29,7 +29,7 @@ export default async function EditAlbumPage() {
         <div className="-top-[500px] -right-[500px] pointer-events-none absolute z-0 h-[1000px] w-[1000px] rounded-full bg-primary/10 blur-[120px]" />
         <div className="-bottom-[500px] -left-[500px] pointer-events-none absolute z-0 h-[1000px] w-[1000px] rounded-full bg-secondary-50/20 blur-[120px] dark:bg-secondary/10" />
 
-        <section className="relative z-10 flex-grow py-10 lg:py-16">
+        <section className="relative z-10 grow py-10 lg:py-16">
           <div className="container mx-auto px-4 lg:px-9">
             <div className="mb-8">
               <BackButton aria-label={t("back_button_aria")} />

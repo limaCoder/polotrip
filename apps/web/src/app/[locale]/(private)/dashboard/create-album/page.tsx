@@ -29,7 +29,6 @@ export default async function CreateAlbumPage() {
     <>
       <Header />
       <main className="relative flex min-h-screen flex-col overflow-hidden bg-background pt-16 lg:pt-0">
-        {/* Ambient background decoration */}
         <div className="-top-24 pointer-events-none absolute right-0 h-[800px] w-[800px] translate-x-1/3 rounded-full bg-primary/5 blur-[120px]" />
         <div className="-left-24 -translate-x-1/4 pointer-events-none absolute bottom-0 h-[600px] w-[600px] translate-y-1/3 rounded-full bg-secondary/10 blur-[100px]" />
 

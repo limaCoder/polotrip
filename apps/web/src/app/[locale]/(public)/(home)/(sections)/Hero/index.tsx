@@ -10,32 +10,26 @@ export async function Hero() {
 
   return (
     <section className="relative flex min-h-[95vh] flex-col items-center justify-center overflow-hidden bg-background pt-32 pb-20 lg:pt-40">
-      {/* Dynamic Atmospheric Background 🪄 */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {/* Abstract blurred shapes */}
         <div className="-top-[20%] -translate-x-1/2 absolute left-[10%] h-[600px] w-[800px] rounded-[100%] bg-primary/20 opacity-60 blur-[120px]" />
         <div className="absolute top-[10%] right-[-10%] h-[500px] w-[500px] rounded-[100%] bg-secondary/20 opacity-50 blur-[120px]" />
         <div className="absolute bottom-[20%] left-[20%] h-[400px] w-[600px] rounded-[100%] bg-primary/10 opacity-40 blur-[120px]" />
 
-        {/* Subtle dot grid for depth and texture */}
         <div className="mask-[radial-gradient(ellipse_80%_60%_at_50%_40%,#000_60%,transparent_100%)] absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[40px_40px]" />
       </div>
 
       <div className="container relative z-10 flex flex-col items-center px-4">
-        {/* Decorative Memory/Travel Indicator */}
         <MotionDiv
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 flex items-center justify-center gap-3 rounded-full border border-primary/20 bg-background/50 px-4 py-2 shadow-sm backdrop-blur-md"
           initial={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Origin Dot */}
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
 
-          {/* Flight Path */}
           <div className="relative flex w-16 items-center">
             <div className="w-full border-primary/30 border-t-[1.5px] border-dashed" />
             <MotionDiv
@@ -54,7 +48,6 @@ export async function Hero() {
             </MotionDiv>
           </div>
 
-          {/* Destination Dot */}
           <span className="relative flex h-2 w-2">
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary/30" />
           </span>
@@ -105,7 +98,6 @@ export async function Hero() {
           }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
         >
-          {/* Decorative glow behind image */}
           <div className="-z-10 absolute inset-0 scale-[1.2] rounded-full bg-primary/20 blur-[100px]" />
 
           <MotionDiv
