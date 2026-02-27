@@ -14,13 +14,13 @@ export async function Benefits() {
       whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="container mx-auto px-4 lg:px-9">
-        <h2 className="mb-4 text-center font-bold font-title_two text-primary md:mb-12">
+        <h2 className="mb-6 text-center font-title_one text-foreground md:mb-16">
           {t("title")}
         </h2>
 
         <BenefitsGrid />
 
-        <p className="mx-auto mt-8 max-w-2xl text-center text-muted-foreground text-sm md:mt-12">
+        <p className="mx-auto mt-12 max-w-2xl text-center font-body_one text-muted-foreground md:mt-16">
           {t("description")}
         </p>
       </div>

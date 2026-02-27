@@ -48,7 +48,7 @@ export function ThemeSwitcher({
       }
       className={cn(
         "h-9 w-9",
-        whiteIcon && "text-white hover:text-white",
+        whiteIcon && "text-text hover:text-text",
         className
       )}
       onClick={toggleTheme}

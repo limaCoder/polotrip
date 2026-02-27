@@ -94,7 +94,7 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
             >
               <MorphingDialogTrigger>
                 <motion.div
-                  className="relative cursor-pointer overflow-hidden rounded-lg shadow-md transition-shadow duration-300 hover:shadow-lg"
+                  className="hover:-translate-y-1 relative cursor-pointer rounded-sm bg-white p-2 shadow-md transition-all duration-300 hover:shadow-xl lg:p-3"
                   initial={{ opacity: 0, y: 20 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true, margin: "-100px" }}
@@ -108,7 +108,7 @@ export function MasonryGallery({ photos }: { photos: Photo[] }) {
                     }}
                   >
                     <motion.div
-                      className="absolute inset-0"
+                      className="absolute inset-0 overflow-hidden rounded-sm bg-neutral-100"
                       layoutId={`photo-${columnPhoto?.id}`}
                     >
                       <MorphingDialogImage

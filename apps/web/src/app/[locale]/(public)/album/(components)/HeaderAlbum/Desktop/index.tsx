@@ -40,23 +40,27 @@ export function HeaderAlbumDesktop({
       <div className="flex items-center gap-6">
         <button
           aria-label={t("tv_mode_aria")}
-          className="flex items-center gap-2 text-white transition-colors hover:text-primary"
+          className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-white backdrop-blur-md transition-all hover:border-primary hover:bg-primary"
           onClick={handleTvMode}
           type="button"
         >
-          <Tv className="relative top-[-3px] text-primary" size={20} />
-          <span className="w-max font-body_one">{t("tv_mode")}</span>
+          <Tv className="h-4 w-4 text-white group-hover:text-white" />
+          <span className="font-heading text-xs uppercase tracking-widest">
+            {t("tv_mode")}
+          </span>
         </button>
 
         {isOwner && (
           <button
             aria-label={t("share_aria")}
-            className="flex items-center gap-2 text-white transition-colors hover:text-primary"
+            className="group flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-white backdrop-blur-md transition-all hover:border-primary hover:bg-primary"
             onClick={() => setIsShareModalOpen(true)}
             type="button"
           >
-            <Share2 className="relative top-[-2px] text-primary" size={20} />
-            <span className="w-max font-body_one">{t("share")}</span>
+            <Share2 className="h-4 w-4 text-white group-hover:text-white" />
+            <span className="font-heading text-xs uppercase tracking-widest">
+              {t("share")}
+            </span>
           </button>
         )}
 

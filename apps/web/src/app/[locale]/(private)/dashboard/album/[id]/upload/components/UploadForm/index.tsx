@@ -37,9 +37,11 @@ export function UploadForm() {
       : t("selected_plural", { count: uploadFormState?.files?.length });
 
   return (
-    <div className="rounded-lg bg-card p-8 shadow">
-      <h1 className="mb-2 font-bold font-title_three">{t("title")}</h1>
-      <h2 className="mb-6 font-body_two text-text/75">{t("tip")}</h2>
+    <div className="rounded-2xl border border-background/60 bg-background/70 p-8 shadow-2xl backdrop-blur-xl transition-all duration-500">
+      <h1 className="mb-2 bg-linear-to-r from-primary to-blue-600 bg-clip-text font-bold font-title_three text-transparent drop-shadow-sm">
+        {t("title")}
+      </h1>
+      <h2 className="mb-8 font-body_two text-text/75">{t("tip")}</h2>
 
       {uploadFormState?.error && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-red-700">
@@ -56,7 +58,7 @@ export function UploadForm() {
 
       <div
         className={cn(
-          "relative mb-6 flex h-[116px] flex-col items-center justify-center rounded-md border border-text/25 border-dashed p-3 text-center",
+          "group relative mb-8 flex h-[160px] flex-col items-center justify-center rounded-xl border-2 border-primary/30 border-dashed bg-primary/5 p-4 text-center transition-all duration-300 hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_30px_-5px_var(--tw-shadow-color)] hover:shadow-primary/20",
           uploadFormState?.isUploading ? "pointer-events-none opacity-50" : ""
         )}
       >
@@ -69,13 +71,17 @@ export function UploadForm() {
           ref={fileInputRef}
           type="file"
         />
-        <Upload className="mb-2 text-text/25" size={24} />
-        <p className="font-body_two text-sm">
-          <span className="font-bold text-primary">{t("upload_prompt")}</span>
+        <div className="mb-3 rounded-full bg-primary/10 p-3 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+          <Upload size={28} />
+        </div>
+        <p className="font-body_two text-sm text-text/80">
+          <span className="font-bold text-primary transition-colors group-hover:text-primary/80">
+            {t("upload_prompt")}
+          </span>
           <br />
           {t("drag_and_drop_prompt")}
         </p>
-        <span className="mt-1 text-primary text-xs">
+        <span className="mt-2 font-medium text-primary/70 text-xs">
           {t("file_requirements")}
         </span>
       </div>
@@ -89,15 +95,19 @@ export function UploadForm() {
             </span>
           </div>
 
-          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {uploadFormState?.files?.map((photo) => (
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {uploadFormState?.files?.map((photo, index) => (
               <div
-                className="group relative h-[300px] w-full overflow-hidden rounded md:h-[160px]"
+                className="group fade-in zoom-in relative h-[300px] w-full animate-in overflow-hidden rounded-xl border border-white/20 shadow-sm transition-all duration-500 hover:shadow-md md:h-[180px]"
                 key={photo?.id}
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  animationFillMode: "both",
+                }}
               >
                 <Image
                   alt={photo?.file?.name}
-                  className="rounded-sm object-cover"
+                  className="rounded-xl object-cover transition-transform duration-700 group-hover:scale-105"
                   fill
                   src={photo?.preview}
                 />
@@ -113,14 +123,15 @@ export function UploadForm() {
                     </p>
                   </div>
                 )}
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <button
                   aria-label={t("remove_photo_aria")}
-                  className="absolute top-2 right-2 rounded-full bg-black/50 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  className="absolute top-3 right-3 rounded-full bg-black/40 p-1.5 text-white opacity-0 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.5)] group-hover:opacity-100"
                   disabled={uploadFormState?.isUploading}
                   onClick={() => removeFile(photo?.id)}
                   type="button"
                 >
-                  <X size={16} />
+                  <X size={16} strokeWidth={2.5} />
                 </button>
               </div>
             ))}
@@ -150,10 +161,10 @@ export function UploadForm() {
         <CityUnscrambleGame className="rounded-lg bg-card p-4 shadow-sm" />
       </LoadingGameWrapper>
 
-      <div className="flex w-full justify-end gap-4">
+      <div className="mt-8 flex w-full justify-end gap-4">
         <Button
           aria-label={t("clear_all_button_aria")}
-          className="rounded border border-text-opacity-25 px-4 font-bold hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-transparent dark:hover:bg-transparent dark:hover:brightness-75"
+          className="rounded-xl border border-text/10 bg-background/80 px-6 font-bold text-text/80 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-white hover:shadow disabled:cursor-not-allowed disabled:opacity-50"
           disabled={clearAllButtonDisabled}
           onClick={clearAll}
           type="button"
@@ -163,7 +174,7 @@ export function UploadForm() {
 
         <Button
           aria-label={t("continue_button_aria")}
-          className="rounded border border-text-opacity-25 bg-primary px-4 font-bold hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="hover:-translate-y-0.5 rounded-xl bg-linear-to-r from-primary to-blue-600 px-8 font-bold text-text shadow-[0_4px_14px_0_rgba(var(--primary-rgb),0.39)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(var(--primary-rgb),0.23)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:text-white"
           disabled={uploadButtonDisabled}
           onClick={handleUploadClick}
           type="button"

@@ -46,7 +46,7 @@ export function RateLimitBanner({
   return (
     <div
       className={cn(
-        "rounded-lg border p-4",
+        "rounded-2xl border p-4 shadow-sm backdrop-blur-md transition-all",
         isError
           ? "border-destructive bg-destructive/10"
           : "border-yellow-500/50 bg-yellow-500/10"

@@ -18,7 +18,11 @@ import { Toaster } from "@/components/ui/sooner";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/types";
 import { cn } from "@/lib/cn";
-import { fontEpilogueVariable } from "@/styles/fonts";
+import {
+  fontEpilogueVariable,
+  fontFrauncesVariable,
+  fontJakartaVariable,
+} from "@/styles/fonts";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -30,6 +34,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "RootLayout" });
 
   return {
@@ -79,16 +84,23 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <NextIntlClientProvider messages={messages}>
-        <body className={cn(fontEpilogueVariable, "font-epilogue antialiased")}>
+      <body
+        className={cn(
+          fontEpilogueVariable,
+          fontFrauncesVariable,
+          fontJakartaVariable,
+          "font-jakarta antialiased"
+        )}
+      >
+        <NextIntlClientProvider messages={messages}>
           <Providers>
             <PostHogIdentifier />
             <NuqsAdapter>{children}</NuqsAdapter>
           </Providers>
           <Toaster />
           <CookieConsentWrapper />
-        </body>
-      </NextIntlClientProvider>
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }

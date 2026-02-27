@@ -40,10 +40,12 @@ export function PhotoGallery({
     : t("no_date_defined");
 
   return (
-    <div className="rounded-lg bg-card p-8 shadow">
-      <div className="mb-3">
-        <h2 className="mb-1 font-bold font-title_three">{t("title")}</h2>
-        <p className="font-body_two text-text/75">{t("description")}</p>
+    <div className="relative overflow-hidden rounded-2xl border border-background/20 bg-background/40 p-6 shadow-xl backdrop-blur-xl transition-all duration-300">
+      <div className="mb-8">
+        <h2 className="mb-2 font-bold font-title_three text-2xl tracking-tight">
+          {t("title")}
+        </h2>
+        <p className="font-body_two text-text/70">{t("description")}</p>
       </div>
 
       <div className="mb-6 flex flex-col items-startmd:items-center justify-between gap-4 md:flex-row">

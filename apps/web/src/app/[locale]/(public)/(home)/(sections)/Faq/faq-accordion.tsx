@@ -29,10 +29,23 @@ export function FaqAccordion({ questions }: FaqAccordionProps) {
 
   return (
     <Accordion collapsible onValueChange={handleValueChange} type="single">
-      {questions.map((q) => (
-        <AccordionItem key={q.question} value={`item-${q.question}`}>
-          <AccordionTrigger>{q.question}</AccordionTrigger>
-          <AccordionContent>{q.answer}</AccordionContent>
+      {questions.map((q, index) => (
+        <AccordionItem
+          className="border-border/50 border-b-2 py-2 transition-colors data-[state=open]:border-primary"
+          key={q.question}
+          value={`item-${index + 1}`}
+        >
+          <AccordionTrigger className="py-6 text-left font-heading text-xl hover:no-underline lg:text-3xl">
+            <span className="flex items-start gap-6 lg:gap-8">
+              <span className="mt-1 font-body_one text-muted-foreground text-sm lg:mt-2 lg:text-base">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="text-foreground">{q.question}</span>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="pr-4 pb-8 pl-12 font-body_two text-base text-muted-foreground leading-relaxed lg:pl-16 lg:text-lg">
+            {q.answer}
+          </AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>

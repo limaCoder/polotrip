@@ -7,10 +7,11 @@ export function HeroPhotos() {
   return (
     <div className="relative mt-12 flex h-full w-full items-center justify-center lg:mt-8 lg:justify-end">
       <MotionDiv
-        animate={{ y: [0, -10, 0] }}
-        initial={{ y: 0 }}
+        animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
+        className="drop-shadow-2xl"
+        initial={{ y: 0, rotate: -2 }}
         transition={{
-          duration: 3,
+          duration: 4,
           repeat: Number.POSITIVE_INFINITY,
           ease: "easeInOut",
         }}

@@ -23,9 +23,9 @@ export async function LocationsContent({
 
   return (
     <section className="container px-4 py-8">
-      <div className="mb-4 flex items-center gap-2">
-        <MapPin className="hidden text-primary md:block" size={24} />
-        <h2 className="font-title_two text-2xl text-primary">
+      <div className="mb-8 flex items-center gap-4">
+        <MapPin className="hidden h-8 w-8 text-secondary md:block" />
+        <h2 className="font-heading text-2xl text-secondary md:text-4xl">
           {t("moments_title", { ownerName: albumOwnerName })}
         </h2>
       </div>

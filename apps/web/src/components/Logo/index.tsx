@@ -43,9 +43,11 @@ export function Logo({
           showWhiteLogo ? "opacity-0" : "opacity-100"
         )}
         height={height}
+        loading={priority ? undefined : "lazy"}
         priority={priority}
         sizes={sizes}
         src="/brand/logo.svg"
+        {...(priority ? { fetchPriority: "high" } : {})}
         width={width}
       />
       <Image
@@ -55,9 +57,11 @@ export function Logo({
           showWhiteLogo ? "opacity-100" : "opacity-0"
         )}
         height={height}
+        loading={priority ? undefined : "lazy"}
         priority={priority}
         sizes={sizes}
         src="/brand/logo-white.svg"
+        {...(priority ? { fetchPriority: "high" } : {})}
         width={width}
       />
     </div>

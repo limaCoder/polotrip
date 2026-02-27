@@ -84,12 +84,12 @@ export function EditAlbumContent() {
   return (
     <FormProvider {...form}>
       {isGlobalLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="h-16 w-16 animate-spin rounded-full border-primary border-b-4" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+          <div className="h-16 w-16 animate-spin rounded-full border-primary border-b-4 shadow-[0_0_15px_rgba(41,128,185,0.5)]" />
         </div>
       )}
-      <div className="grid grid-cols-1 gap-9 lg:grid-cols-[1fr_3fr]">
-        <div className="flex flex-col gap-9">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_2.5fr] xl:grid-cols-[1fr_3fr]">
+        <div className="flex flex-col gap-8">
           {isLoading ? (
             <PhotoTimelineSkeleton />
           ) : (
@@ -103,15 +103,20 @@ export function EditAlbumContent() {
           {isLoading ? (
             <PhotoMapSkeleton />
           ) : (
-            <div className="rounded-lg bg-card p-8 shadow">
-              <div className="mb-3 flex items-center gap-3">
-                <MapPin className="text-primary" size={24} />
-                <h2 className="font-bold font-title_three">{t("map_title")}</h2>
+            <div className="relative overflow-hidden rounded-2xl border border-background/20 bg-background/40 p-6 shadow-xl backdrop-blur-xl transition-all duration-300">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-inner">
+                  <MapPin size={24} />
+                </div>
+                <div>
+                  <h2 className="font-bold font-title_three text-xl tracking-tight">
+                    {t("map_title")}
+                  </h2>
+                  <p className="mt-1 font-body_two text-sm text-text/70">
+                    {t("map_description")}
+                  </p>
+                </div>
               </div>
-
-              <p className="mb-6 font-body_two text-text/75">
-                {t("map_description")}
-              </p>
 
               <div className="h-[300px] w-full overflow-hidden rounded-md">
                 <PhotoMap
@@ -129,7 +134,7 @@ export function EditAlbumContent() {
           <AddMorePhotosCard />
         </div>
 
-        <div className="flex flex-col gap-9">
+        <div className="flex flex-col gap-8">
           <PhotoEditForm
             deselectAllPhotos={deselectAllPhotos}
             isDisabled={selectedPhotos?.length === 0}
@@ -163,23 +168,26 @@ export function EditAlbumContent() {
             />
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <Button
               aria-label={t("publish_album_button_aria")}
               className={cn(
-                "flex items-center gap-2 rounded bg-primary px-8 py-3 font-body_two hover:bg-primary/90",
-                isGlobalLoading && "cursor-not-allowed opacity-50"
+                "group hover:-translate-y-0.5 relative flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-primary px-10 py-6 font-body_one font-semibold text-white shadow-[0_4px_14px_0_rgba(41,128,185,0.39)] transition-all hover:shadow-[0_6px_20px_rgba(41,128,185,0.23)]",
+                isGlobalLoading && "pointer-events-none opacity-80"
               )}
               disabled={isGlobalLoading}
               onClick={openFinishDialog}
             >
+              <div className="absolute inset-0 z-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
               {isGlobalLoading ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
+                <div className="relative z-10 flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-white/30 border-t-2 border-b-white" />
                   <span>{t("publishing_album_button")}</span>
-                </>
+                </div>
               ) : (
-                <span>{t("publish_album_button")}</span>
+                <span className="relative z-10">
+                  {t("publish_album_button")}
+                </span>
               )}
             </Button>
           </div>

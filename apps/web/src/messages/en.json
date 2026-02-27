@@ -45,60 +45,61 @@
   },
   "Home": {
     "Hero": {
-      "title": "Keep memories that enchant",
-      "subtitle": "Create interactive travel albums with photos and maps to share your adventures with those who really matter.",
+      "title": "Your travel photos deserve better than G**gle Drive.",
+      "subtitle": "Turn thousands of forgotten phone photos into an interactive digital album. Relive your adventures with maps, chat with your memories using AI, and easily share them with the people you love.",
       "how_it_works_button_aria": "How does it work?",
       "how_it_works_button": "How does it work?",
-      "see_example_button_aria": "See an example",
-      "see_example_button": "See an example"
+      "see_example_button_aria": "View a sample album",
+      "see_example_button": "View a sample",
+      "hero_bear_alt": "Polotrip 3D plushie travel bear"
     },
     "Benefits": {
-      "title": "Why choose Polotrip?",
-      "description": "Unlike conventional storage solutions, Polotrip is exclusively designed to create and share travel memories the way you've always wanted.",
+      "title": "Why a regular cloud folder isn't enough",
+      "description": "Polotrip isn't just a place to dump files. It's an experience designed to help you and your family relive every moment of the trip.",
       "cards": {
-        "organized_memories_title": "Organized digital memories",
-        "organized_memories_description": "No more lost photos in random folders. Keep your travel memories organized and easy to find.",
-        "interactive_map_title": "Interactive map",
-        "interactive_map_description": "Visualize your journey on a map with all the places you've visited, unlike conventional storage services.",
-        "music_soundtrack_title": "Custom soundtrack",
-        "music_soundtrack_description": "Add a YouTube music to play while people browse through your album, creating an even more immersive and emotional experience.",
-        "no_space_limitations_title": "No space limitations",
-        "no_space_limitations_description": "Forget 'storage full' messages from your G**gle Drive or Dr**box. Focus on memories, not managing space.",
-        "narrative_experience_title": "Narrative experience",
-        "narrative_experience_description": "Turn your photos into stories, not just files piled up in a cloud storage folder.",
-        "easy_sharing_title": "Easy and controlled sharing",
-        "easy_sharing_description": "Share your albums with whomever you want through a link, maintaining full control over your memories."
+        "organized_memories_title": "Chat with your memories",
+        "organized_memories_description": "Forgot the name of that restaurant in Paris? Our AI assistant analyzes your album and answers questions about your trip like magic.",
+        "interactive_map_title": "Relive the exact route",
+        "interactive_map_description": "Watch your journey come to life on an interactive map featuring all the incredible places you visited.",
+        "music_soundtrack_title": "Effortless organization",
+        "music_soundtrack_description": "No more lost photos. Your trip is automatically organized into an elegant, easy-to-navigate timeline.",
+        "no_space_limitations_title": "Set the perfect mood",
+        "no_space_limitations_description": "Add the song that defined your trip to play in the background, creating an emotional browsing experience.",
+        "narrative_experience_title": "A story, not just files",
+        "narrative_experience_description": "Turn a pile of JPEGs into a visual narrative the people you love will actually enjoy scrolling through.",
+        "easy_sharing_title": "Privacy in your control",
+        "easy_sharing_description": "Share your adventure via a secure link with only the people you choose. No hassle, no app downloads required."
       }
     },
     "HowItWorks": {
-      "title": "How does it work?",
-      "description": "Creating and sharing your travel memories has never been easier. Follow these simple steps to get started.",
+      "title": "Your trip immortalized in minutes",
+      "description": "Taking the photos was the fun part. Sharing them shouldn't feel like a chore. Here's how simple it is:",
       "steps": {
         "step_1_category": "1. Create your account",
-        "step_1_title": "Register in a few seconds and start creating your first personalized digital travel album.",
-        "step_2_category": "2. Make your album real",
-        "step_2_title": "After creating the album, complete the purchase quickly and securely to unlock the upload of your memories.",
-        "step_3_category": "3. Upload the photos",
-        "step_3_title": "Add your best travel photos to your digital album.",
-        "step_4_category": "4. Customize your album",
-        "step_4_title": "Organize your photos and add locations to the interactive map to wrap up your memories.",
-        "step_5_category": "5. Share with friends",
-        "step_5_title": "Send the link of your album to friends and family to relive your adventures. They can browse the map and see your photos."
+        "step_1_title": "Sign up in seconds and name your adventure.",
+        "step_2_category": "2. Unlock uploads",
+        "step_2_title": "Securely confirm your album and get ready to upload your memories.",
+        "step_3_category": "3. Upload original photos",
+        "step_3_title": "Send your photos straight from your phone (we use the original location data!).",
+        "step_4_category": "4. Review the journey",
+        "step_4_title": "Polotrip automatically builds your timeline and map. Just add captions and the perfect soundtrack.",
+        "step_5_category": "5. Share the emotion",
+        "step_5_title": "Send the link to family and friends. They can explore the map and photos instantly on any screen."
       }
     },
     "Faq": {
-      "title": "Frequently asked questions",
-      "description": "For further questions, send a message to our support contact",
+      "title": "Common Questions",
+      "description": "Have any questions? Our support team is ready to help.",
       "image_alt": "Illustration of a woman holding a balloon with question marks",
       "questions": {
         "q1_question": "Do I need to create an account to use it?",
-        "q1_answer": "Yes, you need to create an account to start creating and managing your albums securely.",
-        "q2_question": "Can I share my albums?",
-        "q2_answer": "Yes! After creating an album, you can share a secure link with friends or family, with privacy control.",
+        "q1_answer": "Yes, creating an account ensures that only you have control over the privacy and editing of your photos.",
+        "q2_question": "How does the Artificial Intelligence work?",
+        "q2_answer": "Our AI analyzes the locations, dates, and photos in your album. You can chat with it to ask things like 'What was the hotel we stayed at on the last day?' or 'How many photos did we take in Rome?'.",
         "q3_question": "Do people need an account to view my album?",
-        "q3_answer": "No! Just share the album link and anyone can access it, without needing to create an account.",
+        "q3_answer": "No! That's the best part. Whoever receives your link doesn't need to download anything or create passwords. Just click and relive the trip.",
         "q4_question": "Are my photos safe on Polotrip?",
-        "q4_answer": "The photos in your albums can only be viewed by those who have the album link. However, the images are stored on a public server, which means that, technically, anyone with the exact address of the image can access it. The image address is hard to guess and is not publicly disclosed by the platform. We recommend that you share the album link only with people you trust. Albums created on Polotrip remain available via link as long as the platform is active. If we need to terminate the service, we will notify you in advance so you can download a copy of your memories.",
+        "q4_answer": "Your albums can only be accessed via the unique link you share. We recommend sending it only to people you trust. Created albums remain available via link as long as the platform is active.",
         "q5_question": "Does the album expire after a while?",
         "q5_answer": "No. Once created, your album remains available for you to access and share whenever you want.",
         "q6_question": "Can I edit the album after publishing it?",
@@ -106,13 +107,21 @@
       }
     },
     "Cta": {
-      "title": "Ready to create your first album?",
-      "description": "For as little as <price>{price}</price>, create a unique and memorable digital travel album.",
-      "start_now_button_aria": "Start now",
-      "start_now_button": "Start now"
+      "title": "Ready to rescue your trips from the camera roll?",
+      "description": "For just <price>{price}</price>, create a unique interactive album your family will love exploring today and remembering for years.",
+      "start_now_button_aria": "Start my album now",
+      "start_now_button": "Start my album now"
+    },
+    "metadata": {
+      "title": "Interactive Travel Albums | Polotrip",
+      "description": "Turn your travel photos into beautiful interactive albums with maps and an AI assistant. Relive and share your adventures easily with Polotrip."
     }
   },
   "SignIn": {
+    "metadata": {
+      "title": "Sign In | Polotrip",
+      "description": "Sign in to Polotrip to create, manage, and share your interactive travel albums."
+    },
     "title": "Welcome!",
     "subtitle": "Choose one of the options below to authenticate your account",
     "email_label": "Email",
@@ -127,7 +136,8 @@
     "webview_dialog_description": "To sign in with Google, you need to open this site in an external browser (Safari, Chrome, etc.). Sign in does not work in in-app browsers.",
     "webview_dialog_copy_link": "Copy link",
     "webview_dialog_link_copied": "Link copied!",
-    "webview_dialog_open_manually": "Copy the link above and paste it in your browser to continue."
+    "webview_dialog_open_manually": "Copy the link above and paste it in your browser to continue.",
+    "tos_agreement": "By signing in, you agree to our <tos>Terms of Service</tos> and <privacy>Privacy Policy</privacy>."
   },
   "CreateAlbum": {
     "metadata": {

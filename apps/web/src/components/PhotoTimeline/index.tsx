@@ -29,9 +29,9 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
           </div>
         ) : (
           <div className="relative" ref={timelineRef}>
-            <div className="absolute top-0 bottom-0 left-8 w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-[0%] from-transparent via-neutral-200 to-[99%] to-transparent [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] md:left-12 dark:via-neutral-700">
+            <div className="mask-[linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] absolute top-0 bottom-0 left-8 w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-0% from-transparent via-neutral-200 to-99% to-transparent md:left-12 dark:via-neutral-700">
               <motion.div
-                className="absolute inset-x-0 top-0 w-[2px] rounded-full bg-gradient-to-t from-[0%] from-secondary via-[50%] via-primary to-transparent"
+                className="absolute inset-x-0 top-0 w-[2px] rounded-full bg-linear-to-t from-0% from-secondary via-50% via-primary to-transparent"
                 style={{
                   height: heightTransform,
                   opacity: opacityTransform,
@@ -47,7 +47,7 @@ export function PhotoTimeline({ albumId }: PhotoTimelineProps) {
                       <div className="h-3 w-3 rounded-full bg-secondary" />
                     </div>
                   </div>
-                  <h2 className="ml-10 font-bold text-secondary text-xl md:ml-14 md:text-2xl">
+                  <h2 className="ml-10 font-heading text-2xl text-secondary md:ml-14 md:text-4xl lg:text-5xl">
                     {event?.date}
                   </h2>
                 </div>

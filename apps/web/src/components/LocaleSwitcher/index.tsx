@@ -40,7 +40,7 @@ export function LocaleSwitcher({
           aria-label={t("select_locale_aria")}
           className={cn(
             "px-2",
-            whiteTrigger ? "text-white" : "",
+            whiteTrigger ? "text-text" : "",
             hideChevron ? "[&>svg]:hidden" : ""
           )}
         >

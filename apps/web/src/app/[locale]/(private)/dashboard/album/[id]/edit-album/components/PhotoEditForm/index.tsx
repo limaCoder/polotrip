@@ -59,11 +59,15 @@ export function PhotoEditForm({
   return (
     <div
       className={cn(
-        "rounded-lg bg-card p-8 shadow",
+        "relative overflow-hidden rounded-2xl border border-background/20 bg-background/40 p-6 shadow-xl backdrop-blur-xl transition-all duration-300",
         isDisabled && "opacity-40"
       )}
     >
-      <h2 className="mb-6 font-bold font-title_three">{selectionText}</h2>
+      <div className="mb-6 flex items-center gap-4">
+        <h2 className="font-bold font-title_three text-xl tracking-tight">
+          {selectionText}
+        </h2>
+      </div>
 
       <Form {...form}>
         <form

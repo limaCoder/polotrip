@@ -1,5 +1,5 @@
 // biome-ignore lint/suspicious/noShadowRestrictedNames: we need to shadow the Map component
-import { BookOpen, Camera, Cloud, Map, Music2, Share2 } from "lucide-react";
+import { BookOpen, Layers, Lock, Map, Music2, Sparkles } from "lucide-react";
 import type { BenefitData } from "./types";
 
 export const benefitsData: BenefitData[] = [
@@ -7,7 +7,7 @@ export const benefitsData: BenefitData[] = [
     id: 1,
     titleKey: "organized_memories_title",
     descriptionKey: "organized_memories_description",
-    icon: <Camera />,
+    icon: <Sparkles />,
   },
   {
     id: 2,
@@ -19,13 +19,13 @@ export const benefitsData: BenefitData[] = [
     id: 3,
     titleKey: "music_soundtrack_title",
     descriptionKey: "music_soundtrack_description",
-    icon: <Music2 />,
+    icon: <Layers />,
   },
   {
     id: 4,
     titleKey: "no_space_limitations_title",
     descriptionKey: "no_space_limitations_description",
-    icon: <Cloud />,
+    icon: <Music2 />,
   },
   {
     id: 5,
@@ -37,6 +37,6 @@ export const benefitsData: BenefitData[] = [
     id: 6,
     titleKey: "easy_sharing_title",
     descriptionKey: "easy_sharing_description",
-    icon: <Share2 />,
+    icon: <Lock />,
   },
 ];

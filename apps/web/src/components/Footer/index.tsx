@@ -27,18 +27,18 @@ export async function Footer() {
         <div className="flex flex-col">
           <p className="font-body_one font-bold">{t("legal")}</p>
           <Link
-            className="mt-2 font-body_one text-primary"
+            className="mt-4 font-body_one text-primary"
             href="/terms-of-use"
           >
             {t("terms_of_use")}
           </Link>
           <Link
-            className="mt-1 font-body_one text-primary"
+            className="mt-4 font-body_one text-primary"
             href="/privacy-policy"
           >
             {t("privacy_policy")}
           </Link>
-          <span className="mt-1 font-body_one text-primary">{t("cnpj")}</span>
+          <span className="mt-4 font-body_one text-primary">{t("cnpj")}</span>
         </div>
       </div>
     </footer>
