@@ -45,60 +45,61 @@
   },
   "Home": {
     "Hero": {
-      "title": "Guarde memórias que encantam",
-      "subtitle": "Crie álbuns de viagem interativos com fotos e mapas para compartilhar suas aventuras com quem realmente importa.",
+      "title": "Suas fotos de viagem merecem mais que o G**gle Drive.",
+      "subtitle": "Transforme milhares de fotos esquecidas no celular em um álbum digital interativo. Reviva suas aventuras com mapas, converse com suas memórias usando Inteligência Artificial e compartilhe facilmente com quem você ama.",
       "how_it_works_button_aria": "Como funciona?",
       "how_it_works_button": "Como funciona?",
-      "see_example_button_aria": "Veja um exemplo",
-      "see_example_button": "Veja um exemplo"
+      "see_example_button_aria": "Ver um álbum de exemplo",
+      "see_example_button": "Ver um exemplo",
+      "hero_bear_alt": "Urso de pelúcia 3D da Polotrip viajando"
     },
     "Benefits": {
-      "title": "Por que escolher o Polotrip?",
-      "description": "Diferente de soluções convencionais de armazenamento, o Polotrip foi projetado exclusivamente para criar e compartilhar memórias de viagens da maneira que você sempre quis.",
+      "title": "Por que não usar apenas a nuvem?",
+      "description": "O Polotrip não é apenas um lugar para guardar arquivos. É uma experiência desenhada para fazer você e sua família reviverem cada momento da viagem.",
       "cards": {
-        "organized_memories_title": "Memórias digitais organizadas",
-        "organized_memories_description": "Chega de fotos perdidas em pastas aleatórias. Mantenha suas memórias de viagem organizadas e fáceis de encontrar.",
-        "interactive_map_title": "Mapa interativo",
-        "interactive_map_description": "Visualize sua jornada em um mapa com todos os lugares que você visitou, diferente de serviços de armazenamento convencionais.",
-        "music_soundtrack_title": "Trilha sonora personalizada",
-        "music_soundtrack_description": "Adicione uma música do YouTube para tocar enquanto as pessoas navegam pelo seu álbum, criando uma experiência ainda mais imersiva e emocional.",
-        "no_space_limitations_title": "Sem limitações de espaço",
-        "no_space_limitations_description": "Esqueça mensagens de \"armazenamento cheio\" do seu G**gle Drive ou Dr**box. Foque nas memórias, não em gerenciar espaço.",
-        "narrative_experience_title": "Experiência narrativa",
-        "narrative_experience_description": "Transforme suas fotos em histórias, não apenas arquivos empilhados em uma pasta de armazenamento em nuvem.",
-        "easy_sharing_title": "Compartilhamento fácil e controlado",
-        "easy_sharing_description": "Compartilhe seus álbuns com quem você quiser através de um link, mantendo o controle total sobre suas memórias."
+        "organized_memories_title": "Converse com suas memórias",
+        "organized_memories_description": "Esqueceu o nome daquele restaurante em Paris? Nossa Inteligência Artificial analisa seu álbum e responde perguntas sobre a sua viagem como mágica.",
+        "interactive_map_title": "Reviva a rota exata",
+        "interactive_map_description": "Veja sua jornada ganhar vida em um mapa interativo com todos os lugares incríveis que você visitou.",
+        "music_soundtrack_title": "Organização sem esforço",
+        "music_soundtrack_description": "Chega de fotos perdidas. Sua viagem é organizada automaticamente em uma linha do tempo elegante e fácil de navegar.",
+        "no_space_limitations_title": "O clima perfeito",
+        "no_space_limitations_description": "Adicione a música que marcou a viagem para tocar enquanto as pessoas navegam, criando uma experiência que emociona.",
+        "narrative_experience_title": "Uma história, não arquivos",
+        "narrative_experience_description": "Transforme um amontoado de JPEGs em uma narrativa visual que as pessoas realmente terão prazer em ver até o fim.",
+        "easy_sharing_title": "Privacidade sob controle",
+        "easy_sharing_description": "Compartilhe sua aventura através de um link seguro apenas com quem você escolher. Sem complicação, sem necessidade de baixar apps."
       }
     },
     "HowItWorks": {
-      "title": "Como funciona?",
-      "description": "Criar e compartilhar suas memórias de viagem nunca foi tão fácil. Siga estes simples passos para começar.",
+      "title": "Sua viagem eternizada em minutos",
+      "description": "Tirar as fotos foi a parte divertida. Compartilhá-las não deveria dar trabalho. Veja como é simples:",
       "steps": {
         "step_1_category": "1. Crie sua conta",
-        "step_1_title": "Registre-se em poucos segundos e comece a criar seu primeiro álbum de viagem digital personalizado.",
-        "step_2_category": "2. Torne seu álbum real",
-        "step_2_title": "Após criar o álbum, finalize a compra de forma rápida e segura para liberar o upload das suas memórias.",
-        "step_3_category": "3. Faça upload das fotos",
-        "step_3_title": "Adicione suas melhores fotos de viagem ao seu álbum digital.",
-        "step_4_category": "4. Personalize seu álbum",
-        "step_4_title": "Organize suas fotos e adicione locais no mapa interativo para embalar suas memórias.",
-        "step_5_category": "5. Compartilhe com amigos",
-        "step_5_title": "Envie o link do seu álbum para amigos e familiares reviverem suas aventuras. Eles poderão navegar pelo mapa e ver suas fotos."
+        "step_1_title": "Registre-se em segundos e dê um nome para a sua aventura.",
+        "step_2_category": "2. Libere os uploads",
+        "step_2_title": "Confirme seu álbum de forma segura e prepare-se para subir suas lembranças.",
+        "step_3_category": "3. Envie as fotos originais",
+        "step_3_title": "Faça o upload das fotos direto do celular (mantemos os dados de local original!).",
+        "step_4_category": "4. Revise a jornada",
+        "step_4_title": "O Polotrip organiza a linha do tempo e o mapa. Adicione legendas e a trilha sonora perfeita.",
+        "step_5_category": "5. Compartilhe a emoção",
+        "step_5_title": "Envie o link para a família. Eles poderão explorar o mapa e as fotos instantaneamente em qualquer tela."
       }
     },
     "Faq": {
-      "title": "Perguntas frequentes",
-      "description": "Para maiores dúvidas, mande uma mensagem para o nosso contato de suporte",
+      "title": "Dúvidas comuns",
+      "description": "Ficou com alguma dúvida? Nossa equipe de suporte está pronta para ajudar.",
       "image_alt": "Ilustração de uma mulher segurando um balão de pontos de interrogação",
       "questions": {
         "q1_question": "Preciso criar uma conta para usar?",
-        "q1_answer": "Sim, é necessário criar uma conta para começar a criar e gerenciar seus álbuns com segurança.",
-        "q2_question": "Posso compartilhar meus álbuns?",
-        "q2_answer": "Sim! Após criar um álbum, você pode compartilhar um link seguro com amigos ou familiares, com controle de privacidade.",
+        "q1_answer": "Sim, criar uma conta garante que apenas você tenha controle sobre a edição e privacidade das suas fotos.",
+        "q2_question": "Como a Inteligência Artificial funciona?",
+        "q2_answer": "A nossa IA analisa os locais, datas e fotos do seu álbum. Você pode conversar com ela para perguntar coisas como 'Qual foi o hotel que ficamos no último dia?' ou 'Quantas fotos tiramos em Roma?'.",
         "q3_question": "As pessoas precisam ter conta para visualizar meu álbum?",
-        "q3_answer": "Não! Basta compartilhar o link do álbum e qualquer pessoa poderá acessar, sem precisar criar conta.",
+        "q3_answer": "Não! Essa é a melhor parte. Quem recebe o seu link não precisa baixar nada nem criar senhas. É só clicar e reviver a viagem.",
         "q4_question": "Minhas fotos ficam seguras no Polotrip?",
-        "q4_answer": "As fotos dos seus álbuns só podem ser visualizadas por quem tem o link do álbum. No entanto, as imagens são armazenadas em um servidor público, o que significa que, tecnicamente, qualquer pessoa com o endereço exato da imagem pode acessá-la. O endereço das imagens é difícil de adivinhar e não é divulgado publicamente pela plataforma. Recomendamos que você compartilhe o link do álbum apenas com pessoas de confiança. Os álbuns criados no Polotrip ficam disponíveis via link enquanto a plataforma estiver ativa. Se um dia precisarmos encerrar o serviço, avisaremos com antecedência para que você possa baixar uma cópia das suas lembranças.",
+        "q4_answer": "Seus álbuns são acessados apenas pelo link único que você compartilha. Recomendamos enviar apenas para pessoas de confiança. Os álbuns criados ficam disponíveis via link enquanto a plataforma estiver ativa.",
         "q5_question": "O álbum expira depois de um tempo?",
         "q5_answer": "Não. Depois de criado, seu álbum permanece disponível para você acessar e compartilhar quando quiser.",
         "q6_question": "Posso editar o álbum depois de publicá-lo?",
@@ -106,13 +107,21 @@
       }
     },
     "Cta": {
-      "title": "Pronto para criar seu primeiro álbum?",
-      "description": "Por a partir de <price>{price}</price>, crie um álbum de viagem digital único e memorável.",
-      "start_now_button_aria": "Comece agora",
-      "start_now_button": "Comece agora"
+      "title": "Pronto para tirar suas viagens do rolo da câmera?",
+      "description": "Por apenas <price>{price}</price>, crie um álbum digital interativo que sua família vai adorar explorar hoje e relembrar por anos.",
+      "start_now_button_aria": "Começar meu álbum agora",
+      "start_now_button": "Começar meu álbum agora"
+    },
+    "metadata": {
+      "title": "Álbuns de Viagem Interativos | Polotrip",
+      "description": "Transforme suas fotos de viagem em lindos álbuns interativos com mapas e assistente IA. Reviva e compartilhe suas aventuras facilmente com Polotrip."
     }
   },
   "SignIn": {
+    "metadata": {
+      "title": "Fazer Login | Polotrip",
+      "description": "Faça login no Polotrip para criar, gerenciar e compartilhar seus álbuns de viagem interativos."
+    },
     "title": "Seja bem-vindo!",
     "subtitle": "Escolha uma das opções abaixo para autenticar na sua conta",
     "email_label": "Email",
@@ -127,7 +136,8 @@
     "webview_dialog_description": "Para fazer login com Google, você precisa abrir este site em um navegador externo (Safari, Chrome, etc.). O login não funciona em navegadores internos de aplicativos.",
     "webview_dialog_copy_link": "Copiar link",
     "webview_dialog_link_copied": "Link copiado!",
-    "webview_dialog_open_manually": "Copie o link acima e cole no seu navegador para continuar."
+    "webview_dialog_open_manually": "Copie o link acima e cole no seu navegador para continuar.",
+    "tos_agreement": "Ao entrar, você concorda com nossos <tos>Termos de Uso</tos> e <privacy>Política de Privacidade</privacy>."
   },
   "CreateAlbum": {
     "metadata": {
