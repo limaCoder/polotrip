@@ -22,10 +22,14 @@ export function PhotoTimeline({
   });
 
   return (
-    <div className="rounded-lg bg-card p-8 shadow">
-      <div className="mb-6 flex items-center gap-3">
-        <Calendar className="text-primary" size={24} />
-        <h2 className="font-bold font-title_three">{t("title")}</h2>
+    <div className="relative overflow-hidden rounded-2xl border border-background/20 bg-background/40 p-6 shadow-xl backdrop-blur-xl transition-all duration-300 hover:border-background/40">
+      <div className="mb-6 flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-inner">
+          <Calendar size={24} />
+        </div>
+        <h2 className="font-bold font-title_three text-xl tracking-tight">
+          {t("title")}
+        </h2>
       </div>
 
       <div className="flex flex-col gap-4">

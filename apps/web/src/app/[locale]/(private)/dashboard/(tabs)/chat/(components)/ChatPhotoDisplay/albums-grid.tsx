@@ -21,7 +21,7 @@ export function AlbumsGrid({ albums }: AlbumsGridProps) {
   }
 
   return (
-    <div className="grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="grid h-full w-full min-w-[300px] max-w-4xl grid-cols-1 gap-4 sm:min-w-[400px] md:grid-cols-2 xl:grid-cols-3">
       {validAlbums?.slice(0, 6)?.map((album) => {
         const albumDate: string = (album?.date ??
           album?.createdAt ??

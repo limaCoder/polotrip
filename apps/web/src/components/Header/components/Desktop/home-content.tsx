@@ -26,7 +26,7 @@ export function HomeContent({
   return (
     <>
       <p
-        className={cn("block", isHomeFromParent && "text-white drop-shadow-lg")}
+        className={cn("block", isHomeFromParent && "text-text drop-shadow-lg")}
       >
         {t("create_albums_prompt")}
       </p>

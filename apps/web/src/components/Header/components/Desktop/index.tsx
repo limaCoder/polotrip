@@ -24,7 +24,6 @@ export function HeaderDesktop({ isHome }: HeaderDesktopProps) {
       <Link className="cursor-pointer" href={logoHref}>
         <Logo
           alt={t("logo_alt")}
-          forceWhite={isHome}
           height={40}
           priority
           sizes="(max-width: 768px) 150px, 180px"

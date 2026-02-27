@@ -25,11 +25,13 @@ export function CtaButton({
   return (
     <ButtonNavigation
       aria-label={buttonAria}
-      className="h-[60px] bg-primary text-white hover:bg-primary/90"
+      className="group relative overflow-hidden rounded-full border-2 border-primary bg-primary px-10 py-4 text-primary-foreground transition-all duration-300 hover:bg-transparent hover:text-primary"
       href="/sign-in"
       onClick={handleClick}
     >
-      <span className="font-bold">{buttonText}</span>
+      <span className="relative z-10 font-heading font-semibold text-sm uppercase tracking-widest">
+        {buttonText}
+      </span>
     </ButtonNavigation>
   );
 }

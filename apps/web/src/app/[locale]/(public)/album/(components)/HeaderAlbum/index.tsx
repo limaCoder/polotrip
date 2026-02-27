@@ -8,7 +8,7 @@ export function HeaderAlbum({
   albumOwnerName,
 }: HeaderAlbumProps) {
   return (
-    <header className="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 lg:px-9">
+    <header className="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 sm:px-8 lg:px-12 lg:pt-8">
       <HeaderAlbumDesktop
         albumDescription={albumDescription}
         albumOwnerName={albumOwnerName}

@@ -37,7 +37,7 @@ export function AlbumsList() {
         isFetching={albums?.isFetching}
         loadingComponent={
           <SkeletonList
-            className="h-[256px] w-[100%] rounded-2xl shadow-md"
+            className="h-[256px] w-full rounded-2xl shadow-md"
             count={3}
           />
         }

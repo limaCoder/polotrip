@@ -26,16 +26,20 @@ export function AlbumDetailsCard() {
 
   return (
     <>
-      <div className="rounded-lg bg-card p-6 shadow">
-        <div className="mb-4 flex flex-col items-start justify-between">
+      <div className="relative overflow-hidden rounded-2xl border border-background/20 bg-background/40 p-6 shadow-xl backdrop-blur-xl transition-all duration-300">
+        <div className="mb-6 flex flex-col items-start justify-between gap-4">
           <div>
-            <h2 className="mb-2 font-semibold text-xl">{t("title")}</h2>
-            <p className="text-gray-500 text-sm">{t("description")}</p>
+            <h2 className="mb-1 font-bold font-title_three text-xl tracking-tight">
+              {t("title")}
+            </h2>
+            <p className="font-body_two text-sm text-text/70">
+              {t("description")}
+            </p>
           </div>
           <button
             aria-label={t("edit_album_button_aria")}
             aria-labelledby={t("edit_album_button_aria")}
-            className="mt-2 flex items-center gap-2 font-bold text-primary transition-colors hover:text-primary/80"
+            className="flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-2 font-body_two font-bold text-primary text-sm transition-all hover:bg-primary hover:text-white"
             onClick={() => setIsModalOpen(true)}
             type="button"
           >

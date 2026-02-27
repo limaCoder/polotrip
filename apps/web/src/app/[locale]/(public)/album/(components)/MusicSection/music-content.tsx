@@ -13,9 +13,9 @@ export async function MusicContent({ albumId, locale }: MusicSectionProps) {
 
   return (
     <section className="container px-4 py-8">
-      <div className="mb-4 flex items-center gap-2">
-        <Music className="hidden text-primary md:block" size={24} />
-        <h2 className="font-title_two text-2xl text-primary">
+      <div className="mb-8 flex items-center gap-4">
+        <Music className="hidden h-8 w-8 text-secondary md:block" />
+        <h2 className="font-title_two text-2xl text-secondary md:text-4xl">
           {t("music_title")}
         </h2>
       </div>

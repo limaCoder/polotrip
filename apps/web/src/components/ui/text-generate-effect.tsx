@@ -11,17 +11,20 @@ export const TextGenerateEffect = ({
   filter = true,
   duration = 0.5,
   tag = "span",
+  immediate = false,
 }: {
   words: string;
   className?: string;
   filter?: boolean;
   duration?: number;
   tag?: "span" | "h1" | "p";
+  immediate?: boolean;
 }) => {
   const [scope, animate] = useAnimate();
   const wordsArray = words?.split(" ");
 
   useEffect(() => {
+    if (immediate) return;
     animate(
       tag,
       {
@@ -33,7 +36,7 @@ export const TextGenerateEffect = ({
         delay: stagger(0.2),
       }
     );
-  }, [animate, duration, filter, tag]);
+  }, [animate, duration, filter, tag, immediate]);
 
   const renderWords = () => {
     return (
@@ -42,10 +45,13 @@ export const TextGenerateEffect = ({
           if (tag === "h1") {
             return (
               <motion.h1
-                className="inline font-heading opacity-0"
+                className={cn(
+                  "inline font-heading",
+                  immediate ? "opacity-100" : "opacity-0"
+                )}
                 key={word + idx}
                 style={{
-                  filter: filter ? "blur(10px)" : "none",
+                  filter: filter && !immediate ? "blur(10px)" : "none",
                 }}
               >
                 {word}{" "}
@@ -56,10 +62,13 @@ export const TextGenerateEffect = ({
           if (tag === "p") {
             return (
               <motion.p
-                className="mt-6 inline font-title_three opacity-0"
+                className={cn(
+                  "mt-6 inline font-title_three",
+                  immediate ? "opacity-100" : "opacity-0"
+                )}
                 key={word + idx}
                 style={{
-                  filter: filter ? "blur(10px)" : "none",
+                  filter: filter && !immediate ? "blur(10px)" : "none",
                 }}
               >
                 {word}{" "}

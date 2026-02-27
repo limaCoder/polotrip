@@ -26,10 +26,10 @@ export async function HowItWorks() {
       whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="container mx-auto px-4 lg:px-9">
-        <h2 className="mb-4 text-center font-bold font-title_two text-primary">
+        <h2 className="mb-6 text-center font-title_one text-foreground">
           {t("title")}
         </h2>
-        <p className="mx-auto mb-8 text-center font-body_one">
+        <p className="mx-auto mb-16 text-center font-body_one text-muted-foreground">
           {t("description")}
         </p>
 

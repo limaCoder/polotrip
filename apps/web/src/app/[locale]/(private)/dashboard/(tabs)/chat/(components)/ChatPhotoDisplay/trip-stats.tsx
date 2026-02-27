@@ -66,7 +66,7 @@ export function TripStats({ data }: TripStatsProps) {
   }
 
   return (
-    <Card className="max-w-md">
+    <Card className="w-full min-w-[300px] max-w-md sm:min-w-[400px]">
       <CardHeader>
         <CardTitle className="text-base">
           {String(

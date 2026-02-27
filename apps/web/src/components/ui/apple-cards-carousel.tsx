@@ -233,7 +233,8 @@ export const Card = ({
       className="relative z-10 flex h-[400px] w-[300px] flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[30rem] md:w-96 dark:bg-neutral-900"
       layoutId={layout ? `card-${card.title}` : undefined}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+      <div className="pointer-events-none absolute inset-0 z-30 bg-black/30" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-linear-to-b from-black/60 via-transparent to-transparent" />
       <div className="relative z-40 p-8">
         <motion.p
           className="body_one text-left font-bold text-yellow"
