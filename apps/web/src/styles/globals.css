@@ -349,3 +349,19 @@
     transform: scaleX(1);
   }
 }
+
+@layer utilities {
+  .tabs-scrollbar::-webkit-scrollbar {
+    height: 4px;
+    background-color: color-mix(in oklch, var(--primary) 20%, transparent);
+  }
+
+  .tabs-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+  }
+
+  .tabs-scrollbar::-webkit-scrollbar-button {
+    display: none;
+  }
+}

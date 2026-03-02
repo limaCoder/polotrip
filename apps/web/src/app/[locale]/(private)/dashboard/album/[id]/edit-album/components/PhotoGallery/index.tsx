@@ -48,7 +48,7 @@ export function PhotoGallery({
         <p className="font-body_two text-text/70">{t("description")}</p>
       </div>
 
-      <div className="mb-6 flex flex-col items-startmd:items-center justify-between gap-4 md:flex-row">
+      <div className="mb-6 flex flex-col items-start justify-between gap-4">
         <p className="font-body_two">
           <span className="font-bold text-primary">
             {(pagination?.total || filteredPhotos.length) === 1

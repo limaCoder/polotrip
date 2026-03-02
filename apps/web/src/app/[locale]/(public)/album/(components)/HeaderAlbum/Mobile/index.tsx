@@ -85,8 +85,8 @@ export function HeaderAlbumMobile({
               <LocaleSwitcher hideChevron />
             </div>
           )}
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/75 transition hover:bg-primary hover:text-white">
-            <ThemeSwitcher />
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/75 transition-all hover:bg-primary hover:text-white">
+            <ThemeSwitcher brightnessHover />
           </div>
         </div>
       </div>
