@@ -8,6 +8,7 @@ import env from "./env";
 const DAYS_EXPIRATION_SESSION = 7;
 
 export const config: BetterAuthOptions = {
+  baseURL: env.AUTH_WEB_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
