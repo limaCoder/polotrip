@@ -17,11 +17,7 @@ const authClient = createAuthClient({
   },
   advanced: {
     cookiePrefix: "polotrip",
-    cookies: {
-      session_token: {
-        name: "polotrip.state",
-      },
-    },
+    cookieName: "state",
   },
 });
 
