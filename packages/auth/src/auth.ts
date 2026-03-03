@@ -40,21 +40,21 @@ export const config: BetterAuthOptions = {
     expiresIn: 60 * 60 * 24 * DAYS_EXPIRATION_SESSION,
     updateAge: 60 * 60 * 24, // 1 day
   },
-  trustedOrigins: [env.AUTH_WEB_URL],
+  trustedOrigins: [env.AUTH_WEB_URL].filter(Boolean) as string[],
   advanced: {
     cookiePrefix: "polotrip",
+    crossSubDomainCookies: {
+      enabled: env.NODE_ENV === "production",
+      domain: env.NODE_ENV === "production" ? ".polotrip.com" : undefined,
+    },
+    defaultCookieAttributes: {
+      secure: env.NODE_ENV === "production",
+      sameSite: "lax",
+    },
+    useSecureCookies: env.NODE_ENV === "production",
     cookies: {
       session_token: {
         name: "polotrip.state",
-        attributes: {
-          // in local environment, comment the lines between path and domain properties
-          path: "/",
-          sameSite: "None",
-          secure: process.env.NODE_ENV === "production",
-          domain:
-            process.env.NODE_ENV === "production" ? ".polotrip.com" : undefined,
-          httpOnly: true,
-        },
       },
     },
   },
