@@ -3,9 +3,9 @@ import type { VideoStatus, VideoStyle } from "@/http/get-video/types";
 
 type VideoGeneratorProps = {
   albumId: string;
-  albumTitle: string;
-  photoCount: number;
-  isPaid: boolean;
+  albumTitle?: string;
+  photoCount?: number;
+  isPaid?: boolean;
 };
 
 type VideoStyleSelectorProps = {

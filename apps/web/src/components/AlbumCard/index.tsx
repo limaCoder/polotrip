@@ -1,7 +1,11 @@
-import { Calendar, EllipsisVertical, Image as ImageIcon } from "lucide-react";
+import {
+  Calendar,
+  EllipsisVertical,
+  Image as ImageIcon,
+  Video,
+} from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { Separator } from "@/components/ui/separator";
 import {
   AlbumStatusColorEnum,
   type AlbumStatusLabelEnum,
@@ -11,7 +15,7 @@ import {
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/cn";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { VideoGenerator } from "../VideoGenerator";
+import { Separator } from "../ui/separator";
 import type { AlbumCardProps } from "./types";
 
 export function AlbumCard({
@@ -130,12 +134,6 @@ export function AlbumCard({
             </PopoverTrigger>
             <PopoverContent
               className="max-w-fit bg-background"
-              onInteractOutside={(e) => {
-                const target = e.target as HTMLElement;
-                if (target.closest('[role="dialog"]')) {
-                  e.preventDefault();
-                }
-              }}
               onOpenAutoFocus={(e) => {
                 e.preventDefault();
               }}
@@ -147,12 +145,13 @@ export function AlbumCard({
                 {t("edit_album")}
               </Link>
               <Separator />
-              <VideoGenerator
-                albumId={id}
-                albumTitle={title}
-                isPaid={isAlbumPublished}
-                photoCount={photosCount}
-              />
+              <Link
+                className="flex w-full items-center gap-2 pb-2 text-primary transition-all duration-300 hover:brightness-130"
+                href={`/dashboard/album/${id}/video-generator`}
+              >
+                {t("generate_video")}
+                <Video className="h-4 w-4" />
+              </Link>
             </PopoverContent>
           </Popover>
         </div>

@@ -1004,12 +1004,16 @@
     }
   },
   "VideoGenerator": {
+    "metadata_title": "Gerador de Vídeo - {title}",
+    "metadata_description": "Crie um vídeo emocionante da sua viagem \"{title}\" usando IA.",
+    "page_title": "Gerador de Vídeo",
+    "page_description": "Transforme as fotos do seu álbum em um vídeo narrativo emocionante com inteligência artificial.",
     "create_video": "Criar Vídeo",
     "watch_video": "Assistir Vídeo",
     "your_video": "Seu Vídeo",
     "create_narrative_video": "Criar Vídeo Narrativo",
     "create_video_description": "Gere um vídeo narrativo com IA para \"{title}\"",
-    "video_ready_description": "Seu vídeo para \"{title}\" está pronto para assistir",
+    "video_ready_description": "Seu vídeo para \"{title}\" está pronto para assistir:",
     "select_style_description": "Escolha o estilo de narração para seu vídeo",
     "generate_video": "Gerar Vídeo",
     "generating": "Gerando...",

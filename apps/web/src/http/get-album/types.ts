@@ -13,6 +13,8 @@ type GetAlbumResponse = {
     musicUrl: string | null;
     photoLimit: number;
     plan: string;
+    currentStepAfterPayment: string;
+    photoCount: number;
   };
   user: {
     name: string;

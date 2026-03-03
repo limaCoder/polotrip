@@ -1004,12 +1004,16 @@
     }
   },
   "VideoGenerator": {
+    "metadata_title": "Video Generator - {title}",
+    "metadata_description": "Create an emotional video of your trip \"{title}\" using AI.",
+    "page_title": "Video Generator",
+    "page_description": "Transform your album photos into an emotional narrative video using artificial intelligence.",
     "create_video": "Create Video",
     "watch_video": "Watch Video",
     "your_video": "Your Video",
     "create_narrative_video": "Create Narrative Video",
     "create_video_description": "Generate an AI-powered narrative video for \"{title}\"",
-    "video_ready_description": "Your video for \"{title}\" is ready to watch",
+    "video_ready_description": "Your video for \"{title}\" is ready to watch:",
     "select_style_description": "Choose the style of narration for your video",
     "generate_video": "Generate Video",
     "generating": "Generating...",
