@@ -1,0 +1,21 @@
+{
+  "name": "@polotrip/marketing-remotion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts PolotripReel out/polotrip-reel.mp4"
+  },
+  "dependencies": {
+    "@remotion/transitions": "^4.0.432",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "remotion": "^4.0.432"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.432",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.3",
+    "typescript": "^5.8.3"
+  }
+}
