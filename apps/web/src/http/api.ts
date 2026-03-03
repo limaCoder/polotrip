@@ -31,11 +31,12 @@ const serverApi = ky.create(baseConfig).extend({
 
           const cookies = header.get("cookie");
 
-          const sessionCookie = cookies
+          const sessionCookies = cookies
             ?.split("; ")
-            .find((cookie) => cookie.startsWith("polotrip"));
+            .filter((cookie) => cookie.startsWith("polotrip"))
+            .join("; ");
 
-          request.headers.set("cookie", sessionCookie ?? "");
+          request.headers.set("cookie", sessionCookies ?? "");
         } catch (error) {
           throw new Error(`Error setting cookies: ${error}`);
         }

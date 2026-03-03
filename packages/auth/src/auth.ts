@@ -49,11 +49,6 @@ export const config: BetterAuthOptions = {
       path: "/",
     },
     cookiePrefix: "polotrip",
-    cookies: {
-      session_token: {
-        name: "polotrip.state",
-      },
-    },
   },
   basePath: "/api/v1/auth",
 };
