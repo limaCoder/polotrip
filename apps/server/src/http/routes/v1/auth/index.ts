@@ -1,4 +1,3 @@
-import { toNodeHandler } from "better-auth/node";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 
 const authRoute: FastifyPluginAsyncZod = async (app) => {
@@ -9,17 +8,70 @@ const authRoute: FastifyPluginAsyncZod = async (app) => {
     );
   }
 
-  app.addContentTypeParser("application/json", (_request, _payload, done) => {
-    done(null, null);
-  });
-
-  const authHandler = toNodeHandler(app.auth.handler);
-
   app.route({
-    method: ["POST", "GET"],
+    method: ["POST", "GET", "OPTIONS", "PUT", "PATCH", "DELETE"],
     url: "/auth/*",
-    handler: async (req, reply) => {
-      return await authHandler(req.raw, reply.raw);
+    handler: async (request, reply) => {
+      try {
+        // Construct url explicitly with correct proto for proxy environments
+        const protocol = request.headers["x-forwarded-proto"] || "http";
+        const host =
+          request.headers["x-forwarded-host"] || request.headers.host;
+        const url = new URL(request.url, `${protocol}://${host}`);
+
+        const headers = new Headers();
+        for (const [key, value] of Object.entries(request.headers)) {
+          if (value) {
+            if (Array.isArray(value)) {
+              for (const v of value) headers.append(key, v);
+            } else {
+              headers.append(key, value as string);
+            }
+          }
+        }
+
+        let bodyInit: string | undefined;
+        if (
+          request.method !== "GET" &&
+          request.method !== "HEAD" &&
+          request.body
+        ) {
+          bodyInit =
+            typeof request.body === "string"
+              ? request.body
+              : JSON.stringify(request.body);
+        }
+
+        const req = new Request(url.toString(), {
+          method: request.method,
+          headers,
+          body: bodyInit,
+          duplex: "half",
+        } as RequestInit & { duplex: "half" });
+
+        const response = await app.auth.handler(req);
+
+        reply.status(response.status);
+
+        const setCookies: string[] = [];
+        response.headers.forEach((value, key) => {
+          if (key.toLowerCase() === "set-cookie") {
+            setCookies.push(value);
+          } else {
+            reply.header(key, value);
+          }
+        });
+
+        if (setCookies.length > 0) {
+          reply.header("set-cookie", setCookies);
+        }
+
+        const body = response.body ? await response.text() : null;
+        return reply.send(body);
+      } catch (e) {
+        app.log.error(e);
+        return reply.status(500).send("Internal Server Error in Auth");
+      }
     },
   });
 };
