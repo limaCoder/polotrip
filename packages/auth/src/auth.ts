@@ -41,6 +41,13 @@ export const config: BetterAuthOptions = {
     updateAge: 60 * 60 * 24, // 1 day
   },
   advanced: {
+    trustedProxyHeaders: true,
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    },
     cookiePrefix: "polotrip",
     cookies: {
       session_token: {
