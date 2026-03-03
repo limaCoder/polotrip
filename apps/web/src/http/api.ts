@@ -33,7 +33,11 @@ const serverApi = ky.create(baseConfig).extend({
 
           const sessionCookies = cookies
             ?.split("; ")
-            .filter((cookie) => cookie.startsWith("polotrip"))
+            .filter(
+              (cookie) =>
+                cookie.trim().startsWith("polotrip") ||
+                cookie.trim().startsWith("__Secure-polotrip")
+            )
             .join("; ");
 
           request.headers.set("cookie", sessionCookies ?? "");
