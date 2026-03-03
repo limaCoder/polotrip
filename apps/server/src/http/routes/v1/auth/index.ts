@@ -53,11 +53,10 @@ const authRoute: FastifyPluginAsyncZod = async (app) => {
 
         reply.status(response.status);
 
-        const setCookies: string[] = [];
+        const setCookies = response.headers.getSetCookie();
+
         response.headers.forEach((value, key) => {
-          if (key.toLowerCase() === "set-cookie") {
-            setCookies.push(value);
-          } else {
+          if (key.toLowerCase() !== "set-cookie") {
             reply.header(key, value);
           }
         });
