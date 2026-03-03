@@ -71,6 +71,13 @@
       "when": 1763327533304,
       "tag": "0009_add_gin_indexes_for_text_search",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1769279073315,
+      "tag": "0010_living_dragon_lord",
+      "breakpoints": true
     }
   ]
 }

@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["emails/welcome.tsx", "emails/email-example.tsx"],
+  entry: ["emails/welcome.tsx", "emails/email-example.tsx", "emails/video-ready.tsx"],
   clean: true,
   dts: true,
   format: ["esm"],

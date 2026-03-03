@@ -15,7 +15,7 @@ import {
   revokePreviewUrl,
 } from "@/helpers/uploadHelpers";
 import { albumKeys } from "@/hooks/network/keys/albumKeys";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { getAlbum } from "@/http/get-album";
 import { getSignedUrls, saveUploadedPhotos } from "@/http/upload-photos";
 import type { PhotoMetadata } from "@/http/upload-photos/types";

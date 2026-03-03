@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { createAlbumWithCheckout } from "@/actions/createAlbumWithCheckout";
 import type { AlbumPlan } from "@/constants/pricingEnum";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import getStripe from "@/lib/stripe/get-stripejs";
 import { getAlbumPrice } from "@/utils/getAlbumPrice";
 

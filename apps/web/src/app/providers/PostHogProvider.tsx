@@ -50,6 +50,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       capture_exceptions: true,
       debug: process.env.NODE_ENV === "development",
       opt_out_capturing_by_default: shouldOptOut,
+      capture_performance: false,
     });
 
     if (shouldOptOut) {

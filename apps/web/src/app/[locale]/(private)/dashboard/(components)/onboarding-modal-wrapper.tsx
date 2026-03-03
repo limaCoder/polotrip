@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { onboardingStepsData } from "@/data/onboardingSteps";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 
 export const ONBOARDING_COMPLETED_EVENT = "onboarding-completed";
 
