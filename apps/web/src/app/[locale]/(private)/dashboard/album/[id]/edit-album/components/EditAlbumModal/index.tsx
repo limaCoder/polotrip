@@ -152,7 +152,7 @@ export function EditAlbumModal({
 
   return (
     <Dialog onOpenChange={onClose} open={isOpen}>
-      <DialogContent className="overflow-hidden sm:max-w-md md:max-w-lg lg:max-w-xl">
+      <DialogContent className="max-w-[95vw] overflow-hidden p-4 sm:max-w-md sm:p-6 md:max-w-lg lg:max-w-xl">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -202,13 +202,13 @@ export function EditAlbumModal({
               <p className="mb-2 font-body_two text-sm">
                 {t("recommendations_title")}
               </p>
-              <div className="flex items-center gap-3">
-                <div className="flex h-[68px] w-[120px] items-center justify-center rounded border border-primary/30 border-dashed bg-secondary/20">
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
+                <div className="flex h-[68px] w-full shrink-0 items-center justify-center rounded border border-primary/30 border-dashed bg-secondary/20 sm:w-[120px]">
                   <span className="text-[10px] text-primary/70">
                     {t("recommendations_size")}
                   </span>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 text-center sm:text-left">
                   <p className="text-sm text-text/70">
                     {t("recommendations_format")}
                   </p>

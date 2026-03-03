@@ -127,7 +127,7 @@ export function AlbumForm() {
               {t("trip_date_label")}
             </label>
             <MonthPicker
-              className="w-full rounded-xl border border-white/10 bg-background/50 p-4 font-body_two text-base shadow-inner backdrop-blur-md transition-all hover:bg-background/80 focus:border-primary/50 focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full rounded-xl border border-white/10 bg-background/50 p-4 font-body_two text-base shadow-inner backdrop-blur-md transition-all hover:bg-primary/80 focus:border-primary/50 focus:bg-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
               name="date"
               placeholder={t("trip_date_placeholder")}
             />

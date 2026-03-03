@@ -22,7 +22,9 @@ export default async function middleware(request: NextRequest) {
     return pathname === `/${locale}${path}`;
   });
 
-  const sessionCookie = request.cookies.get("polotrip.state")?.value;
+  const sessionCookie =
+    request.cookies.get("__Secure-polotrip.session_token")?.value ||
+    request.cookies.get("polotrip.session_token")?.value;
 
   if (isPrivatePath && !sessionCookie) {
     return NextResponse.redirect(new URL(`/${locale}/sign-in`, request.url));

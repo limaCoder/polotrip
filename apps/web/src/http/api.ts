@@ -4,7 +4,7 @@ import { env } from "@/lib/env";
 const isClient = typeof window !== "undefined";
 
 const baseConfig = {
-  prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
+  prefixUrl: isClient ? "/api/" : `${env.NEXT_PUBLIC_API_URL}/api/`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -31,11 +31,16 @@ const serverApi = ky.create(baseConfig).extend({
 
           const cookies = header.get("cookie");
 
-          const sessionCookie = cookies
+          const sessionCookies = cookies
             ?.split("; ")
-            .find((cookie) => cookie.startsWith("polotrip"));
+            .filter(
+              (cookie) =>
+                cookie.trim().startsWith("polotrip") ||
+                cookie.trim().startsWith("__Secure-polotrip")
+            )
+            .join("; ");
 
-          request.headers.set("cookie", sessionCookie ?? "");
+          request.headers.set("cookie", sessionCookies ?? "");
         } catch (error) {
           throw new Error(`Error setting cookies: ${error}`);
         }

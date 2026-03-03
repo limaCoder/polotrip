@@ -67,7 +67,7 @@ export function PhotosWithContext({ data }: PhotosWithContextProps) {
   }
 
   return (
-    <div className="h-full w-full min-w-[300px] max-w-4xl space-y-4 sm:min-w-[400px]">
+    <div className="h-full w-full min-w-0 max-w-4xl space-y-4">
       {context && (
         <div className="border-b pb-3">
           <h3 className="font-semibold text-lg">{context}</h3>

@@ -28,7 +28,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     >
       {!isUser && (
         <Avatar className="mt-1 h-9 w-9 shrink-0 border border-background/20 shadow-sm ring-2 ring-white">
-          <AvatarFallback className="flex items-center justify-center bg-background/40">
+          <AvatarFallback className="flex items-center justify-center bg-white/90">
             <Image
               alt="Polotrip"
               height={20}

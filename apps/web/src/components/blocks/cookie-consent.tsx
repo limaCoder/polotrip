@@ -156,7 +156,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
             </CardContent>
             <CardFooter className="flex gap-2 pt-2">
               <Button
-                className="flex-1 bg-yellow hover:bg-yellow/80"
+                className="flex-1 bg-yellow text-black hover:bg-yellow/80"
                 onClick={handleDecline}
               >
                 {t("decline_button")}
@@ -185,7 +185,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
             </CardContent>
             <CardFooter className="flex h-0 gap-2 px-4 py-2">
               <Button
-                className="flex-1 rounded-full bg-yellow hover:bg-yellow/80"
+                className="flex-1 rounded-full bg-yellow text-black hover:bg-yellow/80"
                 onClick={handleDecline}
                 size="sm"
               >
@@ -214,7 +214,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
               </CardDescription>
               <div className="flex items-center justify-end gap-4">
                 <Button
-                  className="h-9 bg-yellow text-xs hover:bg-yellow/80"
+                  className="h-9 bg-yellow text-black text-xs hover:bg-yellow/80"
                   onClick={handleDecline}
                   size="sm"
                 >

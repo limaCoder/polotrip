@@ -23,7 +23,7 @@ export function DashboardTabs() {
   ] as const;
 
   return (
-    <div className="mb-10 inline-flex gap-2 self-start rounded-2xl border border-background/60 bg-background/40 p-1.5 shadow-sm backdrop-blur-md">
+    <div className="tabs-scrollbar mb-10 inline-flex w-full gap-2 self-start overflow-x-auto rounded-2xl border border-background/60 bg-background/40 p-1.5 pb-3 shadow-sm backdrop-blur-md">
       {tabs.map((tab) => {
         const isActive = pathname === tab.href;
         const Icon = tab.icon;
@@ -31,7 +31,7 @@ export function DashboardTabs() {
         return (
           <Link
             className={cn(
-              "flex items-center gap-2 rounded-xl px-6 py-2.5 font-semibold text-sm shadow-sm transition-all duration-300",
+              "flex min-w-fit items-center gap-2 rounded-xl px-6 py-2.5 font-semibold text-sm shadow-sm transition-all duration-300",
               isActive
                 ? "bg-primary text-primary-foreground"
                 : "text-text hover:bg-white/60 hover:text-slate-900"

@@ -10,15 +10,15 @@ export async function Cta({ locale }: CtaProps) {
   const albumPrice = getAlbumPrice(PricingEnum.BASIC, locale);
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden py-10 lg:py-20">
-      <div className="absolute inset-4 z-0 overflow-hidden rounded-2xl border border-white/20 bg-background shadow-2xl lg:inset-8 lg:block">
+    <section className="relative flex items-center justify-center overflow-hidden py-8 sm:py-10 lg:py-20">
+      <div className="absolute inset-4 z-0 overflow-hidden rounded-2xl border border-white/20 bg-background shadow-2xl lg:inset-8">
         <video
           autoPlay
           className="h-full w-full scale-105 object-cover"
           loop
           muted
           playsInline
-          preload="none"
+          preload="auto"
         >
           <source src="/pages/home/cta/cta-section.mp4" type="video/mp4" />
         </video>
@@ -32,12 +32,12 @@ export async function Cta({ locale }: CtaProps) {
         />
       </div>
 
-      <div className="container relative z-10 px-4 py-20 lg:px-9">
+      <div className="container relative z-10 px-6 py-12 sm:py-20 lg:px-9">
         <div className="flex flex-col items-center text-center text-white">
-          <h2 className="mb-6 font-bold font-heading text-4xl text-white tracking-tight lg:text-7xl">
+          <h2 className="mb-4 font-bold font-heading text-3xl text-white tracking-tight sm:mb-6 lg:text-7xl">
             {t("title")}
           </h2>
-          <p className="mb-12 max-w-2xl font-body_one text-lg text-white/90 lg:text-xl">
+          <p className="mb-8 max-w-2xl font-body_one text-base text-white/90 sm:mb-12 lg:text-xl">
             {t.rich("description", {
               price: (_price) => (
                 <strong>{formatCurrency(locale, albumPrice)}</strong>

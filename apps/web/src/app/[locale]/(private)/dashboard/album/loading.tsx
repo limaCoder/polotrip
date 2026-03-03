@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function AlbumLoading() {
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-10 bg-background">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-10 bg-white">
       <div className="flex flex-col items-center gap-8">
         <div className="relative h-16 w-16 animate-pulse">
           <Image

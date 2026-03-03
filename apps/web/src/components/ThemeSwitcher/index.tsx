@@ -9,11 +9,13 @@ import { cn } from "@/lib/cn";
 type ThemeSwitcherProps = {
   className?: string;
   whiteIcon?: boolean;
+  brightnessHover?: boolean;
 };
 
 export function ThemeSwitcher({
   className,
   whiteIcon = false,
+  brightnessHover = false,
 }: ThemeSwitcherProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -49,6 +51,8 @@ export function ThemeSwitcher({
       className={cn(
         "h-9 w-9",
         whiteIcon && "text-text hover:text-text",
+        brightnessHover &&
+          "transition-all hover:bg-transparent hover:brightness-125",
         className
       )}
       onClick={toggleTheme}

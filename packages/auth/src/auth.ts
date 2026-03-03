@@ -8,6 +8,7 @@ import env from "./env";
 const DAYS_EXPIRATION_SESSION = 7;
 
 export const config: BetterAuthOptions = {
+  baseURL: env.AUTH_WEB_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -39,23 +40,15 @@ export const config: BetterAuthOptions = {
     expiresIn: 60 * 60 * 24 * DAYS_EXPIRATION_SESSION,
     updateAge: 60 * 60 * 24, // 1 day
   },
-  trustedOrigins: [env.AUTH_WEB_URL],
   advanced: {
-    cookiePrefix: "polotrip",
-    cookies: {
-      session_token: {
-        name: "polotrip.state",
-        attributes: {
-          // in local environment, comment the lines between path and domain properties
-          path: "/",
-          sameSite: "None",
-          secure: process.env.NODE_ENV === "production",
-          domain:
-            process.env.NODE_ENV === "production" ? ".polotrip.com" : undefined,
-          httpOnly: true,
-        },
-      },
+    trustedProxyHeaders: true,
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
     },
+    cookiePrefix: "polotrip",
   },
   basePath: "/api/v1/auth",
 };
