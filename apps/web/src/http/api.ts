@@ -4,7 +4,7 @@ import { env } from "@/lib/env";
 const isClient = typeof window !== "undefined";
 
 const baseConfig = {
-  prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api/`,
+  prefixUrl: isClient ? "/api/" : `${env.NEXT_PUBLIC_API_URL}/api/`,
   headers: {
     "Content-Type": "application/json",
   },
