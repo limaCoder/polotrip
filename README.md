@@ -19,6 +19,7 @@ Polotrip is a digital platform designed to bring the intimate and engaging exper
 - A timeline-based photo gallery with EXIF-aware sorting;
 - An interactive map displaying geolocated photos using Leaflet;
 - Public sharing with a clean, mobile-friendly layout;
+- AI integration using Vercel AI SDK with OpenAI models and MCP Server via MCP SDK to provide tool calling;
 - User authentication via OAuth (Google), powered by BetterAuth;
 - Payments handled through Stripe Checkout (pay-per-album model);
 - Image upload pipeline using pre-signed URLs generated on the backend;
@@ -39,6 +40,7 @@ This project is a monorepo using pnpm workspaces and Turborepo.
 - **Forms:** React Hook Form in client-side and server-actions in server-side
 - **Authentication:** BetterAuth
 - **Payments:** Stripe
+- **AI:** Vercel SDK
 - **Data Validation:** Zod
 
 ### Backend (`apps/server`)
@@ -50,9 +52,14 @@ This project is a monorepo using pnpm workspaces and Turborepo.
 - **Storage:** Cloudfare R2 and Supabase Storage
 - **Authentication:** BetterAuth
 - **Payments:** Stripe
+- **AI:** Vercel SDK
 - **Data Validation:** Zod
 - **Email:** Resend
 - **Deployment:** Railway
+
+### MCP (`apps/mcp`)
+
+- **ModelContextProtocol/sdk**: Tools
 
 ## 📂 Project Structure
 
@@ -63,6 +70,7 @@ The monorepo is organized as follows:
 ├── apps/
 │   ├── web/         # Next.js frontend
 │   └── server/      # Fastify backend
+    └── mcp/         # MCP Server
 ├── packages/
 │   ├── auth/        # Authentication package
 │   ├── db/          # Database schema and ORM
