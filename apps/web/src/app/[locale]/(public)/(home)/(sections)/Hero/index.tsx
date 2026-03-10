@@ -89,7 +89,7 @@ export async function Hero() {
         </div>
 
         <MotionDiv
-          className="relative mt-16 w-full max-w-md origin-bottom sm:max-w-lg lg:mt-24 lg:max-w-2xl"
+          className="relative mt-16 w-full max-w-md origin-bottom sm:max-w-lg lg:mt-20 lg:max-w-2xl"
           initial={{ opacity: 1, y: 80, scale: 0.9 }}
           transition={{
             opacity: { duration: 1, delay: 0.7, ease: "easeOut" },

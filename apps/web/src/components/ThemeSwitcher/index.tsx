@@ -17,7 +17,7 @@ export function ThemeSwitcher({
   whiteIcon = false,
   brightnessHover = false,
 }: ThemeSwitcherProps) {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -40,13 +40,15 @@ export function ThemeSwitcher({
   }
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   return (
     <Button
       aria-label={
-        theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+        resolvedTheme === "dark"
+          ? "Switch to light mode"
+          : "Switch to dark mode"
       }
       className={cn(
         "h-9 w-9",
@@ -60,7 +62,7 @@ export function ThemeSwitcher({
       type="button"
       variant="ghost"
     >
-      {theme === "dark" ? (
+      {resolvedTheme === "dark" ? (
         <Sun className="h-4 w-4" />
       ) : (
         <Moon className="h-4 w-4" />
