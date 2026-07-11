@@ -5,3 +5,5 @@ storybook-static/
 .DS_Store
 coverage/
 .env
+.env.*
+!.env.example
