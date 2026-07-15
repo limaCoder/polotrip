@@ -78,6 +78,16 @@ const nextConfig = {
         ],
       },
       {
+        source: "/en",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "frame-ancestors 'self' https://marioaugustolima.com.br http://localhost:4321 http://127.0.0.1:4321",
+          },
+        ],
+      },
+      {
         source: "/sw.js",
         headers: [
           {
