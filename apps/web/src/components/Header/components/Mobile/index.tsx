@@ -2,7 +2,7 @@
 
 import { Album, Github, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonNavigation } from "@/components/ButtonNavigation";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
@@ -17,8 +17,16 @@ const IS_INTERNATIONALIZATION_ENABLED = true;
 export function HeaderMobile() {
   const t = useTranslations("Header");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isHomePage = pathname === "/";
   const isDashboardPage = pathname === "/dashboard";
@@ -31,7 +39,13 @@ export function HeaderMobile() {
   };
 
   return (
-    <div className="container relative flex items-center justify-between bg-background px-4 py-4 lg:hidden">
+    <div
+      className={cn(
+        "relative transition-colors duration-300 lg:hidden",
+        (!isHomePage || isScrolled || isMenuOpen) && "bg-background"
+      )}
+    >
+      <div className="container flex items-center justify-between px-4 py-4">
       <Link href={logoHref}>
         <Logo
           alt={t("logo_alt")}
@@ -66,6 +80,7 @@ export function HeaderMobile() {
           </button>
         </div>
       )}
+      </div>
 
       <div
         className={cn(
