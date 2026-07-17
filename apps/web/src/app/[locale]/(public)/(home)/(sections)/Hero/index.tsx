@@ -68,7 +68,7 @@ export async function Hero() {
             words={t("title")}
           />
           <TextGenerateEffect
-            className="mt-6 max-w-2xl font-body_one font-light text-foreground/75 text-lg leading-relaxed sm:text-lg md:text-xl lg:text-2xl"
+            className="mt-6 max-w-2xl font-body_one font-normal text-foreground/95 text-lg leading-relaxed drop-shadow-md sm:text-lg md:text-xl lg:text-2xl"
             duration={1}
             filter={true}
             tag="p"
