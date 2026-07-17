@@ -13,7 +13,7 @@ Four touchpoints, all bilingual (en/pt via next-intl messages in `apps/web/src/m
 
 ### 1. Hero badge
 
-Adapt the existing animated badge in `apps/web/src/app/[locale]/(public)/(home)/(sections)/Hero/index.tsx` (the plane + dashed line pill) to carry the text "Now open source" and link to `https://github.com/limaCoder/polotrip` (new tab, `rel="noopener noreferrer"`). Keep the plane animation. Text comes from a new i18n key `Home.Hero.open_source_badge`.
+Adapt the existing animated badge in `apps/web/src/app/[locale]/(public)/(home)/(sections)/Hero/index.tsx` (the plane + dashed line pill) to carry the text "Now open source" and link to `https://github.com/marioaulima/polotrip` (new tab, `rel="noopener noreferrer"`). Keep the plane animation. Text comes from a new i18n key `Home.Hero.open_source_badge`.
 
 ### 2. Dedicated section: `OpenSource`
 
@@ -37,13 +37,13 @@ Layout: two columns on `lg+`, stacked on mobile.
   3. MIT licensed, fork-friendly (icon: `GitFork`)
 - **Right column:** terminal-styled card showing the real quickstart:
   ```
-  git clone https://github.com/limaCoder/polotrip.git
+  git clone https://github.com/marioaulima/polotrip.git
   cd polotrip && pnpm install
   docker compose up -d && pnpm run db:push
   pnpm dev
   ```
   Static styled block, no syntax-highlight dependency. Monospace, dark card, traffic-light dots header.
-- **CTAs (below left column copy):** primary "Star on GitHub" → repo URL; secondary "Self-hosting guide" → `https://github.com/limaCoder/polotrip#-self-hosting--getting-started`.
+- **CTAs (below left column copy):** primary "Star on GitHub" → repo URL; secondary "Self-hosting guide" → `https://github.com/marioaulima/polotrip#-self-hosting--getting-started`.
 
 Section uses `MotionSection` with the same reveal animation props as `Benefits`. i18n namespace `Home.OpenSource`.
 

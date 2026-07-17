@@ -10,8 +10,8 @@
 
 ## Global Constraints
 
-- Repo URL everywhere: `https://github.com/limaCoder/polotrip` (import from constant, never hardcode twice).
-- Self-hosting guide URL: `https://github.com/limaCoder/polotrip#-self-hosting--getting-started`.
+- Repo URL everywhere: `https://github.com/marioaulima/polotrip` (import from constant, never hardcode twice).
+- Self-hosting guide URL: `https://github.com/marioaulima/polotrip#-self-hosting--getting-started`.
 - External links: `target="_blank"` + `rel="noopener noreferrer"`.
 - UI copy in English in `en.json`, Portuguese in `pt.json`. Code identifiers/comments in English.
 - No new dependencies. No changes to Cta/pricing copy.
@@ -34,9 +34,9 @@
 
 ```ts
 // apps/web/src/constants/githubRepo.ts
-export const GITHUB_REPO_URL = "https://github.com/limaCoder/polotrip";
+export const GITHUB_REPO_URL = "https://github.com/marioaulima/polotrip";
 export const GITHUB_SELF_HOSTING_URL =
-  "https://github.com/limaCoder/polotrip#-self-hosting--getting-started";
+  "https://github.com/marioaulima/polotrip#-self-hosting--getting-started";
 ```
 
 - [ ] **Step 2: Add English strings**
@@ -76,7 +76,7 @@ Inside `Home.Faq.questions`, add:
 
 ```json
 "q7_question": "Is Polotrip open source?",
-"q7_answer": "Yes! Polotrip is fully open source under the MIT license. The complete code — frontend, backend, and the MCP server — is on GitHub at github.com/limaCoder/polotrip.",
+"q7_answer": "Yes! Polotrip is fully open source under the MIT license. The complete code — frontend, backend, and the MCP server — is on GitHub at github.com/marioaulima/polotrip.",
 "q8_question": "Can I run Polotrip on my own infrastructure?",
 "q8_answer": "Yes. The README has a full self-hosting guide: clone the repo, copy the .env examples, start the database with Docker, and run it. Your photos and the AI layer stay on your servers."
 ```
@@ -131,7 +131,7 @@ In `apps/web/src/messages/pt.json`, same keys:
 
 ```json
 "q7_question": "O Polotrip é open source?",
-"q7_answer": "Sim! O Polotrip é totalmente open source sob a licença MIT. O código completo — frontend, backend e o servidor MCP — está no GitHub em github.com/limaCoder/polotrip.",
+"q7_answer": "Sim! O Polotrip é totalmente open source sob a licença MIT. O código completo — frontend, backend e o servidor MCP — está no GitHub em github.com/marioaulima/polotrip.",
 "q8_question": "Posso rodar o Polotrip na minha própria infraestrutura?",
 "q8_answer": "Sim. O README tem um guia completo de self-hosting: clone o repositório, copie os arquivos .env de exemplo, suba o banco com Docker e rode. Suas fotos e a camada de IA ficam nos seus servidores."
 ```
@@ -311,7 +311,7 @@ type CodeSnippetProps = {
 };
 
 const quickstartLines = [
-  "git clone https://github.com/limaCoder/polotrip.git",
+  "git clone https://github.com/marioaulima/polotrip.git",
   "cd polotrip && pnpm install",
   "docker compose up -d && pnpm run db:push",
   "pnpm dev",

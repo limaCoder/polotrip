@@ -23,7 +23,9 @@
     "faq": "FAQ",
     "open_user_menu_aria": "Open user menu",
     "my_account": "My account",
-    "logout": "Logout"
+    "logout": "Logout",
+    "github": "GitHub",
+    "github_aria": "Polotrip on GitHub"
   },
   "Footer": {
     "logo_alt": "Polotrip Logo",
@@ -32,7 +34,8 @@
     "legal": "LEGAL",
     "terms_of_use": "Terms of use",
     "privacy_policy": "Privacy Policy",
-    "cnpj": "CNPJ: 57.996.361/0001-57"
+    "cnpj": "CNPJ: 57.996.361/0001-57",
+    "github": "GitHub"
   },
   "CookieConsent": {
     "title": "We use cookies",
@@ -52,7 +55,9 @@
       "see_example_button_aria": "View a sample album",
       "see_example_button": "View a sample",
       "hero_bear_alt": "Polotrip 3D plushie travel bear",
-      "hero_scene_alt": "Soft felt Polotrip bear reading a travel photo album on linen with a map and compass"
+      "hero_scene_alt": "Soft felt Polotrip bear reading a travel photo album on linen with a map and compass",
+      "open_source_badge": "Now open source",
+      "open_source_badge_aria": "Polotrip is now open source — view the repository on GitHub"
     },
     "Benefits": {
       "title": "Why a regular cloud folder isn't enough",
@@ -88,6 +93,23 @@
         "step_5_title": "Send the link to family and friends. They can explore the map and photos instantly on any screen."
       }
     },
+    "OpenSource": {
+      "title": "Own your memories",
+      "description": "Polotrip is open source under the MIT license. Run it on your own infrastructure — your photos, and the AI layer on top of them, never leave your servers.",
+      "features": {
+        "self_host_title": "Self-host everything",
+        "self_host_description": "Frontend, API, database, and storage run on infrastructure you control.",
+        "mcp_title": "Chat with your photos via MCP",
+        "mcp_description": "A built-in MCP server lets any AI agent answer questions about your albums.",
+        "mit_title": "MIT licensed, fork-friendly",
+        "mit_description": "Use it, change it, ship it. Contributions are welcome."
+      },
+      "star_button": "Star on GitHub",
+      "star_button_aria": "Star the Polotrip repository on GitHub",
+      "guide_button": "Self-hosting guide",
+      "guide_button_aria": "Read the self-hosting guide in the Polotrip README",
+      "terminal_title": "quickstart"
+    },
     "Faq": {
       "title": "Common Questions",
       "description": "Have any questions? Our support team is ready to help.",
@@ -104,7 +126,11 @@
         "q5_question": "Does the album expire after a while?",
         "q5_answer": "No. Once created, your album remains available for you to access and share whenever you want.",
         "q6_question": "Can I edit the album after publishing it?",
-        "q6_answer": "Yes! You can edit the title, description, cover photo, delete photos, change captions, or adjust locations on the map at any time."
+        "q6_answer": "Yes! You can edit the title, description, cover photo, delete photos, change captions, or adjust locations on the map at any time.",
+        "q7_question": "Is Polotrip open source?",
+        "q7_answer": "Yes! Polotrip is fully open source under the MIT license. The complete code — frontend, backend, and the MCP server — is on GitHub at github.com/marioaulima/polotrip.",
+        "q8_question": "Can I run Polotrip on my own infrastructure?",
+        "q8_answer": "Yes. The README has a full self-hosting guide: clone the repo, copy the .env examples, start the database with Docker, and run it. Your photos and the AI layer stay on your servers."
       }
     },
     "Cta": {

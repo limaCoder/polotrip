@@ -90,7 +90,7 @@ The monorepo is organized as follows:
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/limaCoder/polotrip.git
+git clone https://github.com/marioaulima/polotrip.git
 cd polotrip
 pnpm install
 ```

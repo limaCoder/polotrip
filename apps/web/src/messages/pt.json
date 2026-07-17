@@ -23,7 +23,9 @@
     "faq": "Perguntas frequentes",
     "open_user_menu_aria": "Abrir menu de usuário",
     "my_account": "Minha conta",
-    "logout": "Logout"
+    "logout": "Logout",
+    "github": "GitHub",
+    "github_aria": "Polotrip no GitHub"
   },
   "Footer": {
     "logo_alt": "Logo da Polotrip",
@@ -32,7 +34,8 @@
     "legal": "LEGAL",
     "terms_of_use": "Termos de uso",
     "privacy_policy": "Política de Privacidade",
-    "cnpj": "CNPJ: 57.996.361/0001-57"
+    "cnpj": "CNPJ: 57.996.361/0001-57",
+    "github": "GitHub"
   },
   "CookieConsent": {
     "title": "Usamos cookies",
@@ -52,7 +55,9 @@
       "see_example_button_aria": "Ver um álbum de exemplo",
       "see_example_button": "Ver um exemplo",
       "hero_bear_alt": "Urso de pelúcia 3D da Polotrip viajando",
-      "hero_scene_alt": "Urso de pelúcia Polotrip lendo um álbum de viagem sobre linho, com mapa e bússola"
+      "hero_scene_alt": "Urso de pelúcia Polotrip lendo um álbum de viagem sobre linho, com mapa e bússola",
+      "open_source_badge": "Agora open source",
+      "open_source_badge_aria": "O Polotrip agora é open source — veja o repositório no GitHub"
     },
     "Benefits": {
       "title": "Por que não usar apenas a nuvem?",
@@ -88,6 +93,23 @@
         "step_5_title": "Envie o link para a família. Eles poderão explorar o mapa e as fotos instantaneamente em qualquer tela."
       }
     },
+    "OpenSource": {
+      "title": "Suas memórias são suas",
+      "description": "O Polotrip é open source sob a licença MIT. Rode na sua própria infraestrutura — suas fotos, e a camada de IA sobre elas, nunca saem dos seus servidores.",
+      "features": {
+        "self_host_title": "Self-host de tudo",
+        "self_host_description": "Frontend, API, banco de dados e storage rodam em infraestrutura que você controla.",
+        "mcp_title": "Converse com suas fotos via MCP",
+        "mcp_description": "Um servidor MCP integrado permite que qualquer agente de IA responda perguntas sobre seus álbuns.",
+        "mit_title": "Licença MIT, fork à vontade",
+        "mit_description": "Use, modifique, publique. Contribuições são bem-vindas."
+      },
+      "star_button": "Star no GitHub",
+      "star_button_aria": "Dê uma estrela no repositório do Polotrip no GitHub",
+      "guide_button": "Guia de self-hosting",
+      "guide_button_aria": "Leia o guia de self-hosting no README do Polotrip",
+      "terminal_title": "quickstart"
+    },
     "Faq": {
       "title": "Dúvidas comuns",
       "description": "Ficou com alguma dúvida? Nossa equipe de suporte está pronta para ajudar.",
@@ -104,7 +126,11 @@
         "q5_question": "O álbum expira depois de um tempo?",
         "q5_answer": "Não. Depois de criado, seu álbum permanece disponível para você acessar e compartilhar quando quiser.",
         "q6_question": "Posso editar o álbum depois de publicá-lo?",
-        "q6_answer": "Sim! Você pode editar o título, a descrição, a foto de capa, excluir fotos, mudar legendas ou ajustar locais no mapa a qualquer momento."
+        "q6_answer": "Sim! Você pode editar o título, a descrição, a foto de capa, excluir fotos, mudar legendas ou ajustar locais no mapa a qualquer momento.",
+        "q7_question": "O Polotrip é open source?",
+        "q7_answer": "Sim! O Polotrip é totalmente open source sob a licença MIT. O código completo — frontend, backend e o servidor MCP — está no GitHub em github.com/marioaulima/polotrip.",
+        "q8_question": "Posso rodar o Polotrip na minha própria infraestrutura?",
+        "q8_answer": "Sim. O README tem um guia completo de self-hosting: clone o repositório, copie os arquivos .env de exemplo, suba o banco com Docker e rode. Suas fotos e a camada de IA ficam nos seus servidores."
       }
     },
     "Cta": {
