@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { GITHUB_REPO_URL } from "@/constants/githubRepo";
 import { Link } from "@/i18n/routing";
 import { FooterLogo } from "./footer-logo";
 
@@ -38,6 +39,14 @@ export async function Footer() {
           >
             {t("privacy_policy")}
           </Link>
+          <a
+            className="mt-4 font-body_one text-primary"
+            href={GITHUB_REPO_URL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {t("github")}
+          </a>
           <span className="mt-4 font-body_one text-primary">{t("cnpj")}</span>
         </div>
       </div>
