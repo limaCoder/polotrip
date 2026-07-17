@@ -25,4 +25,12 @@ export const faqData: FaqData[] = [
     questionKey: "q6_question",
     answerKey: "q6_answer",
   },
+  {
+    questionKey: "q7_question",
+    answerKey: "q7_answer",
+  },
+  {
+    questionKey: "q8_question",
+    answerKey: "q8_answer",
+  },
 ];

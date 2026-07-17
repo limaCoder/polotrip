@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const questionNumbers = [1, 2, 3, 4, 5, 6] as const;
+const questionNumbers = [1, 2, 3, 4, 5, 6, 7, 8] as const;
 type QuestionNumber = (typeof questionNumbers)[number];
 
 type QuestionKey = `q${QuestionNumber}_question`;
