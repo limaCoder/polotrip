@@ -6,6 +6,7 @@ import { Cta } from "./(sections)/Cta";
 import { Faq } from "./(sections)/Faq";
 import { Hero } from "./(sections)/Hero";
 import { HowItWorks } from "./(sections)/HowItWorks";
+import { OpenSource } from "./(sections)/OpenSource";
 
 export default async function Home({ params }: PageProps) {
   const { locale } = await params;
@@ -17,6 +18,7 @@ export default async function Home({ params }: PageProps) {
         <Hero />
         <Benefits />
         <HowItWorks />
+        <OpenSource />
         <Faq />
         <Cta locale={locale} />
       </main>
