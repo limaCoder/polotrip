@@ -1,12 +1,13 @@
 "use client";
 
-import { Album, Menu, X } from "lucide-react";
+import { Album, Github, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ButtonNavigation } from "@/components/ButtonNavigation";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { GITHUB_REPO_URL } from "@/constants/githubRepo";
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/cn";
 import { DashboardContent } from "../../dashboard-content";
@@ -95,6 +96,17 @@ export function HeaderMobile() {
           onClick={toggleMenu}
         >
           {t("faq")}
+        </a>
+        <a
+          aria-label={t("github_aria")}
+          className="flex items-center gap-2 text-foreground"
+          href={GITHUB_REPO_URL}
+          onClick={toggleMenu}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Github className="h-4 w-4" />
+          {t("github")}
         </a>
         <ButtonNavigation
           aria-label={t("access_account_aria")}

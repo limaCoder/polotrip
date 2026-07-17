@@ -1,10 +1,13 @@
 "use client";
 
+import { Github } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { Logo } from "@/components/Logo";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { GITHUB_REPO_URL } from "@/constants/githubRepo";
 import { Link, usePathname } from "@/i18n/routing";
+import { cn } from "@/lib/cn";
 import { DashboardContent } from "../../dashboard-content";
 import type { HeaderDesktopProps } from "../../types";
 import { HomeContent } from "./home-content";
@@ -32,6 +35,18 @@ export function HeaderDesktop({ isHome }: HeaderDesktopProps) {
       </Link>
 
       <div className="flex items-center gap-4">
+        <a
+          aria-label={t("github_aria")}
+          className={cn(
+            "transition-opacity hover:opacity-70",
+            isHome ? "text-white drop-shadow-lg" : "text-foreground"
+          )}
+          href={GITHUB_REPO_URL}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Github className="h-5 w-5" />
+        </a>
         <HomeContent isHome={isHome} />
         <ThemeSwitcher whiteIcon={isHome} />
         {IS_INTERNATIONALIZATION_ENABLED && <LocaleSwitcher />}
