@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { env } from "@/lib/env";
 import { useChatRateLimit } from "../(hooks)/use-chat-rate-limit";
 import { ChatInput } from "./ChatInput";
 import { ChatMessage } from "./ChatMessage";
@@ -19,7 +18,7 @@ export function ChatInterface() {
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
-        api: `${env.NEXT_PUBLIC_API_URL}/api/v1/chat`,
+        api: "/api/v1/chat",
         credentials: "include",
       }),
     []

@@ -50,7 +50,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             className={cn(
               "w-fit px-5 py-3.5 text-base leading-relaxed tracking-wide shadow-sm",
               isUser
-                ? "inline-block self-end rounded-2xl rounded-tr-sm bg-primary text-text"
+                ? "inline-block self-end rounded-2xl rounded-tr-sm bg-primary text-white"
                 : "max-w-[90%] self-start rounded-2xl rounded-tl-sm border border-background/20 bg-background/40 text-text shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
             )}
           >
