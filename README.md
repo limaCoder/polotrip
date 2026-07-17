@@ -36,7 +36,7 @@ This project is a monorepo using pnpm workspaces and Turborepo.
 - **Framework:** Next.js with App Router
 - **Styling:** Tailwind CSS with Shadcn/ui
 - **Animation:** motion/react
-- **Aysnc State In Client-Side:** React Query
+- **Async State (Client-Side):** React Query
 - **Forms:** React Hook Form in client-side and server-actions in server-side
 - **Authentication:** BetterAuth
 - **Payments:** Stripe
@@ -49,7 +49,7 @@ This project is a monorepo using pnpm workspaces and Turborepo.
 - **Language:** TypeScript
 - **ORM:** Drizzle ORM
 - **Database:** PostgreSQL (via Docker locally and Neon in prod)
-- **Storage:** Cloudfare R2 and Supabase Storage
+- **Storage:** Cloudflare R2 and Supabase Storage
 - **Authentication:** BetterAuth
 - **Payments:** Stripe
 - **AI:** Vercel SDK
@@ -68,43 +68,79 @@ The monorepo is organized as follows:
 ```
 /
 ├── apps/
-│   ├── web/         # Next.js frontend
-│   └── server/      # Fastify backend
-    └── mcp/         # MCP Server
+│   ├── web/           # Next.js frontend
+│   ├── server/        # Fastify backend
+│   └── mcp/           # MCP Server (chat with your photos via AI agents)
 ├── packages/
-│   ├── auth/        # Authentication package
-│   ├── db/          # Database schema and ORM
-│   ├── eslint-config/ # Shared ESLint configuration
-│   ├── transactional/ # Email templates
-│   └── ts-config/   # Shared TypeScript configuration
+│   ├── auth/          # Authentication package (BetterAuth)
+│   ├── db/            # Database schema and ORM (Drizzle)
+│   ├── transactional/ # Email templates (React Email)
+│   └── ts-config/     # Shared TypeScript configuration
 └── ...
 ```
 
-## 🚀 Getting Started
+## 🚀 Self-Hosting / Getting Started
 
 ### Prerequisites
 
-- Node.js
+- Node.js LTS (see `.nvmrc`)
 - pnpm
+- Docker (for the local PostgreSQL database)
 
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/polotrip.git
-    ```
-2.  Install dependencies:
-    ```bash
-    pnpm install
-    ```
-
-### Running the Development Servers
-
-To start both the frontend and backend servers in parallel, run:
+### 1. Clone and install
 
 ```bash
-pnpm dev
+git clone https://github.com/limaCoder/polotrip.git
+cd polotrip
+pnpm install
 ```
+
+### 2. Configure environment variables
+
+Each workspace has its own `.env.example`. Copy them and fill in the values:
+
+```bash
+cp apps/web/.env.example apps/web/.env
+cp apps/server/.env.example apps/server/.env
+cp apps/mcp/.env.example apps/mcp/.env
+cp packages/auth/.env.example packages/auth/.env
+cp packages/db/.env.example packages/db/.env
+```
+
+External services you will need credentials for:
+
+| Service | Used for | Required? |
+| --- | --- | --- |
+| Google OAuth ([console](https://console.cloud.google.com/apis/credentials)) | Sign in | Yes |
+| Stripe (test mode works) | Album checkout | Yes for the payment flow |
+| Cloudflare R2 | Photo storage | Yes for uploads |
+| Supabase | Storage (legacy path) | Only if you use it |
+| Resend | Transactional email | Optional |
+| Unsplash | Cover image search | Optional |
+| PostHog | Analytics | Optional |
+| OpenAI | AI chat over your photos (MCP) | Only for the AI features |
+
+Generate `BETTER_AUTH_SECRET` with `openssl rand -base64 32` — never reuse a value from docs or examples.
+
+### 3. Start the database
+
+```bash
+docker compose up -d
+pnpm run db:push
+```
+
+### 4. Run the apps
+
+```bash
+pnpm dev          # web + server + mcp in parallel
+pnpm dev:web      # frontend only (http://localhost:3000)
+pnpm dev:server   # backend only (http://localhost:3333)
+pnpm dev:mcp      # MCP server only
+```
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome. If you plan a bigger change, open an issue first so we can discuss it.
 
 ## 📄 License
 
