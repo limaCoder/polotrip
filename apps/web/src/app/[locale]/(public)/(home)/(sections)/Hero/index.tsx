@@ -1,5 +1,6 @@
 import { Plane } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { GITHUB_REPO_URL } from "@/constants/githubRepo";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { MotionDiv } from "@/lib/motion/motion-components";
 import { HeroBackground } from "./hero-background";
@@ -15,36 +16,47 @@ export async function Hero() {
       <div className="container relative z-10 flex flex-1 flex-col items-center px-4">
         <MotionDiv
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 flex items-center justify-center gap-3 rounded-full border border-primary/20 bg-background/60 px-4 py-2 shadow-sm backdrop-blur-md"
           initial={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-          </span>
+          <a
+            aria-label={t("open_source_badge_aria")}
+            className="mb-8 flex items-center justify-center gap-3 rounded-full border border-primary/20 bg-background/60 px-4 py-2 shadow-sm backdrop-blur-md transition-colors hover:border-primary/40"
+            href={GITHUB_REPO_URL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+            </span>
 
-          <div className="relative flex w-16 items-center">
-            <div className="w-full border-primary/30 border-t-[1.5px] border-dashed" />
-            <MotionDiv
-              animate={{ x: ["-150%", "300%"] }}
-              className="absolute flex items-center justify-center text-primary"
-              transition={{
-                duration: 2.5,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "linear",
-              }}
-            >
-              <Plane
-                className="h-4 w-4 rotate-45 fill-primary/20 text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"
-                strokeWidth={1.5}
-              />
-            </MotionDiv>
-          </div>
+            <div className="relative flex w-16 items-center">
+              <div className="w-full border-primary/30 border-t-[1.5px] border-dashed" />
+              <MotionDiv
+                animate={{ x: ["-150%", "300%"] }}
+                className="absolute flex items-center justify-center text-primary"
+                transition={{
+                  duration: 2.5,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "linear",
+                }}
+              >
+                <Plane
+                  className="h-4 w-4 rotate-45 fill-primary/20 text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"
+                  strokeWidth={1.5}
+                />
+              </MotionDiv>
+            </div>
 
-          <span className="relative flex h-2 w-2">
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary/30" />
-          </span>
+            <span className="relative flex h-2 w-2">
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary/30" />
+            </span>
+
+            <span className="font-body_one text-foreground/80 text-sm">
+              {t("open_source_badge")}
+            </span>
+          </a>
         </MotionDiv>
 
         <div className="flex w-full max-w-4xl flex-col items-center text-center">
