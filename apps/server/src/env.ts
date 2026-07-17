@@ -39,6 +39,10 @@ const envSchema = z.object({
 
   MCP_SECRET: z.string().min(32).optional(),
   MCP_SERVER_URL: z.string().url().optional(),
+
+  RABBITMQ_URL: z.string().url().optional(),
+  VIDEO_WORKER_SECRET: z.string().min(32).optional(),
+  VIDEO_BUCKET_NAME: z.string().default("polotrip-videos"),
 });
 
 export const env = envSchema.parse(process.env);

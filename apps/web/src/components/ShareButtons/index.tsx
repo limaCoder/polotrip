@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { cn } from "@/lib/cn";
 import type { ShareButtonsProps } from "./types";
 

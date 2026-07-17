@@ -11,6 +11,10 @@
     "./email-example": {
       "import": "./dist/email-example.mjs",
       "types": "./dist/email-example.d.ts"
+    },
+    "./video-ready": {
+      "import": "./dist/video-ready.mjs",
+      "types": "./dist/video-ready.d.ts"
     }
   },
   "scripts": {
@@ -19,6 +23,7 @@
   },
   "devDependencies": {
     "@polotrip/ts-config": "workspace:*",
+    "@react-email/preview-server": "5.1.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "react-email": "^5.1.0",

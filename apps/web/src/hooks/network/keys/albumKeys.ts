@@ -11,4 +11,5 @@ export const albumKeys = {
   space: (albumId: string) => [...albumKeys.detail(albumId), 'space'] as const,
   publicPhotos: 'publicPhotos' as const,
   publicPhotosList: (albumId: string) => [albumKeys.publicPhotos, 'list', albumId] as const,
+  video: (albumId: string) => [...albumKeys.detail(albumId), 'video'] as const,
 } as const;

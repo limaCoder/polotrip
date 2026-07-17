@@ -11,7 +11,7 @@ import { useUpdatePhoto } from "@/hooks/network/mutations/useUpdatePhoto";
 import { useUpdatePhotoBatch } from "@/hooks/network/mutations/useUpdatePhotoBatch";
 import { useGetAlbumDates } from "@/hooks/network/queries/useGetAlbumDates";
 import { useGetPhotosByDate } from "@/hooks/network/queries/useGetPhotosByDate";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { dateToAPIString } from "@/utils/dates";
 import type { PhotoEditFormData } from "../components/PhotoEditForm/types";
 import { formSchema } from "../components/PhotoEditForm/types";

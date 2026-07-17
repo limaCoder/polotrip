@@ -1,7 +1,7 @@
 "use client";
 
 import { ButtonNavigation } from "@/components/ButtonNavigation";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import type { CtaButtonProps } from "./types";
 
 export function CtaButton({

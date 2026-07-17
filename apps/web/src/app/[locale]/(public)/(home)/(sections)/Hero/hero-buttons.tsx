@@ -1,7 +1,7 @@
 "use client";
 
 import { ButtonNavigation } from "@/components/ButtonNavigation";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import type { HeroButtonsProps } from "./types";
 
 export function HeroButtons({

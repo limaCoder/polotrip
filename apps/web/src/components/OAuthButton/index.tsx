@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { signIn } from "@/lib/auth/client";
 import { env } from "@/lib/env";
 import { isWebView } from "@/utils/detectWebView";

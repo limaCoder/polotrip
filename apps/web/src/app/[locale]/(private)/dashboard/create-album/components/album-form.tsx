@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { usePostHog } from "@/hooks/usePostHog";
+import { usePostHog } from "@/hooks/use-posthog";
 import { cn } from "@/lib/cn";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getPlanName, getPlanPhotoLimit } from "@/utils/getAlbumPrice";

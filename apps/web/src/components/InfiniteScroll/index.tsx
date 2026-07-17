@@ -25,7 +25,7 @@ export function InfiniteScroll({
 
   return (
     <>
-      {isFetching ? (
+      {isFetching && hasNextPage ? (
         <>
           {loadingComponent}
           {hasLoadingMessage && <div>{loadingMessage}</div>}

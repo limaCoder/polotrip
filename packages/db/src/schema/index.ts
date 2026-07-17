@@ -1,6 +1,8 @@
+import { albumVideos } from "./album-videos";
 import { albums } from "./albums";
 import { accounts, sessions, users, verifications } from "./auth-schema";
 import { payments } from "./payments";
+import { photoEmbeddings } from "./photo-embeddings";
 import { photos } from "./photos";
 
 const schema = {
@@ -11,6 +13,8 @@ const schema = {
   sessions,
   accounts,
   verifications,
+  albumVideos,
+  photoEmbeddings,
 };
 
 export {
@@ -22,4 +26,6 @@ export {
   sessions,
   accounts,
   verifications,
+  albumVideos,
+  photoEmbeddings,
 };
