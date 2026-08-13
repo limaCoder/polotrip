@@ -805,8 +805,8 @@
         "title": "5. Armazenamento de Dados",
         "content_1": "Seus dados são armazenados da seguinte forma:",
         "items": {
-          "album_covers": "Capas dos álbuns: Armazenadas em um bucket público no Supabase",
-          "album_photos": "Fotos dos álbuns: Armazenadas em um bucket privado no R2 Cloudflare",
+          "album_covers": "Capas dos álbuns: Armazenadas no bucket público R2 da Cloudflare",
+          "album_photos": "Fotos dos álbuns: Armazenadas no bucket público R2 da Cloudflare",
           "metadata_account_info": "Metadados e informações da conta: Armazenados em banco de dados seguro"
         },
         "content_2": "Implementamos medidas técnicas e organizacionais para proteger seus dados contra acesso não autorizado, alteração, divulgação ou destruição."
@@ -816,7 +816,7 @@
         "content_1": "Compartilhamos suas informações nas seguintes circunstâncias:",
         "items": {
           "authorized_people": "<bold>Com pessoas que você autoriza:</bold> Seus álbuns são visíveis apenas para pessoas com quem você compartilha o link único. As imagens dos álbuns são armazenadas em um bucket público, o que significa que, tecnicamente, qualquer pessoa com o endereço exato da imagem pode acessá-la. No entanto, o endereço das imagens é difícil de adivinhar e não é divulgado publicamente pela plataforma.",
-          "service_providers": "<bold>Com provedores de serviços:</bold> Compartilhamos dados com prestadores de serviços que nos ajudam a operar o Polotrip, como Stripe (pagamentos), Supabase e Cloudflare (armazenamento).",
+          "service_providers": "<bold>Com provedores de serviços:</bold> Compartilhamos dados com prestadores de serviços que nos ajudam a operar o Polotrip, como Stripe (pagamentos) e Cloudflare (armazenamento).",
           "legal_requirements": "<bold>Quando exigido por lei:</bold> Podemos divulgar suas informações quando obrigados por lei ou para proteger nossos direitos legais."
         },
         "content_2": "Não vendemos ou alugamos suas informações pessoais a terceiros. Recomendamos que você compartilhe seus álbuns apenas com pessoas de confiança."

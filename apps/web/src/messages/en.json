@@ -805,8 +805,8 @@
         "title": "5. Data Storage",
         "content_1": "Your data is stored as follows:",
         "items": {
-          "album_covers": "Album covers: Stored in a public bucket on Supabase",
-          "album_photos": "Album photos: Stored in a private bucket on R2 Cloudflare",
+          "album_covers": "Album covers: Stored in Cloudflare's public R2 bucket",
+          "album_photos": "Album photos: Stored in Cloudflare's public R2 bucket",
           "metadata_account_info": "Metadata and account information: Stored in a secure database"
         },
         "content_2": "We implement technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction."
@@ -816,7 +816,7 @@
         "content_1": "We share your information in the following circumstances:",
         "items": {
           "authorized_people": "<bold>With people you authorize:</bold> Your albums are visible only to people with whom you share the unique link. The images in the albums are stored in a public bucket, which technically means that anyone with the exact image address can access it. However, the image addresses are difficult to guess and are not publicly disclosed by the platform.",
-          "service_providers": "<bold>With service providers:</bold> We share data with service providers that help us operate Polotrip, such as Stripe (payments), Supabase, and Cloudflare (storage).",
+          "service_providers": "<bold>With service providers:</bold> We share data with service providers that help us operate Polotrip, such as Stripe (payments) and Cloudflare (storage).",
           "legal_requirements": "<bold>When required by law:</bold> We may disclose your information when required by law or to protect our legal rights."
         },
         "content_2": "We do not sell or rent your personal information to third parties. We recommend that you share your albums only with people you trust."

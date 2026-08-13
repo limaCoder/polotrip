@@ -24,7 +24,7 @@ Usuários que desejam preservar e compartilhar memórias de viagem de forma ínt
 - **Metas de Negócio:**
   - Validar o modelo "pay-per-album": R$19,99 para 100 fotos e R$9,99 a cada 100 fotos adicionais.
   - Fornecer uma experiência diferenciada com scroll infinito, timeline interativa, mapa (Leaflet) integrado.
-  - Manter os custos operacionais sob controle por meio de técnicas otimizadas de processamento em lote, compressão com CompressorJS e upload via Signed URLs para o Supabase Storage.
+  - Manter os custos operacionais sob controle por meio de técnicas otimizadas de processamento em lote, compressão com CompressorJS e upload via Signed URLs para o Cloudflare R2.
 
 ---
 
@@ -57,7 +57,7 @@ Usuários que desejam preservar e compartilhar memórias de viagem de forma ínt
 
 ### 3.5. Upload e Processamento de Fotos
 
-**Estratégia de Upload com Compressão, Preservação de Metadados e Supabase:**
+**Estratégia de Upload com Compressão, Preservação de Metadados e Cloudflare R2:**
 
 - **No Frontend:**
 
@@ -69,7 +69,7 @@ Usuários que desejam preservar e compartilhar memórias de viagem de forma ínt
     - Usar [piexifjs](https://github.com/hMatoba/piexifjs) para reinserir os metadados extraídos na imagem comprimida.
   - **Upload via Signed URLs:**
     - O frontend solicita Signed URLs ao backend para cada imagem.
-    - Realiza o upload direto para o **Supabase Storage** utilizando controle de concorrência (com `Promise.all()` e/ou biblioteca como [p-limit](https://www.npmjs.com/package/p-limit)).
+    - Realiza o upload direto para o **Cloudflare R2** utilizando controle de concorrência (com `Promise.all()` e/ou biblioteca como [p-limit](https://www.npmjs.com/package/p-limit)).
   - **Feedback Visual:**
     - Exibição de mensagens de progresso e status para cada imagem processada.
 
@@ -81,7 +81,7 @@ Usuários que desejam preservar e compartilhar memórias de viagem de forma ínt
     - Trata erros HTTP específicos (404, 403, etc.)
   - **Função de Negócio (getUploadUrls):**
     - Valida se o álbum existe e pertence ao usuário
-    - Interage com Supabase para gerar URLs assinadas
+    - Interage com o Cloudflare R2 para gerar URLs assinadas
     - Gera nomes únicos para arquivos usando CUID2
   - **Rota HTTP (/albums/photos/save):**
     - Recebe os metadados das fotos já enviadas
@@ -172,7 +172,7 @@ polotrip/
 - Zod para validação de dados
 - Resend para integração de envio de emails
 - Docker para containerização
-- Supabase para Storage e Banco de Dados (Postgres)
+- Cloudflare R2 para Storage e Neon/Postgres para o banco de dados
 
 **Arquitetura do Backend:**
 
@@ -229,7 +229,7 @@ Esta arquitetura traz benefícios como:
   - O fluxo de criação do álbum (100 fotos a R$19,99) deve ser concluído com sucesso, utilizando Server Actions e useActionState.
   - A integração com Stripe deve funcionar de forma segura; a implementação do Pix via AbacatePay será realizada após o MVP.
 - **Upload e Processamento:**
-  - Imagens devem ser processadas utilizando CompressorJS para compressão, extração e reinserção de EXIF (com exif-js e piexifjs), e enviadas via Signed URLs para o Supabase Storage.
+  - Imagens devem ser processadas utilizando CompressorJS para compressão, extração e reinserção de EXIF (com exif-js e piexifjs), e enviadas via Signed URLs para o Cloudflare R2.
   - O processo de upload deve ser escalonado em lotes com controle de concorrência e feedback visual adequado.
 - **Edição e Visualização:**
   - A tela de edição deve permitir exclusão e inserção manual de localizações, utilizando Zustand e React Hook Form.

@@ -49,7 +49,7 @@ This project is a monorepo using pnpm workspaces and Turborepo.
 - **Language:** TypeScript
 - **ORM:** Drizzle ORM
 - **Database:** PostgreSQL (via Docker locally and Neon in prod)
-- **Storage:** Cloudflare R2 and Supabase Storage
+- **Storage:** Cloudflare R2
 - **Authentication:** BetterAuth
 - **Payments:** Stripe
 - **AI:** Vercel SDK
@@ -114,7 +114,6 @@ External services you will need credentials for:
 | Google OAuth ([console](https://console.cloud.google.com/apis/credentials)) | Sign in | Yes |
 | Stripe (test mode works) | Album checkout | Yes for the payment flow |
 | Cloudflare R2 | Photo storage | Yes for uploads |
-| Supabase | Storage (legacy path) | Only if you use it |
 | Resend | Transactional email | Optional |
 | Unsplash | Cover image search | Optional |
 | PostHog | Analytics | Optional |
