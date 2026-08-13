@@ -2,6 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
+import { R2_CONTENT_BUCKET } from "../../services/storage/r2-config";
 import { StorageProviderFactory } from "../factories/storage-provider.factory";
 
 type GetUploadUrlsRequest = {
@@ -57,7 +58,7 @@ async function getUploadUrls({
     const filePath = `${userId}/${albumId}/${uniqueFilename}`;
 
     const data = await storageProvider.createSignedUploadUrl(
-      "polotrip-albums-content",
+      R2_CONTENT_BUCKET,
       filePath
     );
 

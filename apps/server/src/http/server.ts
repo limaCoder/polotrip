@@ -21,6 +21,7 @@ import healthRoute from "./routes/v1/health.js";
 
 const app = fastify({
   logger: false,
+  bodyLimit: 8 * 1024 * 1024,
   connectionTimeout: 120_000,
   keepAliveTimeout: 120_000,
   maxRequestsPerSocket: 0,

@@ -1,4 +1,5 @@
 import {
+  DeleteObjectsCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -25,6 +26,23 @@ export class R2StorageProvider implements StorageProvider {
         secretAccessKey,
       },
     });
+  }
+
+  async putObject(
+    bucket: string,
+    path: string,
+    body: Uint8Array,
+    contentType: string
+  ) {
+    await this.client.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: path,
+        Body: body,
+        ContentType: contentType,
+        CacheControl: "public, max-age=3600, must-revalidate",
+      })
+    );
   }
 
   async createSignedUploadUrl(bucket: string, path: string) {
@@ -77,6 +95,21 @@ export class R2StorageProvider implements StorageProvider {
         {
           originalError: error,
         }
+      );
+    }
+  }
+
+  async deleteObjects(bucket: string, paths: string[]) {
+    if (!paths.length) return;
+    const result = await this.client.send(
+      new DeleteObjectsCommand({
+        Bucket: bucket,
+        Delete: { Objects: paths.map((Key) => ({ Key })), Quiet: true },
+      })
+    );
+    if (result.Errors?.length) {
+      throw new Error(
+        result.Errors.map((error) => error.Message || error.Key).join(", ")
       );
     }
   }

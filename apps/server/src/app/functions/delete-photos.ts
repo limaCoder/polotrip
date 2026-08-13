@@ -1,9 +1,12 @@
 import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
-import { createClient } from "@supabase/supabase-js";
 import { eq, inArray } from "drizzle-orm";
-import { env } from "@/env";
 import { redisService } from "@/services/cache/redis-service";
+import {
+  getR2ObjectPath,
+  R2_CONTENT_BUCKET,
+} from "../../services/storage/r2-config";
+import { StorageProviderFactory } from "../factories/storage-provider.factory";
 
 type DeletePhotosRequest = {
   photoIds: string[];
@@ -44,8 +47,6 @@ async function deletePhotos({
     return { deletedCount: 0 };
   }
 
-  const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
-
   return await db.transaction(async (tx) => {
     const deletedPhotos = await tx
       .delete(photos)
@@ -67,24 +68,14 @@ async function deletePhotos({
       .returning();
 
     const filePaths = photosToDelete
-      .map((photo) => {
-        const url = new URL(photo.imageUrl);
-        const pathParts = url.pathname.split("/");
-
-        const bucketTypeIndex = pathParts.findIndex(
-          (part) => part === "public" || part === "sign"
-        );
-
-        if (bucketTypeIndex > -1 && bucketTypeIndex + 1 < pathParts.length) {
-          return pathParts.slice(bucketTypeIndex + 2).join("/");
-        }
-
-        return null;
-      })
+      .map((photo) => getR2ObjectPath(photo.imageUrl))
       .filter(Boolean) as string[];
 
     if (filePaths.length > 0) {
-      await supabase.storage.from("polotrip-albums-content").remove(filePaths);
+      await StorageProviderFactory.getProvider().deleteObjects(
+        R2_CONTENT_BUCKET,
+        filePaths
+      );
     }
 
     await redisService.delPattern(`polotrip:album-dates:${albumId}:*`);

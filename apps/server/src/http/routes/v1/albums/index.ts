@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { checkAlbumSpaceRoutes } from "./check-album-space";
+import { coverImagesRoute } from "./cover-images";
 import { createAlbumRoute } from "./create-album";
 import { deletePhotosRoute } from "./delete-photos";
 import { getAlbumRoute } from "./get-album";
@@ -24,6 +25,7 @@ const albumsController: FastifyPluginAsyncZod = async (app) => {
   app.register(getAlbumDatesRoute);
   app.register(deletePhotosRoute);
   app.register(checkAlbumSpaceRoutes);
+  app.register(coverImagesRoute);
 
   app.register(getPublicAlbumRoute);
   app.register(getPublicAlbumLocationsRoute);

@@ -1,4 +1,11 @@
 type StorageProvider = {
+  putObject(
+    bucket: string,
+    path: string,
+    body: Uint8Array,
+    contentType: string
+  ): Promise<void>;
+
   createSignedUploadUrl(
     bucket: string,
     path: string
@@ -15,6 +22,8 @@ type StorageProvider = {
     signedUrl: string;
     path: string;
   }>;
+
+  deleteObjects(bucket: string, paths: string[]): Promise<void>;
 };
 
 export type { StorageProvider };

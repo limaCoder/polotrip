@@ -14,9 +14,6 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
 
-  SUPABASE_KEY: z.string(),
-  SUPABASE_URL: z.string().url(),
-
   UNSPLASH_ACCESS_KEY: z.string(),
   UNSPLASH_SECRET_KEY: z.string(),
 
@@ -31,6 +28,11 @@ const envSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string(),
   R2_JURISDICTION_DEFAULT_ENDPOINT: z.string().url(),
   R2_JURISDICTION_EU_ENDPOINT: z.string().url(),
+  R2_CONTENT_BUCKET_NAME: z.string().min(1).default("polotrip-albums-content"),
+  R2_PUBLIC_BASE_URL: z
+    .string()
+    .url()
+    .default("https://polotrip-albums-content-bucket.work"),
 
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),

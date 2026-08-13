@@ -2,6 +2,7 @@ import { db } from "@polotrip/db";
 import { albums, photos } from "@polotrip/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { redisService } from "@/services/cache/redis-service";
+import { getR2PublicUrl } from "@/services/storage/r2-config";
 
 type PhotoData = {
   filePath: string;
@@ -48,10 +49,8 @@ async function saveUploadedPhotos({
     throw new Error(`Limit of ${album.photoLimit} photos per album exceeded`);
   }
 
-  const BUCKET_NAME = "polotrip-albums-content-bucket.work";
-
   const photosToInsert = uploadedPhotosData?.map((photo) => {
-    const publicUrl = `https://${BUCKET_NAME}/${photo.filePath}`;
+    const publicUrl = getR2PublicUrl(photo.filePath);
 
     return {
       albumId,

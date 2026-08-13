@@ -26,9 +26,6 @@ const nextConfig = {
         hostname: "*.stripe.network",
       },
       {
-        hostname: "*.supabase.co",
-      },
-      {
         hostname: "*.r2.cloudflarestorage.com",
       },
       {

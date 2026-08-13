@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   client: {
@@ -13,8 +13,6 @@ export const env = createEnv({
   server: {
     STRIPE_WEBHOOK_SECRET: z.string(),
     STRIPE_SECRET_KEY: z.string(),
-    SUPABASE_KEY: z.string(),
-    SUPABASE_URL: z.string(),
   },
 
   runtimeEnv: {
@@ -24,12 +22,11 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUB_KEY: process.env.NEXT_PUBLIC_STRIPE_PUB_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    SUPABASE_KEY: process.env.SUPABASE_KEY,
-    SUPABASE_URL: process.env.SUPABASE_URL,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     // production
     NEXT_PUBLIC_WEB_URL:
-      process.env.NEXT_PUBLIC_WEB_URL || `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
+      process.env.NEXT_PUBLIC_WEB_URL ||
+      `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
   },
 });

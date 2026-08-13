@@ -6,6 +6,7 @@
     "dev": "tsx watch --env-file .env ./src/http/server.ts",
     "start": "node ./dist/http/server.mjs",
     "build": "tsup src",
+    "migrate:covers-to-r2": "tsx --env-file .env ./src/db/migrate-supabase-covers-to-r2.ts",
     "seed": "tsx --env-file .env ./src/db/seed.ts"
   },
   "keywords": [],
@@ -41,7 +42,6 @@
     "@polotrip/db": "workspace:*",
     "@polotrip/transactional": "workspace:*",
     "@react-email/render": "^1.0.6",
-    "@supabase/supabase-js": "^2.49.1",
     "@upstash/redis": "^1.35.6",
     "better-auth": "1.4.5",
     "dayjs": "1.11.12",
